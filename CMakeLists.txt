@@ -135,6 +135,19 @@ add_executable(pi0-example
    )
 target_link_libraries(pi0-example ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(AdlarsonAnalysis
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/PPhysics.h
+   src/PPhysics.cc
+   inc/AdlarsonPhysics.h
+   src/PPi0Example.cc
+   src/AdlarsonPhysics.cc
+   src/AdlarsonPhysics_main.cc
+   )
+target_link_libraries(AdlarsonAnalysis ${LIBS} ${ROOT_LIBRARIES})
+
+
 # install some scripts to the bin directory
 # by creating symlinks
 file(GLOB CORE_EXTRA_SCRIPTS "scripts/*")
