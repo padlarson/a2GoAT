@@ -139,3 +139,45 @@ void AdlarsonPhysics::tengAnalysis()
     // final results: Dalitz plot, m_pi0pi0, eta prime production as fcn energy
 
 }
+
+void AdlarsonPhysics::PhysicsResults( const TLorentzVector &g )
+{
+    // g is the array of TLorentzVectors containing the final and kinfitted event sample in order
+    // 0 1 2 3 - p eta pi01 pi02
+    // Dalitz plot variables
+    Double_t T_eta, T_pi1, T_pi2;
+    Double_t X, Y, Q;
+
+    Int_t DPbin;
+    Double_t Xgen, Ygen, Xdf, Ydf;
+
+
+    // Cusp effect variables
+    Double_t m_2pi0;
+    Double_t m_2pi0gen, m_2pi0df;
+
+    Double_t m_etapr;
+
+    /*
+    T_eta = g[1].E() - g[1].M();
+    if( g[2].E() > g[3].E() ){
+        T_pi1 = g[2].E() - g[2].M();
+        T_pi2 = g[3].E() - g[3].M();
+    }
+    else{
+        T_pi1 = g[3].E() - g[3].M();
+        T_pi2 = g[2].E() - g[2].M();
+    }
+    */
+
+    Q = T_eta + T_pi1 + T_pi2;
+    X = ( TMath::Sqrt(3.0) / Q ) * ( T_pi1 - T_pi2 );
+    Y = ( MASS_ETA + 2 * MASS_PI0 ) / MASS_PI0 * ( T_eta / Q ) - 1.0;
+
+
+
+
+
+
+
+}
