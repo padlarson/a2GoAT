@@ -40,5 +40,7 @@ public:
     void sixgAnalysis();
     void tengAnalysis();
 
+    void PhysicsResults( const TLorentzVector &g );
+
 };
 #endif
