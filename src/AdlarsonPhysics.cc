@@ -1,4 +1,5 @@
 #include "AdlarsonPhysics.h"
+#include "GTreeA2Geant.h"
 
 
 
@@ -49,7 +50,7 @@ void	AdlarsonPhysics::ProcessEvent()
             }
         }
 
-        if( (photons->GetNParticles() == 6) || (photons->GetNParticles() == 7))
+        if( (photons->GetNParticles() == 6) || (photons->GetNParticles() == 7) )
         {
             double_t im6g = IM_Ng( photons->GetNParticles()  );
             IM_6g->Fill( im6g );
@@ -80,7 +81,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configfile)
 }
 
 
-double_t    AdlarsonPhysics::IM_Ng(UInt_t n )
+double_t    AdlarsonPhysics::IM_Ng( UInt_t n )
 {
     TLorentzVector g_vec;
 
