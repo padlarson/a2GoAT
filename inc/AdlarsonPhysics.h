@@ -18,9 +18,6 @@ private:
     TLorentzVector sixgam_v;
     TLorentzVector tengam_v;
 
-//    GAnalysis3MesonsProton    hist_eta;
-//    GAnalysis3MesonsProton    hist_etap;
-
 protected:
     virtual Bool_t  Start();
 

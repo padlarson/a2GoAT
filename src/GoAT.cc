@@ -3,7 +3,8 @@
 
 GoAT::GoAT() :
     useParticleReconstruction(0),
-    nEventsWritten(0)
+    nEventsWritten(0),
+    useTrueObservables(0)
 { 
 }
 
@@ -75,6 +76,21 @@ Bool_t	GoAT::Init()
 
 	cout << endl;	
 
+    cout << "==========================================================" << endl;
+    cout << " Adlarson: Setting up true observables:" << endl;
+    cout << "==========================================================" << endl;
+
+    config = ReadConfig("Do-True-Observable-Rec");
+    if( strcmp(config.c_str(), "nokey") != 0 )
+    {
+        int buffer=0;
+        sscanf( config.c_str(), "%d\n", &buffer);
+        useTrueObservables = (buffer==1);
+    }
+
+
+
+
 	cout << "Initialisation complete." << endl;
 	cout << "==========================================================" << endl << endl;
   
@@ -87,6 +103,14 @@ void	GoAT::ProcessEvent()
     {
         if(GetEventNumber() % period == 0)
             cout << "Event: " << GetEventNumber() << "  Events Accepted: " << nEventsWritten << endl;
+    }
+
+    if(useTrueObservables)
+    {
+    //   save true observables
+    //   e.g. IM(2pi0), Calculate X, Y,
+        // if(!GTrueObservables)
+
     }
 
     if(SortAnalyseEvent())

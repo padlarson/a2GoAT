@@ -20,6 +20,7 @@ private:
 	
     Bool_t 	useParticleReconstruction;
     Bool_t 	useMesonReconstruction;
+    Bool_t  useTrueObservables;
 
     Int_t 	nEventsWritten;
 protected:

@@ -22,8 +22,8 @@
 /**
  * @brief A GTree for a2geant output files.
  *
- *   Reads the TTree named "h12". Supplies Geant4 based detector hit inforamtion and also
- *   copies the MC-True inforamtion.
+ *   Reads the TTree named "h12". Supplies Geant4 based detector hit information and also
+ *   copies the MC-True information.
  *
  * Use the "hadd" program from ROOT to copy the a2geant tree into the acqu output file:
  * $ hadd target.root Acqu.root geant.root
@@ -36,7 +36,7 @@ public:
 
 protected:
 
-        // Brach memories
+        // Branch memories
        Int_t           fnhits;
        Int_t           fnpart;
        Int_t           fntaps;
