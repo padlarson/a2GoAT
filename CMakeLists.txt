@@ -144,6 +144,8 @@ add_executable(AdlarsonAnalysis
    src/PPi0Example.cc
    src/AdlarsonPhysics.cc
    src/AdlarsonPhysics_main.cc
+   inc/GTreeTrueObservables.h
+   src/GTreeTrueObservables.cc	
    )
 target_link_libraries(AdlarsonAnalysis ${LIBS} ${ROOT_LIBRARIES})
 

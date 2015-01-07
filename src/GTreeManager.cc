@@ -40,7 +40,6 @@ GTreeManager::GTreeManager()    :
 #endif
     geant(NULL),
     outputFile(0)
-
 {
     pdgDB = TDatabasePDG::Instance();
 
@@ -67,6 +66,7 @@ GTreeManager::GTreeManager()    :
     pluto = new GTreePluto(this);
 #endif
     geant = new GTreeA2Geant(this);
+    trueobs = new GTreeTrueObservables(this);
 }
 
 GTreeManager::~GTreeManager()
