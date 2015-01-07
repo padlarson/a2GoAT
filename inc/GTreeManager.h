@@ -22,7 +22,9 @@
 #ifdef hasPluto
 #include "GTreePluto.h"
 #endif
+
 #include "GTreeA2Geant.h"
+#include "GTreeTrueObservables.h"
 
 #include <stdio.h>
 #include <TSystem.h>
@@ -72,6 +74,7 @@ private:
     GTreePluto*         pluto;
 #endif
     GTreeA2Geant*       geant;
+    GTreeTrueObservables*   trueobs;
 
 protected:
     TFile*          outputFile;
