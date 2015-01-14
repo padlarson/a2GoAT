@@ -10,9 +10,10 @@
 #include "GSort.h"
 #include "GParticleReconstruction.h"
 #include "GMesonReconstruction.h"
+// #include "GTrueObservableReconstruction.h"
 
 
-class	GoAT : public GSort, public GParticleReconstruction, public GMesonReconstruction
+class	GoAT : public GSort, public GParticleReconstruction, public GMesonReconstruction //, public GTrueObservableReconstruction
 {
 private:
     Int_t	usePeriodMacro;
