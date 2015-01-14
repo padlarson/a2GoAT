@@ -24,7 +24,7 @@
 #endif
 
 #include "GTreeA2Geant.h"
-#include "GTreeTrueObservables.h"
+#include "GTreeTrueParticle.h"
 
 #include <stdio.h>
 #include <TSystem.h>
@@ -74,7 +74,7 @@ private:
     GTreePluto*         pluto;
 #endif
     GTreeA2Geant*       geant;
-    GTreeTrueObservables*   trueobs;
+    GTreeTrueParticle*   truePhotons;
 
 protected:
     TFile*          outputFile;
