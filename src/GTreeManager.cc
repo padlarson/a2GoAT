@@ -66,7 +66,8 @@ GTreeManager::GTreeManager()    :
     pluto = new GTreePluto(this);
 #endif
     geant = new GTreeA2Geant(this);
-    trueobs = new GTreeTrueObservables(this);
+
+    truePhotons = new GTreeTrueParticle(this, "truePhotons");
 }
 
 GTreeManager::~GTreeManager()

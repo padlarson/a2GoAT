@@ -10,6 +10,7 @@
 #include "GSort.h"
 #include "GParticleReconstruction.h"
 #include "GMesonReconstruction.h"
+#include "GTreePluto.h"
 // #include "GTrueObservableReconstruction.h"
 
 
