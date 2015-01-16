@@ -1,5 +1,5 @@
 #include "AdlarsonPhysics.h"
-#include "GTreeA2Geant.h"
+#include "GTrue.h"
 
 
 
@@ -8,6 +8,12 @@ AdlarsonPhysics::AdlarsonPhysics()
 
     IM_6g	= new GH1("IM_6g", 	"IM_6g/7g", 240,   0, 1200);
     IM_10g	= new GH1("IM_10g", "IM_10g", 	240,   0, 1200);
+
+    // True observables
+ //   DP_true
+    M_pi1pi2_true = new GH1("M_pi1pi2_true", "M_{#pi#pi,true}", 100, 0, 0.2);
+ //   M_etapi1etapi2_true = new GH2()
+
 
 
     GHistBGSub::InitCuts(-20, 20, -55, -35);
@@ -37,6 +43,18 @@ Bool_t	AdlarsonPhysics::Start()
 
 void	AdlarsonPhysics::ProcessEvent()
 {
+    etapr_6gTrue.Start(*pluto); // (pluto tree, n part in pluto per event)
+
+    eta_true = etapr_6gTrue.GetTrueEtaLV();
+    pi01_true = etapr_6gTrue.GetTrueNeutralPiLV(0);
+    pi02_true = etapr_6gTrue.GetTrueNeutralPiLV(1);
+    etapr_true[0] = eta_true;
+    etapr_true[1] = pi01_true;
+    etapr_true[2] = pi02_true;
+    DalitzPlot(etapr_true, Xtrue, Ytrue, DPnrTrue);
+    m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
+
+
  //   if(protons->GetNParticles() > 0)
         // Strategy is :
         //  Identify all TAPS hits and check from TOF if the particle is a
@@ -136,7 +154,7 @@ void AdlarsonPhysics::tengAnalysis()
 
 }
 
-void AdlarsonPhysics::DalitzPlot(const TLorentzVector *g , Double_t &X, Double_t &Y , Int_t &DP_nr)
+void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double_t &Y , Int_t &DP_nr)
 {
 
     // g is the array of TLorentzVectors containing the final event sample in order
@@ -176,15 +194,24 @@ Double_t    AdlarsonPhysics::IM_Ng( UInt_t n )
     return g_vec.M();
 }
 
-void m2pi0_metapi0( const TLorentzVector *g, Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 )
+void AdlarsonPhysics::m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 )
 {
     // g is the array of TLorentzVectors containing the final event sample in order
     // 0 1 2 - eta pi01 pi02
     // Dalitz plot variables
 
+    Double_t meta, mpi01, mpi02, metapr;
+
+    meta = g[0].M();
+    mpi01 = g[1].M();
+    mpi02 = g[2].M();
+    metapr = ( g[0] + g[1] + g[2] ).M();
+
     m_etapi01   = ( g[0] + g[1] ).M();
     m_etapi02   = ( g[0] + g[2] ).M();
-    m_2pi0      = ( g[1] + g[2] ).M();
+    m_2pi0      = ( g[1] + g[2] ).M2();
+
+    M_pi1pi2_true->Fill(m_2pi0);
 
 }
 
