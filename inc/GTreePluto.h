@@ -5,6 +5,8 @@
 #include "GTree.h"
 #include "PParticle.h"
 #include "TClonesArray.h"
+#include "TLorentzVector.h"
+#include "TVector.h"
 
 #include <list>
 #include <algorithm>
@@ -47,10 +49,11 @@ public:
 
     virtual void                Clear()                 { PlutoMCTrue->Clear(); plutoID=-1; plutoRandomID=1; }
     virtual TClonesArray* 		GetMCTrue()        		{ return PlutoMCTrue; }
-    virtual PParticle*          GetMCTrue(const int idx) const throw(std::exception);
-    virtual TLorentzVector      GetTrueP4(const int idx) const throw(std::exception);
-    virtual TLorentzVector      GetTrueBeam() const;
-    virtual TLorentzVector      GetTrueBeam(const TLorentzVector, const int beamID) const;
+
+    virtual PParticle*          GetMCTrue(const Int_t index) { return (PParticle*)PlutoMCTrue->At(index);}
+    virtual TLorentzVector&     GetMCTrueLV(const Int_t index) { return *((TLorentzVector*)GetMCTrue(index));}
+
+
     virtual Long64_t            GetPlutoID()       const     { return plutoID; }
     virtual Long64_t            GetPlutoRandomID() const     { return plutoRandomID; }
 

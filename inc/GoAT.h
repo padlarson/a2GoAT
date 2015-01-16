@@ -14,7 +14,7 @@
 // #include "GTrueObservableReconstruction.h"
 
 
-class	GoAT : public GSort, public GParticleReconstruction, public GMesonReconstruction //, public GTrueObservableReconstruction
+class	GoAT : public GSort, public GParticleReconstruction, public GMesonReconstruction
 {
 private:
     Int_t	usePeriodMacro;
