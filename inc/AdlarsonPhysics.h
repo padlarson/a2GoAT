@@ -9,12 +9,26 @@
 #include "GTreeManager.h"
 #include "GH1.h"
 #include "TVector.h"
+#include "GTrue.h"
 
 class	AdlarsonPhysics  : public GTreeManager
 {
 private:
     GH1*	IM_6g;
     GH1*	IM_10g;
+
+//    GH2*    DP_true;
+    GH1*    M_pi1pi2_true;
+//    GH2*    M_etapi1etapi2_true;
+
+    TLorentzVector  eta_true;
+    TLorentzVector  pi01_true;
+    TLorentzVector  pi02_true;
+    TLorentzVector  etapr_true[3];
+
+    Double_t    Xtrue, Ytrue;
+    Int_t       DPnrTrue;
+    Double_t    m_etapi01True, m_etapi02True, m_2pi0True;
 
     TLorentzVector etapr_sixgam[6];
     TLorentzVector dir3pi0_sixgam[6];
@@ -25,6 +39,8 @@ private:
     static Int_t perm6outof7g[7][6];
     static Int_t perm6outof8g[28][6];
     static Int_t perm6outof10g[210][6];
+
+    GTrue   etapr_6gTrue;
 
 protected:
     virtual Bool_t  Start();
@@ -50,8 +66,7 @@ public:
     void GetBest10gCombination();
 
 
-    void DalitzPlot( const TLorentzVector *g , Double_t &X, Double_t &Y, Int_t &DP_nr );
-    void m2pi0_metapi0( const TLorentzVector *g, Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 );
-
+    void DalitzPlot( const TLorentzVector g[3] , Double_t &X, Double_t &Y, Int_t &DP_nr );
+    void m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 );
 };
 #endif
