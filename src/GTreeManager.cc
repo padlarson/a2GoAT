@@ -38,8 +38,13 @@ GTreeManager::GTreeManager()    :
 #ifdef hasPluto
     pluto(NULL),
 #endif
+<<<<<<< HEAD
     geant(NULL),
     outputFile(0)
+=======
+    geant(NULL)
+
+>>>>>>> ac83acf... modifications to the code such that GTrue is used instead
 {
     pdgDB = TDatabasePDG::Instance();
 
@@ -66,8 +71,6 @@ GTreeManager::GTreeManager()    :
     pluto = new GTreePluto(this);
 #endif
     geant = new GTreeA2Geant(this);
-
-    truePhotons = new GTreeTrueParticle(this, "truePhotons");
 }
 
 GTreeManager::~GTreeManager()

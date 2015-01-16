@@ -5,6 +5,8 @@
 #include "GTree.h"
 #include "PParticle.h"
 #include "TClonesArray.h"
+#include "TLorentzVector.h"
+#include "TVector.h"
 
 #include <list>
 #include <algorithm>
@@ -50,6 +52,7 @@ public:
     virtual TLorentzVector      GetTrueP4(const int idx) const throw(std::exception);
     virtual TLorentzVector      GetTrueBeam() const;
     virtual TLorentzVector      GetTrueBeam(const TLorentzVector, const int beamID) const;
+    virtual TLorentzVector&     GetMCTrueLV(const Int_t index) { return *((TLorentzVector*)GetMCTrue(index));}
     virtual Long64_t            GetPlutoID()       const     { return plutoID; }
     virtual Long64_t            GetPlutoRandomID() const     { return plutoRandomID; }
 

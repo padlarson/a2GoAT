@@ -28,11 +28,11 @@ link_directories(${ROOT_LIBRARY_DIR})
 include_directories(inc)
 set(ROOT_LIBRARIES "${ROOT_LIBRARIES} -lEG")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 set(GOAT_BASE
    inc/GTree.h
-   inc/GTreeTrack.h
+   inc/GTreeRawParticle.h
    inc/GTreeDetectorHits.h
    inc/GTreeTagger.h
    inc/GTreeLinPol.h
@@ -40,14 +40,13 @@ set(GOAT_BASE
    inc/GTreeParticle.h
    inc/GTreeMeson.h
    inc/GTreeTrigger.h
-   inc/GTreeSetupParameters.h
    inc/GTreeEventParameters.h
    inc/GTreeA2Geant.h
    inc/GHistManager.h
    inc/GTreeManager.h
-   inc/GConfigFile.h
+   inc/GConfigFile.h   
    src/GTree.cc
-   src/GTreeTrack.cc
+   src/GTreeRawParticle.cc
    src/GTreeDetectorHits.cc
    src/GTreeTagger.cc
    src/GTreeLinPol.cc
@@ -55,9 +54,8 @@ set(GOAT_BASE
    src/GTreeParticle.cc
    src/GTreeMeson.cc
    src/GTreeTrigger.cc
-   src/GTreeSetupParameters.cc
    src/GTreeEventParameters.cc
-   src/GTreeA2Geant.cc	
+   src/GTreeA2Geant.cc
    src/GHistManager.cc
    src/GTreeManager.cc
    src/GConfigFile.cc
@@ -83,7 +81,7 @@ set(GOAT_GHIST
    src/GHistTaggerBinning2.cc
 )
 
-#if( PLUTO )
+if( PLUTO )
 
     find_package(Pluto)
 
@@ -103,9 +101,9 @@ set(GOAT_GHIST
            set(LIBS ${LIB} ${PLUTO_LIBRARY})
     endif()
 
-#else()
-#    message(STATUS "Pluto disabled")
-#endif()
+else()
+    message(STATUS "Pluto disabled")
+endif()
 
 
 add_executable(goat
@@ -138,14 +136,14 @@ target_link_libraries(pi0-example ${LIBS} ${ROOT_LIBRARIES})
 add_executable(AdlarsonAnalysis
    ${GOAT_BASE}
    ${GOAT_GHIST}
-   inc/GTrue.h
-   src/GTrue.cc
    inc/PPhysics.h
    src/PPhysics.cc
    inc/AdlarsonPhysics.h
    src/PPi0Example.cc
    src/AdlarsonPhysics.cc
    src/AdlarsonPhysics_main.cc
+   inc/GTreeTrueObservables.h
+   src/GTreeTrueObservables.cc	
    )
 target_link_libraries(AdlarsonAnalysis ${LIBS} ${ROOT_LIBRARIES})
 
