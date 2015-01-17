@@ -10,9 +10,16 @@ AdlarsonPhysics::AdlarsonPhysics()
     IM_10g	= new GH1("IM_10g", "IM_10g", 	240,   0, 1200);
 
     // True observables
- //   DP_true
-    M_pi1pi2_true = new GH1("M_pi1pi2_true", "M_{#pi#pi,true}", 100, 0, 0.2);
- //   M_etapi1etapi2_true = new GH2()
+        // Beam energy
+        True_BeamEnergy     = new GH1("True_BeamEnergy", "True Beam Energy", 250, 1.400, 1.650);
+        // Phase space final state particles
+        ThvE_p              = new GHistBGSub2("ThvE_p", "E_{p} vs #theta_{p}", 100, 0., 0.6, 100, 0., 25.);
+        ThvE_eta_g          = new GHistBGSub2("ThvE_eta_g", "E_{#gamma, #eta} vs #theta_{#gamma, #eta}", 100, 0, 1.000, 36, 0, 180);
+        ThvE_pi0_g          = new GHistBGSub2("ThvE_pi0_g", "E_{#gamma, #pi^{0}} vs #theta_{#gamma, #pi^{0}}", 60, 0, .600, 36, 0, 180);
+        // Physics result
+        DP_true             = new GHistBGSub2("DP_true", "True Dalitz Plot distribution", 60, -1.5, 1.5, 60, -1.5, 1.5);
+        M_pi1pi2_true       = new GH1("M_pi1pi2_true", "True M_{#pi#pi,true}^{2}", 60, 0.05, 0.20);
+        M_etapi_true        = new GH1("M_etapi_true", "True M_{#eta#pi,true}^{2}", 100, 0.45, 0.70);
 
 
 
@@ -45,14 +52,7 @@ void	AdlarsonPhysics::ProcessEvent()
 {
     etapr_6gTrue.Start(*pluto); // (pluto tree, n part in pluto per event)
 
-    eta_true = etapr_6gTrue.GetTrueEtaLV();
-    pi01_true = etapr_6gTrue.GetTrueNeutralPiLV(0);
-    pi02_true = etapr_6gTrue.GetTrueNeutralPiLV(1);
-    etapr_true[0] = eta_true;
-    etapr_true[1] = pi01_true;
-    etapr_true[2] = pi02_true;
-    DalitzPlot(etapr_true, Xtrue, Ytrue, DPnrTrue);
-    m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
+    TrueAnalysis_etapr6g();
 
 
  //   if(protons->GetNParticles() > 0)
@@ -96,6 +96,33 @@ void	AdlarsonPhysics::ProcessScalerRead()
 Bool_t	AdlarsonPhysics::Init(const char* configfile)
 {
     return kTRUE;
+}
+
+
+void AdlarsonPhysics::TrueAnalysis_etapr6g()
+{
+    True_BeamEnergy->Fill(etapr_6gTrue.GetTrueBeamEnergy());
+
+    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
+    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
+    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
+    DalitzPlot(etapr_true, Xtrue, Ytrue, DPnrTrue);
+    m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
+
+
+    Double_t test = etapr_6gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000;
+    ThvE_p->Fill(etapr_6gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000 ,etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
+
+    double test2 = (etapr_6gTrue.GetTrueGammaLV(4) + etapr_6gTrue.GetTrueGammaLV(5)).M();
+
+    for(Int_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
+    {
+        if ( i > 3 ) // first four gammas come from 2pi0
+            ThvE_eta_g->Fill(etapr_6gTrue.GetTrueGammaLV(i).E(),etapr_6gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
+        else
+            ThvE_pi0_g->Fill(etapr_6gTrue.GetTrueGammaLV(i).E(),etapr_6gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
+    }
+    return;
 }
 
 
@@ -165,14 +192,23 @@ void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double
     Double_t Q;
     Double_t X_max = 1.5, Y_max = 1.5, bin_width = 0.2;
 
-    T_eta = g[0].E() - g[0].M();
-    if( g[1].E() > g[2].E() ){
-        T_pi1 = g[1].E() - g[1].M();
-        T_pi2 = g[2].E() - g[2].M();
+    TVector3 etaprime_rest      = -(g[0]+g[1]+g[2]).BoostVector();
+    TLorentzVector eta_ep_rest  = g[0];
+    TLorentzVector pi01_ep_rest = g[1];
+    TLorentzVector pi02_ep_rest = g[2];
+
+    eta_ep_rest.Boost(etaprime_rest);
+    pi01_ep_rest.Boost(etaprime_rest);
+    pi02_ep_rest.Boost(etaprime_rest);
+
+    T_eta = eta_ep_rest.E() - eta_ep_rest.M();
+    if( pi01_ep_rest.E() > pi02_ep_rest.E() ){
+        T_pi1 = pi01_ep_rest.E() - pi01_ep_rest.M();
+        T_pi2 = pi02_ep_rest.E() - pi02_ep_rest.M();
     }
     else{
-        T_pi1 = g[2].E() - g[2].M();
-        T_pi2 = g[1].E() - g[1].M();
+        T_pi1 = pi02_ep_rest.E() - pi02_ep_rest.M();
+        T_pi2 = pi01_ep_rest.E() - pi01_ep_rest.M();
     }
 
     Q = T_eta + T_pi1 + T_pi2;
@@ -180,6 +216,8 @@ void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double
     Y = ( MASS_ETA + 2 * MASS_PI0 ) / MASS_PI0 * ( T_eta / Q ) - 1.0;
 
     DP_nr = ( int( X ) + X_max ) / 0.2 + 40*( int( Y ) + Y_max );
+
+    DP_true->Fill(X,Y);
 }
 
 
@@ -202,18 +240,22 @@ void AdlarsonPhysics::m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, 
 
     Double_t meta, mpi01, mpi02, metapr;
 
+
     meta = g[0].M();
     mpi01 = g[1].M();
     mpi02 = g[2].M();
     metapr = ( g[0] + g[1] + g[2] ).M();
 
-    m_etapi01   = ( g[0] + g[1] ).M();
-    m_etapi02   = ( g[0] + g[2] ).M();
+    m_etapi01   = ( g[0] + g[1] ).M2();
+    m_etapi02   = ( g[0] + g[2] ).M2();
     m_2pi0      = ( g[1] + g[2] ).M2();
 
     M_pi1pi2_true->Fill(m_2pi0);
-
+    M_etapi_true->Fill(m_etapi01);
+    M_etapi_true->Fill(m_etapi02);
 }
+
+
 
 
 Int_t AdlarsonPhysics::perm6g[15][6]=
