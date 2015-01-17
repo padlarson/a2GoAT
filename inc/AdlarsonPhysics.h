@@ -6,21 +6,32 @@
 #include <cstdio>
 #include <string> 
 
+#include <TCutG.h>
 #include "GTreeManager.h"
-#include "GH1.h"
+#include "GHistBGSub2.h"
 #include "TVector.h"
 #include "GTrue.h"
 
 class	AdlarsonPhysics  : public GTreeManager
 {
 private:
+    // Histograms and scatterplots declared
     GH1*	IM_6g;
     GH1*	IM_10g;
 
-//    GH2*    DP_true;
-    GH1*    M_pi1pi2_true;
-//    GH2*    M_etapi1etapi2_true;
+    GH1*            True_BeamEnergy;
+    GHistBGSub2*    ThvE_p;
+    GHistBGSub2*    ThvE_eta_g;
+    GHistBGSub2*    ThvE_pi0_g;
+    GHistBGSub2*    DP_true;
+    GH1*            M_pi1pi2_true;
+    GH1*            M_etapi_true;
 
+    // proton identified from TAPS_E vs VETO_dE
+    TCutG*          OpenCutFile(Char_t* filename, Char_t* cutname);
+    TCutG*          cutProtonTAPS;
+
+    // True LorentzVectors
     TLorentzVector  eta_true;
     TLorentzVector  pi01_true;
     TLorentzVector  pi02_true;
@@ -56,6 +67,9 @@ public:
 
     // calculates IM for n photons
     Double_t    IM_Ng( UInt_t n );
+
+    // function where true analysis is done for eta' --> eta 2pi0 --> 6g
+    void TrueAnalysis_etapr6g();
 
     // functions specifically related to 6g analysis
     void sixgAnalysis();
