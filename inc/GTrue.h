@@ -12,7 +12,7 @@ class GTrue
 {
 
 private:
-    GH1                 vX;
+//    GH1                 vX;
     Double_t            TrueBeamEnergy;
     // weight of each event, default weight = 1
     Double_t            weight;
@@ -43,6 +43,8 @@ public:
     void Init(GTreePluto& pluto);
     void Start(GTreePluto& pluto);
 
+            Double_t    GetTrueBeamEnergy()                     { return TrueBeamEnergy;}
+    const   Double_t    GetTrueBeamEnergy()     const           { return TrueBeamEnergy;}
     // proton LorentzVector
             TLorentzVector& GetTrueProtonLV()           { return proton;}
     const   TLorentzVector& GetTrueProtonLV()   const   { return proton;}

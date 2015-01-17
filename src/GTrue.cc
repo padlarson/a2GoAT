@@ -4,7 +4,7 @@
 
 
 GTrue::GTrue():
-    vX("vertexX", "vertexX", 2050, -1025, 1025),
+ //   vX("vertexX", "vertexX", 2050, -1025, 1025),
     weight(1.0),
     TrueBeamEnergy(-10000.0),
     vertex(-1000,-1000,-1000),
