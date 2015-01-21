@@ -28,6 +28,8 @@
  * Use the "hadd" program from ROOT to copy the a2geant tree into the acqu output file:
  * $ hadd target.root Acqu.root geant.root
  * And then run goat on target.root.
+ * To use PLUTo information write
+ * $ hadd target.root Acqu.root Geant.root Pluto.root NB( do not use the mkin converted pluto tree)
  */
 class  GTreeA2Geant : public GTree
 {

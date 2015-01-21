@@ -13,6 +13,7 @@ AdlarsonPhysics::AdlarsonPhysics()
         // Beam energy
         True_BeamEnergy     = new GH1("True_BeamEnergy", "True Beam Energy", 250, 1.400, 1.650);
         // Phase space final state particles
+        ThpvsThetaprCM      = new GHistBGSub2("ThpvsThetaprCM", "#theta_{p} vs #theta_{#eta^{'}}", 360, 0., 180, 360, 0., 180.);
         ThvE_p              = new GHistBGSub2("ThvE_p", "E_{p} vs #theta_{p}", 100, 0., 0.6, 100, 0., 25.);
         ThvE_eta_g          = new GHistBGSub2("ThvE_eta_g", "E_{#gamma, #eta} vs #theta_{#gamma, #eta}", 100, 0, 1.000, 36, 0, 180);
         ThvE_pi0_g          = new GHistBGSub2("ThvE_pi0_g", "E_{#gamma, #pi^{0}} vs #theta_{#gamma, #pi^{0}}", 60, 0, .600, 36, 0, 180);
@@ -103,17 +104,18 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
 {
     True_BeamEnergy->Fill(etapr_6gTrue.GetTrueBeamEnergy());
 
+
+    // calculate Physics
+
     etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
     etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
     etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
     DalitzPlot(etapr_true, Xtrue, Ytrue, DPnrTrue);
     m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
 
+    // calculate True Energy vs Theta of final state particles
 
-    Double_t test = etapr_6gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000;
     ThvE_p->Fill(etapr_6gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000 ,etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
-
-    double test2 = (etapr_6gTrue.GetTrueGammaLV(4) + etapr_6gTrue.GetTrueGammaLV(5)).M();
 
     for(Int_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
     {

@@ -20,6 +20,7 @@ private:
     GH1*	IM_10g;
 
     GH1*            True_BeamEnergy;
+    GHistBGSub2*    ThpvsThetaprCM;
     GHistBGSub2*    ThvE_p;
     GHistBGSub2*    ThvE_eta_g;
     GHistBGSub2*    ThvE_pi0_g;
