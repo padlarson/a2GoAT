@@ -45,14 +45,14 @@ GTreePluto::ParticleList GTreePluto::GetAllParticles() const
 
 void    GTreePluto::SetBranchAdresses()
 {
-    tree_in->SetBranchAddress("Particles", 	&PlutoMCTrue);
-    tree_in->SetBranchAddress("plutoID", 	&plutoID);
-    tree_in->SetBranchAddress("plutoRandomID", 	&plutoRandomID);
+    inputTree->SetBranchAddress("Particles", 	&PlutoMCTrue);
+    inputTree->SetBranchAddress("plutoID", 	&plutoID);
+    inputTree->SetBranchAddress("plutoRandomID", 	&plutoRandomID);
 }
 
 void    GTreePluto::SetBranches()
 {
-    tree_out->Branch("Particles", PlutoMCTrue);
-    tree_out->Branch("plutoID", &plutoID);
-    tree_out->Branch("plutoRandomID", &plutoRandomID);
+    outputTree->Branch("Particles", PlutoMCTrue);
+    outputTree->Branch("plutoID", &plutoID);
+    outputTree->Branch("plutoRandomID", &plutoRandomID);
 }
