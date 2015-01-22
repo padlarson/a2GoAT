@@ -139,7 +139,7 @@ add_executable(AdlarsonAnalysis
    ${GOAT_GHIST}
    inc/GTrue.h
    src/GTrue.cc
-   inc/PPhysics.h
+   inc/PPhysics.h  
    src/PPhysics.cc
    inc/AdlarsonPhysics.h
    src/PPi0Example.cc
