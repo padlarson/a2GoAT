@@ -51,8 +51,11 @@ Bool_t	AdlarsonPhysics::Start()
 
 void	AdlarsonPhysics::ProcessEvent()
 {
-    etapr_6gTrue.Start(*pluto); // (pluto tree, n part in pluto per event)
 
+
+    etapr_6gTrue.Start(*GetPluto()); // (pluto tree, n part in pluto per event)
+
+    /*
     TrueAnalysis_etapr6g();
 
 
@@ -85,6 +88,8 @@ void	AdlarsonPhysics::ProcessEvent()
             tengAnalysis();
         }
 
+        */
+
 }
 
 void	AdlarsonPhysics::ProcessScalerRead()
@@ -100,6 +105,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configfile)
 }
 
 
+/*
 void AdlarsonPhysics::TrueAnalysis_etapr6g()
 {
     True_BeamEnergy->Fill(etapr_6gTrue.GetTrueBeamEnergy());
@@ -465,3 +471,4 @@ Int_t AdlarsonPhysics::perm6outof10g[210][6]=
 
 };
 
+*/
