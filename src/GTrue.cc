@@ -1,4 +1,5 @@
 #include "GTrue.h"
+#include "GTreeA2Geant.h"
 #include "GTreePluto.h"
 #include "PParticle.h"
 
@@ -20,14 +21,14 @@ GTrue::~GTrue()
 }
 
 
-void GTrue::Start(GTreePluto& pluto)
+void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
 {
     nchpi = 0;
     npi0 = 0;
     ngamma = 0;
     TrueBeamEnergy = -10000.0;
 
-    vertex  = pluto.GetMCTrue(0)->GetVertex();
+    vertex  = geant.GetVertex();
 
     TrueBeamEnergy = pluto.GetMCTrueLV(0).P();
 //    TrueBeamEnergy = pluto.GetAllParticles().front()->P();
