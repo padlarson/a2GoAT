@@ -41,7 +41,7 @@ public:
     GTrue();
     virtual ~GTrue();
     void Init(GTreePluto& pluto);
-    void Start(GTreePluto& pluto);
+    void Start(GTreePluto& pluto, GTreeA2Geant& geant);
 
             Double_t    GetTrueBeamEnergy()                     { return TrueBeamEnergy;}
     const   Double_t    GetTrueBeamEnergy()     const           { return TrueBeamEnergy;}
