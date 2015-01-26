@@ -1,5 +1,37 @@
 void RenameGoAT(TString sFile){
+
+  if(sFile.EndsWith(".root")) RunFile(sFile);
+  else{
+    TString sDir = gSystem->ExpandPathName(sFile.Data());
+
+    Int_t iLength;
+    TSystemFile *sfFile;
+    const char* cFile;
+
+    gSystem->cd(sDir);
+    
+    TSystemDirectory *sdFile = new TSystemDirectory("files","./");
+    TList *lFile = sdFile->GetListOfFiles();
+    lFile->Sort();
+    TIter itFile(lFile);
+    
+    while((sfFile=(TSystemFile*)itFile())){
+      cFile = sfFile->GetName();
+      sFile = cFile;
+      iLength = strlen(cFile);
+      if((iLength >= 5) && (strcmp(&cFile[iLength-5],".root") == 0)){
+	RunFile(sFile);
+      }
+    }
+  }
+}
+
+void RunFile(TString sFile){
   
+  printf("Renaming %s\n",sFile.Data());
+  TStopwatch timer;
+  timer.Start();
+
   TFile fOld(sFile,"READ");
 
   // Acqu Trees
@@ -28,7 +60,7 @@ void RenameGoAT(TString sFile){
   TFile fNew(sFile,"RECREATE");
 
   if(taggerOld){
-    printf("Renaming treeTagger to tagger\n");
+    printf("         treeTagger to tagger\n");
 
     Int_t nTagged          = 0;
     Double_t *taggedEnergy = new Double_t[4096];
@@ -59,18 +91,28 @@ void RenameGoAT(TString sFile){
       tagger->Fill();
     }
     tagger->Write();
+
+    delete tagger;
+
+    delete taggedEnergy;
+    delete taggedChannel;
+    delete taggedTime;
   }
 
-  Int_t nParticles      = 0;
+  UInt_t nParticles     = 0;
   Double_t *time        = new Double_t[128];
-  Int_t *clusterSize    = new Int_t[128];
-  Int_t *apparatus      = new Int_t[128];
+  UChar_t *clusterSize  = new UChar_t[128];
+  UChar_t *apparatus    = new UChar_t[128];
   Double_t *vetoEnergy  = new Double_t[128];
   Double_t *MWPC0Energy = new Double_t[128];
   Double_t *MWPC1Energy = new Double_t[128];
 
+  Int_t nParticlesNew   = 0;
+  Int_t *clusterSizeNew = new Int_t[128];
+  Int_t *apparatusNew   = new Int_t[128];
+
   if(tracksOld){
-    printf("Renaming treeRawEvent to tracks\n");
+    printf("         treeRawEvent to tracks\n");
 
     Int_t nTracks           = 0;
     Double_t *clusterEnergy = new Double_t[128];
@@ -102,7 +144,7 @@ void RenameGoAT(TString sFile){
       }
       if(tracksOld->GetBranch("clusterSize")){
 	tracksOld->SetBranchAddress("clusterSize", clusterSize);
-	tracks->Branch("clusterSize", clusterSize, "clusterSize[nTracks]/I");
+	tracks->Branch("clusterSize", clusterSizeNew, "clusterSize[nTracks]/I");
       }
       if(tracksOld->GetBranch("centralCrys")){
 	tracksOld->SetBranchAddress("centralCrys", centralCrystal);
@@ -114,7 +156,7 @@ void RenameGoAT(TString sFile){
       }
       if(tracksOld->GetBranch("Apparatus")){
 	tracksOld->SetBranchAddress("Apparatus", apparatus);
-	tracks->Branch("apparatus", apparatus, "apparatus[nTracks]/I");
+	tracks->Branch("apparatus", apparatusNew, "apparatus[nTracks]/I");
       }
       if(tracksOld->GetBranch("d_E")){
 	tracksOld->SetBranchAddress("d_E", vetoEnergy);
@@ -131,14 +173,26 @@ void RenameGoAT(TString sFile){
     }
 
     for(Int_t i=0; i<tracksOld->GetEntries(); i++){
-      tracksOld->GetEvent(i);
+      tracksOld->GetEvent(i);      
+      for(Int_t j=0; j<nTracks; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       tracks->Fill();
     }
     tracks->Write();
+
+    delete tracks;
+
+    delete clusterEnergy;
+    delete theta;
+    delete phi;
+    delete centralCrystal;
+    delete centralVeto;
   }
 
   if(detectorHitsOld){
-    printf("Renaming treeDetectorHits to detectorHits\n");
+    printf("         treeDetectorHits to detectorHits\n");
 
     Int_t nNaIHits          = 0;
     Int_t *NaIHits          = new Int_t[860];
@@ -209,10 +263,20 @@ void RenameGoAT(TString sFile){
       detectorHits->Fill();
     }
     detectorHits->Write();
+
+    delete detectorHits;
+
+    delete NaIHits;
+    delete NaICluster;
+    delete PIDHits;
+    delete MWPCHits;
+    delete BaF2Hits;
+    delete BaF2Cluster;
+    delete VetoHits;
   }
 
   if(linPolOld){
-    printf("Renaming treeLinPol to linPol\n");
+    printf("         treeLinPol to linPol\n");
 
     Int_t plane                 = 0;
     Double_t edge               = 0;
@@ -248,10 +312,15 @@ void RenameGoAT(TString sFile){
       linPol->Fill();
     }
     linPol->Write();
+
+    delete linPol;
+
+    delete polarizationTable;
+    delete enhancementTable;
   }
 
   if(triggerOld){
-    printf("Renaming treeTrigger to trigger\n");
+    printf("         treeTrigger to trigger\n");
 
     Double_t energySum      = 0;
     Int_t multiplicity      = 0;
@@ -308,12 +377,19 @@ void RenameGoAT(TString sFile){
       trigger->Fill();
     }
     trigger->Write();
+
+    delete trigger;
+
+    delete errorModuleID;
+    delete errorModuleIndex;
+    delete errorCode;
+    delete triggerPattern;
   }
 
   Int_t eventNumber = 0;
 
   if(scalersOld){
-    printf("Renaming treeScaler to scalers\n");
+    printf("         treeScaler to scalers\n");
 
     TString sScaler = scalersOld->GetBranch("Scaler")->GetTitle();
     sScaler.Remove(0,sScaler.First("[")+1);
@@ -345,39 +421,49 @@ void RenameGoAT(TString sFile){
       scalers->Fill();
     }
     scalers->Write();
+
+    delete scalers;
+
+    delete scalerArray;
   }
 
   if(eventParametersOld){
-    printf("Renaming treeEventParameters to eventParameters\n");
+    printf("         treeEventParameters to eventParameters\n");
 
-    Int_t nReconstructed = 0;
+    UInt_t eventNumberU = 0;
+    UChar_t nReconstructed = 0;
+    Int_t nReconstructedNew = 0;
 
     TTree *eventParameters = new TTree("eventParameters", "eventParameters");
 
     if(eventParametersOld->GetBranch("EventNumber")){
-      eventParametersOld->SetBranchAddress("EventNumber", &eventNumber);
+      eventParametersOld->SetBranchAddress("EventNumber", &eventNumberU);
       eventParameters->Branch("eventNumber", &eventNumber, "eventNumber/I");
     }
     if(eventParametersOld->GetBranch("nReconstructed")){
       eventParametersOld->SetBranchAddress("nReconstructed", &nReconstructed);
-      eventParameters->Branch("nReconstructed", &nReconstructed, "nReconstructed/I");
+      eventParameters->Branch("nReconstructed", &nReconstructedNew, "nReconstructed/I");
     }
 
     for(Int_t i=0; i<eventParametersOld->GetEntries(); i++){
       eventParametersOld->GetEvent(i);
+      eventNumber = (Int_t)eventNumberU;
+      nReconstructedNew = (Int_t)nReconstructed;
       eventParameters->Fill();
     }
     eventParameters->Write();
+
+    delete eventParameters;
   }
 
   if(rootinosOld){
-    printf("Renaming rootino to rootinos\n");
+    printf("         rootino to rootinos\n");
 
     TTree *rootinos = new TTree("rootinos", "rootinos");
 
     if(rootinosOld->GetBranch("nParticles")){
       rootinosOld->SetBranchAddress("nParticles", &nParticles);
-      rootinos->Branch("nParticles", &nParticles, "nParticles/i");
+      rootinos->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(rootinosOld->GetBranch("particles.")){
 	rootinosOld->SetBranchAddress("particles.", &particles);
 	rootinos->Branch("particles", &particles, 32000, 0);
@@ -388,11 +474,11 @@ void RenameGoAT(TString sFile){
       }
       if(rootinosOld->GetBranch("clusterSize")){
 	rootinosOld->SetBranchAddress("clusterSize", clusterSize);
-	rootinos->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/b");
+	rootinos->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(rootinosOld->GetBranch("Apparatus")){
 	rootinosOld->SetBranchAddress("Apparatus", apparatus);
-	rootinos->Branch("apparatus", apparatus, "apparatus[nParticles]/b");
+	rootinos->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(rootinosOld->GetBranch("d_E")){
 	rootinosOld->SetBranchAddress("d_E", vetoEnergy);
@@ -410,19 +496,26 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<rootinosOld->GetEntries(); i++){
       rootinosOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       rootinos->Fill();
     }
     rootinos->Write();
+
+    delete rootinos;
   }
 
   if(photonsOld){
-    printf("Renaming gamma to photons\n");
+    printf("         gamma to photons\n");
 
     TTree *photons = new TTree("photons", "photons");
 
     if(photonsOld->GetBranch("nParticles")){
       photonsOld->SetBranchAddress("nParticles", &nParticles);
-      photons->Branch("nParticles", &nParticles, "nParticles/I");
+      photons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(photonsOld->GetBranch("particles.")){
 	photonsOld->SetBranchAddress("particles.", &particles);
 	photons->Branch("particles", &particles, 32000, 0);
@@ -433,11 +526,11 @@ void RenameGoAT(TString sFile){
       }
       if(photonsOld->GetBranch("clusterSize")){
 	photonsOld->SetBranchAddress("clusterSize", clusterSize);
-	photons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	photons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(photonsOld->GetBranch("Apparatus")){
 	photonsOld->SetBranchAddress("Apparatus", apparatus);
-	photons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	photons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(photonsOld->GetBranch("d_E")){
 	photonsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -455,19 +548,26 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<photonsOld->GetEntries(); i++){
       photonsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       photons->Fill();
     }
     photons->Write();
+
+    delete photons;
   }
 
   if(electronsOld){
-    printf("Renaming e- to electrons\n");
+    printf("         e- to electrons\n");
 
     TTree *electrons = new TTree("electrons", "electrons");
 
     if(electronsOld->GetBranch("nParticles")){
       electronsOld->SetBranchAddress("nParticles", &nParticles);
-      electrons->Branch("nParticles", &nParticles, "nParticles/I");
+      electrons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(electronsOld->GetBranch("particles.")){
 	electronsOld->SetBranchAddress("particles.", &particles);
 	electrons->Branch("particles", &particles, 32000, 0);
@@ -478,11 +578,11 @@ void RenameGoAT(TString sFile){
       }
       if(electronsOld->GetBranch("clusterSize")){
 	electronsOld->SetBranchAddress("clusterSize", clusterSize);
-	electrons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	electrons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(electronsOld->GetBranch("Apparatus")){
 	electronsOld->SetBranchAddress("Apparatus", apparatus);
-	electrons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	electrons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(electronsOld->GetBranch("d_E")){
 	electronsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -500,19 +600,26 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<electronsOld->GetEntries(); i++){
       electronsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       electrons->Fill();
     }
     electrons->Write();
+
+    delete electrons;
   }
 
   if(chargedPionsOld){
-    printf("Renaming pi+ to chargedPions\n");
+    printf("         pi+ to chargedPions\n");
 
     TTree *chargedPions = new TTree("chargedPions", "chargedPions");
 
     if(chargedPionsOld->GetBranch("nParticles")){
       chargedPionsOld->SetBranchAddress("nParticles", &nParticles);
-      chargedPions->Branch("nParticles", &nParticles, "nParticles/I");
+      chargedPions->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(chargedPionsOld->GetBranch("particles.")){
 	chargedPionsOld->SetBranchAddress("particles.", &particles);
 	chargedPions->Branch("particles", &particles, 32000, 0);
@@ -523,11 +630,11 @@ void RenameGoAT(TString sFile){
       }
       if(chargedPionsOld->GetBranch("clusterSize")){
 	chargedPionsOld->SetBranchAddress("clusterSize", clusterSize);
-	chargedPions->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	chargedPions->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(chargedPionsOld->GetBranch("Apparatus")){
 	chargedPionsOld->SetBranchAddress("Apparatus", apparatus);
-	chargedPions->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	chargedPions->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(chargedPionsOld->GetBranch("d_E")){
 	chargedPionsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -545,19 +652,26 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<chargedPionsOld->GetEntries(); i++){
       chargedPionsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       chargedPions->Fill();
     }
     chargedPions->Write();
+
+    delete chargedPions;
   }
 
   if(protonsOld){
-    printf("Renaming proton to protons\n");
+    printf("         proton to protons\n");
 
     TTree *protons = new TTree("protons", "protons");
 
     if(protonsOld->GetBranch("nParticles")){
       protonsOld->SetBranchAddress("nParticles", &nParticles);
-      protons->Branch("nParticles", &nParticles, "nParticles/I");
+      protons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(protonsOld->GetBranch("particles.")){
 	protonsOld->SetBranchAddress("particles.", &particles);
 	protons->Branch("particles", &particles, 32000, 0);
@@ -568,11 +682,11 @@ void RenameGoAT(TString sFile){
       }
       if(protonsOld->GetBranch("clusterSize")){
 	protonsOld->SetBranchAddress("clusterSize", clusterSize);
-	protons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	protons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(protonsOld->GetBranch("Apparatus")){
 	protonsOld->SetBranchAddress("Apparatus", apparatus);
-	protons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	protons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(protonsOld->GetBranch("d_E")){
 	protonsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -590,19 +704,26 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<protonsOld->GetEntries(); i++){
       protonsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
       protons->Fill();
     }
     protons->Write();
+
+    delete protons;
   }
 
   if(neutronsOld){
-    printf("Renaming neutron to neutrons\n");
+    printf("         neutron to neutrons\n");
 
     TTree *neutrons = new TTree("neutrons", "neutrons");
 
     if(neutronsOld->GetBranch("nParticles")){
       neutronsOld->SetBranchAddress("nParticles", &nParticles);
-      neutrons->Branch("nParticles", &nParticles, "nParticles/I");
+      neutrons->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(neutronsOld->GetBranch("particles.")){
 	neutronsOld->SetBranchAddress("particles.", &particles);
 	neutrons->Branch("particles", &particles, 32000, 0);
@@ -613,11 +734,11 @@ void RenameGoAT(TString sFile){
       }
       if(neutronsOld->GetBranch("clusterSize")){
 	neutronsOld->SetBranchAddress("clusterSize", clusterSize);
-	neutrons->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	neutrons->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(neutronsOld->GetBranch("Apparatus")){
 	neutronsOld->SetBranchAddress("Apparatus", apparatus);
-	neutrons->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	neutrons->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(neutronsOld->GetBranch("d_E")){
 	neutronsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -636,8 +757,15 @@ void RenameGoAT(TString sFile){
     for(Int_t i=0; i<neutronsOld->GetEntries(); i++){
       neutronsOld->GetEvent(i);
       neutrons->Fill();
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+      }
     }
     neutrons->Write();
+
+    delete neutrons;
   }
 
   UChar_t *nSubParticles    = new UChar_t[64];
@@ -649,14 +777,19 @@ void RenameGoAT(TString sFile){
   TClonesArray *subPhotons      = new TClonesArray("TLorentzVector", 64);
   TClonesArray *subChargedPions = new TClonesArray("TLorentzVector", 64);
 
+  Int_t *nSubParticlesNew    = new Int_t[64];
+  Int_t *nSubRootinosNew     = new Int_t[64];
+  Int_t *nSubPhotonsNew      = new Int_t[64];
+  Int_t *nSubChargedPionsNew = new Int_t[64];
+
   if(neutralPionsOld){
-    printf("Renaming pi0 to neutralPions\n");
+    printf("         pi0 to neutralPions\n");
 
     TTree *neutralPions = new TTree("neutralPions", "neutralPions");
 
     if(neutralPionsOld->GetBranch("nParticles")){
       neutralPionsOld->SetBranchAddress("nParticles", &nParticles);
-      neutralPions->Branch("nParticles", &nParticles, "nParticles/I");
+      neutralPions->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(neutralPionsOld->GetBranch("particles.")){
 	neutralPionsOld->SetBranchAddress("particles.", &particles);
 	neutralPions->Branch("particles", &particles, 32000, 0);
@@ -667,11 +800,11 @@ void RenameGoAT(TString sFile){
       }
       if(neutralPionsOld->GetBranch("clusterSize")){
 	neutralPionsOld->SetBranchAddress("clusterSize", clusterSize);
-	neutralPions->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	neutralPions->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("Apparatus")){
 	neutralPionsOld->SetBranchAddress("Apparatus", apparatus);
-	neutralPions->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	neutralPions->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("d_E")){
 	neutralPionsOld->SetBranchAddress("d_E", vetoEnergy);
@@ -687,19 +820,19 @@ void RenameGoAT(TString sFile){
       }
       if(neutralPionsOld->GetBranch("nSubParticles")){
 	neutralPionsOld->SetBranchAddress("nSubParticles", nSubParticles);
-	neutralPions->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/I");
+	neutralPions->Branch("nSubParticles", nSubParticlesNew, "nSubParticles[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("nSubRootinos")){
 	neutralPionsOld->SetBranchAddress("nSubRootinos", nSubRootinos);
-	neutralPions->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/I");
+	neutralPions->Branch("nSubRootinos", nSubRootinosNew, "nSubRootinos[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("nSubPhotons")){
 	neutralPionsOld->SetBranchAddress("nSubPhotons", nSubPhotons);
-	neutralPions->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/I");
+	neutralPions->Branch("nSubPhotons", nSubPhotonsNew, "nSubPhotons[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("nSubChargedPi")){
 	neutralPionsOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
-	neutralPions->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/I");
+	neutralPions->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
       if(neutralPionsOld->GetBranch("subRootinos")){
 	neutralPionsOld->SetBranchAddress("subRootinos", &subRootinos);
@@ -717,19 +850,30 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<neutralPionsOld->GetEntries(); i++){
       neutralPionsOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
+	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
+	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
+	nSubChargedPionsNew[j] = (Int_t)nSubChargedPions[j];
+      }
       neutralPions->Fill();
     }
     neutralPions->Write();
+
+    delete neutralPions;
   }
 
   if(etasOld){
-    printf("Renaming eta to etas\n");
+    printf("         eta to etas\n");
 
     TTree *etas = new TTree("etas", "etas");
 
     if(etasOld->GetBranch("nParticles")){
       etasOld->SetBranchAddress("nParticles", &nParticles);
-      etas->Branch("nParticles", &nParticles, "nParticles/I");
+      etas->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(etasOld->GetBranch("particles.")){
 	etasOld->SetBranchAddress("particles.", &particles);
 	etas->Branch("particles", &particles, 32000, 0);
@@ -740,11 +884,11 @@ void RenameGoAT(TString sFile){
       }
       if(etasOld->GetBranch("clusterSize")){
 	etasOld->SetBranchAddress("clusterSize", clusterSize);
-	etas->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	etas->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(etasOld->GetBranch("Apparatus")){
 	etasOld->SetBranchAddress("Apparatus", apparatus);
-	etas->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	etas->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(etasOld->GetBranch("d_E")){
 	etasOld->SetBranchAddress("d_E", vetoEnergy);
@@ -760,19 +904,19 @@ void RenameGoAT(TString sFile){
       }
       if(etasOld->GetBranch("nSubParticles")){
 	etasOld->SetBranchAddress("nSubParticles", nSubParticles);
-	etas->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/I");
+	etas->Branch("nSubParticles", nSubParticlesNew, "nSubParticles[nParticles]/I");
       }
       if(etasOld->GetBranch("nSubRootinos")){
 	etasOld->SetBranchAddress("nSubRootinos", nSubRootinos);
-	etas->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/I");
+	etas->Branch("nSubRootinos", nSubRootinosNew, "nSubRootinos[nParticles]/I");
       }
       if(etasOld->GetBranch("nSubPhotons")){
 	etasOld->SetBranchAddress("nSubPhotons", nSubPhotons);
-	etas->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/I");
+	etas->Branch("nSubPhotons", nSubPhotonsNew, "nSubPhotons[nParticles]/I");
       }
       if(etasOld->GetBranch("nSubChargedPi")){
 	etasOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
-	etas->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/I");
+	etas->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
       if(etasOld->GetBranch("subRootinos")){
 	etasOld->SetBranchAddress("subRootinos", &subRootinos);
@@ -790,19 +934,30 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<etasOld->GetEntries(); i++){
       etasOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
+	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
+	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
+	nSubChargedPionsNew[j] = (Int_t)nSubChargedPions[j];
+      }
       etas->Fill();
     }
     etas->Write();
+
+    delete etas;
   }
 
   if(etaPrimesOld){
-    printf("Renaming eta' to etaPrimes\n");
+    printf("         eta' to etaPrimes\n");
 
     TTree *etaPrimes = new TTree("etaPrimes", "etaPrimes");
 
     if(etaPrimesOld->GetBranch("nParticles")){
       etaPrimesOld->SetBranchAddress("nParticles", &nParticles);
-      etaPrimes->Branch("nParticles", &nParticles, "nParticles/I");
+      etaPrimes->Branch("nParticles", &nParticlesNew, "nParticles/I");
       if(etaPrimesOld->GetBranch("particles.")){
 	etaPrimesOld->SetBranchAddress("particles.", &particles);
 	etaPrimes->Branch("particles", &particles, 32000, 0);
@@ -813,11 +968,11 @@ void RenameGoAT(TString sFile){
       }
       if(etaPrimesOld->GetBranch("clusterSize")){
 	etaPrimesOld->SetBranchAddress("clusterSize", clusterSize);
-	etaPrimes->Branch("clusterSize", clusterSize, "clusterSize[nParticles]/I");
+	etaPrimes->Branch("clusterSize", clusterSizeNew, "clusterSize[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("Apparatus")){
 	etaPrimesOld->SetBranchAddress("Apparatus", apparatus);
-	etaPrimes->Branch("apparatus", apparatus, "apparatus[nParticles]/I");
+	etaPrimes->Branch("apparatus", apparatusNew, "apparatus[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("d_E")){
 	etaPrimesOld->SetBranchAddress("d_E", vetoEnergy);
@@ -833,19 +988,19 @@ void RenameGoAT(TString sFile){
       }
       if(etaPrimesOld->GetBranch("nSubParticles")){
 	etaPrimesOld->SetBranchAddress("nSubParticles", nSubParticles);
-	etaPrimes->Branch("nSubParticles", nSubParticles, "nSubParticles[nParticles]/I");
+	etaPrimes->Branch("nSubParticles", nSubParticlesNew, "nSubParticles[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("nSubRootinos")){
 	etaPrimesOld->SetBranchAddress("nSubRootinos", nSubRootinos);
-	etaPrimes->Branch("nSubRootinos", nSubRootinos, "nSubRootinos[nParticles]/I");
+	etaPrimes->Branch("nSubRootinos", nSubRootinosNew, "nSubRootinos[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("nSubPhotons")){
 	etaPrimesOld->SetBranchAddress("nSubPhotons", nSubPhotons);
-	etaPrimes->Branch("nSubPhotons", nSubPhotons, "nSubPhotons[nParticles]/I");
+	etaPrimes->Branch("nSubPhotons", nSubPhotonsNew, "nSubPhotons[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("nSubChargedPi")){
 	etaPrimesOld->SetBranchAddress("nSubChargedPi", nSubChargedPions);
-	etaPrimes->Branch("nSubChargedPions", nSubChargedPions, "nSubChargedPions[nParticles]/I");
+	etaPrimes->Branch("nSubChargedPions", nSubChargedPionsNew, "nSubChargedPions[nParticles]/I");
       }
       if(etaPrimesOld->GetBranch("subRootinos")){
 	etaPrimesOld->SetBranchAddress("subRootinos", &subRootinos);
@@ -863,10 +1018,44 @@ void RenameGoAT(TString sFile){
 
     for(Int_t i=0; i<etaPrimesOld->GetEntries(); i++){
       etaPrimesOld->GetEvent(i);
+      nParticlesNew = (Int_t)nParticles;
+      for(Int_t j=0; j<nParticlesNew; j++){
+	clusterSizeNew[j] = (Int_t)clusterSize[j];
+	apparatusNew[j] = (Int_t)apparatus[j];
+	nSubParticlesNew[j] = (Int_t)nSubParticles[j];
+	nSubRootinosNew[j] = (Int_t)nSubRootinos[j];
+	nSubPhotonsNew[j] = (Int_t)nSubPhotons[j];
+	nSubChargedPionsNew[j] = (Int_t)nSubChargedPions[j];
+      }
       etaPrimes->Fill();
     }
     etaPrimes->Write();
+
+    delete etaPrimes;
   }
+
+  delete time;
+  delete clusterSize;
+  delete apparatus;
+  delete vetoEnergy;
+  delete MWPC0Energy;
+  delete MWPC1Energy;
+
+  delete nSubParticles;
+  delete nSubRootinos;
+  delete nSubPhotons;
+  delete nSubChargedPions;
+    
+  delete subRootinos;
+  delete subPhotons;
+  delete subChargedPions;
+
+  delete clusterSizeNew;
+  delete apparatusNew;
+  delete nSubParticlesNew;
+  delete nSubRootinosNew;
+  delete nSubPhotonsNew;
+  delete nSubChargedPionsNew;
 
   if(fOld.GetListOfKeys()->Contains("CheckCB")){
     fNew.mkdir("CheckCB");
@@ -885,6 +1074,13 @@ void RenameGoAT(TString sFile){
     TH2F *Check_CBPhiCorr_pi0 = (TH2F*)fOld.Get("CheckCB/Check_CBPhiCorr_pi0");	
     Check_CBPhiCorr_pi0->Write();
 
+    delete Check_CBdE_E;
+    delete Check_CBPhiCorr;
+    delete Check_CBdE_E_1PID;
+    delete Check_CBPhiCorr_1PID;
+    delete Check_CBdE_E_pi0;
+    delete Check_CBPhiCorr_pi0;
+
     fNew.cd();
   }
 
@@ -901,6 +1097,11 @@ void RenameGoAT(TString sFile){
     Check_TAPSdE_E_1Veto->Write();
     TH2F *Check_TAPSPhiCorr_1Veto = (TH2F*)fOld.Get("CheckTAPS/Check_TAPSPhiCorr_1Veto");
     Check_TAPSPhiCorr_1Veto->Write();
+
+    delete Check_TAPSdE_E;
+    delete Check_TAPSPhiCorr;
+    delete Check_TAPSdE_E_1Veto;
+    delete Check_TAPSPhiCorr_1Veto;
 
     fNew.cd();
   }
@@ -937,20 +1138,63 @@ void RenameGoAT(TString sFile){
     TH2F *Check_VetoTDCHits = (TH2F*)fOld.Get("CheckHitPatterns/Check_VetoTDCHits");
     Check_VetoTDCHits->Write();
 
+    delete Check_CBHits;
+    delete Check_CBADCHits;
+    delete Check_CBTDCHits;
+
+    delete Check_PIDHits;
+    delete Check_PIDADCHits;
+    delete Check_PIDTDCHits;
+
+    delete Check_TAPSHits;
+    delete Check_TAPSADCHits;
+    delete Check_TAPSTDCHits;
+
+    delete Check_VetoHits;
+    delete Check_VetoADCHits;
+    delete Check_VetoTDCHits;
+
     fNew.cd();
   }
 
   if(fOld.GetListOfKeys()->Contains("GoAT_File")){
     TNamed *GoAT_File = (TNamed*)fOld.Get("GoAT_File");
     GoAT_File->Write();
+    
+    delete GoAT_File;
   }
 
   if(fOld.GetListOfKeys()->Contains("CountScalerValid")){
     TH1I *CountScalerValid = (TH1I*)fOld.Get("CountScalerValid");
     CountScalerValid->Write();
+
+    delete CountScalerValid;
   }
+
+  delete taggerOld;
+  delete tracksOld;
+  delete detectorHitsOld;
+  delete linPolOld;
+  delete triggerOld;
+  delete scalersOld;
+
+  delete eventParametersOld;
+  delete rootinosOld;
+  delete photonsOld;
+  delete electronsOld;
+  delete chargedPionsOld;
+  delete protonsOld;
+  delete neutronsOld;
+  delete neutralPionsOld;
+  delete etasOld;
+  delete etaPrimesOld;
+
+  delete particles;
 
   fNew.Close();
   fOld.Close();
+
+  timer.Stop();
+  printf("Renaming took %.1f seconds.\n\n", timer.RealTime());
 
 }
