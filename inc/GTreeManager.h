@@ -15,6 +15,7 @@
 #include "GTreeMeson.h"
 #include "GTreeTrigger.h"
 #include "GTreeDetectorHits.h"
+#include "GTreeSetupParameters.h"
 #include "GTreeEventParameters.h"
 #include "GHistManager.h"
 
@@ -33,8 +34,10 @@ private:
     TFile*      inputFile;
     TObjArray   treeList;
     TObjArray   treeCorreleatedToScalerReadList;
+    TObjArray   treeSingleReadList;
     TObjArray   readList;
     TObjArray   readCorreleatedToScalerReadList;
+    TObjArray   readSingleReadList;
     TObjArray   writeList;
     Bool_t      isWritten;
 
@@ -52,6 +55,7 @@ private:
     GTreeTrigger*       trigger;
     GTreeScaler*        scalers;
 
+    GTreeSetupParameters* setupParameters;
     GTreeEventParameters* eventParameters;
     GTreeDetectorHits*  detectorHits;
     GTreeParticle*      rootinos;
@@ -79,6 +83,7 @@ protected:
     GTreeTrigger*       GetTrigger()                {return trigger;}
     GTreeScaler*        GetScalers()                {return scalers;}
 
+    GTreeSetupParameters* GetSetupParameters()      {return setupParameters;}
     GTreeEventParameters* GetEventParameters()      {return eventParameters;}
     GTreeDetectorHits*  GetDetectorHits()           {return detectorHits;}
     GTreeParticle*      GetRootinos()               {return rootinos;}
@@ -103,6 +108,7 @@ protected:
     const   GTreeTrigger*       GetTrigger()            const       {return trigger;}
     const   GTreeScaler*        GetScalers()            const       {return scalers;}
 
+    const   GTreeSetupParameters* GetSetupParameters()  const       {return setupParameters;}
     const   GTreeEventParameters* GetEventParameters()  const       {return eventParameters;}
     const   GTreeDetectorHits*  GetDetectorHits()       const       {return detectorHits;}
     const   GTreeParticle*      GetRootinos()           const       {return rootinos;}

@@ -28,6 +28,7 @@ public:
 private:
     TString         name;
     Bool_t          correlatedToScalerRead;
+    Bool_t          singleRead;
     Int_t           status;
 
     void    GetEntryFast(const UInt_t index)    {inputTree->GetEntry(index);}
@@ -42,7 +43,7 @@ protected:
     virtual void    SetBranches() = 0;
 
 public:
-    GTree(GTreeManager* Manager, const TString& _Name, const Bool_t CorrelatedToScalerRead = kFALSE);
+    GTree(GTreeManager* Manager, const TString& _Name, const Bool_t CorrelatedToScalerRead = kFALSE, const Bool_t SingleRead = kFALSE);
     virtual ~GTree();
 
     virtual void        Clear() = 0;

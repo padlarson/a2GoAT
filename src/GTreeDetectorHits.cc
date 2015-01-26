@@ -7,7 +7,7 @@ GTreeDetectorHits::GTreeDetectorHits(GTreeManager *Manager)    :
     nNaIHits(0),
     nPIDHits(0),
     nMWPCHits(0),
-    nBaF2PbWO4Hits(0),
+    nBaF2Hits(0),
     nVetoHits(0)
 {
 }
@@ -25,9 +25,9 @@ void    GTreeDetectorHits::SetBranchAdresses()
     inputTree->SetBranchAddress("PIDHits", PIDHits);
     inputTree->SetBranchAddress("nMWPCHits", &nMWPCHits);
     inputTree->SetBranchAddress("MWPCHits", MWPCHits);
-    inputTree->SetBranchAddress("nBaF2PbWO4Hits", &nBaF2PbWO4Hits);
-    inputTree->SetBranchAddress("BaF2PbWO4Hits", BaF2PbWO4Hits);
-    inputTree->SetBranchAddress("BaF2PbWO4Cluster", BaF2PbWO4Cluster);
+    inputTree->SetBranchAddress("nBaF2Hits", &nBaF2Hits);
+    inputTree->SetBranchAddress("BaF2Hits", BaF2Hits);
+    inputTree->SetBranchAddress("BaF2Cluster", BaF2Cluster);
     inputTree->SetBranchAddress("nVetoHits", &nVetoHits);
     inputTree->SetBranchAddress("VetoHits", VetoHits);
 }
@@ -41,9 +41,9 @@ void    GTreeDetectorHits::SetBranches()
     outputTree->Branch("PIDHits", PIDHits, "PIDHits[nPIDHits]/I");
     outputTree->Branch("nMWPCHits", &nMWPCHits, "nMWPCHits/I");
     outputTree->Branch("MWPCHits", MWPCHits, "MWPCHits[nMWPCHits]/I");
-    outputTree->Branch("nBaF2PbWO4Hits", &nBaF2PbWO4Hits, "nBaF2PbWO4Hits/I");
-    outputTree->Branch("BaF2PbWO4Hits", BaF2PbWO4Hits, "BaF2PbWO4Hits[nBaF2PbWO4Hits]/I");
-    outputTree->Branch("BaF2PbWO4Cluster", BaF2PbWO4Cluster, "BaF2PbWO4Cluster[nBaF2PbWO4Hits]/I");
+    outputTree->Branch("nBaF2Hits", &nBaF2Hits, "nBaF2Hits/I");
+    outputTree->Branch("BaF2Hits", BaF2Hits, "BaF2Hits[nBaF2Hits]/I");
+    outputTree->Branch("BaF2Cluster", BaF2Cluster, "BaF2Cluster[nBaF2Hits]/I");
     outputTree->Branch("nVetoHits", &nVetoHits, "nVetoHits/I");
     outputTree->Branch("VetoHits", VetoHits, "VetoHits[nVetoHits]/I");
 }

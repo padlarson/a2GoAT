@@ -8,7 +8,7 @@ void RenameGoAT(TString sFile){
   TTree *detectorHitsOld = (TTree*)fOld.Get("treeDetectorHits");
   TTree *linPolOld       = (TTree*)fOld.Get("treeLinPol");
   TTree *triggerOld      = (TTree*)fOld.Get("treeTrigger");
-  TTree *scalerOld       = (TTree*)fOld.Get("treeScaler");
+  TTree *scalersOld       = (TTree*)fOld.Get("treeScaler");
 
   // GoAT Trees
   TTree *eventParametersOld = (TTree*)fOld.Get("treeEventParameters");
@@ -40,10 +40,6 @@ void RenameGoAT(TString sFile){
     if(taggerOld->GetBranch("nTagged")){
       taggerOld->SetBranchAddress("nTagged", &nTagged);
       tagger->Branch("nTagged", &nTagged,"nTagged/I");
-      if(taggerOld->GetBranch("photonbeam_E")){
-	taggerOld->SetBranchAddress("photonbeam_E", taggedEnergy);
-	tagger->Branch("taggedEnergy", taggedEnergy, "taggedEnergy[nTagged]/D");
-      }
       if(taggerOld->GetBranch("tagged_ch")){
 	taggerOld->SetBranchAddress("tagged_ch", taggedChannel);
 	tagger->Branch("taggedChannel", taggedChannel, "taggedChannel[nTagged]/I");
@@ -51,6 +47,10 @@ void RenameGoAT(TString sFile){
       if(taggerOld->GetBranch("tagged_t")){
 	taggerOld->SetBranchAddress("tagged_t", taggedTime);
 	tagger->Branch("taggedTime", taggedTime, "taggedTime[nTagged]/D");
+      }
+      if(taggerOld->GetBranch("photonbeam_E")){
+	taggerOld->SetBranchAddress("photonbeam_E", taggedEnergy);
+	tagger->Branch("taggedEnergy", taggedEnergy, "taggedEnergy[nTagged]/D");
       }
     }
 
@@ -147,9 +147,9 @@ void RenameGoAT(TString sFile){
     Int_t *PIDHits          = new Int_t[860];
     Int_t nMWPCHits         = 0;
     Int_t *MWPCHits         = new Int_t[860];
-    Int_t nBaF2PbWO4Hits    = 0;
-    Int_t *BaF2PbWO4Hits    = new Int_t[860];
-    Int_t *BaF2PbWO4Cluster = new Int_t[860];
+    Int_t nBaF2Hits    = 0;
+    Int_t *BaF2Hits    = new Int_t[860];
+    Int_t *BaF2Cluster = new Int_t[860];
     Int_t nVetoHits         = 0;
     Int_t *VetoHits         = new Int_t[860];
 	
@@ -184,15 +184,15 @@ void RenameGoAT(TString sFile){
       }
     }
     if(detectorHitsOld->GetBranch("nBaF2_PbWO4_Hits")){
-      detectorHitsOld->SetBranchAddress("nBaF2_PbWO4_Hits", &nBaF2PbWO4Hits);
-      detectorHits->Branch("nBaF2PbWO4Hits", &nBaF2PbWO4Hits, "nBaF2PbWO4Hits/I");
+      detectorHitsOld->SetBranchAddress("nBaF2_PbWO4_Hits", &nBaF2Hits);
+      detectorHits->Branch("nBaF2Hits", &nBaF2Hits, "nBaF2Hits/I");
       if(detectorHitsOld->GetBranch("BaF2_PbWO4_Hits")){
-	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Hits", BaF2PbWO4Hits);
-	detectorHits->Branch("BaF2PbWO4Hits", BaF2PbWO4Hits, "BaF2PbWO4Hits[nBaF2PbWO4Hits]/I");
+	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Hits", BaF2Hits);
+	detectorHits->Branch("BaF2Hits", BaF2Hits, "BaF2Hits[nBaF2Hits]/I");
       }
       if(detectorHitsOld->GetBranch("BaF2_PbWO4_Cluster")){
-	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Cluster", BaF2PbWO4Cluster);
-	detectorHits->Branch("BaF2PbWO4Cluster", BaF2PbWO4Cluster, "BaF2PbWO4Cluster[nBaF2PbWO4Hits]/I");
+	detectorHitsOld->SetBranchAddress("BaF2_PbWO4_Cluster", BaF2Cluster);
+	detectorHits->Branch("BaF2Cluster", BaF2Cluster, "BaF2Cluster[nBaF2Hits]/I");
       }
     }
     if(detectorHitsOld->GetBranch("nVeto_Hits")){
@@ -312,10 +312,10 @@ void RenameGoAT(TString sFile){
 
   Int_t eventNumber = 0;
 
-  if(scalerOld){
-    printf("Renaming treeScaler to scaler\n");
+  if(scalersOld){
+    printf("Renaming treeScaler to scalers\n");
 
-    TString sScaler = scalerOld->GetBranch("Scaler")->GetTitle();
+    TString sScaler = scalersOld->GetBranch("Scaler")->GetTitle();
     sScaler.Remove(0,sScaler.First("[")+1);
     sScaler.Remove(sScaler.First("]"));
     const Int_t nScaler = sScaler.Atoi();
@@ -323,28 +323,28 @@ void RenameGoAT(TString sFile){
     sprintf(str, "scalers[%d]/i", nScaler);
 
     Int_t eventID = 0;
-    UInt_t *scalers = new UInt_t[nScaler];
+    UInt_t *scalerArray = new UInt_t[nScaler];
 
-    TTree *scaler = new TTree("scaler", "scaler");
+    TTree *scalers = new TTree("scalers", "scalers");
     
-    if(scalerOld->GetBranch("eventNumber")){
-      scalerOld->SetBranchAddress("eventNumber", &eventNumber);
-      scaler->Branch("eventNumber", &eventNumber, "eventNumber/I");
+    if(scalersOld->GetBranch("eventNumber")){
+      scalersOld->SetBranchAddress("eventNumber", &eventNumber);
+      scalers->Branch("eventNumber", &eventNumber, "eventNumber/I");
     }
-    if(scalerOld->GetBranch("eventID")){
-      scalerOld->SetBranchAddress("eventID", &eventID);
-      scaler->Branch("eventID", &eventID, "eventID/I");
+    if(scalersOld->GetBranch("eventID")){
+      scalersOld->SetBranchAddress("eventID", &eventID);
+      scalers->Branch("eventID", &eventID, "eventID/I");
     }
-    if(scalerOld->GetBranch("Scaler")){
-      scalerOld->SetBranchAddress("Scaler", scalers);
-      scaler->Branch("scalers", scalers, str);
+    if(scalersOld->GetBranch("Scaler")){
+      scalersOld->SetBranchAddress("Scaler", scalerArray);
+      scalers->Branch("scalers", scalerArray, str);
     }
 
-    for(Int_t i=0; i<scalerOld->GetEntries(); i++){
-      scalerOld->GetEvent(i);
-      scaler->Fill();
+    for(Int_t i=0; i<scalersOld->GetEntries(); i++){
+      scalersOld->GetEvent(i);
+      scalers->Fill();
     }
-    scaler->Write();
+    scalers->Write();
   }
 
   if(eventParametersOld){

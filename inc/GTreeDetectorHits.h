@@ -15,9 +15,9 @@ private:
     Int_t		PIDHits[24];
     Int_t		nMWPCHits;
     Int_t		MWPCHits[860];
-    Int_t		nBaF2PbWO4Hits;
-    Int_t		BaF2PbWO4Hits[438];
-    Int_t		BaF2PbWO4Cluster[438];
+    Int_t		nBaF2Hits;
+    Int_t		BaF2Hits[438];
+    Int_t		BaF2Cluster[438];
     Int_t		nVetoHits;
     Int_t		VetoHits[438];
 
@@ -29,7 +29,7 @@ public:
     GTreeDetectorHits(GTreeManager *Manager);
     virtual ~GTreeDetectorHits();
 
-    virtual void            Clear()                         {nNaIHits=0; nPIDHits=0; nMWPCHits=0; nBaF2PbWO4Hits=0; nVetoHits=0;}
+    virtual void            Clear()                         {nNaIHits=0; nPIDHits=0; nMWPCHits=0; nBaF2Hits=0; nVetoHits=0;}
 
             Int_t		GetNNaIHits()              	const	{return nNaIHits;}
     const	Int_t*		GetNaIHits()           		const	{return NaIHits;}
@@ -45,11 +45,11 @@ public:
     const	Int_t*		GetMWPCHits()                	const	{return MWPCHits;}
             Int_t		GetMWPCHits(const Int_t index)	const	{return MWPCHits[index];}
 
-            Int_t		GetNBaF2PbWO4Hits()                   const	{return nBaF2PbWO4Hits;}
-    const	Int_t*		GetBaF2PbWO4Hits()                    const	{return BaF2PbWO4Hits;}
-            Int_t		GetBaF2PbWO4Hits(const Int_t index)	const	{return BaF2PbWO4Hits[index];}
-    const	Int_t*		GetBaF2PbWO4Cluster()                    const	{return BaF2PbWO4Cluster;}
-            Int_t		GetBaF2PbWO4Cluster(const Int_t index)	const	{return BaF2PbWO4Cluster[index];}
+            Int_t		GetNBaF2Hits()                   const	{return nBaF2Hits;}
+    const	Int_t*		GetBaF2Hits()                    const	{return BaF2Hits;}
+            Int_t		GetBaF2Hits(const Int_t index)	const	{return BaF2Hits[index];}
+    const	Int_t*		GetBaF2Cluster()                    const	{return BaF2Cluster;}
+            Int_t		GetBaF2Cluster(const Int_t index)	const	{return BaF2Cluster[index];}
 
             Int_t		GetNVetoHits()                 const	{return nVetoHits;}
     const	Int_t*		GetVetoHits()                  const	{return VetoHits;}

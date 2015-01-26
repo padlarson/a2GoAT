@@ -3,7 +3,8 @@
 
 GTreeTagger::GTreeTagger(GTreeManager *Manager)    :
     GTree(Manager, TString("tagger")),
-    nTagged(0)
+    nTagged(0),
+    hasEnergy(0)
 {
     for(Int_t i=0; i<GTreeTagger_MAX; i++)
     {
@@ -23,18 +24,21 @@ void    GTreeTagger::SetBranchAdresses()
     inputTree->SetBranchAddress("nTagged", 	   &nTagged);
     inputTree->SetBranchAddress("taggedChannel", taggedChannel);
     inputTree->SetBranchAddress("taggedTime",    taggedTime);
-    inputTree->SetBranchAddress("taggedEnergy",  taggedEnergy);
+    if(inputTree->GetBranch("taggedEnergy"))
+    {
+        inputTree->SetBranchAddress("taggedEnergy",  taggedEnergy);
+        hasEnergy = true;
+    }
+
 }
 
 void    GTreeTagger::SetBranches()
 {
     outputTree->Branch("nTagged",       &nTagged,      "nTagged/I");
-    outputTree->Branch("taggedEnergy",  taggedEnergy,  "taggedEnergy[nTagged]/D");
     outputTree->Branch("taggedChannel", taggedChannel, "taggedChannel[nTagged]/I");
     outputTree->Branch("taggedTime",    taggedTime,    "taggedTime[nTagged]/D");
+    if(hasEnergy) outputTree->Branch("taggedEnergy",  taggedEnergy,  "taggedEnergy[nTagged]/D");
 }
-
-
 
 TLorentzVector  GTreeTagger::GetVectorProtonTarget(const Int_t index)    const
 {

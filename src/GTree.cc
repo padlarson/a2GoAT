@@ -5,9 +5,10 @@
 using namespace std;
 
 
-GTree::GTree(GTreeManager *Manager, const TString& _Name, const Bool_t CorrelatedToScalerRead)    :
+GTree::GTree(GTreeManager *Manager, const TString& _Name, const Bool_t CorrelatedToScalerRead, const Bool_t SingleRead)    :
     name(_Name),
     correlatedToScalerRead(CorrelatedToScalerRead),
+    singleRead(SingleRead),
     status(FLAG_CLOSED),
     inputTree(0),
     outputTree(0),
@@ -18,6 +19,11 @@ GTree::GTree(GTreeManager *Manager, const TString& _Name, const Bool_t Correlate
     {
         if(!manager->treeCorreleatedToScalerReadList.FindObject(this))
             manager->treeCorreleatedToScalerReadList.Add(this);
+    }
+    else if(singleRead)
+    {
+        if(!manager->treeSingleReadList.FindObject(this))
+            manager->treeSingleReadList.Add(this);
     }
     else
     {
@@ -34,6 +40,14 @@ GTree::~GTree()
         {
             manager->treeCorreleatedToScalerReadList.Remove(this);
             manager->treeCorreleatedToScalerReadList.Compress();
+        }
+    }
+    else if(singleRead)
+    {
+        if(manager->treeSingleReadList.FindObject(this))
+        {
+            manager->treeSingleReadList.Remove(this);
+            manager->treeSingleReadList.Compress();
         }
     }
     else
@@ -71,6 +85,11 @@ Bool_t  GTree::OpenForInput()
         {
             if(!manager->readCorreleatedToScalerReadList.FindObject(this))
                 manager->readCorreleatedToScalerReadList.Add(this);
+        }
+        else if(singleRead)
+        {
+            if(!manager->readSingleReadList.FindObject(this))
+                manager->readSingleReadList.Add(this);
         }
         else
         {
