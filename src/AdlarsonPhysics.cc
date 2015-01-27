@@ -1,3 +1,4 @@
+#include "GParticleReconstruction.h"
 #include "AdlarsonPhysics.h"
 #include "GTrue.h"
 
@@ -21,6 +22,10 @@ AdlarsonPhysics::AdlarsonPhysics()
         DP_true             = new GHistBGSub2("DP_true", "True Dalitz Plot distribution", 60, -1.5, 1.5, 60, -1.5, 1.5);
         M_pi1pi2_true       = new GH1("M_pi1pi2_true", "True M_{#pi#pi,true}^{2}", 60, 0.05, 0.20);
         M_etapi_true        = new GH1("M_etapi_true", "True M_{#eta#pi,true}^{2}", 100, 0.45, 0.70);
+
+
+     // Rec. TAPS - proton analysis
+        EvdE_TAPS      = new GHistBGSub2("EvdE_TAPS", "E vs dE}", 100, 0., 1000, 20, 0., 20.);
 
 
 
@@ -53,42 +58,56 @@ void	AdlarsonPhysics::ProcessEvent()
 {
 
 
-    etapr_6gTrue.Start(*GetPluto()); // (pluto tree, n part in pluto per event)
+    etapr_6gTrue.Start(*GetPluto(), *GetGeant()); // (pluto tree, n part in pluto per event)
+ //   if(!GParticleReconstruction::Init())
+ //   {
+ //       cout << "GParticleReconstruction Init failed!" << endl;
+ //       return kFALSE;
+ //   }
 
-    /*
+
     TrueAnalysis_etapr6g();
-
 
  //   if(protons->GetNParticles() > 0)
         // Strategy is :
         //  Identify all TAPS hits and check from TOF if the particle is a
         // nucleon or not. As default all hits are considered to be photons.
 
-        for (int i = 0; photons->GetNParticles() ; i++)
+        double chi2pr_min = 100000;
+        double chitest = 10000;
+        double factortheta, factorphi;
+        int itrack = -1;
+
+        for (int i = 0; i < GetPhotons()->GetNParticles() ; i++)
         {
-            if( photons->GetApparatus(i) == GTreeRawParticle::APPARATUS_TAPS )
+            if( GetPhotons()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS )
             {
-              // loop through all events
+                factortheta = etapr_6gTrue.GetTrueProtonLV().Theta() - GetPhotons()->Particle(i).Theta();
+                factortheta = factortheta*TMath::RadToDeg();
+                factorphi =  etapr_6gTrue.GetTrueProtonLV().Phi() - GetPhotons()->Particle(i).Phi();
+                factorphi = factorphi*TMath::RadToDeg();
             }
         }
+        if(itrack != -1)
+        EvdE_TAPS->Fill(GetPhotons()->Particle(itrack).E(), GetPhotons()->GetVetoEnergy(itrack));
 
-        if( (photons->GetNParticles() == 6) || (photons->GetNParticles() == 7) )
+        if( (GetPhotons()->GetNParticles() == 6) || (GetPhotons()->GetNParticles() == 7) )
         {
-            double_t im6g = IM_Ng( photons->GetNParticles()  );
+            double_t im6g = IM_Ng( GetPhotons()->GetNParticles()  );
             IM_6g->Fill( im6g );
 
             sixgAnalysis();
         }
 
-        if(photons->GetNParticles() == 10)
+        if(GetPhotons()->GetNParticles() == 10)
         {
-            double_t im10g = IM_Ng( photons->GetNParticles()  );
+            double_t im10g = IM_Ng( GetPhotons()->GetNParticles()  );
             IM_10g->Fill( im10g );
 
             tengAnalysis();
         }
 
-        */
+
 
 }
 
@@ -105,7 +124,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configfile)
 }
 
 
-/*
+
 void AdlarsonPhysics::TrueAnalysis_etapr6g()
 {
     True_BeamEnergy->Fill(etapr_6gTrue.GetTrueBeamEnergy());
@@ -136,9 +155,9 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
 
 void AdlarsonPhysics::sixgAnalysis()
 {
-    for( Int_t i = 0; i < tagger->GetNTagged(); i++ )
+    for( Int_t i = 0; i < GetTagger()->GetNTagged(); i++ )
     {
-        for ( Int_t j = 0; j < protons->GetNParticles(); j++ )
+        for ( Int_t j = 0; j < GetProtons()->GetNParticles(); j++ )
         {
 
             // run kinematical fit energy and momentum conservation:
@@ -163,9 +182,9 @@ void AdlarsonPhysics::sixgAnalysis()
 
 void AdlarsonPhysics::tengAnalysis()
 {
-    for( Int_t i = 0; i < tagger->GetNTagged(); i++ )
+    for( Int_t i = 0; i < GetTagger()->GetNTagged(); i++ )
     {
-        for ( Int_t j = 0; j < protons->GetNParticles(); j++ )
+        for ( Int_t j = 0; j < GetProtons()->GetNParticles(); j++ )
         {
 
             // run kinematical fit
@@ -188,6 +207,7 @@ void AdlarsonPhysics::tengAnalysis()
     //
 
 }
+
 
 void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double_t &Y , Int_t &DP_nr)
 {
@@ -235,7 +255,7 @@ Double_t    AdlarsonPhysics::IM_Ng( UInt_t n )
 
     g_vec.SetPxPyPzE(0,0,0,0);
     for ( Int_t i = 0 ; i < n; i++ )
-        g_vec += photons->Particle(i);
+        g_vec += GetPhotons()->Particle(i);
 
     return g_vec.M();
 }
@@ -471,4 +491,4 @@ Int_t AdlarsonPhysics::perm6outof10g[210][6]=
 
 };
 
-*/
+
