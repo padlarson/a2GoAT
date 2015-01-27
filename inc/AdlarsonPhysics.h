@@ -12,6 +12,7 @@
 #include "TVector.h"
 #include "GTrue.h"
 
+
 class	AdlarsonPhysics  : public GTreeManager
 {
 private:
@@ -28,9 +29,13 @@ private:
     GH1*            M_pi1pi2_true;
     GH1*            M_etapi_true;
 
+    GHistBGSub2*    EvdE_TAPS;
+
     // proton identified from TAPS_E vs VETO_dE
     TCutG*          OpenCutFile(Char_t* filename, Char_t* cutname);
     TCutG*          cutProtonTAPS;
+    TCutG*          cutPionTAPS;
+    TCutG*          cutElectronTAPS;
 
     // True LorentzVectors
     TLorentzVector  eta_true;
