@@ -19,6 +19,7 @@ GTreeParticle::GTreeParticle(GTreeManager *Manager, const TString& _Name)    :
         vetoEnergy[i]   = 0;
         MWPC0Energy[i]  = 0;
         MWPC1Energy[i]  = 0;
+        trackIndex[i]   =-1;
     }
 }
 
@@ -37,6 +38,7 @@ void    GTreeParticle::SetBranchAdresses()
     inputTree->SetBranchAddress("vetoEnergy", vetoEnergy);
     inputTree->SetBranchAddress("MWPC0Energy", MWPC0Energy);
     inputTree->SetBranchAddress("MWPC1Energy", MWPC1Energy);
+    inputTree->SetBranchAddress("trackIndex", trackIndex);
 }
 
 void    GTreeParticle::SetBranches()
@@ -49,6 +51,7 @@ void    GTreeParticle::SetBranches()
     outputTree->Branch("vetoEnergy", vetoEnergy, "vetoEnergy[nParticles]/D");
     outputTree->Branch("MWPC0Energy", MWPC0Energy, "MWPC0Energy[nParticles]/D");
     outputTree->Branch("MWPC1Energy", MWPC1Energy, "MWPC1Energy[nParticles]/D");
+    outputTree->Branch("trackIndex", trackIndex, "trackIndex[nParticles]/I");
 }
 
 
@@ -73,7 +76,7 @@ Bool_t	GTreeParticle::Write()
     return GTree::Write();
 }
 
-void    GTreeParticle::AddParticle(const TLorentzVector& vec, const Int_t _Apparatus, const Double_t _vetoEnergy, const Double_t _MWPC0Energy, const Double_t _MWPC1Energy, const Double_t _Time, const Int_t _ClusterSize)
+void    GTreeParticle::AddParticle(const TLorentzVector& vec, const Int_t _Apparatus, const Double_t _vetoEnergy, const Double_t _MWPC0Energy, const Double_t _MWPC1Energy, const Double_t _Time, const Int_t _ClusterSize, const Int_t _trackIndex)
 {
     apparatus[nParticles]   = _Apparatus;
     time[nParticles]        = _Time;
@@ -82,6 +85,7 @@ void    GTreeParticle::AddParticle(const TLorentzVector& vec, const Int_t _Appar
     MWPC0Energy[nParticles] = _MWPC0Energy;
     MWPC1Energy[nParticles] = _MWPC1Energy;
     new((*particles)[nParticles]) TLorentzVector(vec);
+    trackIndex[nParticles]  = _trackIndex;
     nParticles++;
     manager->countReconstructed++;
 }
@@ -111,6 +115,7 @@ void    GTreeParticle::RemoveParticles(const Int_t nIndices, const Int_t* indice
             MWPC1Energy[sort[i]] = MWPC1Energy[nParticles];
             //particles->RemoveAt(sort[i]);
             new((*particles)[sort[i]]) TLorentzVector(*((TLorentzVector*)particles->At(nParticles)));
+            trackIndex[sort[i]]  = trackIndex[nParticles];
         }
         particles->RemoveAt(nParticles);
     }

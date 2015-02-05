@@ -494,17 +494,17 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
     {
         // Finally add particles which were temporarily identified
         if (identified[i] == pdgDB->GetParticle("proton")->PdgCode())
-            GetProtons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
+            GetProtons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("proton")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i), i);
         else if (identified[i] == pdgDB->GetParticle("pi+")->PdgCode())
-            GetChargedPions()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
+            GetChargedPions()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("pi+")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i), i);
         else if (identified[i] == pdgDB->GetParticle("e-")->PdgCode())
-            GetElectrons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
+            GetElectrons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("e-")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i), i);
         else if (identified[i] == pdgDB->GetParticle("neutron")->PdgCode())
-            GetNeutrons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
+            GetNeutrons()->AddParticle(GetTracks()->GetVector(i, pdgDB->GetParticle("neutron")->Mass()*1000), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i), i);
         else if (identified[i] == pdgDB->GetParticle("gamma")->PdgCode())
-            GetPhotons()->AddParticle(GetTracks()->GetVector(i), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
+            GetPhotons()->AddParticle(GetTracks()->GetVector(i), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i), i);
         else if (identified[i] == PDG_ROOTINO)
-            GetRootinos()->AddParticle(GetTracks()->GetVector(i), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i));
+            GetRootinos()->AddParticle(GetTracks()->GetVector(i), GetTracks()->GetApparatus(i), GetTracks()->GetVetoEnergy(i), GetTracks()->GetMWPC0Energy(i), GetTracks()->GetMWPC1Energy(i), GetTracks()->GetTime(i), GetTracks()->GetClusterSize(i), i);
     }
 
     return kTRUE;

@@ -4,7 +4,7 @@
 
 #include <TClonesArray.h>
 #include <TLorentzVector.h>
-
+#include "Rtypes.h"
 #include "GTree.h"
 
 #define GTreeParticle_MAX 128
@@ -23,6 +23,7 @@ private:
     Double_t            vetoEnergy[GTreeParticle_MAX];
     Double_t            MWPC0Energy[GTreeParticle_MAX];
     Double_t            MWPC1Energy[GTreeParticle_MAX];
+    Int_t               trackIndex[GTreeParticle_MAX];  // index of the corresponding tack in the track list, -1 => No track
 
 
 protected:
@@ -34,7 +35,7 @@ public:
     GTreeParticle(GTreeManager *Manager, const TString& _Name);
     virtual ~GTreeParticle();
 
-            void            AddParticle(const TLorentzVector& vec, const Int_t _Apparatus = 0, const Double_t _vetoEnergy = 0, const Double_t _MWPC0Energy = 0, const Double_t _MWPC1Energy = 0, const Double_t _Time = 0, const Int_t _ClusterSize = 0);
+            void            AddParticle(const TLorentzVector& vec, const Int_t _Apparatus = 0, const Double_t _vetoEnergy = 0, const Double_t _MWPC0Energy = 0, const Double_t _MWPC1Energy = 0, const Double_t _Time = 0, const Int_t _ClusterSize = 0, const Int_t _trackIndex = -1);
     virtual void            Clear() {nParticles = 0; particles->Clear();}
             Int_t           GetApparatus(const Int_t index)     const	{return apparatus[index];}
             Int_t           GetClusterSize(const Int_t index)   const 	{return clusterSize[index];}
@@ -46,6 +47,10 @@ public:
             Double_t        GetMWPC0Energy(const Int_t index)   const	{return MWPC0Energy[index];}
     const	Double_t*       GetMWPC1Energy()                    const	{return MWPC1Energy;}
             Double_t        GetMWPC1Energy(const Int_t index)   const	{return MWPC1Energy[index];}
+
+            Int_t           GetTrackIndex(const Int_t index)    const   {return trackIndex[index];}
+    const   Int_t*          GetTrackIndex()                     const   {return trackIndex; }
+
     inline          TLorentzVector& Particle(const Int_t particle);
     inline  const   TLorentzVector& Particle(const Int_t particle) const;
     virtual void            Print() const;
