@@ -6,28 +6,38 @@
 
 AdlarsonPhysics::AdlarsonPhysics()
 {
+// TRUE OBSERVABLES
+// Beam energy
+    True_BeamEnergy     = new GH1("True_BeamEnergy", "True Beam Energy", 250, 1.400, 1.650);
+    Tagged_BeamEnergy    = new GH1("Tagged_BeamEnergy", "Tagged Beam Energy", 1650, 0, 1650);
+// Phase space final state particles
+    ThpvsThetaprCM      = new GHistBGSub2("ThpvsThetaprCM", "#theta_{p} vs #theta_{#eta^{'}}", 360, 0., 180, 360, 0., 180.);
+    ThvE_p              = new GHistBGSub2("ThvE_p", "True E_{p} vs #theta_{p}", 100, 0., 0.6, 100, 0., 25.);
+    ThvE_eta_g          = new GHistBGSub2("ThvE_eta_g", "E_{#gamma, #eta} vs #theta_{#gamma, #eta}", 100, 0, 1.000, 36, 0, 180);
+    ThvE_pi0_g          = new GHistBGSub2("ThvE_pi0_g", "E_{#gamma, #pi^{0}} vs #theta_{#gamma, #pi^{0}}", 60, 0, .600, 36, 0, 180);
+// Physics result
+    DP_true             = new GHistBGSub2("DP_true", "True Dalitz Plot distribution", 60, -1.5, 1.5, 60, -1.5, 1.5);
+    M_pi1pi2_true       = new GH1("M_pi1pi2_true", "True M_{#pi#pi,true}^{2}", 60, 0.05, 0.20);
+    M_etapi_true        = new GH1("M_etapi_true", "True M_{#eta#pi,true}^{2}", 100, 0.45, 0.70);
 
-    IM_6g	= new GH1("IM_6g", 	"IM_6g/7g", 240,   0, 1200);
-    IM_10g	= new GH1("IM_10g", "IM_10g", 	240,   0, 1200);
+// RECONSTRUCTED OBSERVABLES
+// Rec. TAPS - proton analysis
+    EvdE_TAPS_all      = new GHistBGSub2("EvdE_TAPS_all", "All E vs dE TAPS", 1200, 0., 600., 200, 0.5, 10.);
+    EvdE_TAPS_proton   = new GHistBGSub2("EvdE_TAPS_proton", "Best proton cand E vs dE TAPS", 1200, 0., 600, 200, 0.5, 10.);
 
-    // True observables
-        // Beam energy
-        True_BeamEnergy     = new GH1("True_BeamEnergy", "True Beam Energy", 250, 1.400, 1.650);
-        // Phase space final state particles
-        ThpvsThetaprCM      = new GHistBGSub2("ThpvsThetaprCM", "#theta_{p} vs #theta_{#eta^{'}}", 360, 0., 180, 360, 0., 180.);
-        ThvE_p              = new GHistBGSub2("ThvE_p", "E_{p} vs #theta_{p}", 100, 0., 0.6, 100, 0., 25.);
-        ThvE_eta_g          = new GHistBGSub2("ThvE_eta_g", "E_{#gamma, #eta} vs #theta_{#gamma, #eta}", 100, 0, 1.000, 36, 0, 180);
-        ThvE_pi0_g          = new GHistBGSub2("ThvE_pi0_g", "E_{#gamma, #pi^{0}} vs #theta_{#gamma, #pi^{0}}", 60, 0, .600, 36, 0, 180);
-        // Physics result
-        DP_true             = new GHistBGSub2("DP_true", "True Dalitz Plot distribution", 60, -1.5, 1.5, 60, -1.5, 1.5);
-        M_pi1pi2_true       = new GH1("M_pi1pi2_true", "True M_{#pi#pi,true}^{2}", 60, 0.05, 0.20);
-        M_etapi_true        = new GH1("M_etapi_true", "True M_{#eta#pi,true}^{2}", 100, 0.45, 0.70);
+    Nrprotons           = new GHistBGSub("Nrprotons", "nr of protons", 5,  0, 5);
+    ThvEp_rec           = new GHistBGSub2("ThvEp_rec", "Rec E_{p} vs #theta_{p}", 120, 0., 600, 50, 0., 25.);
+    MM_p                = new GHistBGSub("MM_p", "Missing Mass calculated for proton", 300, 800., 1100.);
 
+// Rec. Photons
+    IM_6g	= new GH1("IM_6g", 	"IM_6g/7g", 240,   200, 1400);
+    IM_10g	= new GH1("IM_10g", "IM_10g", 	240,   200, 1400);
 
-     // Rec. TAPS - proton analysis
-        EvdE_TAPS      = new GHistBGSub2("EvdE_TAPS", "E vs dE}", 100, 0., 1000, 20, 0., 20.);
+    IM6gvMMp = new GHistBGSub2("IM6gvMMp", "MM(p) vs IM(6#gamma/7#gamma)", 300,800., 1100., 240, 200., 1400.);
+    IM10gvMMp = new GHistBGSub2("IM10gvMMp", "MM(p) vs IM(10#gamma)", 300,800., 1100., 240, 200., 1400.);
 
-
+    cutFile             = new TFile("/home/adlarson/a2GoAT/configfiles/cuts/TAPS_DeltaE-E-PA.root");
+    cutProtonTAPS       = (TCutG*)cutFile->Get("CutProton");
 
     GHistBGSub::InitCuts(-20, 20, -55, -35);
     GHistBGSub::AddRandCut(35, 55);
@@ -57,54 +67,68 @@ Bool_t	AdlarsonPhysics::Start()
 void	AdlarsonPhysics::ProcessEvent()
 {
 
-
-    etapr_6gTrue.Start(*GetPluto(), *GetGeant()); // (pluto tree, n part in pluto per event)
- //   if(!GParticleReconstruction::Init())
- //   {
- //       cout << "GParticleReconstruction Init failed!" << endl;
- //       return kFALSE;
- //   }
+    etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+    TrueAnalysis_etapr6g();                         // obtains the true observables
 
 
-    TrueAnalysis_etapr6g();
+        Int_t nrprotons = 0;
+        Int_t iprtrack = -1;
 
- //   if(protons->GetNParticles() > 0)
-        // Strategy is :
-        //  Identify all TAPS hits and check from TOF if the particle is a
-        // nucleon or not. As default all hits are considered to be photons.
+        MMp_vec.SetPxPyPzE(0., 0., 0., 0.);
+        IM6g_vec.SetPxPyPzE(0., 0., 0., 0.);
+        IM10g_vec.SetPxPyPzE(0., 0., 0., 0.);
 
-        double chi2pr_min = 100000;
-        double chitest = 10000;
-        double factortheta, factorphi;
-        int itrack = -1;
-
-        for (int i = 0; i < GetPhotons()->GetNParticles() ; i++)
-        {
-            if( GetPhotons()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS )
+        for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+        {            
+            if( GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS )
             {
-                factortheta = etapr_6gTrue.GetTrueProtonLV().Theta() - GetPhotons()->Particle(i).Theta();
-                factortheta = factortheta*TMath::RadToDeg();
-                factorphi =  etapr_6gTrue.GetTrueProtonLV().Phi() - GetPhotons()->Particle(i).Phi();
-                factorphi = factorphi*TMath::RadToDeg();
+               EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i));
+               if(cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
+               {
+                    nrprotons++;
+                    iprtrack = i;
+
+                    if( nrprotons > 1 )
+                    {
+                      if( GetTracks()->GetVetoEnergy(iprtrack) < GetTracks()->GetVetoEnergy(i) )
+                        iprtrack = i;
+                    }
+                    else
+                        iprtrack = i;
+
+               }
             }
         }
-        if(itrack != -1)
-        EvdE_TAPS->Fill(GetPhotons()->Particle(itrack).E(), GetPhotons()->GetVetoEnergy(itrack));
 
-        if( (GetPhotons()->GetNParticles() == 6) || (GetPhotons()->GetNParticles() == 7) )
+        Nrprotons->Fill(nrprotons);
+        if( iprtrack == -1 ) return;
+
+        EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
+        ThvEp_rec->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetTheta(iprtrack));
+
+
+        proton_vec = GetTracks()->GetVector(iprtrack, pdgDB->GetParticle("proton")->Mass()*1000);
+        // Now construct missing mass calc for proton with tagger energies.
+        for ( Int_t i = 0; i < GetTagger()->GetNTagged(); i++)
         {
-            double_t im6g = IM_Ng( GetPhotons()->GetNParticles()  );
-            IM_6g->Fill( im6g );
+            Tagged_BeamEnergy->Fill(GetTagger()->GetTaggedEnergy(i));
+            double t = GetTagger()->GetTaggedEnergy(i);
 
-            sixgAnalysis();
+            MMp_vec.SetPxPyPzE(-proton_vec.Px(), -proton_vec.Py(), GetTagger()->GetTaggedEnergy(i) - proton_vec.Pz(), GetTagger()->GetTaggedEnergy(i) + pdgDB->GetParticle("proton")->Mass()*1000 - proton_vec.E());
+
+            MMp = ( MMp_vec ).M();
+            MM_p->Fill(MMp);
+        }
+
+
+        if( (GetTracks()->GetNTracks() == 7) || (GetTracks()->GetNTracks() == 8) || (GetTracks()->GetNTracks() == 9) )
+        {
+            sixgAnalysis(iprtrack);
         }
 
         if(GetPhotons()->GetNParticles() == 10)
         {
-            double_t im10g = IM_Ng( GetPhotons()->GetNParticles()  );
-            IM_10g->Fill( im10g );
-
-            tengAnalysis();
+            tengAnalysis(iprtrack);
         }
 
 
@@ -129,6 +153,15 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
 {
     True_BeamEnergy->Fill(etapr_6gTrue.GetTrueBeamEnergy());
 
+    TLorentzVector k;
+    k.SetPxPyPzE(0.,0.,0.,0.);
+
+    for(Int_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
+        k += etapr_6gTrue.GetTrueGammaLV(i);
+
+    double testtrue = k.M();
+
+    double hej = 0;
 
     // calculate Physics
 
@@ -153,18 +186,31 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
 }
 
 
-void AdlarsonPhysics::sixgAnalysis()
+void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
 {
+
+    for ( Int_t i = 0; i <= GetTracks()->GetNTracks() ; i++ )
+    {
+        if(i != ipr)
+            IM6g_vec += GetTracks()->GetVector(i);
+    }
+
+    IM_6g->Fill( IM6g_vec.M() );
+    IM6gvMMp->Fill(MMp,IM6g_vec.M());
+
     for( Int_t i = 0; i < GetTagger()->GetNTagged(); i++ )
     {
-        for ( Int_t j = 0; j < GetProtons()->GetNParticles(); j++ )
-        {
 
-            // run kinematical fit energy and momentum conservation:
+        // Run kinfit:
+        // For all (6g or 7g) + proton obtain errors for all observables
+        // Run kinfit and select the tagger + 6g + proton with lowest chi2
 
-            // cut on pdf:
+        // Here run post-kinfit analysis:
+        // Find the 15 combinations to form a 2pi0+eta and 3pi0. Determin which reaction it is and remove 3pi0
+        // run kinfit with rec. observables now also enforcing eta mass.
 
-        }
+        // Obtain physics observables
+
     }
 
     // select best combination eta 2pi0 and 3pi0:
@@ -180,18 +226,21 @@ void AdlarsonPhysics::sixgAnalysis()
 
 }
 
-void AdlarsonPhysics::tengAnalysis()
+void AdlarsonPhysics::tengAnalysis(Int_t ipr)
 {
+    for ( Int_t i = 0; i < GetTracks()->GetNTracks() ; i++ )
+    {
+        if(i != iprtrack)
+            IM10g_vec += GetTracks()->GetVector(i);
+    }
+
+    IM_10g->Fill(IM10g_vec.M());
+    IM10gvMMp->Fill( MMp , IM10g_vec.M());
+
     for( Int_t i = 0; i < GetTagger()->GetNTagged(); i++ )
     {
-        for ( Int_t j = 0; j < GetProtons()->GetNParticles(); j++ )
-        {
-
-            // run kinematical fit
-            // cut on pdf
 
 
-        }
     }
 
     // with the best candidate:

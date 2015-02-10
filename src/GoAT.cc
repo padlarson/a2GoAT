@@ -105,17 +105,6 @@ void	GoAT::ProcessEvent()
             cout << "Event: " << GetEventNumber() << "  Events Accepted: " << nEventsWritten << endl;
     }
 
-    if(useTrueObservables)
-    {
-
-
-    //    if(!GTrueObservableReconstruction::ProcessEventWithoutFilling())     return;
-    //    GTrueObservableReconstruction::ProcessEvent();
-    //   save true observables
-    //   e.g. IM(2pi0), Calculate X, Y,
-        // if(!GTrueObservables)
-
-    }
 
     if(SortAnalyseEvent())
     {
