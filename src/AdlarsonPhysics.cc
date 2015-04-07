@@ -41,6 +41,9 @@ AdlarsonPhysics::AdlarsonPhysics()
 
     GHistBGSub::InitCuts(-20, 20, -55, -35);
     GHistBGSub::AddRandCut(35, 55);
+
+    // do I want to initialise my TOF-TAPS timing corrections here?
+    // where does Patrik Ott do it?
 }
 
 AdlarsonPhysics::~AdlarsonPhysics()
@@ -152,16 +155,6 @@ Bool_t	AdlarsonPhysics::Init(const char* configfile)
 void AdlarsonPhysics::TrueAnalysis_etapr6g()
 {
     True_BeamEnergy->Fill(etapr_6gTrue.GetTrueBeamEnergy());
-
-    TLorentzVector k;
-    k.SetPxPyPzE(0.,0.,0.,0.);
-
-    for(Int_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
-        k += etapr_6gTrue.GetTrueGammaLV(i);
-
-    double testtrue = k.M();
-
-    double hej = 0;
 
     // calculate Physics
 
