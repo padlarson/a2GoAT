@@ -31,16 +31,7 @@ void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
     vertex  = geant.GetVertex();
 
     TrueBeamEnergy = pluto.GetMCTrueLV(0).P();
-//    TrueBeamEnergy = pluto.GetAllParticles().front()->P();
 
-    /*for(std::list<PParticle*>::iterator i = pluto.GetAllParticles().begin(); i!=pluto.GetAllParticles().end(); i++)
-    {
-        if((*i)->Is("gamma")){
-            //gamma[ngamma] = (const TLorentzVector*)(*i);
-            ngamma++;
-            continue;
-        }
-    }*/
 
 
     for(int i = 0; i < pluto.GetAllParticles().size(); i++)

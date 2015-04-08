@@ -16,35 +16,16 @@
 class	AdlarsonPhysics  : public GTreeManager
 {
 private:
-    // Histograms and scatterplots declared
+    // histograms and scatterplots
+   GH1* True_BeamEnergy;
+   // Phase space observables
+   GHistBGSub2* ThvT_p;
+   GHistBGSub2* ThpvEg;
 
-    GH1*            TrueE;
-    GH1*            TrueTh;
-    GH1*            TruePhi;
+   // Where all true observables are stored
+   GTrue TrueObs;
 
-    GHistBGSub2*    TrueEvTh;
-
-    GHistBGSub2*    dthvdetnr_TAPS;
-    GHistBGSub2*    dfivdetnr_TAPS;
-    GHistBGSub2*    revdetnr_TAPS;
-
-    GHistBGSub2*    dthvdetnr_CB;
-    GHistBGSub2*    dfivdetnr_CB;
-    GHistBGSub2*    revdetnr_CB;
-
-    GHistBGSub2*    Ncl_v_trueEtrueth;
-    GHistBGSub2*    EvdE_TAPS;
-
-
-    double_t        th_true;
-    double_t        fi_true;
-    double_t        E_true;
-    double_t        th_rec;
-    double_t        fi_rec;
-    double_t        E_rec;
-    double_t        deltath;
-    double_t        deltafi;
-    double_t        REnergy;
+   Double_t BeamE;
 
 
 
