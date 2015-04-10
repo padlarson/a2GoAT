@@ -30,7 +30,7 @@ void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
 
     vertex  = geant.GetVertex();
 
-    TrueBeamEnergy = pluto.GetMCTrueLV(0).P();
+    TrueBeamEnergy = pluto.GetTrueBeam().E();
 //    TrueBeamEnergy = pluto.GetAllParticles().front()->P();
 
     /*for(std::list<PParticle*>::iterator i = pluto.GetAllParticles().begin(); i!=pluto.GetAllParticles().end(); i++)
@@ -46,37 +46,37 @@ void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
     for(int i = 0; i < pluto.GetAllParticles().size(); i++)
     {
         if(pluto.GetMCTrue(i)->Is("n")){
-            neutron = pluto.GetMCTrueLV(i);
+            neutron = pluto.GetTrueP4(i);
             continue;
         }
         if(pluto.GetMCTrue(i)->Is("p")){
-            proton = pluto.GetMCTrueLV(i);
+            proton = pluto.GetTrueP4(i);
             continue;
         }
         if(pluto.GetMCTrue(i)->Is("eta'")){
-            etaprime = pluto.GetMCTrueLV(i);
+            etaprime = pluto.GetTrueP4(i);
             continue;
         }
         if(pluto.GetMCTrue(i)->Is("w")){
-            omega = pluto.GetMCTrueLV(i);
+            omega = pluto.GetTrueP4(i);
             continue;
         }
         if(pluto.GetMCTrue(i)->Is("eta")){
-            eta = pluto.GetMCTrueLV(i);
+            eta = pluto.GetTrueP4(i);
             continue;
         }
         if(pluto.GetMCTrue(i)->Is("pi-") || pluto.GetMCTrue(i)->Is("pi+")){
-            chpi[nchpi] = pluto.GetMCTrueLV(i);
+            chpi[nchpi] = pluto.GetTrueP4(i);
             nchpi++;
             continue;
         }
         if(pluto.GetMCTrue(i)->Is("pi0")){
-            pi0[npi0] = pluto.GetMCTrueLV(i);
+            pi0[npi0] = pluto.GetTrueP4(i);
             npi0++;
             continue;
         }
         if(pluto.GetMCTrue(i)->Is("gamma")){
-            gamma[ngamma] = pluto.GetMCTrueLV(i);
+            gamma[ngamma] = pluto.GetTrueP4(i);
             ngamma++;
             continue;
         }

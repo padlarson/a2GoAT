@@ -384,8 +384,7 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
 
     for(Int_t i=0; i<GetTracks()->GetNTracks(); i++)
     {
-
-        if(GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_CB)
+        if(GetTracks()->HasCB(i))
         {
             if(GetTracks()->GetTime(i)<timeCutCB[0] || GetTracks()->GetTime(i)>timeCutCB[1])
                 return kFALSE;

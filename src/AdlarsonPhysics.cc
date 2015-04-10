@@ -183,9 +183,9 @@ void	AdlarsonPhysics::ProcessEvent()
         {
             for( int j = 0; j < GetTracks()->GetNTracks() ; j++ )
             {
-                if( (GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS)  && ( GetTracks()->GetTheta(i) > 18.0 ) )
+                if( GetTracks()->HasTAPS(i)  && ( GetTracks()->GetTheta(i) > 18.0 ) )
                 {
-                    if( (GetTracks()->GetApparatus(j) == GTreeTrack::APPARATUS_CB) && ( GetTracks()->GetTheta(j) < 30.0 ))
+                    if( GetTracks()->HasCB(j) && ( GetTracks()->GetTheta(j) < 30.0 ))
                     {
                         fi_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j) );
                         fi_th_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j),  GetTracks()->GetTheta(i) - GetTracks()->GetTheta(j));
@@ -197,7 +197,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
         for (Int_t i = 0; i < GetTracks()->GetNTracks() ; i++)
         {            
-            if( GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS )
+            if( GetTracks()->HasTAPS(i) )
             {
                EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i));
                Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(i) );
