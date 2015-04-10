@@ -7,13 +7,13 @@
 
 GHistScaCor::GHistScaCor(const Bool_t linkHistogram) :
     GHistLinked(linkHistogram),
+    corrected(kFALSE),
+    writeUncorrected(kTRUE),
     buffer(0),
     accumulated(0),
     accumulatedCorrected(0),
     singleScalerReads(),
-    singleScalerReadsCorrected(),
-    corrected(kFALSE),
-    writeUncorrected(kTRUE)
+    singleScalerReadsCorrected()
 {
     singleScalerReads.SetOwner();
     singleScalerReadsCorrected.SetOwner();
@@ -21,13 +21,13 @@ GHistScaCor::GHistScaCor(const Bool_t linkHistogram) :
 
 GHistScaCor::GHistScaCor() :
     GHistLinked(),
+    corrected(kFALSE),
+    writeUncorrected(kTRUE),
     buffer(new TH1D()),
     accumulated(new TH1D()),
     accumulatedCorrected(new TH1D()),
     singleScalerReads(),
-    singleScalerReadsCorrected(),
-    corrected(kFALSE),
-    writeUncorrected(kTRUE)
+    singleScalerReadsCorrected()
 {
     buffer->SetDirectory(0);
     accumulated->SetDirectory(0);
@@ -39,6 +39,8 @@ GHistScaCor::GHistScaCor() :
 
 GHistScaCor::GHistScaCor(const char* name, const char* title, const Int_t nbinsx, const Double_t xlow, const Double_t xup, const Bool_t linkHistogram) :
     GHistLinked(linkHistogram),
+    corrected(kFALSE),
+    writeUncorrected(kTRUE),
     buffer(new TH1D(TString(name).Append(GHSC_bufferNameSuffix).Data(),
                     TString(title).Append(GHSC_bufferTitleSuffix).Data(),
                     nbinsx, xlow, xup)),
@@ -47,9 +49,7 @@ GHistScaCor::GHistScaCor(const char* name, const char* title, const Int_t nbinsx
                         nbinsx, xlow, xup)),
     accumulatedCorrected(new TH1D(name, title, nbinsx, xlow, xup)),
     singleScalerReads(128),
-    singleScalerReadsCorrected(128),
-    corrected(kFALSE),
-    writeUncorrected(kTRUE)
+    singleScalerReadsCorrected(128)
 {
     buffer->SetDirectory(0);
     accumulated->SetDirectory(0);
@@ -84,6 +84,7 @@ Bool_t	GHistScaCor::Add(const TH1* _buffer, const TH1* _accumulated, const TH1* 
     accumulated->Add(_accumulated, c);
     accumulatedCorrected->Add(_accumulatedCorrected, c);
     corrected   = CorrectedInput;
+    return kTRUE;
 }
 
 Bool_t	GHistScaCor::Add(const GHistScaCor *h, Double_t c)

@@ -37,6 +37,17 @@ GHistTaggerBinning2::~GHistTaggerBinning2()
 
 }
 
+void    GHistTaggerBinning2::CalcResult()
+{
+    GHistBGSub2*    help    = ((GHistBGSub3*)array)->ProjectionXY();
+    sum->Add(help);
+    if(help)
+        delete help;
+
+    sum->CalcResult();
+    array->CalcResult();
+}
+
 Int_t	GHistTaggerBinning2::Fill(const Double_t value)
 {
     std::cout << "ERROR: You tried to fill a 2 dim. Hist with only 1 value." << std::endl;
@@ -52,5 +63,6 @@ Int_t   GHistTaggerBinning2::Fill(const Double_t x, const Double_t y, const GTre
         else
             Fill(x, y);
     }
+    return tagger.GetNTagged();
 }
 

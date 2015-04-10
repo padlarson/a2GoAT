@@ -69,12 +69,14 @@ Int_t   GHistBGSub2::Fill(const Double_t x, const Double_t y, const Double_t tag
         if(taggerTime>=cutRandMin[i] && taggerTime<=cutRandMax[i])
             return ((GHistScaCor2*)rand.At(i))->Fill(x, y);
     }
+    return 0;
 }
 
 Int_t   GHistBGSub2::Fill(const Double_t x, const Double_t y, const GTreeTagger& tagger)
 {
     for(Int_t i=0; i<tagger.GetNTagged(); i++)
         Fill(x, y, tagger.GetTaggedTime(i));
+    return tagger.GetNTagged();
 }
 
 

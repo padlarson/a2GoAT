@@ -48,12 +48,13 @@ UInt_t  GTreeScaler::GetScalerEntry(const Int_t number)
         }
     }
 
-    for(Int_t i=0; i<GetNEntries(); i++)
+    for(UInt_t i=0; i<GetNEntries(); i++)
     {
         GetEntry(i);
         if(number<eventNumber)
             return i;
     }
+    return GetNEntries();
 }
 
 
@@ -96,7 +97,7 @@ void    GTreeScaler::CloneValidEntries()
         }
     }
 
-    for(Int_t i=1; i<GetNEntries(); i++)
+    for(UInt_t i=1; i<GetNEntries(); i++)
     {
         GetEntry(i);
         Fill();

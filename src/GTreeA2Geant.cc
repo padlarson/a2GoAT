@@ -142,8 +142,9 @@ GTreeA2Geant::~GTreeA2Geant()
 
 TLorentzVector GTreeA2Geant::GetBeam() const
 {
-    //                          x         y         z         E
-    return TLorentzVector(fbeam[0], fbeam[1], fbeam[2], fbeam[4]);
+    double x = fbeam[0], y = fbeam[1], z = fbeam[2], t = fbeam[3];
+
+    return TLorentzVector(t*x, t*y, t*z, t);
 }
 
 TVector3 GTreeA2Geant::GetVertex() const
@@ -179,7 +180,7 @@ Int_t GTreeA2Geant::GetNCBHits() const
 
 Int_t GTreeA2Geant::GetCBHitIndex(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNCBHits() )
+    if( n >= (UInt_t)GetNCBHits() )
         throw std::out_of_range(Form("%s: CB Hit index out of bounds. (%d/%d)", __func__, n, GetNCBHits()));
 
     return icryst[n];
@@ -187,7 +188,7 @@ Int_t GTreeA2Geant::GetCBHitIndex(const UInt_t n) const throw (std::out_of_range
 
 Float_t GTreeA2Geant::GetCBHitEnergy(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNCBHits() )
+    if( n >= (UInt_t)GetNCBHits() )
         throw std::out_of_range(Form("%s: CB Hit index out of bounds. (%d/%d)", __func__, n, GetNCBHits()));
 
     return ecryst[n];
@@ -216,7 +217,7 @@ const Int_t * const GTreeA2Geant::GetTAPSHitIndices() const
 
 Int_t GTreeA2Geant::GetTAPSHitIndex(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNTAPSHits() )
+    if( n >= (UInt_t)GetNTAPSHits() )
         throw std::out_of_range(Form("%s: TAPS Hit index out of bounds. (%d/%d)", __func__, n, GetNTAPSHits()));
 
     return ictaps[n];
@@ -224,7 +225,7 @@ Int_t GTreeA2Geant::GetTAPSHitIndex(const UInt_t n) const throw (std::out_of_ran
 
 Float_t GTreeA2Geant::GetTAPSHitEnergyLong(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNTAPSHits() )
+    if( n >= (UInt_t)GetNTAPSHits() )
         throw std::out_of_range(Form("%s: TAPS Hit index out of bounds. (%d/%d)", __func__, n, GetNTAPSHits()));
 
     return ectapsl[n];
@@ -232,7 +233,7 @@ Float_t GTreeA2Geant::GetTAPSHitEnergyLong(const UInt_t n) const throw (std::out
 
 Float_t GTreeA2Geant::GetTAPSHitEnergyShort(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNTAPSHits() )
+    if( n >= (UInt_t)GetNTAPSHits() )
         throw std::out_of_range(Form("%s: TAPS Hit index out of bounds. (%d/%d)", __func__, n, GetNTAPSHits()));
 
     return ectapfs[n];
@@ -250,7 +251,7 @@ const Float_t * const GTreeA2Geant::GetTAPSHitEnergiesShort() const
 
 Float_t GTreeA2Geant::GetTAPSHitTime(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNTAPSHits() )
+    if( n >= (UInt_t)GetNTAPSHits() )
         throw std::out_of_range(Form("%s: TAPS Hit index out of bounds. (%d/%d)", __func__, n, GetNTAPSHits()));
 
     return tctaps[n];
@@ -268,7 +269,7 @@ Int_t GTreeA2Geant::GetNTAPSVetoHits() const
 
 Int_t GTreeA2Geant::GetTAPSVetoHitIndex(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNTAPSVetoHits() )
+    if( n >= (UInt_t)GetNTAPSVetoHits() )
         throw std::out_of_range(Form("%s: TAPS Hit index out of bounds. (%d/%d)", __func__, n, GetNTAPSVetoHits()));
 
     return ivtaps[n];
@@ -281,7 +282,7 @@ const Int_t * const GTreeA2Geant::GetTAPSVetoHitIndices() const
 
 Float_t GTreeA2Geant::GetTAPSVetoHitEnergy(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNTAPSVetoHits() )
+    if( n >= (UInt_t)GetNTAPSVetoHits() )
         throw std::out_of_range(Form("%s: TAPS Hit index out of bounds. (%d/%d)", __func__, n, GetNTAPSVetoHits()));
 
     return evtaps[n];
@@ -299,7 +300,7 @@ Int_t GTreeA2Geant::GetNPIDHits() const
 
 Int_t GTreeA2Geant::GetPIDHitIndex(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNPIDHits() )
+    if( n >= (UInt_t)GetNPIDHits() )
         throw std::out_of_range(Form("%s: PID Hit index out of bounds. (%d/%d)", __func__, n, GetNPIDHits()));
 
     return iveto[n];
@@ -307,7 +308,7 @@ Int_t GTreeA2Geant::GetPIDHitIndex(const UInt_t n) const throw (std::out_of_rang
 
 Float_t GTreeA2Geant::GetPIDHitEnergy(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNPIDHits() )
+    if( n >= (UInt_t)GetNPIDHits() )
         throw std::out_of_range(Form("%s: PID Hit index out of bounds. (%d/%d)", __func__, n, GetNPIDHits()));
 
     return eveto[n];
@@ -325,7 +326,7 @@ const Float_t * const GTreeA2Geant::GetPIDHitEnergies() const
 
 Float_t GTreeA2Geant::GetPIDHitTime(const UInt_t n) const throw (std::out_of_range)
 {
-    if( n >= GetNPIDHits() )
+    if( n >= (UInt_t)GetNPIDHits() )
         throw std::out_of_range(Form("%s: PID Hit index out of bounds. (%d/%d)", __func__, n, GetNPIDHits()));
 
     return tveto[n];
@@ -368,7 +369,7 @@ const Float_t * const GTreeA2Geant::GetMWPCHitPosZ() const
 
 TVector3 GTreeA2Geant::GetMWPCVector(const UInt_t n) const throw(std::out_of_range)
 {
-    if( n >= GetNMWPCHits() )
+    if( n >= (UInt_t)GetNMWPCHits() )
         throw std::out_of_range(Form("%s: MWPC Particle index out of bounds. (%d/%d)", __func__, n, GetNMWPCHits()));
 
     return TVector3(mposx[n], mposy[n], mposz[n]);
@@ -376,7 +377,7 @@ TVector3 GTreeA2Geant::GetMWPCVector(const UInt_t n) const throw(std::out_of_ran
 
 Float_t GTreeA2Geant::GetMWPCEnergy(const UInt_t n) const throw(std::out_of_range)
 {
-    if( n >= GetNMWPCHits() )
+    if( n >= (UInt_t)GetNMWPCHits() )
         throw std::out_of_range(Form("%s: MWPC Particle index out of bounds. (%d/%d)", __func__, n, GetNMWPCHits()));
 
     return emwpc[n];
@@ -384,7 +385,7 @@ Float_t GTreeA2Geant::GetMWPCEnergy(const UInt_t n) const throw(std::out_of_rang
 
 Int_t GTreeA2Geant::GetMWPCIndex(const UInt_t n) const throw(std::out_of_range)
 {
-    if( n >= GetNMWPCHits() )
+    if( n >= (UInt_t)GetNMWPCHits() )
         throw std::out_of_range(Form("%s: MWPC Particle index out of bounds. (%d/%d)", __func__, n, GetNMWPCHits()));
 
     return imwpc[n];
@@ -437,7 +438,7 @@ TLorentzVector GTreeA2Geant::GetTrueVector(const UInt_t n) const throw(std::out_
 
 template <class T>
 void zero( T& data ) {
-    bzero( data, sizeof(data));
+    memset( data, 0, sizeof(data) );
 }
 
 void GTreeA2Geant::Clear()

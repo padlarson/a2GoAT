@@ -52,6 +52,7 @@ public:
             void        Close();
             void        Fill();
     inline  Bool_t      GetEntry(const UInt_t index);
+    virtual void        Unpack() {}
     const   char*       GetName() const {return name.Data();}
             UInt_t      GetNEntries()   { if(IsOpenForInput()) return inputTree->GetEntries(); return 0;}
             Bool_t      IsClosed()          {return !status;}
@@ -69,6 +70,7 @@ Bool_t  GTree::GetEntry(const UInt_t index)
     if(index > inputTree->GetEntries())
         return kFALSE;
     inputTree->GetEntry(index);
+    return kTRUE;
 }
 
 

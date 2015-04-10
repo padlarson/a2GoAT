@@ -1,5 +1,8 @@
 #include "GTreePluto.h"
 #include "PParticle.h"
+#include <iostream>
+
+using namespace std;
 
 GTreePluto::GTreePluto(GTreeManager* Manager):
     GTree(Manager, TString("data")),
@@ -12,36 +15,63 @@ GTreePluto::GTreePluto(GTreeManager* Manager):
 GTreePluto::~GTreePluto()
 {}
 
-GTreePluto::ParticleList GTreePluto::GetFinalState() const
+bool IsFinalState(const PParticle* particle) { return particle->GetDaughterIndex() == -1; }
+bool IsBeamParticle(const PParticle* particle) { return particle->ID() > 1000; }
+
+void GTreePluto::Unpack()
 {
-    ParticleList list;
+    finalstate.clear();
+    allparticles.clear();
+    beamparticles.clear();
 
     for( Long64_t i=0;i<PlutoMCTrue->GetEntries(); ++i) {
 
         const PParticle* const particle = dynamic_cast<const PParticle*>((*PlutoMCTrue)[i]);
 
-        if(particle && particle->GetDaughterIndex() == -1)
-            list.push_back(particle);
-    }
+        if(IsBeamParticle(particle))
+            beamparticles.emplace_back(particle);
+        else {
+            allparticles.emplace_back(particle);
 
-    return list;
+            if(IsFinalState(particle))
+                finalstate.emplace_back(particle);
+        }
+    }
 }
 
-GTreePluto::ParticleList GTreePluto::GetAllParticles() const
+PParticle* GTreePluto::GetMCTrue(const int idx) const throw(std::exception)
 {
-    ParticleList list;
+    if (!PlutoMCTrue)
+        //return nullptr;
+        throw noTree;
 
-    for( Long64_t i=0;i<PlutoMCTrue->GetEntries(); ++i) {
-
-        const PParticle* const particle = dynamic_cast<const PParticle*>((*PlutoMCTrue)[i]);
-
-        if(particle)
-            list.push_back(particle);
-    }
-
-    return list;
+    return dynamic_cast<PParticle*>(PlutoMCTrue->At(idx));
 }
 
+TLorentzVector GTreePluto::GetTrueP4(const int idx) const throw(std::exception)
+{
+    if (!PlutoMCTrue)
+        //return TLorentzVector(0., 0., 0., 0.);
+        throw noTree;
+
+    return dynamic_cast<PParticle*>(PlutoMCTrue->At(idx))->Vect4();
+}
+
+// Assume proton target if no argument is given
+TLorentzVector GTreePluto::GetTrueBeam() const
+{
+    return GetTrueBeam(TLorentzVector(0., 0., 0., .938272), 14001);
+}
+
+TLorentzVector GTreePluto::GetTrueBeam(const TLorentzVector target, const int beamID) const
+{
+
+    auto it = std::find_if(beamparticles.begin(), beamparticles.end(), [beamID](PParticle const& p){ return p.ID() == beamID; });
+    if (it == beamparticles.end())
+        return TLorentzVector(0., 0., 0., 0.);
+
+    return (*it)->Vect4() - target;
+}
 
 void    GTreePluto::SetBranchAdresses()
 {

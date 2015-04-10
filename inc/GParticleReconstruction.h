@@ -41,12 +41,17 @@ private:
     TCutG* 		cutTimeOfFlightTAPS;
     TCutG* 		cutClusterSizeTAPS;
 
-    Double_t	chargedThetaMin;
-    Double_t	chargedThetaMax;
-
     Int_t* 		identified;
     Int_t* 		charge;
     Int_t* 		hadron;
+
+    Bool_t      doScalerCorrection;
+    Bool_t      doTrigger;
+    Double_t    energySum;
+    Int_t       multiplicity;
+
+    Double_t	chargedThetaMin;
+    Double_t	chargedThetaMax;
 
     Bool_t 		chargeIgnorePID;
     Bool_t 		chargeIgnoreMWPC0;
@@ -55,11 +60,6 @@ private:
 
     Double_t    timeCutCB[2];
     Double_t    timeCutTAPS[2];
-
-    Bool_t      doScalerCorrection;
-    Bool_t      doTrigger;
-    Double_t    energySum;
-    Int_t       multiplicity;
 
     TCutG*	OpenCutFile(Char_t* filename, Char_t* cutname);
     Bool_t  Trigger();

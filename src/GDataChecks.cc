@@ -6,11 +6,11 @@ using namespace std;
 
 
 GDataChecks::GDataChecks()  :
-				CheckCBStability(0),
 				CBHitsThresh1(0),
 				CBHitsThresh2(0),
 				CBHitsThresh3(0),
-				CBHitsThresh4(0)
+                CBHitsThresh4(0),
+                CheckCBStability(0)
 {
 }
 

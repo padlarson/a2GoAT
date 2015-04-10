@@ -89,9 +89,6 @@ void	PPi0Example::ProcessScalerRead()
 
 Bool_t	PPi0Example::Write()
 {
-	// Write some TH1s
-	GTreeManager::Write(TaggerAccScal);
-
-	// Write all GH1's easily
-	GTreeManager::Write();
+    // Write all GH1's and TObjects defined in this class
+    return GTreeManager::Write();
 }

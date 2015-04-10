@@ -42,6 +42,7 @@ Bool_t	GHistTaggerBinning::Add(const GHistTaggerBinning* h, Double_t c)
 {
     sum->Add(h->sum, c);
     array->Add(h->array, c);
+    return true;
 }
 
 void    GHistTaggerBinning::CalcResult()
@@ -64,6 +65,7 @@ Int_t   GHistTaggerBinning::Fill(const Double_t value, const GTreeTagger& tagger
         else
             Fill(value);
     }
+    return tagger.GetNTagged();
 }
 
 void    GHistTaggerBinning::ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads)
