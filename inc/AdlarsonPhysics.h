@@ -13,9 +13,21 @@
 #include "TVector.h"
 #include "GTrue.h"
 
+#include <vector>
+#include <map>
+
+#include <APLCON.hpp>
+template<typename T>
+std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2) {
+    std::vector<T> v = v1;
+    v.insert(v.end(),v2.begin(),v2.end());
+    return v;
+}
+
 
 class	AdlarsonPhysics  : public GTreeManager
 {
+
 private:
     // Histograms and scatterplots
     // True
@@ -48,9 +60,13 @@ private:
     GH1*            IM_10g;
     GHistBGSub2*    IM10gvMMp;
 
+    GH1*            fi_diff_TAPSCB;
+    GHistBGSub2*    fi_TAPSvsCB;
+    GHistBGSub2*    fi_th_diff_TAPSCB;
 
     GHistBGSub2*    EvdE_TAPS_all;
     GHistBGSub2*    EvdE_TAPS_proton;
+    GHistBGSub2*    EvTOF;
 
     // proton identified from TAPS_E vs VETO_dE
 
@@ -73,6 +89,7 @@ private:
 
     Int_t nrprotons;
     Int_t iprtrack;
+
     TLorentzVector proton_vec;
     Double_t MMp;
 
@@ -89,11 +106,66 @@ private:
 
     GTrue   etapr_6gTrue;
 
+
 protected:
     virtual Bool_t  Start();
 
     virtual void    ProcessEvent();
     virtual void	ProcessScalerRead();
+
+
+    // choose here what you want to do
+    // please also provide GoAT trees with matching MC true information...
+    static constexpr bool includeIMconstraint = false;
+    static constexpr bool includeVertexFit = true;
+    static constexpr size_t nPhotons = 6;
+
+    const double IM = MASS_ETA;
+
+
+    // lightweight structure for linking to fitter
+        struct FitParticle {
+            void SetFromVector(const TLorentzVector& p_) {
+                Ek = p_.E()-p_.M();
+                Theta = p_.Theta();
+                Phi = p_.Phi();
+            }
+
+            static TLorentzVector Make(const std::vector<double>& EkThetaPhi,
+                                               const Double_t m);
+            static TLorentzVector Make(const FitParticle& p,
+                                       const Double_t m) {
+            return Make(std::vector<double>{p.Ek, p.Theta, p.Phi}, m);
+            }
+
+            std::vector<double*> Link() {
+                return {std::addressof(Ek),
+                        std::addressof(Theta),
+                        std::addressof(Phi)};
+            }
+            std::vector<double*> LinkSigma() {
+                return {std::addressof(Ek_Sigma),
+                        std::addressof(Theta_Sigma),
+                        std::addressof(Phi_Sigma)};
+            }
+
+            void Smear();
+
+
+            double Ek;
+            double Ek_Sigma;
+            double Theta;
+            double Theta_Sigma;
+            double Phi;
+            double Phi_Sigma;
+        private:
+            static std::default_random_engine generator;
+        };
+
+    APLCON kinfit;
+    FitParticle beam;
+    std::vector<FitParticle> photons;
+    FitParticle proton;
 			
 public:
     AdlarsonPhysics();
@@ -118,5 +190,7 @@ public:
 
     void DalitzPlot( const TLorentzVector g[3] , Double_t &X, Double_t &Y, Int_t &DP_nr );
     void m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 );
+
 };
 #endif
+

@@ -2,9 +2,13 @@
 #include "AdlarsonPhysics.h"
 #include "GTrue.h"
 
+#include <APLCON.hpp>
 
 
-AdlarsonPhysics::AdlarsonPhysics()
+
+AdlarsonPhysics::AdlarsonPhysics():
+    kinfit("etaprime"),
+    photons(nPhotons)
 {
 // TRUE OBSERVABLES
 // Beam energy
@@ -21,9 +25,16 @@ AdlarsonPhysics::AdlarsonPhysics()
     M_etapi_true        = new GH1("M_etapi_true", "True M_{#eta#pi,true}^{2}", 100, 0.45, 0.70);
 
 // RECONSTRUCTED OBSERVABLES
+    // Correlation CB and TAPS
+    fi_diff_TAPSCB     = new GH1("fi_diff_TAPSCB", "#Delta#phi TAPS - CB", 200, -200., 200.);
+    fi_th_diff_TAPSCB  = new GHistBGSub2("fi_th_diff_TAPSCB", "#Delta#phi v #Delta#theta TAPS - CB", 200, -200., 200., 80, -20., 20.);
+    fi_TAPSvsCB        = new GHistBGSub2("fi_TAPSvsCB", "#phi TAPS vs CB", 100, -200.,200.,100, -200.,200.);
+
+
 // Rec. TAPS - proton analysis
     EvdE_TAPS_all      = new GHistBGSub2("EvdE_TAPS_all", "All E vs dE TAPS", 1200, 0., 600., 200, 0.5, 10.);
     EvdE_TAPS_proton   = new GHistBGSub2("EvdE_TAPS_proton", "Best proton cand E vs dE TAPS", 1200, 0., 600, 200, 0.5, 10.);
+    EvTOF              = new GHistBGSub2("EvTOF", "Energy TAPS vs TOF", 200, -20., 20., 400, 0., 800.);
 
     Nrprotons           = new GHistBGSub("Nrprotons", "nr of protons", 5,  0, 5);
     ThvEp_rec           = new GHistBGSub2("ThvEp_rec", "Rec E_{p} vs #theta_{p}", 120, 0., 600, 50, 0., 25.);
@@ -42,8 +53,95 @@ AdlarsonPhysics::AdlarsonPhysics()
     GHistBGSub::InitCuts(-20, 20, -55, -35);
     GHistBGSub::AddRandCut(35, 55);
 
+    const TLorentzVector target(0,0,0, MASS_PROTON );
+
     // do I want to initialise my TOF-TAPS timing corrections here?
     // where does Patrik Ott do it?
+
+    kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma());
+    kinfit.LinkVariable("Proton",  proton.Link(),     proton.LinkSigma());
+
+    vector<string> photon_names;
+    for(size_t i=0;i<nPhotons;i++) {
+        stringstream s_photon;
+        s_photon << "Photon" << (i+1);
+        photon_names.push_back(s_photon.str());
+        kinfit.LinkVariable(s_photon.str(), photons[i].Link(), photons[i].LinkSigma());
+    }
+    vector<string> all_names = {"Beam", "Proton"};
+    all_names.insert(all_names.end(),photon_names.begin(),photon_names.end());
+
+
+    // Constraint: Incoming 4-vector = Outgoing 4-vector
+    auto EnergyMomentumBalance = [] (const vector< vector<double> >& particles) -> vector<double>
+    {
+        const TLorentzVector target(0,0,0, MASS_PROTON );
+        // assume first particle is beam photon
+        TLorentzVector diff = target + FitParticle::Make(particles[0], 0.0 );
+        // assume second particle outgoing proton
+        diff -= FitParticle::Make(particles[1], MASS_PROTON );
+        // subtract the rest, assumed to be photons
+        for(size_t i=2;i<particles.size();i++) {
+            diff -= FitParticle::Make(particles[i], 0.0 );
+        }
+
+        return {diff.X(), diff.Y(), diff.Z(), diff.T()};
+
+    };
+    kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
+
+    // Constraint: Invariant mass of nPhotons equals constant IM,
+    // make lambda catch also this with [&] specification
+    auto RequireIM = [&] (const vector< vector<double> >& photons) -> double
+    {
+        TLorentzVector sum(0,0,0,0);
+        for(const auto& p : photons) {
+            sum += FitParticle::Make(p, 0.0);
+        }
+        return sum.M() - IM;
+    };
+    if(includeIMconstraint)
+        kinfit.AddConstraint("RequireIM", photon_names, RequireIM);
+
+    // Constraint: Vertex position in z direction: v_z (positive if upstream)
+    // if the photon originated from (0,0,v_z) instead of origin,
+    // the corrected angle theta' is given by
+    // tan(theta') = (R sin(theta))/(R cos(theta) - v_z)
+    // R is the CB radius, 10in aka 25.4cm
+
+    auto VertexConstraint = [&] (vector< vector<double> >& photons) -> double
+    {
+        constexpr double R = 25.4;
+        // last element in photons is vz (scalar has dimension 1)
+        // see AddConstraint below
+        const double v_z = photons.back()[0];
+        photons.resize(photons.size()-1); // get rid of last element
+        // correct each photon's theta angle,
+        // then calculate invariant mass of all photons
+        TLorentzVector sum(0,0,0,0);
+        for(auto& p : photons) {
+            const double theta = p[1]; // second element is theta
+            const double theta_p = std::atan2( R*sin(theta), R*cos(theta) - v_z);
+            p[1] = theta_p;
+            sum += FitParticle::Make(p,0.0);
+        }
+        return sum.M() - 0.0;
+    };
+
+    if(includeVertexFit) {
+        kinfit.AddUnmeasuredVariable("v_z"); // default value 0
+        kinfit.AddConstraint("VertexConstraint", photon_names + std::vector<string>{"v_z"}, VertexConstraint);
+    }
+
+//        static_assert(!(includeIMconstraint && includeVertexFit), "Do not enable Vertex and IM Fit at the same time");
+
+    APLCON::Fit_Settings_t settings = kinfit.GetSettings();
+    settings.MaxIterations = 50;
+    kinfit.SetSettings(settings);
+
+    cout.precision(3);
+    APLCON::PrintFormatting::Width = 11;
+
 }
 
 AdlarsonPhysics::~AdlarsonPhysics()
@@ -82,11 +180,30 @@ void	AdlarsonPhysics::ProcessEvent()
         IM10g_vec.SetPxPyPzE(0., 0., 0., 0.);
 
         for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+        {
+            for( int j = 0; j < GetTracks()->GetNTracks() ; j++ )
+            {
+                if( (GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS)  && ( GetTracks()->GetTheta(i) > 18.0 ) )
+                {
+                    if( (GetTracks()->GetApparatus(j) == GTreeTrack::APPARATUS_CB) && ( GetTracks()->GetTheta(j) < 30.0 ))
+                    {
+                        fi_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j) );
+                        fi_th_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j),  GetTracks()->GetTheta(i) - GetTracks()->GetTheta(j));
+                        fi_TAPSvsCB->Fill( GetTracks()->GetPhi(i), GetTracks()->GetPhi(j) );
+                    }
+                }
+            }
+        }
+
+        for (Int_t i = 0; i < GetTracks()->GetNTracks() ; i++)
         {            
             if( GetTracks()->GetApparatus(i) == GTreeTrack::APPARATUS_TAPS )
             {
                EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i));
-               if(cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i)))
+               Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(i) );
+               EvTOF->Fill( (GetTracks()->GetTime(i))/(radnm), GetTracks()->GetClusterEnergy(i));
+
+               if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(i), GetTracks()->GetVetoEnergy(i)) )
                {
                     nrprotons++;
                     iprtrack = i;
@@ -109,7 +226,6 @@ void	AdlarsonPhysics::ProcessEvent()
         EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
         ThvEp_rec->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetTheta(iprtrack));
 
-
         proton_vec = GetTracks()->GetVector(iprtrack, pdgDB->GetParticle("proton")->Mass()*1000);
         // Now construct missing mass calc for proton with tagger energies.
         for ( Int_t i = 0; i < GetTagger()->GetNTagged(); i++)
@@ -124,7 +240,7 @@ void	AdlarsonPhysics::ProcessEvent()
         }
 
 
-        if( (GetTracks()->GetNTracks() == 7) || (GetTracks()->GetNTracks() == 8) || (GetTracks()->GetNTracks() == 9) )
+        if( (GetTracks()->GetNTracks() == 7) ) //|| (GetTracks()->GetNTracks() == 8) || (GetTracks()->GetNTracks() == 9) )
         {
             sixgAnalysis(iprtrack);
         }
@@ -182,17 +298,42 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
 void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
 {
 
-    for ( Int_t i = 0; i <= GetTracks()->GetNTracks() ; i++ )
-    {
-        if(i != ipr)
-            IM6g_vec += GetTracks()->GetVector(i);
-    }
 
-    IM_6g->Fill( IM6g_vec.M() );
-    IM6gvMMp->Fill(MMp,IM6g_vec.M());
 
     for( Int_t i = 0; i < GetTagger()->GetNTagged(); i++ )
     {
+        TLorentzVector k = GetTagger()->GetVector(i);
+        TLorentzVector l = GetTagger()->GetVectorProtonTarget(i);
+        double test = k.E();
+        double test2 = l.E();
+        beam.SetFromVector(GetTagger()->GetVector(i));
+
+        int n_photons = 0;
+        for ( Int_t j = 0; j <= GetTracks()->GetNTracks() ; j++ )
+        {
+            if( j != ipr)
+            {
+                IM6g_vec += GetTracks()->GetVector(j);
+                IM_6g->Fill( IM6g_vec.M() );
+                photons[n_photons].SetFromVector(GetTracks()->GetVector(j));
+//                n_photons++;
+            }
+            else
+                proton.SetFromVector(GetTracks()->GetVector(ipr));
+        }
+//        std::cout << "nr of photons are " << n_photons << std::endl;
+    }
+
+/*
+    proton.Smear();
+    for(auto& photon : photons)
+        photon.Smear();
+    beam.Smear();
+ */
+
+//    IM6gvMMp->Fill(MMp,IM6g_vec.M());
+
+
 
         // Run kinfit:
         // For all (6g or 7g) + proton obtain errors for all observables
@@ -204,7 +345,6 @@ void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
 
         // Obtain physics observables
 
-    }
 
     // select best combination eta 2pi0 and 3pi0:
     // GetBest6gCombination();
@@ -532,5 +672,30 @@ Int_t AdlarsonPhysics::perm6outof10g[210][6]=
     { 4, 5, 6, 7, 8, 9 }
 
 };
+
+TLorentzVector AdlarsonPhysics::FitParticle::Make(const std::vector<double> &EkThetaPhi, const Double_t m) {
+    const double E = EkThetaPhi[0] + m;
+    const Double_t p = sqrt( E*E - m*m );
+    TVector3 pv(1,0,0);
+    pv.SetMagThetaPhi(p, EkThetaPhi[1], EkThetaPhi[2]);
+    TLorentzVector l(pv, E);
+    return l;
+}
+
+void AdlarsonPhysics::FitParticle::Smear() {
+    // set the sigmas here,
+    // then the fitter knows them as well (because they're linked)
+
+    Ek_Sigma = 0.02*Ek*pow(Ek,-0.36);
+    Theta_Sigma = 2.5*TMath::DegToRad();
+    if(Theta>20*TMath::DegToRad() && Theta<160*TMath::DegToRad()) {
+        Phi_Sigma = Theta_Sigma/sin(Theta);
+    }
+    else {
+        Phi_Sigma = 1*TMath::DegToRad();
+    }
+
+}
+
 
 
