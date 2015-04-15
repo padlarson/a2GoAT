@@ -1,14 +1,18 @@
 #include "GParticleReconstruction.h"
 #include "AdlarsonPhysics.h"
 #include "GTrue.h"
+#include <cmath>
 
 #include <APLCON.hpp>
 
-
+std::default_random_engine AdlarsonPhysics::FitParticle::generator;
 
 AdlarsonPhysics::AdlarsonPhysics():
     kinfit("etaprime"),
-    photons(nPhotons)
+    photons(nPhotons),
+    photons_fit(nPhotons),
+    photons_rec(nPhotons),
+    RootHist("RootHist", "RootHist", 5,  0, 5)
 {
 // TRUE OBSERVABLES
 // Beam energy
@@ -22,7 +26,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 // Physics result
     DP_true             = new GHistBGSub2("DP_true", "True Dalitz Plot distribution", 60, -1.5, 1.5, 60, -1.5, 1.5);
     M_pi1pi2_true       = new GH1("M_pi1pi2_true", "True M_{#pi#pi,true}^{2}", 60, 0.05, 0.20);
-    M_etapi_true        = new GH1("M_etapi_true", "True M_{#eta#pi,true}^{2}", 100, 0.45, 0.70);
+    M_etapi_true        = new GH1("M_etapi_true", "True M_{#eta#pi,true}^{2}", 160, 0.30, 0.70);
 
 // RECONSTRUCTED OBSERVABLES
     // Correlation CB and TAPS
@@ -44,8 +48,36 @@ AdlarsonPhysics::AdlarsonPhysics():
     IM_6g	= new GH1("IM_6g", 	"IM_6g/7g", 240,   200, 1400);
     IM_10g	= new GH1("IM_10g", "IM_10g", 	240,   200, 1400);
 
-    IM6gvMMp = new GHistBGSub2("IM6gvMMp", "MM(p) vs IM(6#gamma/7#gamma)", 300,800., 1100., 240, 200., 1400.);
-    IM10gvMMp = new GHistBGSub2("IM10gvMMp", "MM(p) vs IM(10#gamma)", 300,800., 1100., 240, 200., 1400.);
+    IM6gvMMp    = new GHistBGSub2("IM6gvMMp", "MM(p) vs IM(6#gamma/7#gamma)", 300,800., 1100., 240, 200., 1400.);
+    IM10gvMMp   = new GHistBGSub2("IM10gvMMp", "MM(p) vs IM(10#gamma)", 300,800., 1100., 240, 200., 1400.);
+
+// Kinfit related variables
+
+    kfit_chi2           = new GH1("kfit_chi2", "#chi^{2} kinfit", 500, 0, 50.);
+    kfit_pdf            = new GH1("kfit_pdf", "#pdf kinfit", 100, 0, 1.);
+    kfit_Pulls          = new GHistBGSub2("Pulls", "Pulls", 50, -5., 5., 25, 0, 25);
+
+    IM6g_fit            = new GH1("IM6g_fit", "IM(6#gamma) after APLCON fit", 500, 400., 1400.);
+    IM6g_fit_3pi        = new GH1("IM6g_fit_3pi", "IM(6#gamma) for 3#pi^{0} candidates", 500, 400., 1400.);
+    IM6g_fit_eta2pi     = new GH1("IM6g_fit_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 500, 400., 1400.);
+
+    PDF_eta2pi_v_3pi    = new GHistBGSub2("PDF_eta2pi_v_3pi", "PDF_eta2pi_v_3pi", 100, 0., 1., 100, 0., 1.);
+    best_eta            = new GH1("best_eta", "best #eta cand from comb", 500, 200, 700.);
+    best_2pi            = new GH1("best_2pi", "best 2#pi^{0} cand from comb", 500, 0., 500.);
+    best_eta_EvTh       = new GHistBGSub2("best_eta_EvTh", "E_{#eta, #gamma} vs #Theta_{#eta, #gamma}", 100, 0., 1000., 50, 0., 200.);
+
+
+// Physics results
+
+    DP_fit             = new GHistBGSub2("DP_fit", "Rec fitted Dalitz Plot distribution vs run nr", 800, 0, 800, 100, 600., 1100.);
+    M_pi1pi2_fit       = new GH1("M_pi1pi2_fit", "Rec M_{#pi#pi,fit}^{2}", 60, 0.05, 0.20);
+    M_etapi_fit        = new GH1("M_etapi_fit", "Rec M_{#eta#pi,fit}^{2}", 160, 0.30, 0.70);
+    deltaMpipi_v_Mpipi_fit = new GHistBGSub2("deltaMpipi_v_Mpipi_fit", "fitted - true value M_{#pi#pi,fit}^{2}", 60, 0.05, 0.20, 120, -0.05, 0.05);
+    etapr_v_BeamE      = new GHistBGSub2("etapr_v_BeamE", "IM(6#gamma) vs Beam Energy", 20, 1400, 1600, 100, 600., 1100.);
+
+
+    deltaX_v_DPbin     = new GHistBGSub2("deltaX_v_DPbin", "X_{fit} - X_{true} vd DP bin nr", 600, 0, 600, 40, -1.0, 1.0);
+    deltaY_v_DPbin     = new GHistBGSub2("deltaY_v_DPbin", "Y_{fit} - Y_{true} vd DP bin nr", 600, 0, 600, 40, -1.0, 1.0);
 
     cutFile             = new TFile("/home/adlarson/a2GoAT/configfiles/cuts/TAPS_DeltaE-E-PA.root");
     cutProtonTAPS       = (TCutG*)cutFile->Get("CutProton");
@@ -53,12 +85,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     GHistBGSub::InitCuts(-20, 20, -55, -35);
     GHistBGSub::AddRandCut(35, 55);
 
-    const TLorentzVector target(0,0,0, MASS_PROTON );
 
-    // do I want to initialise my TOF-TAPS timing corrections here?
-    // where does Patrik Ott do it?
-
-    kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma());
+    kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
     kinfit.LinkVariable("Proton",  proton.Link(),     proton.LinkSigma());
 
     vector<string> photon_names;
@@ -70,26 +98,25 @@ AdlarsonPhysics::AdlarsonPhysics():
     }
     vector<string> all_names = {"Beam", "Proton"};
     all_names.insert(all_names.end(),photon_names.begin(),photon_names.end());
-
-
+\
     // Constraint: Incoming 4-vector = Outgoing 4-vector
     auto EnergyMomentumBalance = [] (const vector< vector<double> >& particles) -> vector<double>
     {
-        const TLorentzVector target(0,0,0, MASS_PROTON );
+
+        const TLorentzVector target(0,0,0, MASS_PROTON);
         // assume first particle is beam photon
         TLorentzVector diff = target + FitParticle::Make(particles[0], 0.0 );
-        // assume second particle outgoing proton
         diff -= FitParticle::Make(particles[1], MASS_PROTON );
         // subtract the rest, assumed to be photons
         for(size_t i=2;i<particles.size();i++) {
             diff -= FitParticle::Make(particles[i], 0.0 );
         }
-
         return {diff.X(), diff.Y(), diff.Z(), diff.T()};
 
     };
     kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
 
+    /*
     // Constraint: Invariant mass of nPhotons equals constant IM,
     // make lambda catch also this with [&] specification
     auto RequireIM = [&] (const vector< vector<double> >& photons) -> double
@@ -100,6 +127,8 @@ AdlarsonPhysics::AdlarsonPhysics():
         }
         return sum.M() - IM;
     };
+
+
     if(includeIMconstraint)
         kinfit.AddConstraint("RequireIM", photon_names, RequireIM);
 
@@ -132,11 +161,14 @@ AdlarsonPhysics::AdlarsonPhysics():
         kinfit.AddUnmeasuredVariable("v_z"); // default value 0
         kinfit.AddConstraint("VertexConstraint", photon_names + std::vector<string>{"v_z"}, VertexConstraint);
     }
+*/
 
 //        static_assert(!(includeIMconstraint && includeVertexFit), "Do not enable Vertex and IM Fit at the same time");
 
     APLCON::Fit_Settings_t settings = kinfit.GetSettings();
     settings.MaxIterations = 50;
+
+//    settings.DebugLevel = 5;
     kinfit.SetSettings(settings);
 
     cout.precision(3);
@@ -158,100 +190,99 @@ Bool_t	AdlarsonPhysics::Start()
     }
     SetAsPhysicsFile();
 
+    RootHist.Reset();
 
     TraverseValidEvents();
-
+\
+    outputFile->cd();
+    gDirectory->mkdir("MC")->cd();
+    RootHist.Write();
 
 	return kTRUE;
 }
 
 void	AdlarsonPhysics::ProcessEvent()
 {
-
     etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
     TrueAnalysis_etapr6g();                         // obtains the true observables
 
 
-        Int_t nrprotons = 0;
-        Int_t iprtrack = -1;
+//    Kinfit_test();                                  // runs kinematical fit with true observables- for testing purposes
 
-        MMp_vec.SetPxPyPzE(0., 0., 0., 0.);
-        IM6g_vec.SetPxPyPzE(0., 0., 0., 0.);
-        IM10g_vec.SetPxPyPzE(0., 0., 0., 0.);
+    Int_t nrprotons = 0;
+    Int_t iprtrack = -1;
 
-        for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+    MMp_vec.SetPxPyPzE(0., 0., 0., 0.);
+    IM6g_vec.SetPxPyPzE(0., 0., 0., 0.);
+    IM10g_vec.SetPxPyPzE(0., 0., 0., 0.);
+
+    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+    {
+        for( int j = 0; j < GetTracks()->GetNTracks() ; j++ )
         {
-            for( int j = 0; j < GetTracks()->GetNTracks() ; j++ )
+            if( GetTracks()->HasTAPS(i)  && ( GetTracks()->GetTheta(i) > 18.0 ) )
             {
-                if( GetTracks()->HasTAPS(i)  && ( GetTracks()->GetTheta(i) > 18.0 ) )
+                if( GetTracks()->HasCB(j) && ( GetTracks()->GetTheta(j) < 30.0 ))
                 {
-                    if( GetTracks()->HasCB(j) && ( GetTracks()->GetTheta(j) < 30.0 ))
-                    {
-                        fi_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j) );
-                        fi_th_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j),  GetTracks()->GetTheta(i) - GetTracks()->GetTheta(j));
-                        fi_TAPSvsCB->Fill( GetTracks()->GetPhi(i), GetTracks()->GetPhi(j) );
-                    }
+                    fi_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j) );
+                    fi_th_diff_TAPSCB->Fill(GetTracks()->GetPhi(i) - GetTracks()->GetPhi(j),  GetTracks()->GetTheta(i) - GetTracks()->GetTheta(j));
+                    fi_TAPSvsCB->Fill( GetTracks()->GetPhi(i), GetTracks()->GetPhi(j) );
                 }
             }
         }
+    }
 
-        for (Int_t i = 0; i < GetTracks()->GetNTracks() ; i++)
-        {            
-            if( GetTracks()->HasTAPS(i) )
-            {
-               EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i));
-               Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(i) );
-               EvTOF->Fill( (GetTracks()->GetTime(i))/(radnm), GetTracks()->GetClusterEnergy(i));
+    for (Int_t i = 0; i < GetTracks()->GetNTracks() ; i++)
+    {
+        if( GetTracks()->HasTAPS(i) )
+        {
+           EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i));
+           Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(i) );
+           EvTOF->Fill( (GetTracks()->GetTime(i))/(radnm), GetTracks()->GetClusterEnergy(i));
 
-               if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(i), GetTracks()->GetVetoEnergy(i)) )
-               {
-                    nrprotons++;
+           if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(i), GetTracks()->GetVetoEnergy(i)) )
+           {
+                nrprotons++;
+                iprtrack = i;
+
+                if( nrprotons > 1 )
+                {
+                  if( GetTracks()->GetVetoEnergy(iprtrack) < GetTracks()->GetVetoEnergy(i) )
+                    iprtrack = i;
+                }
+                else
                     iprtrack = i;
 
-                    if( nrprotons > 1 )
-                    {
-                      if( GetTracks()->GetVetoEnergy(iprtrack) < GetTracks()->GetVetoEnergy(i) )
-                        iprtrack = i;
-                    }
-                    else
-                        iprtrack = i;
-
-               }
-            }
+           }
         }
+    }
 
-        Nrprotons->Fill(nrprotons);
-        if( iprtrack == -1 ) return;
+    Nrprotons->Fill(nrprotons);
+    if( iprtrack == -1 ) return;
 
-        EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
-        ThvEp_rec->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetTheta(iprtrack));
+    EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
+    ThvEp_rec->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetTheta(iprtrack));
 
-        proton_vec = GetTracks()->GetVector(iprtrack, pdgDB->GetParticle("proton")->Mass()*1000);
-        // Now construct missing mass calc for proton with tagger energies.
-        for ( Int_t i = 0; i < GetTagger()->GetNTagged(); i++)
-        {
-            Tagged_BeamEnergy->Fill(GetTagger()->GetTaggedEnergy(i));
-            double t = GetTagger()->GetTaggedEnergy(i);
+    proton_vec = GetTracks()->GetVector(iprtrack, pdgDB->GetParticle("proton")->Mass()*1000);
+    // Now construct missing mass calc for proton with tagger energies.
+    for ( Int_t i = 0; i < GetTagger()->GetNTagged(); i++)
+    {
+        Tagged_BeamEnergy->Fill(GetTagger()->GetTaggedEnergy(i));
+        MMp_vec.SetPxPyPzE(-proton_vec.Px(), -proton_vec.Py(), GetTagger()->GetTaggedEnergy(i) - proton_vec.Pz(), GetTagger()->GetTaggedEnergy(i) + pdgDB->GetParticle("proton")->Mass()*1000 - proton_vec.E());
 
-            MMp_vec.SetPxPyPzE(-proton_vec.Px(), -proton_vec.Py(), GetTagger()->GetTaggedEnergy(i) - proton_vec.Pz(), GetTagger()->GetTaggedEnergy(i) + pdgDB->GetParticle("proton")->Mass()*1000 - proton_vec.E());
+        MMp = ( MMp_vec ).M();
+        MM_p->Fill(MMp);
+    }
 
-            MMp = ( MMp_vec ).M();
-            MM_p->Fill(MMp);
-        }
+    if( (GetTracks()->GetNTracks() == 7) ) //|| (GetTracks()->GetNTracks() == 8) || (GetTracks()->GetNTracks() == 9) )
+    {
+           sixgAnalysis(iprtrack);
+    }
 
-
-        if( (GetTracks()->GetNTracks() == 7) ) //|| (GetTracks()->GetNTracks() == 8) || (GetTracks()->GetNTracks() == 9) )
-        {
-            sixgAnalysis(iprtrack);
-        }
-
-        if(GetPhotons()->GetNParticles() == 10)
-        {
-            tengAnalysis(iprtrack);
-        }
-
-
-
+    if(GetPhotons()->GetNParticles() == 10)
+    {
+        tengAnalysis(iprtrack);
+    }
 }
 
 void	AdlarsonPhysics::ProcessScalerRead()
@@ -260,12 +291,18 @@ void	AdlarsonPhysics::ProcessScalerRead()
 //    hist_etap.ScalerReadCorrection(Double_t(scalers->GetScaler(0))/scalers->GetScaler(1));
 }
 
-
-Bool_t	AdlarsonPhysics::Init(const char* configfile)
+Bool_t	AdlarsonPhysics::Init(const char* configFile)
 {
+    /*
+    Double newVal1;
+    Double newVal2;
+    Double newVal3;
+    sscanf(GConfigFile::ReadConfig("TaggE", 0, configFile).c_str(), "%lf %lf %lf", &newVal1, &newVal2, &newVal3);
+    */
+    std::cout << "No Init function specified for this class." << std::endl;
     return kTRUE;
-}
 
+}
 
 
 void AdlarsonPhysics::TrueAnalysis_etapr6g()
@@ -278,13 +315,18 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
     etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
     etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
     DalitzPlot(etapr_true, Xtrue, Ytrue, DPnrTrue);
+    DP_true->Fill( Xtrue, Ytrue );
+
     m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
+    M_pi1pi2_true->Fill(m_2pi0True);
+    M_etapi_true->Fill(m_etapi01True);
+    M_etapi_true->Fill(m_etapi02True);
 
     // calculate True Energy vs Theta of final state particles
 
     ThvE_p->Fill(etapr_6gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000 ,etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
 
-    for(Int_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
+    for(UInt_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
     {
         if ( i > 3 ) // first four gammas come from 2pi0
             ThvE_eta_g->Fill(etapr_6gTrue.GetTrueGammaLV(i).E(),etapr_6gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
@@ -297,41 +339,120 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
 
 void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
 {
-
-
-
-    for( Int_t i = 0; i < GetTagger()->GetNTagged(); i++ )
+    for(UInt_t i = 0; i < nPhotons; i++)
     {
-        TLorentzVector k = GetTagger()->GetVector(i);
-        TLorentzVector l = GetTagger()->GetVectorProtonTarget(i);
-        double test = k.E();
-        double test2 = l.E();
-        beam.SetFromVector(GetTagger()->GetVector(i));
-
-        int n_photons = 0;
-        for ( Int_t j = 0; j <= GetTracks()->GetNTracks() ; j++ )
-        {
-            if( j != ipr)
-            {
-                IM6g_vec += GetTracks()->GetVector(j);
-                IM_6g->Fill( IM6g_vec.M() );
-                photons[n_photons].SetFromVector(GetTracks()->GetVector(j));
-//                n_photons++;
-            }
-            else
-                proton.SetFromVector(GetTracks()->GetVector(ipr));
-        }
-//        std::cout << "nr of photons are " << n_photons << std::endl;
+        photons_rec[i].SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
+        photons_fit[i].SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
     }
 
-/*
-    proton.Smear();
-    for(auto& photon : photons)
-        photon.Smear();
-    beam.Smear();
- */
+    IM6g_vec.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
+    TLorentzVector etap_fit(0.0, 0.0, 0.0, 0.0);
+    for( Int_t i = 0; i < 1; i++ )
+    {
+        beam.SetFromVector( GetTagger()->GetVector(i) );
+        beam.Smear(3, true);
+        beam.APLCONSettings();
 
-//    IM6gvMMp->Fill(MMp,IM6g_vec.M());
+        proton.SetFromVector( GetTracks()->GetVector(ipr) );
+        proton.Smear(2, false);
+
+        Int_t n_photons = 0;
+        for ( Int_t j = 0; j < GetTracks()->GetNTracks() ; j++ )
+        {
+            if( j != ipr ) // the id proton cluster
+            {
+                photons_rec[n_photons] = GetTracks()->GetVector(j);
+                photons[n_photons].SetFromVector( GetTracks()->GetVector(j));
+                IM6g_vec += photons_rec[n_photons];
+                if( GetTracks()->HasCB(j) )
+                    photons[n_photons].Smear(1, true);
+                else // ( GetTracks()->HasTAPS(j) )
+                    photons[n_photons].Smear(2, true);
+                n_photons++;
+            }
+        }
+    }
+
+    IM_6g->Fill(IM6g_vec.M());
+    IM6gvMMp->Fill( MMp, IM6g_vec.M() );
+
+    const APLCON::Result_t& result = kinfit.DoFit();
+    if(result.Status == APLCON::Result_Status_t::Success)
+    {
+//        cout << result << endl;
+
+       kfit_chi2->Fill(result.ChiSquare);
+       kfit_pdf->Fill(result.Probability);
+
+
+       if( result.Probability < 0.01 ) return;
+
+       Int_t inr = 0;
+       for(const auto& it_map : result.Variables) {
+ //          const string& varname = it_map.first;
+           const APLCON::Result_Variable_t& var = it_map.second;
+            kfit_Pulls->Fill(var.Pull, inr);
+            inr++;
+       }
+       for(size_t t=0; t<photons.size(); t++)
+       {
+           photons_fit[t] = FitParticle::Make(photons[t], 0);
+           etap_fit += photons_fit[t];
+       }
+       IM6g_fit->Fill( etap_fit.M() );
+
+       sigma_eta = 17; sigma_pi0 = 9;
+
+
+       Double_t    chi2min_eta2pi  = 1.0e6;
+       Double_t    chi2min_3pi     = 1.0e6;
+       std::vector<int> imin_eta2pi;
+       std::vector<int> imin_3pi;
+       GetBest6gCombination(sigma_eta, sigma_pi0, chi2min_eta2pi, chi2min_3pi, imin_eta2pi, imin_3pi );
+
+       PDF_eta2pi_v_3pi->Fill(TMath::Prob(chi2min_eta2pi,2), TMath::Prob(chi2min_3pi,2));
+
+       TLorentzVector g[3];
+       g[0] = photons_fit[imin_eta2pi[0]] + photons_fit[imin_eta2pi[1]];
+       g[1] = photons_fit[imin_eta2pi[2]] + photons_fit[imin_eta2pi[3]];
+       g[2] = photons_fit[imin_eta2pi[4]] + photons_fit[imin_eta2pi[5]];
+       best_eta->Fill( (g[0]).M() );
+       best_eta_EvTh->Fill( g[1].E(), g[1].Theta()*TMath::RadToDeg());
+       best_eta_EvTh->Fill( g[2].E(), g[2].Theta()*TMath::RadToDeg());
+
+       best_2pi->Fill( g[1].M() );
+       best_2pi->Fill( g[2].M() );
+
+       if( (TMath::Prob(chi2min_3pi,2) > 0.02) && (TMath::Prob(chi2min_eta2pi,2) < 0.02) )
+            IM6g_fit_3pi->Fill(etap_fit.M());
+
+       if( (TMath::Prob(chi2min_eta2pi,2) > 0.02) && (TMath::Prob(chi2min_3pi,2) < 0.02) )
+       {
+           IM6g_fit_eta2pi->Fill( etap_fit.M() );
+           etapr_v_BeamE->Fill((GetTagger()->GetVector(0)).E(), etap_fit.M());
+
+           Double_t m_etapi01_fit = 0;
+           Double_t m_etapi02_fit = 0;
+           Double_t m_2pi0_fit = 0;
+           m2pi0_metapi0( g ,  m_etapi01_fit, m_etapi02_fit, m_2pi0_fit);
+           M_pi1pi2_fit->Fill(m_2pi0_fit / 1.0e6);
+           M_etapi_fit->Fill(m_etapi01_fit / 1.0e6);
+           M_etapi_fit->Fill(m_etapi02_fit / 1.0e6);
+           deltaMpipi_v_Mpipi_fit->Fill(m_2pi0_fit / 1.0e6, m_2pi0_fit/1.0e6-m_2pi0True);
+
+           Double_t Xfit = -2.0;
+           Double_t Yfit = -2.0;
+           Int_t DP_binnr_fit = 0;
+           DalitzPlot(g, Xfit, Yfit, DP_binnr_fit);
+
+           DP_fit->Fill(DP_binnr_fit, etap_fit.M() );
+           deltaX_v_DPbin->Fill(DP_binnr_fit, Xfit - Xtrue);
+           deltaY_v_DPbin->Fill(DP_binnr_fit, Yfit - Ytrue);
+       }
+
+    }
+
+
 
 
 
@@ -390,7 +511,6 @@ void AdlarsonPhysics::tengAnalysis(Int_t ipr)
 
 }
 
-
 void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double_t &Y , Int_t &DP_nr)
 {
 
@@ -425,18 +545,17 @@ void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double
     X = ( TMath::Sqrt(3.0) / Q ) * ( T_pi1 - T_pi2 );
     Y = ( MASS_ETA + 2 * MASS_PI0 ) / MASS_PI0 * ( T_eta / Q ) - 1.0;
 
-    DP_nr = ( int( X ) + X_max ) / 0.2 + 40*( int( Y ) + Y_max );
+    DP_nr = int ( (X  + X_max ) / bin_width ) + 40*int( (Y  + Y_max ) / bin_width );
 
-    DP_true->Fill(X,Y);
+
 }
-
 
 Double_t    AdlarsonPhysics::IM_Ng( UInt_t n )
 {
     TLorentzVector g_vec;
 
     g_vec.SetPxPyPzE(0,0,0,0);
-    for ( Int_t i = 0 ; i < n; i++ )
+    for ( UInt_t i = 0 ; i < n; i++ )
         g_vec += GetPhotons()->Particle(i);
 
     return g_vec.M();
@@ -448,25 +567,75 @@ void AdlarsonPhysics::m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, 
     // 0 1 2 - eta pi01 pi02
     // Dalitz plot variables
 
-    Double_t meta, mpi01, mpi02, metapr;
+    /*    Double_t meta, mpi01, mpi02, metapr; // use for double check
 
 
     meta = g[0].M();
     mpi01 = g[1].M();
     mpi02 = g[2].M();
     metapr = ( g[0] + g[1] + g[2] ).M();
+    */
 
     m_etapi01   = ( g[0] + g[1] ).M2();
     m_etapi02   = ( g[0] + g[2] ).M2();
     m_2pi0      = ( g[1] + g[2] ).M2();
 
-    M_pi1pi2_true->Fill(m_2pi0);
-    M_etapi_true->Fill(m_etapi01);
-    M_etapi_true->Fill(m_etapi02);
+
 }
 
+TLorentzVector AdlarsonPhysics::FitParticle::Make(const std::vector<double> &EkThetaPhi, const Double_t m) {
+    const double E = EkThetaPhi[0] + m;
+    const Double_t p = sqrt( E*E - m*m );
+    TVector3 pv(1,0,0);
+    pv.SetMagThetaPhi(p, EkThetaPhi[1], EkThetaPhi[2]);
+    TLorentzVector l(pv, E);
+    return l;
+}
 
+void AdlarsonPhysics::FitParticle::Smear(Int_t apparatus_nr, Bool_t measured) {
+    // set the sigmas here,
+    // then the fitter knows them as well (because they're linked)
 
+    if( apparatus_nr == 1 ) //CB
+    {
+        Ek_Sigma = (0.02*(Ek/1.0e3)*pow((Ek/1.0e3),-0.36))*1.0e3;
+        Theta_Sigma = 2.5*TMath::DegToRad();
+        Phi_Sigma = Theta_Sigma/sin(Theta);
+    }
+    else if( apparatus_nr == 2 ) //TAPS
+    {
+        if(measured)
+            Ek_Sigma = ((0.018 + 0.008*TMath::Sqrt(Ek/1.0e3))*(Ek/1.0e3))*1.0e3;
+        else
+            Ek_Sigma = 0;
+        Theta_Sigma = 1.0*TMath::DegToRad();
+        Phi_Sigma = 1.0*TMath::DegToRad();
+    }
+    else  // beam
+    {
+        Ek_Sigma = 2.0;
+        Theta_Sigma = 1e-4;
+        Phi_Sigma = 1e-4;
+    }
+
+/*
+    using gauss_t = std::normal_distribution<double>;
+    gauss_t gauss_Ek(0, Ek_Sigma);
+    Ek += gauss_Ek(generator);
+    gauss_t gauss_Theta(0, Theta_Sigma);
+    Theta += gauss_Theta(generator);
+    gauss_t gauss_Phi(0, Phi_Sigma);
+    Phi += gauss_Phi(generator);
+*/
+
+}
+
+void AdlarsonPhysics::FitParticle::APLCONSettings()
+{
+    Ek_Setting.StepSize = 0;
+    Theta_Setting.StepSize = 0;
+    Phi_Setting.StepSize = 0;
+}
 
 Int_t AdlarsonPhysics::perm6g[15][6]=
 {
@@ -537,6 +706,7 @@ Int_t AdlarsonPhysics::perm6outof8g[28][6]=
 
 Int_t AdlarsonPhysics::perm6outof10g[210][6]=
 {
+
     // all possible permutations of 6 from 10 possibilities
     { 0, 1, 2, 3, 4, 5 }, 	{ 0, 1, 2, 3, 4, 6 }, 	{ 0, 1, 2, 3, 4, 7 }, 	{ 0, 1, 2, 3, 4, 8 }, 	{ 0, 1, 2, 3, 4, 9 },
     { 0, 1, 2, 3, 5, 6 }, 	{ 0, 1, 2, 3, 5, 7 }, 	{ 0, 1, 2, 3, 5, 8 }, 	{ 0, 1, 2, 3, 5, 9 },
@@ -673,29 +843,111 @@ Int_t AdlarsonPhysics::perm6outof10g[210][6]=
 
 };
 
-TLorentzVector AdlarsonPhysics::FitParticle::Make(const std::vector<double> &EkThetaPhi, const Double_t m) {
-    const double E = EkThetaPhi[0] + m;
-    const Double_t p = sqrt( E*E - m*m );
-    TVector3 pv(1,0,0);
-    pv.SetMagThetaPhi(p, EkThetaPhi[1], EkThetaPhi[2]);
-    TLorentzVector l(pv, E);
-    return l;
+void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi )
+{
+    imin_eta2pi.resize(6);
+    imin_3pi.resize(6);
+    Double_t imgg[3];
+    Double_t chi2_eta2pi[3];
+    Double_t chi2_3pi;
+
+    for( Int_t i = 0; i < 15 ; i++)
+    {
+       for (Int_t j = 0; j < 3; j++)
+            imgg[j] = ( photons_fit[perm6g[i][0 + j*2]] + photons_fit[perm6g[i][1 + j*2]]).M();
+
+
+        chi2_eta2pi[0] = std::pow((imgg[0] - MASS_ETA )/(sigma_eta), 2.0) + std::pow((imgg[1] - MASS_PI0 )/(sigma_pi0), 2) + std::pow((imgg[2] - MASS_PI0 )/(sigma_pi0), 2.0);
+        chi2_eta2pi[1] = std::pow((imgg[1] - MASS_ETA )/(sigma_eta), 2.0) + std::pow((imgg[2] - MASS_PI0 )/(sigma_pi0), 2) + std::pow((imgg[0] - MASS_PI0 )/(sigma_pi0), 2.0);
+        chi2_eta2pi[2] = std::pow((imgg[2] - MASS_ETA )/(sigma_eta), 2.0) + std::pow((imgg[0] - MASS_PI0 )/(sigma_pi0), 2) + std::pow((imgg[1] - MASS_PI0 )/(sigma_pi0), 2.0);
+
+
+        for( Int_t t = 0; t < 3; t++ )
+        if( chi2_eta2pi[t] < chi2min_eta2pi )
+        {
+            chi2min_eta2pi = chi2_eta2pi[t];
+            if( t == 0 )
+            {
+                for(Int_t k = 0; k < 6; k++)
+                   imin_eta2pi[k] = perm6g[i][k];
+            }
+            else if( t == 1 )
+            {
+                imin_eta2pi[0] = perm6g[i][2];
+                imin_eta2pi[1] = perm6g[i][3];
+                imin_eta2pi[2] = perm6g[i][0];
+                imin_eta2pi[3] = perm6g[i][1];
+                imin_eta2pi[4] = perm6g[i][4];
+                imin_eta2pi[5] = perm6g[i][5];
+            }
+            else // t == 2
+            {
+                imin_eta2pi[0] = perm6g[i][4];
+                imin_eta2pi[1] = perm6g[i][5];
+                imin_eta2pi[2] = perm6g[i][0];
+                imin_eta2pi[3] = perm6g[i][1];
+                imin_eta2pi[4] = perm6g[i][2];
+                imin_eta2pi[5] = perm6g[i][3];
+            }
+        }
+
+        for( Int_t k = 0; k < 3; k++ )
+            chi2_3pi += std::pow((imgg[k] - MASS_PI0 )/(sigma_pi0), 2);
+        if( chi2_3pi < chi2min_3pi )
+        {
+            chi2min_3pi = chi2_3pi;
+            for(Int_t t = 0; t < 6; t++)
+                imin_3pi[t] = perm6g[i][t];
+        }
+    }
 }
 
-void AdlarsonPhysics::FitParticle::Smear() {
-    // set the sigmas here,
-    // then the fitter knows them as well (because they're linked)
 
-    Ek_Sigma = 0.02*Ek*pow(Ek,-0.36);
-    Theta_Sigma = 2.5*TMath::DegToRad();
-    if(Theta>20*TMath::DegToRad() && Theta<160*TMath::DegToRad()) {
-        Phi_Sigma = Theta_Sigma/sin(Theta);
-    }
-    else {
-        Phi_Sigma = 1*TMath::DegToRad();
+void AdlarsonPhysics::Kinfit_test()
+{
+    TLorentzVector beam_true, proton_true;
+    TLorentzVector photons_true[6];
+
+    beam_true.SetPxPyPzE(0., 0.,  etapr_6gTrue.GetTrueBeamEnergy()*1000, etapr_6gTrue.GetTrueBeamEnergy()*1000);
+//    beam.SetFromVector( beam_true );
+//    beam.Smear(3, true);
+
+    proton_true.SetPxPyPzE(etapr_6gTrue.GetTrueProtonLV().Px()*1000, etapr_6gTrue.GetTrueProtonLV().Py()*1000, etapr_6gTrue.GetTrueProtonLV().Pz()*1000,etapr_6gTrue.GetTrueProtonLV().E()*1000);
+    proton.SetFromVector( proton_true );
+    proton.Smear(2, true);
+
+    for(UInt_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
+    {
+        (photons_true[i]).SetPxPyPzE( etapr_6gTrue.GetTrueGammaLV(i).Px()*1000, etapr_6gTrue.GetTrueGammaLV(i).Py()*1000,etapr_6gTrue.GetTrueGammaLV(i).Pz()*1000, etapr_6gTrue.GetTrueGammaLV(i).E()*1000 );
+        photons[i].SetFromVector( photons_true[i] );
+        photons[i].Smear(1, true);
     }
 
-}
+    TLorentzVector etap_rec;
+    for(size_t t=0;t<photons.size();t++)
+        etap_rec += FitParticle::Make(photons[t], 0);
+    IM_6g->Fill(etap_rec.M());
+
+    const APLCON::Result_t& result = kinfit.DoFit();
+    if(result.Status == APLCON::Result_Status_t::Success)
+    {
+//        cout << result << endl;
+
+       kfit_chi2->Fill(result.ChiSquare);
+       kfit_pdf->Fill(result.Probability);
+
+       Int_t inr = 0;
+       for(const auto& it_map : result.Variables)
+       {
+           //const string& varname = it_map.first;
+           const APLCON::Result_Variable_t& var = it_map.second;
+           kfit_Pulls->Fill(var.Pull, inr);
+           inr++;
+
+       }
+
+    }
+};
 
 
 

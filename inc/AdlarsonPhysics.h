@@ -12,9 +12,10 @@
 #include "GHistBGSub2.h"
 #include "TVector.h"
 #include "GTrue.h"
-
+#include <random>
 #include <vector>
 #include <map>
+#include <cmath>
 
 #include <APLCON.hpp>
 template<typename T>
@@ -68,6 +69,35 @@ private:
     GHistBGSub2*    EvdE_TAPS_proton;
     GHistBGSub2*    EvTOF;
 
+    TH1D    RootHist;
+
+    // Kinfit related variables
+
+    GH1*            kfit_chi2;
+    GH1*            kfit_pdf;
+    GHistBGSub2*    kfit_Pulls;
+
+    GH1*            IM6g_fit;
+
+    GHistBGSub2*    PDF_eta2pi_v_3pi;
+    GH1*            IM6g_fit_3pi;
+    GH1*            IM6g_fit_eta2pi;
+
+
+    GH1*            best_eta;
+    GH1*            best_2pi;
+    GHistBGSub2*    best_eta_EvTh;
+
+    GH1*            M_pi1pi2_fit;
+    GH1*            M_etapi_fit;
+    GHistBGSub2*    deltaMpipi_v_Mpipi_fit;
+    GHistBGSub2*    etapr_v_BeamE;
+
+    GHistBGSub2*    DP_fit;
+    GHistBGSub2*    deltaX_v_DPbin;
+    GHistBGSub2*    deltaY_v_DPbin;
+
+
     // proton identified from TAPS_E vs VETO_dE
 
     TFile*          cutFile;
@@ -106,8 +136,15 @@ private:
 
     GTrue   etapr_6gTrue;
 
+    std::vector<TLorentzVector> photons_rec;
+    std::vector<TLorentzVector> photons_fit;
+
+    Double_t    sigma_eta;
+    Double_t    sigma_pi0;
+
 
 protected:
+ //   virtual Bool_t  Init(const char* configFile);
     virtual Bool_t  Start();
 
     virtual void    ProcessEvent();
@@ -124,7 +161,7 @@ protected:
 
 
     // lightweight structure for linking to fitter
-        struct FitParticle {
+        struct FitParticle{
             void SetFromVector(const TLorentzVector& p_) {
                 Ek = p_.E()-p_.M();
                 Theta = p_.Theta();
@@ -148,18 +185,28 @@ protected:
                         std::addressof(Theta_Sigma),
                         std::addressof(Phi_Sigma)};
             }
+            std::vector<APLCON::Variable_Settings_t> LinkSettings()
+            {
+                return{Ek_Setting, Theta_Setting, Phi_Setting};
+            }
 
-            void Smear();
+            void Smear(int itr_nr, Bool_t measured );
+            void APLCONSettings();
 
 
             double Ek;
             double Ek_Sigma;
+            APLCON::Variable_Settings_t Ek_Setting;
             double Theta;
             double Theta_Sigma;
+            APLCON::Variable_Settings_t Theta_Setting;
             double Phi;
             double Phi_Sigma;
+            APLCON::Variable_Settings_t Phi_Setting;
+
         private:
             static std::default_random_engine generator;
+
         };
 
     APLCON kinfit;
@@ -178,10 +225,11 @@ public:
 
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
+    void Kinfit_test();
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( Int_t ipr );
-    void GetBest6gCombination();
+    void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi );
 
     // functions specifically related to 10g analysis
     void tengAnalysis(Int_t ipr );
