@@ -5,7 +5,8 @@
 #include "Rtypes.h"
 #include "GTreeParticle.h"
 
-
+#define MASS_ELECTRON    0.510998
+#define MASS_MUON    105.65837
 #define MASS_PI0    134.9766
 #define MASS_ETA    547.853
 #define MASS_ETAP   957.78

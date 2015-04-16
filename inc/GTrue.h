@@ -27,6 +27,8 @@ private:
     TLorentzVector     gamma[GTrue_MaxEntries];
     TLorentzVector     electron;
     TLorentzVector     positron;
+    TLorentzVector     muonneg;
+    TLorentzVector     muonpos;
     // Incrementing nr of each particle type;
     UInt_t              nchpi;
     UInt_t              npi0;
@@ -75,6 +77,12 @@ public:
     // positron LorentzVector
             TLorentzVector& GetTruePositronLV()       { return positron;}
     const   TLorentzVector& GetTruePositronLV() const { return positron;}
+    // mu- LorentzVector
+            TLorentzVector& GetTrueMuonNegLV()       { return muonneg;}
+    const   TLorentzVector& GetTrueMuonNegLV() const { return muonneg;}
+    // mu- LorentzVector
+            TLorentzVector& GetTrueMuonPosLV()       { return muonpos;}
+    const   TLorentzVector& GetTrueMuonPosLV() const { return muonpos;}
 //
     Double_t    GetWeight() const   { return weight;}
 

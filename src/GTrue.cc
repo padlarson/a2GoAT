@@ -71,5 +71,23 @@ void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
             ngamma++;
             continue;
         }
+        if(pluto.GetMCTrue(i)->Is("e-")){
+            electron = pluto.GetMCTrueLV(i);
+            continue;
+        }
+        if(pluto.GetMCTrue(i)->Is("e+")){
+            positron = pluto.GetMCTrueLV(i);
+            continue;
+        }
+        if(pluto.GetMCTrue(i)->Is("mu-")){
+            muonneg = pluto.GetMCTrueLV(i);
+            continue;
+        }
+        if(pluto.GetMCTrue(i)->Is("mu+")){
+            muonpos = pluto.GetMCTrueLV(i);
+            continue;
+        }
+
+
     }
 }
