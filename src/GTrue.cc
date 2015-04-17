@@ -30,9 +30,11 @@ void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
 
     vertex  = geant.GetVertex();
 
-    TrueBeamEnergy = pluto.GetTrueBeam().E();
+    TrueBeamEnergy = pluto.GetTrueP4(0).P();
 
-    for(int i = 0; i <= pluto.GetAllParticles().size(); i++)
+
+
+    for(int i = 0; i < pluto.GetAllParticles().size(); i++)
     {
         if(pluto.GetMCTrue(i)->Is("n")){
             neutron = pluto.GetTrueP4(i);
@@ -69,5 +71,23 @@ void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
             ngamma++;
             continue;
         }
+        if(pluto.GetMCTrue(i)->Is("e-")){
+            electron = pluto.GetTrueP4(i);
+            continue;
+        }
+        if(pluto.GetMCTrue(i)->Is("e+")){
+            positron = pluto.GetTrueP4(i);
+            continue;
+        }
+        if(pluto.GetMCTrue(i)->Is("mu-")){
+            muonneg = pluto.GetTrueP4(i);
+            continue;
+        }
+        if(pluto.GetMCTrue(i)->Is("mu+")){
+            muonpos = pluto.GetTrueP4(i);
+            continue;
+        }
+
+
     }
 }
