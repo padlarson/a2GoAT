@@ -95,6 +95,27 @@ Int_t   GHistBGSub3::Fill(const Double_t x, const Double_t y, const Double_t z, 
     return tagger.GetNTagged();
 }
 
+Int_t   GHistBGSub3::FillWeighted(const Double_t x, const Double_t y, const Double_t z, const Double_t weight, const Double_t taggerTime)
+{
+    if(taggerTime>=cutPromptMin && taggerTime<=cutPromptMax)
+        return ((GHistScaCor3*)prompt)->FillWeighted(x, y, z, weight);
+    for(Int_t i=0; i<GetNRandCuts(); i++)
+    {
+        if(i>=rand.GetEntriesFast())
+            ExpandRandBins(i+1);
+        if(taggerTime>=cutRandMin[i] && taggerTime<=cutRandMax[i])
+            return ((GHistScaCor3*)rand.At(i))->FillWeighted(x, y, z, weight);
+    }
+    return 0;
+}
+
+Int_t   GHistBGSub3::FillWeighted(const Double_t x, const Double_t y, const Double_t z, const Double_t weight, const GTreeTagger& tagger)
+{
+    for(Int_t i=0; i<tagger.GetNTagged(); i++)
+        FillWeighted(x, y, z, weight, tagger.GetTaggedTime(i));
+    return tagger.GetNTagged();
+}
+
 GHistBGSub2*    GHistBGSub3::ProjectionXY(const char* name, Int_t firstzbin, Int_t lastzbin, Option_t* option)
 {
     GHistBGSub2*    ret = new GHistBGSub2(name, name, ((GHistScaCor3*)result)->GetNbinsX(), ((GHistScaCor3*)result)->GetXmin(), ((GHistScaCor3*)result)->GetXmax(), ((GHistScaCor3*)result)->GetNbinsY(), ((GHistScaCor3*)result)->GetYmin(), ((GHistScaCor3*)result)->GetYmax(), kFALSE);

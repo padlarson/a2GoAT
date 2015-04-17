@@ -53,7 +53,8 @@ public:
     virtual Bool_t	Add(const GHistScaCor *h, Double_t c = 1);
     virtual Bool_t	Add(const TH1* _buffer, const TH1* _accumulated, const TH1* _accumulatedCorrected, const Bool_t CorrectedInput, const Double_t c = 1);
     virtual void 	CalcResult()    {}
-    virtual Int_t	Fill(Double_t x)    {return buffer->Fill(x);}
+    virtual Int_t	Fill(const Double_t x)    {return buffer->Fill(x);}
+    virtual Int_t   FillWeighted(const Double_t x, const Double_t weight)   {return buffer->Fill(x, weight);}
     const   TH1*    GetAccumulated()            const   {return accumulated;}
     const   TH1*    GetAccumulatedCorrected()   const   {return accumulatedCorrected;}
     const   char*   GetName()                   const   {return accumulatedCorrected->GetName();}
@@ -69,6 +70,7 @@ public:
     virtual void    ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
     virtual void	SetBins(Int_t nx, Double_t xmin, Double_t xmax);
             void    SetWriteUncorrected(const Bool_t value)                                             {writeUncorrected = value;}
+    virtual void	Sumw2(Bool_t flag = kTRUE)                                                          {buffer->Sumw2(flag); accumulated->Sumw2(flag); accumulatedCorrected->Sumw2(flag);}
     virtual Int_t   WriteWithoutCalcResult(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
 };
 

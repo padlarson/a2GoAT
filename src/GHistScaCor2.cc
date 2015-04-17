@@ -65,7 +65,7 @@ void    GHistScaCor2::CreateSingleScalerRead()
     singleScalerReadsCorrected.Add(cor);
 }
 
-Int_t	GHistScaCor2::Fill(Double_t x)
+Int_t	GHistScaCor2::Fill(const Double_t x)
 {
     std::cout << "ERROR: You tried to fill a 2 dim. Hist with only 1 value." << std::endl;
     return 0;

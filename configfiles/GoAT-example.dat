@@ -20,6 +20,15 @@ Cut-dE-E-TAPS-Pion: 	configfiles/cuts/TAPS_DeltaE-E.root	CutPiplus
 Cut-dE-E-TAPS-Proton: 	configfiles/cuts/TAPS_DeltaE-E.root CutProton
 Cut-dE-E-TAPS-Electron: configfiles/cuts/TAPS_DeltaE-E.root CutElectron
 
+# New cluster size, TOF, and PSA cut structure. Currently, if used:
+# 1) charged particles within a cut become protons, regardless of dEvE
+# 2) neutral particles within a cut become neutrons
+#
+#Cut-CB-ClusterSize:     configfiles/cuts/CB_ClusterSize.root Hadron
+#Cut-TAPS-ClusterSize:   configfiles/cuts/TAPS_ClusterSize.root Hadron
+#Cut-TAPS-TOF:           configfiles/cuts/TAPS_TOF.root Hadron
+#Cut-TAPS-PSA:           configfiles/cuts/TAPS_PSA.root Hadron
+
 Do-Meson-Reconstruction: 1
 Cut-IM-Width-Pi0: 20
 Cut-IM-Width-Eta: 44

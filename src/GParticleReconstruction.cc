@@ -141,7 +141,7 @@ Bool_t	GParticleReconstruction::Init()
         }
     }
 
-    config = ReadConfig("Cut-CB-ClustSize");
+    config = ReadConfig("Cut-CB-ClusterSize");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
         if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
@@ -155,7 +155,26 @@ Bool_t	GParticleReconstruction::Init()
         }
         else
         {
-            cout << "ERROR: Cut-CB-ClustSize set improperly" << endl;
+            cout << "ERROR: Cut-CB-ClusterSize set improperly" << endl;
+            return kFALSE;
+        }
+    }
+
+    config = ReadConfig("Cut-CB-PSA");
+    if (strcmp(config.c_str(), "nokey") != 0)
+    {
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
+        {
+            typeCB = ReconstructType(ReconstructPulseShape | typeCB);
+            if(!(cutPulseShapeCB = OpenCutFile(cutFile,cutName)))
+            {
+                cerr << "Failed to load cut! Terminating..." << endl;
+                exit(1);
+            }
+        }
+        else
+        {
+            cout << "ERROR: Cut-CB-PSA set improperly" << endl;
             return kFALSE;
         }
     }
@@ -256,7 +275,7 @@ Bool_t	GParticleReconstruction::Init()
         }
     }
 
-    config = ReadConfig("Cut-TAPS-ClustSize");
+    config = ReadConfig("Cut-TAPS-ClusterSize");
     if (strcmp(config.c_str(), "nokey") != 0)
     {
         if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
@@ -270,7 +289,26 @@ Bool_t	GParticleReconstruction::Init()
         }
         else
         {
-            cout << "ERROR: Cut-TAPS-ClustSize set improperly" << endl;
+            cout << "ERROR: Cut-TAPS-ClusterSize set improperly" << endl;
+            return kFALSE;
+        }
+    }
+
+    config = ReadConfig("Cut-TAPS-PSA");
+    if (strcmp(config.c_str(), "nokey") != 0)
+    {
+        if(sscanf( config.c_str(), "%s %s\n", cutFile,cutName) == 2)
+        {
+            typeTAPS = ReconstructType(ReconstructPulseShape | typeTAPS);
+            if(!(cutPulseShapeTAPS = OpenCutFile(cutFile,cutName)))
+            {
+                cerr << "Failed to load cut! Terminating..." << endl;
+                exit(1);
+            }
+        }
+        else
+        {
+            cout << "ERROR: Cut-TAPS-PulseShape set improperly" << endl;
             return kFALSE;
         }
     }
@@ -384,6 +422,12 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
                     hadron[i] = 1;
             }
 
+            if(typeCB & ReconstructPulseShape)
+            {
+                if(cutPulseShapeCB->IsInside(GetTracks()->GetPSAAngle(i),GetTracks()->GetPSARadius(i)))
+                    hadron[i] = 1;
+            }
+
             if (charge[i] == 0)
             {
                 if(hadron[i] == 0) identified[i] = pdgDB->GetParticle("gamma")->PdgCode();
@@ -451,6 +495,12 @@ Bool_t	GParticleReconstruction::ProcessEventWithoutFilling()
             if(typeTAPS & ReconstructClusterSize)
             {
                 if(cutClusterSizeTAPS->IsInside(GetTracks()->GetClusterEnergy(i),GetTracks()->GetClusterSize(i)))
+                    hadron[i] = 1;
+            }
+
+            if(typeTAPS & ReconstructPulseShape)
+            {
+                if(cutPulseShapeTAPS->IsInside(GetTracks()->GetPSAAngle(i),GetTracks()->GetPSARadius(i)))
                     hadron[i] = 1;
             }
 

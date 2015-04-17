@@ -20,8 +20,9 @@ public:
     GHistScaCor2(const char* name, const char* title, const Int_t nbinsx, const Double_t xlow, const Double_t xup, const Int_t nbinsy, const Double_t ylow, const Double_t yup, const Bool_t linkHistogram = kTRUE);
     virtual ~GHistScaCor2();
 
-    virtual Int_t	Fill(Double_t x);
-    virtual Int_t	Fill(Double_t x, Double_t y)        {return ((TH2*)buffer)->Fill(x, y);}
+    virtual Int_t	Fill(const Double_t x);
+    virtual Int_t	Fill(const Double_t x, const Double_t y)        {return ((TH2*)buffer)->Fill(x, y);}
+    virtual Int_t   FillWeighted(const Double_t x, const Double_t y, const Double_t weight)   {return ((TH2*)buffer)->Fill(x, y, weight);}
             Int_t   GetNbinsY()                 const   {return accumulatedCorrected->GetNbinsY();}
             Int_t   GetYmin()                   const   {return accumulatedCorrected->GetYaxis()->GetXmin();}
             Int_t   GetYmax()                   const   {return accumulatedCorrected->GetYaxis()->GetXmax();}

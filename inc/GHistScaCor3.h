@@ -24,9 +24,10 @@ public:
                  const Bool_t linkHistogram = kTRUE);
     virtual ~GHistScaCor3();
 
-    virtual Int_t	Fill(Double_t x);
-    virtual Int_t	Fill(Double_t x, Double_t y);
-    virtual Int_t	Fill(Double_t x, Double_t y, Double_t z)    {return ((TH3*)buffer)->Fill(x, y, z);}
+    virtual Int_t	Fill(const Double_t x);
+    virtual Int_t	Fill(const Double_t x, const Double_t y);
+    virtual Int_t	Fill(const Double_t x, const Double_t y, const Double_t z)    {return ((TH3*)buffer)->Fill(x, y, z);}
+    virtual Int_t   FillWeighted(const Double_t x, const Double_t y, const Double_t z, const Double_t weight)   {return ((TH3*)buffer)->Fill(x, y, z, weight);}
             Int_t   GetNbinsZ()                         const   {return accumulatedCorrected->GetNbinsZ();}
             Int_t   GetZmin()                           const   {return accumulatedCorrected->GetZaxis()->GetXmin();}
             Int_t   GetZmax()                           const   {return accumulatedCorrected->GetZaxis()->GetXmax();}

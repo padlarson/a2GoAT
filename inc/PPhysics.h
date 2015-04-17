@@ -81,7 +81,7 @@ public:
 
 	void 	SetTC_scalers(Int_t sc_min, Int_t sc_max) { TC_scaler_min = sc_min; TC_scaler_max = sc_max; }
 	Int_t 	GetTC_scaler_min() { return TC_scaler_min;}
-	Int_t 	GetTC_scaler_max() { return TC_scaler_max;}	
+    Int_t 	GetTC_scaler_max() { return TC_scaler_max;}
 
 	// TH1 routines
 	void FillMissingMass(const GTreeParticle& tree, TH1* Hprompt, TH1* Hrandom);
@@ -107,5 +107,7 @@ public:
 	Bool_t InitTargetMass();
 	Bool_t InitTaggerChannelCuts();
 	Bool_t InitTaggerScalers();
+
+    Bool_t  RejectTagged(Int_t tagger_index);
 };
 #endif

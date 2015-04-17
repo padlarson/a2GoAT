@@ -17,6 +17,12 @@ private:
     Int_t           taggedChannel[GTreeTagger_MAX];
     Double_t        taggedTime[GTreeTagger_MAX];
     Double_t        taggedEnergy[GTreeTagger_MAX];
+    Bool_t          taggedDouble[GTreeTagger_MAX];
+    Int_t           nDouble;
+    Int_t           nChain;
+    Int_t           doubleChannel[GTreeTagger_MAX];
+    Double_t        doubleTime[GTreeTagger_MAX];
+    Double_t        doubleEnergy[GTreeTagger_MAX];
     Bool_t          hasEnergy;
     Double_t        calibration[352];
 
@@ -37,6 +43,17 @@ public:
             Double_t        GetTaggedTime(const Int_t index)    const	{return taggedTime[index];}
     const	Double_t*       GetTaggedEnergy()                   const	{return taggedEnergy;}
             Double_t        GetTaggedEnergy(const Int_t index)	const	{if(hasEnergy) return taggedEnergy[index]; return calibration[taggedChannel[index]];}
+    const	Bool_t*         GetTaggedDouble()                   const	{return taggedDouble;}
+            Bool_t          GetTaggedDouble(const Int_t index)  const	{return taggedDouble[index];}
+            Int_t           GetNDouble()                        const	{return nDouble;}
+            Int_t           GetNChain()                         const	{return nChain;}
+    const	Int_t*          GetDoubleChannel()                  const	{return doubleChannel;}
+            Int_t           GetDoubleChannel(const Int_t index) const	{return doubleChannel[index];}
+    const	Double_t*       GetDoubleTime()                     const	{return doubleTime;}
+            Double_t        GetDoubleTime(const Int_t index)    const	{return doubleTime[index];}
+    const	Double_t*       GetDoubleEnergy()                   const	{return doubleEnergy;}
+            Double_t        GetDoubleEnergy(const Int_t index)  const	{return doubleEnergy[index];}
+            void            DecodeDoubles(const Double_t timingRes = 3.0, const Bool_t decodeChain = true);
             Bool_t          HasEnergy()                         const   {return hasEnergy;}
             void            SetCalibration(const Int_t nChan, const Double_t *energy);
     TLorentzVector          GetVector(const Int_t index)        const   {return TLorentzVector(0, 0, taggedEnergy[index], taggedEnergy[index]);}

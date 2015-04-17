@@ -71,13 +71,13 @@ void    GHistScaCor3::CreateSingleScalerRead()
     singleScalerReadsCorrected.Add(cor);
 }
 
-Int_t	GHistScaCor3::Fill(Double_t x)
+Int_t	GHistScaCor3::Fill(const Double_t x)
 {
     std::cout << "ERROR: You tried to fill a 3 dim. Hist with only 1 value." << std::endl;
     return 0;
 }
 
-Int_t	GHistScaCor3::Fill(Double_t x, Double_t y)
+Int_t	GHistScaCor3::Fill(const Double_t x, const Double_t y)
 {
     std::cout << "ERROR: You tried to fill a 3 dim. Hist with only 2 values." << std::endl;
     return 0;

@@ -66,3 +66,15 @@ Int_t   GHistTaggerBinning2::Fill(const Double_t x, const Double_t y, const GTre
     return tagger.GetNTagged();
 }
 
+Int_t   GHistTaggerBinning2::FillWeighted(const Double_t x, const Double_t y, const Double_t weight, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning)
+{
+    for(Int_t i=0; i<tagger.GetNTagged(); i++)
+    {
+        if(CreateHistogramsForTaggerBinning)
+            FillWeighted(x, y, weight, tagger.GetTaggedChannel(i), tagger.GetTaggedTime(i));
+        else
+            FillWeighted(x, y, weight);
+    }
+    return tagger.GetNTagged();
+}
+

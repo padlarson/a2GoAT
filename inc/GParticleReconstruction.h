@@ -19,8 +19,9 @@ public:
         ReconstructCutElectron  = 4,
         ReconstructTimeOfFlight = 8,
         ReconstructClusterSize  = 16,
-        ReconstructAllPhotons   = 32,
-        ReconstructAllProtons   = 64
+        ReconstructPulseShape   = 32,
+        ReconstructAllPhotons   = 64,
+        ReconstructAllProtons   = 128
     };
 
 private:
@@ -32,14 +33,16 @@ private:
     TCutG* 		cutProtonCB;
     TCutG* 		cutPionCB;
     TCutG*		cutElectronCB;
+    TCutG* 		cutTimeOfFlightCB;
+    TCutG* 		cutClusterSizeCB;
+    TCutG* 		cutPulseShapeCB;
+
     TCutG* 		cutProtonTAPS;
     TCutG* 		cutPionTAPS;
     TCutG*		cutElectronTAPS;
-
-    TCutG* 		cutTimeOfFlightCB;
-    TCutG* 		cutClusterSizeCB;
     TCutG* 		cutTimeOfFlightTAPS;
     TCutG* 		cutClusterSizeTAPS;
+    TCutG* 		cutPulseShapeTAPS;
 
     Int_t* 		identified;
     Int_t* 		charge;

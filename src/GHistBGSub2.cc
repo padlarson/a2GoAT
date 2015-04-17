@@ -79,6 +79,26 @@ Int_t   GHistBGSub2::Fill(const Double_t x, const Double_t y, const GTreeTagger&
     return tagger.GetNTagged();
 }
 
+Int_t   GHistBGSub2::FillWeighted(const Double_t x, const Double_t y, const Double_t weight, const Double_t taggerTime)
+{
+    if(taggerTime>=cutPromptMin && taggerTime<=cutPromptMax)
+        return ((GHistScaCor2*)prompt)->FillWeighted(x, y, weight);
+    for(Int_t i=0; i<GetNRandCuts(); i++)
+    {
+        if(i>=rand.GetEntriesFast())
+            ExpandRandBins(i+1);
+        if(taggerTime>=cutRandMin[i] && taggerTime<=cutRandMax[i])
+            return ((GHistScaCor2*)rand.At(i))->FillWeighted(x, y, weight);
+    }
+    return 0;
+}
+
+Int_t   GHistBGSub2::FillWeighted(const Double_t x, const Double_t y, const Double_t weight, const GTreeTagger& tagger)
+{
+    for(Int_t i=0; i<tagger.GetNTagged(); i++)
+        FillWeighted(x, y, weight, tagger.GetTaggedTime(i));
+    return tagger.GetNTagged();
+}
 
 GHistBGSub*    GHistBGSub2::ProjectionX(const char* name, Int_t firstybin, Int_t lastybin, Option_t* option)
 {

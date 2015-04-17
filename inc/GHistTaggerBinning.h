@@ -37,6 +37,10 @@ public:
     virtual Int_t           Fill(const Double_t value, const Double_t taggerTime)                                  {return sum->Fill(value, taggerTime);}
     virtual Int_t           Fill(const Double_t value, const Double_t taggerTime, const Int_t taggerChannel)       {return ((GHistBGSub2*)array)->Fill(value, taggerChannel, taggerTime);}
     virtual Int_t           Fill(const Double_t value, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
+    virtual Int_t           FillWeighted(const Double_t value, const Double_t weight)                                                          {return sum->FillWeighted(value, weight);}
+    virtual Int_t           FillWeighted(const Double_t value, const Double_t weight, const Double_t taggerTime)                                  {return sum->FillWeighted(value, weight, taggerTime);}
+    virtual Int_t           FillWeighted(const Double_t value, const Double_t weight, const Double_t taggerTime, const Int_t taggerChannel)       {return ((GHistBGSub2*)array)->FillWeighted(value, taggerChannel, weight, taggerTime);}
+    virtual Int_t           FillWeighted(const Double_t value, const Double_t weight, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning = kFALSE);
     virtual void            PrepareWriteList(GHistWriteList* arr, const char* name = 0);
     virtual void            Reset(Option_t* option = "")                    {sum->Reset(option); array->Reset(option);}
     virtual void        	Scale(Double_t c1 = 1, Option_t* option = "")   {sum->Scale(c1, option); array->Scale(c1, option);}

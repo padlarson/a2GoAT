@@ -68,6 +68,18 @@ Int_t   GHistTaggerBinning::Fill(const Double_t value, const GTreeTagger& tagger
     return tagger.GetNTagged();
 }
 
+Int_t   GHistTaggerBinning::FillWeighted(const Double_t value, const Double_t weight, const GTreeTagger& tagger, const Bool_t CreateHistogramsForTaggerBinning)
+{
+    for(Int_t i=0; i<tagger.GetNTagged(); i++)
+    {
+        if(CreateHistogramsForTaggerBinning)
+            FillWeighted(value, weight, tagger.GetTaggedTime(i), tagger.GetTaggedChannel(i));
+        else
+            FillWeighted(value, weight);
+    }
+    return tagger.GetNTagged();
+}
+
 void    GHistTaggerBinning::ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads)
 {
     sum->ScalerReadCorrection(CorrectionFactor, CreateHistogramsForSingleScalerReads);

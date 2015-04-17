@@ -84,10 +84,16 @@ void PPhysics::FillMissingMass(const GTreeParticle& tree, Int_t particle_index, 
 
 void PPhysics::FillMissingMass(const GTreeParticle& tree, Int_t particle_index, Int_t tagger_index, TH1* Hprompt, TH1* Hrandom)
 {
+    if(RejectTagged(tagger_index)) return;
+
+    // calc particle time diff
     time = GetTagger()->GetTaggedTime(tagger_index) - tree.GetTime(particle_index);
+
+    // calc missing p4
     missingp4 = CalcMissingP4(tree, particle_index,tagger_index);
 
-	if (GHistBGSub::IsPrompt(time)) Hprompt->Fill(missingp4.M());
+    // Fill TH1
+    if (GHistBGSub::IsPrompt(time)) Hprompt->Fill(missingp4.M());
 	if (GHistBGSub::IsRandom(time)) Hrandom->Fill(missingp4.M());						
 }
 
@@ -97,11 +103,9 @@ void PPhysics::FillTime(const GTreeParticle& tree, TH1* Hist)
 	{
         for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 		{
-            // Is tagger channel rejected by user?
-            if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-            if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
+            if(RejectTagged(j)) continue;
 
-                time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
+            time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
 			Hist->Fill(time);
 		}
 	}
@@ -111,12 +115,10 @@ void PPhysics::FillTime(const GTreeParticle& tree, Int_t particle_index, TH1* Hi
 {
     for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 	{
-    // Is tagger channel rejected by user?
-        if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-        if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
+        if(RejectTagged(j)) continue;
 	
         time = GetTagger()->GetTaggedTime(j) - tree.GetTime(particle_index);
-	Hist->Fill(time);
+        Hist->Fill(time);
 	}
 }
 
@@ -126,11 +128,9 @@ void PPhysics::FillTimeCut(const GTreeParticle& tree, TH1* Hist)
 	{
         for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 		{
-            // Is tagger channel rejected by user?
-            if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-            if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
+            if(RejectTagged(j)) continue;
 
-                    time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
+            time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
 			if((GHistBGSub::IsPrompt(time)) || (GHistBGSub::IsRandom(time))) Hist->Fill(time);
 		}
 	}
@@ -140,9 +140,7 @@ void PPhysics::FillTimeCut(const GTreeParticle& tree, Int_t particle_index, TH1*
 {
     for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 	{
-        // Is tagger channel rejected by user?
-        if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-        if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
+        if(RejectTagged(j)) continue;
 
         time = GetTagger()->GetTaggedTime(j) - tree.GetTime(particle_index);
 		if((GHistBGSub::IsPrompt(time)) || (GHistBGSub::IsRandom(time))) Hist->Fill(time);
@@ -173,10 +171,7 @@ void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index
 
 void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index, Int_t tagger_index, TH1* Hprompt, TH1* Hrandom, Double_t MM_min, Double_t MM_max)
 {
-    // Is tagger channel rejected by user?
-//    cout << tagger->GetTaggedChannel(tagger_index) << " " << TC_cut_min << " " << TC_cut_max << endl;
-    if(GetTagger()->GetTaggedChannel(tagger_index) < TC_cut_min) return;
-    if(GetTagger()->GetTaggedChannel(tagger_index) > TC_cut_max) return;
+    if(RejectTagged(tagger_index)) return;
 
     // calc particle time diff
     time = GetTagger()->GetTaggedTime(tagger_index) - tree.GetTime(particle_index);
@@ -224,9 +219,7 @@ void PPhysics::FillMissingMass(const GTreeParticle& tree, Int_t particle_index, 
 
 void PPhysics::FillMissingMass(const GTreeParticle& tree, Int_t particle_index, Int_t tagger_index, GH1* gHist, Bool_t TaggerBinning)
 {
-    // Is tagger channel rejected by user?
-    if(GetTagger()->GetTaggedChannel(tagger_index) < TC_cut_min) return;
-    if(GetTagger()->GetTaggedChannel(tagger_index) > TC_cut_max) return;
+    if(RejectTagged(tagger_index)) return;
 
     // calc particle time diff
     time = GetTagger()->GetTaggedTime(tagger_index) - tree.GetTime(particle_index);
@@ -274,9 +267,7 @@ void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index
 
 void PPhysics::FillBeamAsymmetry(const GTreeParticle& tree, Int_t particle_index, Int_t tagger_index, GH1* gHist, Bool_t TaggerBinning, Double_t MM_min, Double_t MM_max)
 {
-    // Is tagger channel rejected by user?
-    if(GetTagger()->GetTaggedChannel(tagger_index) < TC_cut_min) return;
-    if(GetTagger()->GetTaggedChannel(tagger_index) > TC_cut_max) return;
+    if(RejectTagged(tagger_index)) return;
 
     // calc particle time diff
     time = GetTagger()->GetTaggedTime(tagger_index) - tree.GetTime(particle_index);
@@ -296,11 +287,9 @@ void PPhysics::FillTime(const GTreeParticle& tree, GH1* gHist)
 	{
         for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 		{
-            // Is tagger channel rejected by user?
-            if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-            if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
+            if(RejectTagged(j)) continue;
 
-                time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
+            time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
 			gHist->Fill(time);
 		}
 	}
@@ -310,10 +299,8 @@ void PPhysics::FillTime(const GTreeParticle& tree, Int_t particle_index, GH1* gH
 {
     for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 	{
-        // Is tagger channel rejected by user?
-        if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-        if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
-	
+        if(RejectTagged(j)) continue;
+
         time = GetTagger()->GetTaggedTime(j) - tree.GetTime(particle_index);
 		gHist->Fill(time);
 	}
@@ -325,11 +312,9 @@ void PPhysics::FillTimeCut(const GTreeParticle& tree, GH1* gHist)
 	{
         for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 		{
-            // Is tagger channel rejected by user?
-            if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-            if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
+            if(RejectTagged(j)) continue;
 
-                    time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
+            time = GetTagger()->GetTaggedTime(j) - tree.GetTime(i);
 			if((GHistBGSub::IsPrompt(time)) || (GHistBGSub::IsRandom(time))) gHist->Fill(time);
 		}
 	}
@@ -339,9 +324,7 @@ void PPhysics::FillTimeCut(const GTreeParticle& tree, Int_t particle_index, GH1*
 {
     for (Int_t j = 0; j < GetTagger()->GetNTagged(); j++)
 	{
-        // Is tagger channel rejected by user?
-        if(GetTagger()->GetTaggedChannel(j) < TC_cut_min) continue;
-        if(GetTagger()->GetTaggedChannel(j) > TC_cut_max) continue;
+        if(RejectTagged(j)) continue;
 
         time = GetTagger()->GetTaggedTime(j) - tree.GetTime(particle_index);
 		if((GHistBGSub::IsPrompt(time)) || (GHistBGSub::IsRandom(time))) gHist->Fill(time);
@@ -485,4 +468,19 @@ Bool_t 	PPhysics::InitTaggerScalers()
 	return kTRUE;
 
 }
+
+Bool_t 	PPhysics::RejectTagged(Int_t tagger_index)
+{
+    Bool_t reject = false;
+
+    // Is tagger channel rejected by user?
+    if(GetTagger()->GetTaggedChannel(tagger_index) < TC_cut_min) reject = true;
+    if(GetTagger()->GetTaggedChannel(tagger_index) > TC_cut_max) reject = true;
+
+    // Is tagger hit a decoded double?
+    if(GetTagger()->GetTaggedDouble(tagger_index)) reject = true;
+
+    return reject;
+}
+
 #endif

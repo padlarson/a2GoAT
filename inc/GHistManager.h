@@ -50,7 +50,7 @@ public:
     virtual ~GHistLinked();
 
     virtual void        CalcResult() = 0;
-    virtual Int_t       Fill(Double_t x) = 0;
+    virtual Int_t       Fill(const Double_t x) = 0;
     static  TDirectory* GetCreateDirectory(const char* name);
             void        Link();
     virtual void        PrepareWriteList(GHistWriteList* arr, const char* name = 0) = 0;

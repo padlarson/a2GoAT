@@ -50,7 +50,10 @@ Bool_t	PPi0Example::Start()
 
 void	PPi0Example::ProcessEvent()
 {
-	// fill time diff (tagger - pi0), all pi0
+    // Uncomment the following line to decode double hits in the tagger
+    //GetTagger()->DecodeDoubles();
+
+    // fill time diff (tagger - pi0), all pi0
     FillTime(*GetNeutralPions(),time);
     FillTimeCut(*GetNeutralPions(),time_cut);
 	

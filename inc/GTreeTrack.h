@@ -39,6 +39,8 @@ private:
     Double_t	vetoEnergy[GTreeTrack_MAX];
     Double_t	MWPC0Energy[GTreeTrack_MAX];
     Double_t	MWPC1Energy[GTreeTrack_MAX];
+    //TAPS PSA Short-gate Energy
+    Double_t	shortEnergy[GTreeTrack_MAX];
     //Pseudo vertex information
     Double_t    pseudoVertexX[GTreeTrack_MAX];
     Double_t    pseudoVertexY[GTreeTrack_MAX];
@@ -85,6 +87,10 @@ public:
             Double_t        GetMWPC0Energy(const Int_t index)         const	{return MWPC0Energy[index];}
     const	Double_t*       GetMWPC1Energy()                          const	{return MWPC1Energy;}
             Double_t        GetMWPC1Energy(const Int_t index)         const	{return MWPC1Energy[index];}
+    const	Double_t*       GetShortEnergy()                          const	{return shortEnergy;}
+            Double_t        GetShortEnergy(const Int_t index)         const	{return shortEnergy[index];}
+            Double_t        GetPSAAngle(const Int_t index)            const	{return TMath::ATan(shortEnergy[index]/clusterEnergy[index])*TMath::RadToDeg();}
+            Double_t        GetPSARadius(const Int_t index)           const	{return TMath::Sqrt(TMath::Power(shortEnergy[index],2)+TMath::Power(clusterEnergy[index],2));}
     const	Double_t*       GetPseudoVertexX()                        const	{return pseudoVertexX;}
             Double_t        GetPseudoVertexX(const Int_t index)       const	{return pseudoVertexX[index];}
     const	Double_t*       GetPseudoVertexY()                        const	{return pseudoVertexY;}
