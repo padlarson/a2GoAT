@@ -12,12 +12,16 @@ AdlarsonPhysics::AdlarsonPhysics():
     photons(nPhotons),
     photons_fit(nPhotons),
     photons_rec(nPhotons),
-    RootHist("RootHist", "RootHist", 5,  0, 5)
+    RootHist("RootHist", "RootHist", 5,  0, 5),
+    ClustersTAPSTime("ClustersTAPSTime", "TAPS cluster time" ,200, -50., 50., 450, 0, 450),
+    ClustersCBTime("ClustersCBTime", "CB cluster time", 200, -50., 50., 720, 0, 720),
+    AllClusters("AllClusters", "nr of all detected clusters",15, 0, 15),
+    ClustersinTime("ClustersinTime", "nr of detected clusters in time",15, 0, 15)
 {
 // TRUE OBSERVABLES
 // Beam energy
     True_BeamEnergy     = new GH1("True_BeamEnergy", "True Beam Energy", 250, 1.400, 1.650);
-    Tagged_BeamEnergy    = new GH1("Tagged_BeamEnergy", "Tagged Beam Energy", 1650, 0, 1650);
+    Tagged_BeamEnergy    = new GH1("Tagged_BeamEnergy", "Tagged Beam Energy", 250, 1400, 1650);
 // Phase space final state particles
     ThpvsThetaprCM      = new GHistBGSub2("ThpvsThetaprCM", "#theta_{p} vs #theta_{#eta^{'}}", 360, 0., 180, 360, 0., 180.);
     ThvE_p              = new GHistBGSub2("ThvE_p", "True E_{p} vs #theta_{p}", 100, 0., 0.6, 100, 0., 25.);
@@ -38,7 +42,9 @@ AdlarsonPhysics::AdlarsonPhysics():
 // Rec. TAPS - proton analysis
     EvdE_TAPS_all      = new GHistBGSub2("EvdE_TAPS_all", "All E vs dE TAPS", 1200, 0., 600., 200, 0.5, 10.);
     EvdE_TAPS_proton   = new GHistBGSub2("EvdE_TAPS_proton", "Best proton cand E vs dE TAPS", 1200, 0., 600, 200, 0.5, 10.);
-    EvTOF              = new GHistBGSub2("EvTOF", "Energy TAPS vs TOF", 200, -20., 20., 400, 0., 800.);
+    EvTOF              = new GHistBGSub2("EvTOF", "Energy TAPS vs TOF/ns", 800, -20., 20., 800, 0., 800.);
+    EvTOFAll           = new GHistBGSub2("EvTOFAll", "Energy TAPS vs TOF ", 800, -20., 20., 800, 0., 800.);
+    EvTOFAllVeto       = new GHistBGSub2("EvTOFAllVeto", "Energy TAPS vs TOF w VETO > 1MeV", 800, -20., 20., 800, 0., 800.);
 
     Nrprotons           = new GHistBGSub("Nrprotons", "nr of protons", 5,  0, 5);
     ThvEp_rec           = new GHistBGSub2("ThvEp_rec", "Rec E_{p} vs #theta_{p}", 120, 0., 600, 50, 0., 25.);
@@ -82,8 +88,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     cutFile             = new TFile("/home/adlarson/a2GoAT/configfiles/cuts/TAPS_DeltaE-E-PA.root");
     cutProtonTAPS       = (TCutG*)cutFile->Get("CutProton");
 
-    GHistBGSub::InitCuts(-20, 20, -55, -35);
-    GHistBGSub::AddRandCut(35, 55);
+    GHistBGSub::InitCuts(-10, 10, -530, -30);
+    GHistBGSub::AddRandCut(30, 530);
 
 
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
@@ -166,7 +172,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 //        static_assert(!(includeIMconstraint && includeVertexFit), "Do not enable Vertex and IM Fit at the same time");
 
     APLCON::Fit_Settings_t settings = kinfit.GetSettings();
-    settings.MaxIterations = 50;
+    settings.MaxIterations = 20;
 
 //    settings.DebugLevel = 5;
     kinfit.SetSettings(settings);
@@ -191,23 +197,61 @@ Bool_t	AdlarsonPhysics::Start()
     SetAsPhysicsFile();
 
     RootHist.Reset();
+    ClustersTAPSTime.Reset();
+    ClustersCBTime.Reset();
+    ClustersinTime.Reset();
+    AllClusters.Reset();
 
     TraverseValidEvents();
 \
     outputFile->cd();
     gDirectory->mkdir("MC")->cd();
     RootHist.Write();
+    ClustersTAPSTime.Write();
+    ClustersCBTime.Write();
+    ClustersinTime.Write();
+    AllClusters.Write();
 
 	return kTRUE;
 }
 
 void	AdlarsonPhysics::ProcessEvent()
 {
-    etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-    TrueAnalysis_etapr6g();                         // obtains the true observables
+//    etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//    TrueAnalysis_etapr6g();                         // obtains the true observables
 
 
 //    Kinfit_test();                                  // runs kinematical fit with true observables- for testing purposes
+
+    ClustersInTime.clear();
+    ClustersInTime.resize(0);
+    UInt_t InTime = 0;
+    UInt_t AllTimes = 0;
+    for( UInt_t i=0; i< GetTracks()->GetNTracks(); i++ )
+    {
+        if( GetTracks()->HasTAPS(i) )
+        {
+            AllTimes++;
+            ClustersTAPSTime.Fill( GetTracks()->GetTime(i), GetTracks()->GetCentralCrystal(i) );
+            if( ( GetTracks()->GetTime(i) > -8.0) &&  ( GetTracks()->GetTime(i) < 15.0) )
+            {
+                ClustersInTime.push_back( i );
+                InTime++;
+            }
+        }
+        if( GetTracks()->HasCB(i) )
+        {
+            AllTimes++;
+            ClustersCBTime.Fill( GetTracks()->GetTime(i), GetTracks()->GetCentralCrystal(i) );
+            if( TMath::Abs( GetTracks()->GetTime(i) ) < 15.0 )
+            {
+                ClustersInTime.push_back( i );
+                InTime++;
+            }
+        }
+    }
+    AllClusters.Fill(AllTimes);
+    ClustersinTime.Fill(InTime);
 
     Int_t nrprotons = 0;
     Int_t iprtrack = -1;
@@ -232,26 +276,43 @@ void	AdlarsonPhysics::ProcessEvent()
         }
     }
 
-    for (Int_t i = 0; i < GetTracks()->GetNTracks() ; i++)
+    Double_t TOF = -100.0;
+    for(int t=0; t<GetTagger()->GetNTagged(); t++)
     {
-        if( GetTracks()->HasTAPS(i) )
+ //       if(TMath::Abs(GetTagger()->GetTaggedTime(t)) > 5.0) continue;
+        for (UInt_t i = 0; i < ClustersInTime.size() ; i++)
         {
-           EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(i),GetTracks()->GetVetoEnergy(i));
-           Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(i) );
-           EvTOF->Fill( (GetTracks()->GetTime(i))/(radnm), GetTracks()->GetClusterEnergy(i));
+            UInt_t j = ClustersInTime[i];
+            if( GetTracks()->HasTAPS(j) )
+            {
+                TOF = GetTagger()->GetTaggedTime(t) - GetTracks()->GetTime(j);
+                EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(j),GetTracks()->GetVetoEnergy(j));
+                Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
 
-           if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(i), GetTracks()->GetVetoEnergy(i)) )
-           {
-                nrprotons++;
-                iprtrack = i;
+                EvTOFAll->Fill( TOF/radnm , GetTracks()->GetClusterEnergy(j));
+                if(  GetTracks()->GetVetoEnergy(j) > ( 4.5 -(4.5/180)*GetTracks()->GetClusterEnergy(j)) )
+                {
+                    if(GetTracks()->GetVetoEnergy(j) > 1.0)
+                    {
+                        EvTOFAllVeto->Fill(TOF/radnm, GetTracks()->GetClusterEnergy(j));
+                        EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(j),GetTracks()->GetVetoEnergy(j));
+                    }
+                }
 
+                EvTOF->Fill( TOF /(radnm), GetTracks()->GetClusterEnergy(j));
+
+                if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(j), GetTracks()->GetVetoEnergy(j)))
+                {
+                    nrprotons++;
+                    iprtrack = j;
+                }
                 if( nrprotons > 1 )
                 {
-                  if( GetTracks()->GetVetoEnergy(iprtrack) < GetTracks()->GetVetoEnergy(i) )
-                    iprtrack = i;
+                    if( GetTracks()->GetVetoEnergy(iprtrack) < GetTracks()->GetVetoEnergy(j) )
+                    iprtrack = j;
                 }
                 else
-                    iprtrack = i;
+                    iprtrack = j;
 
            }
         }
@@ -260,7 +321,7 @@ void	AdlarsonPhysics::ProcessEvent()
     Nrprotons->Fill(nrprotons);
     if( iprtrack == -1 ) return;
 
-    EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
+//    EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
     ThvEp_rec->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetTheta(iprtrack));
 
     proton_vec = GetTracks()->GetVector(iprtrack, pdgDB->GetParticle("proton")->Mass()*1000);
@@ -274,12 +335,12 @@ void	AdlarsonPhysics::ProcessEvent()
         MM_p->Fill(MMp);
     }
 
-    if( (GetTracks()->GetNTracks() == 7) ) //|| (GetTracks()->GetNTracks() == 8) || (GetTracks()->GetNTracks() == 9) )
+    if( (ClustersInTime.size() == 7) ) //|| (GetTracks()->GetNTracks() == 8) || (GetTracks()->GetNTracks() == 9) )
     {
-           sixgAnalysis(iprtrack);
+        sixgAnalysis(iprtrack);
     }
 
-    if(GetPhotons()->GetNParticles() == 10)
+    if( ClustersInTime.size() == 11)
     {
         tengAnalysis(iprtrack);
     }
@@ -339,17 +400,26 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g()
 
 void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
 {
+
+    IM_6g->Fill(IM6g_vec.M());
+    IM6gvMMp->Fill( MMp, IM6g_vec.M() );
+
     for(UInt_t i = 0; i < nPhotons; i++)
     {
         photons_rec[i].SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
         photons_fit[i].SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
     }
 
+    Double_t chi2_min = 1.0e6;
+
     IM6g_vec.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
     TLorentzVector etap_fit(0.0, 0.0, 0.0, 0.0);
-    for( Int_t i = 0; i < 1; i++ )
+
+    for(int t=0; t< GetTagger()->GetNTagged(); t++)
     {
-        beam.SetFromVector( GetTagger()->GetVector(i) );
+
+        // Do I need to reset the APLCON linker for every loop?
+        beam.SetFromVector( GetTagger()->GetVector(t) );
         beam.Smear(3, true);
         beam.APLCONSettings();
 
@@ -357,24 +427,40 @@ void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
         proton.Smear(2, false);
 
         Int_t n_photons = 0;
-        for ( Int_t j = 0; j < GetTracks()->GetNTracks() ; j++ )
+        for ( Int_t j = 0; j < ClustersInTime.size() ; j++ )
         {
-            if( j != ipr ) // the id proton cluster
+            // Here loop through if more than 7 clusters, but only one proton candidate(?);
+            UInt_t k = ClustersInTime[j];
+            if( k != ipr ) // the id proton cluster
             {
-                photons_rec[n_photons] = GetTracks()->GetVector(j);
-                photons[n_photons].SetFromVector( GetTracks()->GetVector(j));
+                photons_rec[n_photons] = GetTracks()->GetVector(k);
+                photons[n_photons].SetFromVector( GetTracks()->GetVector(k));
                 IM6g_vec += photons_rec[n_photons];
-                if( GetTracks()->HasCB(j) )
+                if( GetTracks()->HasCB(k) )
                     photons[n_photons].Smear(1, true);
-                else // ( GetTracks()->HasTAPS(j) )
+                else // ( GetTracks()->HasTAPS(k) )
                     photons[n_photons].Smear(2, true);
                 n_photons++;
             }
         }
+        const APLCON::Result_t& result = kinfit.DoFit();
+        if(result.Status == APLCON::Result_Status_t::Success)
+        {
+            if( result.ChiSquare <  chi2_min )
+            {
+                chi2_min = result.ChiSquare;
+            }
+        }
     }
 
-    IM_6g->Fill(IM6g_vec.M());
-    IM6gvMMp->Fill( MMp, IM6g_vec.M() );
+    // question - shall I loop through all the tagged hits? But here I loop through and save the tagged hit
+    // which has the lowest chi2. But I know that tagged time should be close to 0. Should I here set a condition
+    // that the tagged time should sit in the correct time?
+    // test and check the best chi2 value is for the correct tagged time.
+
+    //  chi2min_vs_taggertime->Fill()
+
+    // Here run kinfit with the best combination:
 
     const APLCON::Result_t& result = kinfit.DoFit();
     if(result.Status == APLCON::Result_Status_t::Success)
@@ -416,20 +502,22 @@ void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
        g[0] = photons_fit[imin_eta2pi[0]] + photons_fit[imin_eta2pi[1]];
        g[1] = photons_fit[imin_eta2pi[2]] + photons_fit[imin_eta2pi[3]];
        g[2] = photons_fit[imin_eta2pi[4]] + photons_fit[imin_eta2pi[5]];
-       best_eta->Fill( (g[0]).M() );
-       best_eta_EvTh->Fill( g[1].E(), g[1].Theta()*TMath::RadToDeg());
-       best_eta_EvTh->Fill( g[2].E(), g[2].Theta()*TMath::RadToDeg());
 
-       best_2pi->Fill( g[1].M() );
-       best_2pi->Fill( g[2].M() );
 
        if( (TMath::Prob(chi2min_3pi,2) > 0.02) && (TMath::Prob(chi2min_eta2pi,2) < 0.02) )
-            IM6g_fit_3pi->Fill(etap_fit.M());
+       {
+            IM6g_fit_3pi->Fill(etap_fit.M());     
+            best_2pi->Fill( g[1].M() );
+            best_2pi->Fill( g[2].M() );
+       }
 
        if( (TMath::Prob(chi2min_eta2pi,2) > 0.02) && (TMath::Prob(chi2min_3pi,2) < 0.02) )
        {
            IM6g_fit_eta2pi->Fill( etap_fit.M() );
            etapr_v_BeamE->Fill((GetTagger()->GetVector(0)).E(), etap_fit.M());
+           best_eta->Fill( (g[0]).M() );
+           best_eta_EvTh->Fill( g[1].E(), g[1].Theta()*TMath::RadToDeg());
+           best_eta_EvTh->Fill( g[2].E(), g[2].Theta()*TMath::RadToDeg());
 
            Double_t m_etapi01_fit = 0;
            Double_t m_etapi02_fit = 0;
@@ -453,25 +541,6 @@ void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
     }
 
 
-
-
-
-        // Run kinfit:
-        // For all (6g or 7g) + proton obtain errors for all observables
-        // Run kinfit and select the tagger + 6g + proton with lowest chi2
-
-        // Here run post-kinfit analysis:
-        // Find the 15 combinations to form a 2pi0+eta and 3pi0. Determin which reaction it is and remove 3pi0
-        // run kinfit with rec. observables now also enforcing eta mass.
-
-        // Obtain physics observables
-
-
-    // select best combination eta 2pi0 and 3pi0:
-    // GetBest6gCombination();
-
-    // cut in the scatterplot eta 2pi0 3pi0 pdf:
-
     // run kinfit again now enforcing eta mass (and pi0 pi0 as well?)
 
     // final results: Dalitz plot, m_pi0pi0, eta prime production as fcn energy
@@ -482,10 +551,15 @@ void AdlarsonPhysics::sixgAnalysis(Int_t ipr)
 
 void AdlarsonPhysics::tengAnalysis(Int_t ipr)
 {
-    for ( Int_t i = 0; i < GetTracks()->GetNTracks() ; i++ )
+    photons_rec.resize(0);
+    for ( Int_t i = 0; i < ClustersInTime.size() ; i++ )
     {
-        if(i != iprtrack)
-            IM10g_vec += GetTracks()->GetVector(i);
+        UInt_t j = ClustersInTime[i];
+        if(j != iprtrack)
+        {
+            IM10g_vec += GetTracks()->GetVector(j);
+            photons_rec.push_back(GetTracks()->GetVector(j));
+        }
     }
 
     IM_10g->Fill(IM10g_vec.M());
@@ -493,13 +567,36 @@ void AdlarsonPhysics::tengAnalysis(Int_t ipr)
 
     for( Int_t i = 0; i < GetTagger()->GetNTagged(); i++ )
     {
-
+    // loop through all tagged + proton + 10g combinations --> select permutation with lowest chi2
 
     }
+    // chi2 vs taggertime
+    if( result.Probability < 0.01 ) return;
+
+    Int_t inr = 0;
+    for(const auto& it_map : result.Variables) {
+//          const string& varname = it_map.first;
+        const APLCON::Result_Variable_t& var = it_map.second;
+ //        kfit_Pulls10g->Fill(var.Pull, inr);
+         inr++;
+    }
+    for(size_t t=0; t<photons.size(); t++)
+    {
+        photons_fit[t] = FitParticle::Make(photons[t], 0);
+        etap_fit += photons_fit[t];
+    }
+    IM6g_fit->Fill( etap_fit.M() );
+
+    sigma_eta = 17;
+
+    Double_t    chi2min_eta3pi     = 1.0e6;
+    std::vector<int> imin_eta3pi;
+
+    GetBest6gCombination10g(sigma_eta, chi2min_eta3pi, imin_eta3pi );
+
 
     // with the best candidate:
     // select best combination eta (6g out of 10g, 220 combinations)
-    // cut in the scatterplot eta 2pi0 3pi0 pdf
 
     // run kinfit again now enforcing eta mass (and pi0 pi0 as well?)
 
@@ -598,18 +695,18 @@ void AdlarsonPhysics::FitParticle::Smear(Int_t apparatus_nr, Bool_t measured) {
 
     if( apparatus_nr == 1 ) //CB
     {
-        Ek_Sigma = (0.02*(Ek/1.0e3)*pow((Ek/1.0e3),-0.36))*1.0e3;
-        Theta_Sigma = 2.5*TMath::DegToRad();
-        Phi_Sigma = Theta_Sigma/sin(Theta);
+        Ek_Sigma = (0.02*(Ek/1.0e3)*pow((Ek/1.0e3),-0.36))*1.0e3*1.3;
+        Theta_Sigma = 2.5*TMath::DegToRad()*1.3;
+        Phi_Sigma = Theta_Sigma/sin(Theta)*1.3;
     }
     else if( apparatus_nr == 2 ) //TAPS
     {
         if(measured)
-            Ek_Sigma = ((0.018 + 0.008*TMath::Sqrt(Ek/1.0e3))*(Ek/1.0e3))*1.0e3;
+            Ek_Sigma = ((0.018 + 0.008*TMath::Sqrt(Ek/1.0e3))*(Ek/1.0e3))*1.0e3*1.3;
         else
             Ek_Sigma = 0;
-        Theta_Sigma = 1.0*TMath::DegToRad();
-        Phi_Sigma = 1.0*TMath::DegToRad();
+        Theta_Sigma = 1.0*TMath::DegToRad()*1.3;
+        Phi_Sigma = 1.0*TMath::DegToRad()*1.3;
     }
     else  // beam
     {
@@ -901,6 +998,67 @@ void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_
         }
     }
 }
+
+void AdlarsonPhysics::GetBest6gCombination10g(Double_t& sigma_eta, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi );
+{
+    imin_eta2pi.resize(6);
+    imin_3pi.resize(6);
+    Double_t imgg[3];
+    Double_t chi2_eta2pi[3];
+    Double_t chi2_3pi;
+
+    for( Int_t i = 0; i < 15 ; i++)
+    {
+       for (Int_t j = 0; j < 3; j++)
+            imgg[j] = ( photons_fit[perm6g[i][0 + j*2]] + photons_fit[perm6g[i][1 + j*2]]).M();
+
+
+        chi2_eta2pi[0] = std::pow((imgg[0] - MASS_ETA )/(sigma_eta), 2.0) + std::pow((imgg[1] - MASS_PI0 )/(sigma_pi0), 2) + std::pow((imgg[2] - MASS_PI0 )/(sigma_pi0), 2.0);
+        chi2_eta2pi[1] = std::pow((imgg[1] - MASS_ETA )/(sigma_eta), 2.0) + std::pow((imgg[2] - MASS_PI0 )/(sigma_pi0), 2) + std::pow((imgg[0] - MASS_PI0 )/(sigma_pi0), 2.0);
+        chi2_eta2pi[2] = std::pow((imgg[2] - MASS_ETA )/(sigma_eta), 2.0) + std::pow((imgg[0] - MASS_PI0 )/(sigma_pi0), 2) + std::pow((imgg[1] - MASS_PI0 )/(sigma_pi0), 2.0);
+
+
+        for( Int_t t = 0; t < 3; t++ )
+        if( chi2_eta2pi[t] < chi2min_eta2pi )
+        {
+            chi2min_eta2pi = chi2_eta2pi[t];
+            if( t == 0 )
+            {
+                for(Int_t k = 0; k < 6; k++)
+                   imin_eta2pi[k] = perm6g[i][k];
+            }
+            else if( t == 1 )
+            {
+                imin_eta2pi[0] = perm6g[i][2];
+                imin_eta2pi[1] = perm6g[i][3];
+                imin_eta2pi[2] = perm6g[i][0];
+                imin_eta2pi[3] = perm6g[i][1];
+                imin_eta2pi[4] = perm6g[i][4];
+                imin_eta2pi[5] = perm6g[i][5];
+            }
+            else // t == 2
+            {
+                imin_eta2pi[0] = perm6g[i][4];
+                imin_eta2pi[1] = perm6g[i][5];
+                imin_eta2pi[2] = perm6g[i][0];
+                imin_eta2pi[3] = perm6g[i][1];
+                imin_eta2pi[4] = perm6g[i][2];
+                imin_eta2pi[5] = perm6g[i][3];
+            }
+        }
+
+        for( Int_t k = 0; k < 3; k++ )
+            chi2_3pi += std::pow((imgg[k] - MASS_PI0 )/(sigma_pi0), 2);
+        if( chi2_3pi < chi2min_3pi )
+        {
+            chi2min_3pi = chi2_3pi;
+            for(Int_t t = 0; t < 6; t++)
+                imin_3pi[t] = perm6g[i][t];
+        }
+    }
+}
+
+
 
 
 void AdlarsonPhysics::Kinfit_test()

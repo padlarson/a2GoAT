@@ -68,8 +68,14 @@ private:
     GHistBGSub2*    EvdE_TAPS_all;
     GHistBGSub2*    EvdE_TAPS_proton;
     GHistBGSub2*    EvTOF;
+    GHistBGSub2*    EvTOFAll;
+    GHistBGSub2*    EvTOFAllVeto;
 
     TH1D    RootHist;
+    TH2F    ClustersTAPSTime;
+    TH2F    ClustersCBTime;
+    TH1D    AllClusters;
+    TH1D    ClustersinTime;
 
     // Kinfit related variables
 
@@ -116,6 +122,7 @@ private:
     Double_t    m_etapi01True, m_etapi02True, m_2pi0True;
 
     // Reconstructed Lorentz Vectors
+    std::vector<Int_t> ClustersInTime;
 
     Int_t nrprotons;
     Int_t iprtrack;
@@ -233,7 +240,8 @@ public:
 
     // functions specifically related to 10g analysis
     void tengAnalysis(Int_t ipr );
-    void GetBest10gCombination();
+    void GetBest6gCombination10g(Double_t& sigma_eta, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi );
+
 
 
     void DalitzPlot( const TLorentzVector g[3] , Double_t &X, Double_t &Y, Int_t &DP_nr );
