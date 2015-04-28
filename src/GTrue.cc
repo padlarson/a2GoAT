@@ -33,8 +33,7 @@ void GTrue::Start(GTreePluto& pluto, GTreeA2Geant& geant)
     TrueBeamEnergy = pluto.GetTrueP4(0).P();
 
 
-
-    for(int i = 0; i < pluto.GetAllParticles().size(); i++)
+    for(int i = 0; i <= pluto.GetAllParticles().size(); i++)
     {
         if(pluto.GetMCTrue(i)->Is("n")){
             neutron = pluto.GetTrueP4(i);

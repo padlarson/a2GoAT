@@ -36,7 +36,7 @@ private:
     // True vertex
     TVector3            vertex;
 
-    void                SetWeight(const Double_t w )   { weight = w;}
+
 
 
 public:
@@ -84,6 +84,7 @@ public:
             TLorentzVector& GetTrueMuonPosLV()       { return muonpos;}
     const   TLorentzVector& GetTrueMuonPosLV() const { return muonpos;}
 //
+    void                SetWeight(const Double_t w )   { weight = w;}
     Double_t    GetWeight() const   { return weight;}
 
     UInt_t      GetNchpi()  const   { return nchpi;}
