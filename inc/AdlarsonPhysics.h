@@ -71,11 +71,13 @@ private:
     GHistBGSub2*    EvTOFAll;
     GHistBGSub2*    EvTOFAllVeto;
 
-    TH1D    RootHist;
     TH2F    ClustersTAPSTime;
     TH2F    ClustersCBTime;
     TH1D    AllClusters;
     TH1D    ClustersinTime;
+    TH1D    BestTaggedTime;
+    TH2F    etapr_v_BeamE_test1;
+    TH2F    etapr_v_BeamE_test2;
 
     // Kinfit related variables
 
@@ -84,10 +86,12 @@ private:
     GHistBGSub2*    kfit_Pulls;
 
     GH1*            IM6g_fit;
+    GH1*            IM6g_fit_rec;
 
     GHistBGSub2*    PDF_eta2pi_v_3pi;
     GH1*            IM6g_fit_3pi;
     GH1*            IM6g_fit_eta2pi;
+
 
 
     GH1*            best_eta;
@@ -124,8 +128,8 @@ private:
     // Reconstructed Lorentz Vectors
     std::vector<Int_t> ClustersInTime;
 
-    Int_t nrprotons;
-    Int_t iprtrack;
+    UInt_t nrprotons;
+    UInt_t iprtrack;
 
     TLorentzVector proton_vec;
     Double_t MMp;
@@ -142,6 +146,8 @@ private:
     static Int_t perm6outof10g[210][6];
 
     GTrue   etapr_6gTrue;
+
+    static constexpr size_t nPhotons = 6;
 
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
@@ -162,7 +168,7 @@ protected:
     // please also provide GoAT trees with matching MC true information...
     static constexpr bool includeIMconstraint = false;
     static constexpr bool includeVertexFit = true;
-    static constexpr size_t nPhotons = 6;
+//    static constexpr size_t nPhotons = 6;
 
     const double IM = MASS_ETA;
 
@@ -233,6 +239,9 @@ public:
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
     void Kinfit_test();
+
+    // functions specifically related to 4g analysis
+    void fourgAnalysis( Int_t ipr );
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( Int_t ipr );
