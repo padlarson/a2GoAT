@@ -20,18 +20,26 @@ class	ProtonChargeRadius  : public GTreeManager
 {
 private:
     // histograms and scatterplots
-   TH1F* True_BeamEnergy;
+   GH1* True_BeamEnergy;
    // Phase space observables
-   TH2* ThvT_p;
-   TH2* ThvT_e;
-   TH2* ThvT_mu;
+   GHistBGSub2* ThvT_p;
+   GHistBGSub2* ThvT_e;
+   GHistBGSub2* ThvT_mu;
 
-   TH2* ThpvEg;
+   GHistBGSub2* ThpvEg;
+   GHistBGSub2* dsigma_v_mll;
+   GHistBGSub2* t_v_mll;
+   GHistBGSub2* thlabpr_v_mll;
+
+   GH1* MC_weight;
+   GH1* mll;
 
    // Where all true observables are stored
    GTrue TrueObs;
 
    Double_t BeamE;
+
+
 
 
 
@@ -46,6 +54,8 @@ public:
     virtual ~ProtonChargeRadius();
 
     virtual Bool_t	Init(const char* configfile);
+
+    void TrueAnalysis_ll(int reaction);
 
 
 };
