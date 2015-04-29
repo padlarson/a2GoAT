@@ -11,15 +11,15 @@ ProtonChargeRadius::ProtonChargeRadius()
     // Beam Energy
     True_BeamEnergy    = new GH1("True_BeamEnergy", "True Beam Energy (MeV)", 200, 0., 0.800);
     // Phase space observables
-    ThvT_p              = new GHistBGSub2("ThvT_p","#theta_{p} (y) vs Energy p (x)", 400, 0., 400, 250, 0., 100.);
-    ThvT_e              = new GHistBGSub2("ThvT_e","#theta_{e} (y) vs Energy e^{+}/e^{-} (x)", 400, 0., 400, 180, 0., 180.);
+    ThvT_p              = new GHistBGSub2("ThvT_p","#theta_{p} (y) vs Energy p (x)", 100, 0., 100, 100, 0., 100.);
+    ThvT_e              = new GHistBGSub2("ThvT_e","#theta_{e} (y) vs Energy e^{+}/e^{-} (x)", 60, 0., 600, 18, 0., 180.);
     ThvT_mu             = new GHistBGSub2("ThvT_mu","#theta_{#mu} (y) vs Energy #mu^{+}/#mu^{-} (x)", 200, 0., 400, 90, 0., 180.);
 
     ThpvEg              = new GHistBGSub2("ThpvEg","#theta_{p} (y) vs Beam Energy #gamma (x)" , 100, 100., 600, 200, 0., 100.);
 
     dsigma_v_mll        = new GHistBGSub2("dsigma_v_mll", "d#sigma (y) M_{ll}^{2} (x) (#mub /GeV^{4}) ", 1000, 0.0, 0.2, 1000, 0, 1000);
-    t_v_mll             = new GHistBGSub2("t_v_mll", "mom transfer (-t) (y) vs M_{ll}^{2} (x)", 200, 0.0, 0.2, 100, 0, 0.2);
-    thlabpr_v_mll       = new GHistBGSub2("thlabpr_v_mll", "#theta_{lab, pr} (y) vs M_{ll}^{2} (x)", 200, 0.0, 0.2, 240, 0, 60);
+    t_v_mll             = new GHistBGSub2("t_v_mll", "mom transfer (-t) (y) vs M_{ll}^{2} (x)", 50, 0.0, 0.2, 50, 0, 0.2);
+    thlabpr_v_mll       = new GHistBGSub2("thlabpr_v_mll", "#theta_{lab, pr} (y) vs M_{ll}^{2} (x)", 100, 0.0, 0.2, 50, 0, 100);
 
 
     MC_weight           = new GH1("MC_weight", "MC_weight", 1000, 0, 10);
@@ -68,7 +68,7 @@ void	ProtonChargeRadius::ProcessEvent()
 //    Double_t weight = 1.0;
     True_BeamEnergy->Fill( TrueObs.GetTrueBeamEnergy(), TrueObs.GetWeight() );
 
-    int reaction = 1;
+    int reaction = 0;
     // reaction:
     // 0  p e+e- production   : 1/E x Bethe-Heidler process.
     // 1  p mu+mu- production   : 1/E x Bethe-Heidler process.
@@ -91,8 +91,6 @@ void	ProtonChargeRadius::ProcessEvent()
     ThvT_mu->FillWeighted( TrueObs.GetTrueMuonNegLV().E()*1000 - MASS_MUON, TrueObs.GetTrueMuonNegLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight() );
     ThvT_mu->FillWeighted( TrueObs.GetTrueMuonPosLV().E()*1000 - MASS_MUON, TrueObs.GetTrueMuonPosLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight() );
 
-
-
 }
 
 void	ProtonChargeRadius::ProcessScalerRead()
@@ -113,8 +111,8 @@ void ProtonChargeRadius::TrueAnalysis_ll(int reaction)
     Double_t weight = 1.0;
     Double_t norm;
 
-//    norm = 50/163.9*5000/5001; //310 MeV beam energy norm
-    norm = 50000.0/99012.0; //510 MeV beam ebnergy norm
+    norm = 50/163.9*5000/5001; //310 MeV beam energy norm
+//    norm = 50000.0/99012.0; //510 MeV beam ebnergy norm
     weight = (1.0/TrueObs.GetTrueBeamEnergy())*norm;
 
     if(reaction < 2)
@@ -161,17 +159,17 @@ void ProtonChargeRadius::TrueAnalysis_ll(int reaction)
 
         Double_t diffxs     =   term1*term2*term3*(CE*GEP*GEP + CM*tau*GMP*GMP);
 // norm 310 MeV e and mu
- //       if(reaction == 0)
-//            norm = 50000./143500.;
-//        else
-//            norm = 50000./12.56;
+        if(reaction == 0)
+            norm = 50000./143500.;
+        else
+            norm = 50000./12.56;
 
 
 // norm 510 MeV e and mu
-       if(reaction == 0)
-            norm = 50000./10209.*5000.0/5046.4;
-        else
-            norm = 50000./15.11;
+//       if(reaction == 0)
+//            norm = 50000./10209.*5000.0/5046.4;
+//        else
+//            norm = 50000./15.11;
 
         weight = weight*diffxs*norm;
         if(weight < 0.1 )
