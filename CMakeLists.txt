@@ -107,8 +107,18 @@ set(GOAT_GHIST
 #    message(STATUS "Pluto disabled")
 #endif()
 
+
 add_library(goatbase SHARED ${GOAT_BASE})
 add_library(ghist SHARED ${GOAT_GHIST})
+
+# look for APLCON fitter package
+# don't forget to build the library  
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/" ${CMAKE_MODULE_PATH})
+find_package(APLCON REQUIRED)
+
+include_directories(.)
+include_directories(${APLCON_INCLUDE_DIR})
+
 
 add_executable(goat
    inc/GDataChecks.h
@@ -146,7 +156,7 @@ add_executable(AdlarsonAnalysis
    src/AdlarsonPhysics.cc
    src/AdlarsonPhysics_main.cc
    )
-target_link_libraries(AdlarsonAnalysis ${LIBS} ${ROOT_LIBRARIES})
+target_link_libraries(AdlarsonAnalysis ${LIBS} ${ROOT_LIBRARIES} ${APLCON_LIBRARIES})
 
 
 # install some scripts to the bin directory
