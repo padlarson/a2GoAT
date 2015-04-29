@@ -70,7 +70,7 @@ public:
     virtual void    ScalerReadCorrection(const Double_t CorrectionFactor, const Bool_t CreateHistogramsForSingleScalerReads = kFALSE);
     virtual void	SetBins(Int_t nx, Double_t xmin, Double_t xmax);
             void    SetWriteUncorrected(const Bool_t value)                                             {writeUncorrected = value;}
-    virtual void	Sumw2(Bool_t flag = kTRUE)                                                          {buffer->Sumw2(flag); accumulated->Sumw2(flag); accumulatedCorrected->Sumw2(flag);}
+    virtual void	Sumw2()                                                          {buffer->Sumw2(); accumulated->Sumw2(); accumulatedCorrected->Sumw2();}
     virtual Int_t   WriteWithoutCalcResult(const char* name = 0, Int_t option = 0, Int_t bufsize = 0);
 };
 

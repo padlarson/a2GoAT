@@ -13,7 +13,11 @@
 *.a
 
 # Ignore build directory
-build
+/build*/
+
+# some files usually ignored
+/CMakeLists.txt.user
+/doc/
 
 # some files usually ignored
 /CMakeLists.txt.user
