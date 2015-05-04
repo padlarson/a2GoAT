@@ -25,7 +25,6 @@ std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2) {
     return v;
 }
 
-
 class	AdlarsonPhysics  : public GTreeManager
 {
 
@@ -66,33 +65,52 @@ private:
     GHistBGSub2*    fi_th_diff_TAPSCB;
 
     GHistBGSub2*    EvdE_TAPS_all;
+    GHistBGSub2*    EvdE_TAPS_cc;
     GHistBGSub2*    EvdE_TAPS_proton;
     GHistBGSub2*    EvTOF;
     GHistBGSub2*    EvTOFAll;
     GHistBGSub2*    EvTOFAllVeto;
+    GHistBGSub2*    EvTOF_pr_norm_to_c;
 
     TH2F    ClustersTAPSTime;
     TH2F    ClustersCBTime;
     TH1D    AllClusters;
     TH1D    ClustersinTime;
-    TH1D    BestTaggedTime;
-    TH2F    etapr_v_BeamE_test1;
-    TH2F    etapr_v_BeamE_test2;
+    TH1D    TaggedTime;
 
-    // Kinfit related variables
+    // Kinfit related variables 4g
+
+    TLorentzVector  IM4g_vec;
+    TLorentzVector  IM4g_fit;
+
+    GH1*            kfit_chi2_4g;
+    GH1*            kfit_pdf_4g;
+    GH1*            IM_4g_rec;
+    GH1*            IM_4g_fit;
+    GHistBGSub2*    PDF_etapi_v_2pi;
+    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
+
+    // Kinfit related variables 6g
 
     GH1*            kfit_chi2;
     GH1*            kfit_pdf;
+    GH1*            kfit_pdf_eta;
     GHistBGSub2*    kfit_Pulls;
 
+    GH1*            IM6g_rec;
     GH1*            IM6g_fit;
     GH1*            IM6g_fit_rec;
 
     GHistBGSub2*    PDF_eta2pi_v_3pi;
     GH1*            IM6g_fit_3pi;
     GH1*            IM6g_fit_eta2pi;
+    GH1*            IM2g_eta;
 
-
+    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
+    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
 
     GH1*            best_eta;
     GH1*            best_2pi;
@@ -102,16 +120,26 @@ private:
     GH1*            M_etapi_fit;
     GHistBGSub2*    deltaMpipi_v_Mpipi_fit;
     GHistBGSub2*    etapr_v_BeamE;
+    GHistBGSub2*    etapr_eta_v_BeamE;
 
     GHistBGSub2*    DP_fit;
     GHistBGSub2*    deltaX_v_DPbin;
     GHistBGSub2*    deltaY_v_DPbin;
 
+    // Kinfit related variables 10g
+
+    GH1*            kfit_chi2_10g;
+    GH1*            kfit_pdf_10g;
+    GHistBGSub2*    kfit_Pulls_10g;
+
+    GH1*            IM10g_fit;
 
     // proton identified from TAPS_E vs VETO_dE
 
-    TFile*          cutFile;
+    TFile*          cutFile;        // File which contains EdE cut
     TCutG*          cutProtonTAPS;
+    TFile*          cutFile2;       // File which contains EToF cut
+    TCutG*          cutProtonETOF;
     TCutG*          cutPionTAPS;
     TCutG*          cutElectronTAPS;
 
@@ -121,9 +149,9 @@ private:
     TLorentzVector  pi02_true;
     TLorentzVector  etapr_true[3];
 
-    Double_t    Xtrue, Ytrue;
-    Int_t       DPnrTrue;
-    Double_t    m_etapi01True, m_etapi02True, m_2pi0True;
+    Double_t        Xtrue, Ytrue;
+    Int_t           DPnrTrue;
+    Double_t        m_etapi01True, m_etapi02True, m_2pi0True;
 
     // Reconstructed Lorentz Vectors
     std::vector<Int_t> ClustersInTime;
@@ -147,13 +175,15 @@ private:
 
     GTrue   etapr_6gTrue;
 
-    static constexpr size_t nPhotons = 6;
-
+    std::vector<int> detnr;
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
+    std::vector<TLorentzVector> photons_fit_eta;
 
     Double_t    sigma_eta;
     Double_t    sigma_pi0;
+
+    const Double_t    taggerTimeCut = 6.0;
 
 
 protected:
@@ -166,11 +196,12 @@ protected:
 
     // choose here what you want to do
     // please also provide GoAT trees with matching MC true information...
-    static constexpr bool includeIMconstraint = false;
-    static constexpr bool includeVertexFit = true;
-//    static constexpr size_t nPhotons = 6;
+    static constexpr bool includeIMconstraint = true;
+ //   static constexpr bool includeVertexFit = true;
+    static constexpr size_t nPhotons_four = 4;
+    static constexpr size_t nPhotons_six = 6;
+    static constexpr size_t nPhotons_ten = 10;
 
-    const double IM = MASS_ETA;
 
 
     // lightweight structure for linking to fitter
@@ -222,10 +253,23 @@ protected:
 
         };
 
+    APLCON kinfit4g;
     APLCON kinfit;
+    APLCON kinfit_eta;
+    APLCON kinfit10g;
+
+    FitParticle beam4g;
     FitParticle beam;
-    std::vector<FitParticle> photons;
+    FitParticle beam_eta;
+    FitParticle beam10g;
+    std::vector<FitParticle> Photons_four;
+    std::vector<FitParticle> Photons_six;
+    std::vector<FitParticle> Photons_six_eta;
+    std::vector<FitParticle> Photons_ten;
+    FitParticle proton4g;
     FitParticle proton;
+    FitParticle proton_eta;
+    FitParticle proton10g;
 			
 public:
     AdlarsonPhysics();
@@ -241,14 +285,14 @@ public:
     void Kinfit_test();
 
     // functions specifically related to 4g analysis
-    void fourgAnalysis( Int_t ipr );
+    void fourgAnalysis( UInt_t ipr );
 
     // functions specifically related to 6g analysis
-    void sixgAnalysis( Int_t ipr );
+    void sixgAnalysis( UInt_t ipr );
     void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi );
 
     // functions specifically related to 10g analysis
-    void tengAnalysis(Int_t ipr );
+    void tengAnalysis(UInt_t ipr );
     void GetBest6gCombination10g(Double_t& sigma_eta, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi );
 
 
