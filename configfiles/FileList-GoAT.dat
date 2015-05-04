@@ -1,0 +1,4 @@
+Input-Directory:  /local/raid1/work/adlarson/analysis/Aug2012/ACQU/root/
+Output-Directory: /local/raid1/work/adlarson/analysis/Aug2012/GoAT/
+Input-File: ACQU_CB*.root
+Output-Prefix: Physics
