@@ -103,6 +103,13 @@ AdlarsonPhysics::AdlarsonPhysics():
     best_2pi            = new GH1("best_2pi", "best 2#pi^{0} cand from comb", 500, 0., 500.);
     best_eta_EvTh       = new GHistBGSub2("best_eta_EvTh", "E_{#eta, #gamma} vs #Theta_{#eta, #gamma}", 100, 0., 1000., 50, 0., 200.);
 
+    // to check the energy of the  eta pi0 system vs its inv mass
+    best_etaMvsE        = new GHistBGSub2("best_etaMvsE", "E_{#eta} vs M_{#eta}", 100, 0., 1000., 150, 200., 800.);
+    best_2pi0MvsE       = new GHistBGSub2("best_2pi0MvsE", "E_{#pi^{0}} vs M_{#gamma#gamma} for #eta2#pi^{0}", 100, 0., 1000., 100, 0., 400.);
+
+    // to check the energy of the pi0 system vs its inv mass
+    best_3pi0MvsE       = new GHistBGSub2("best_3pi0MvsE", "E_{#pi^{0}} vs M_{#gamma#gamma} for 3#pi^{0}", 100, 0., 1000., 100, 0., 400.);
+
     IM2g_eta            = new GH1("IM2g_eta", "IM2g_eta where eta is enforced", 500, 500, 600.);
 
 // Kinfit related variables 10g
@@ -127,10 +134,10 @@ AdlarsonPhysics::AdlarsonPhysics():
     deltaX_v_DPbin     = new GHistBGSub2("deltaX_v_DPbin", "X_{fit} - X_{true} vd DP bin nr", 600, 0, 600, 40, -1.0, 1.0);
     deltaY_v_DPbin     = new GHistBGSub2("deltaY_v_DPbin", "Y_{fit} - Y_{true} vd DP bin nr", 600, 0, 600, 40, -1.0, 1.0);
 
-    cutFile             = new TFile("/home/adlarson/a2GoAT/configfiles/cuts/TAPSEdEPA.root");
+    cutFile             = new TFile("configfiles/cuts/TAPSEdEPA.root");
     cutProtonTAPS       = (TCutG*)cutFile->Get("CutProton");
 
-    cutFile2             = new TFile("/home/adlarson/a2GoAT/configfiles/cuts/TAPS_TOF_PA2.root");
+    cutFile2             = new TFile("configfiles/cuts/TAPS_TOF_PA2.root");
     cutProtonETOF       = (TCutG*)cutFile2->Get("Hadron");
 
     GHistBGSub::InitCuts(-10, 10, -530, -30);
@@ -461,18 +468,15 @@ void	AdlarsonPhysics::ProcessEvent()
         }
     }
 
-//    iprtrack = -1;
+
     for (UInt_t i = 0; i < ClustersInTime.size() ; i++)
     {
-//        UInt_t j = ClustersInTime[iprtrack];
         if( GetTracks()->HasTAPS(iprtrack) )
         {
             EvdE_TAPS_all->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
             if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(iprtrack), GetTracks()->GetVetoEnergy(iprtrack)))
             {
                 EvdE_TAPS_proton->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
-//                nrprotons++;
-//                iprtrack = j;
             }
         }
     }
@@ -520,6 +524,7 @@ void	AdlarsonPhysics::ProcessScalerRead()
 
 Bool_t	AdlarsonPhysics::Init(const char* configFile)
 {
+
     /*
 
     ifstream  stream;
@@ -736,7 +741,6 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 
 }
 
-
 void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 {
     for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
@@ -891,6 +895,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
            if( (TMath::Prob(chi2min_3pi,2) > 0.01) && (TMath::Prob(chi2min_eta2pi,2) < 0.10) ) // dir 3pi0
            {
+               best_3pi0MvsE->Fill(h[0].E(), h[0].M(), GetTagger()->GetTaggedTime(tag));
+               best_3pi0MvsE->Fill(h[1].E(), h[1].M(), GetTagger()->GetTaggedTime(tag));
+               best_3pi0MvsE->Fill(h[2].E(), h[2].M(), GetTagger()->GetTaggedTime(tag));
+
                 IM6g_fit_3pi->Fill(etap_fit.M(), GetTagger()->GetTaggedTime(tag));
                 for(Int_t isix = 0; isix < 6; isix++)
                 {
@@ -906,6 +914,11 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
            }
            if( (TMath::Prob(chi2min_eta2pi,2) > 0.01) && (TMath::Prob(chi2min_3pi,2) < 0.10) ) //eta prime
            {
+               best_etaMvsE->Fill(g[0].E(), g[0].M(), GetTagger()->GetTaggedTime(tag));
+               best_2pi0MvsE->Fill(g[1].E(), g[1].M(), GetTagger()->GetTaggedTime(tag));
+               best_2pi0MvsE->Fill(g[2].E(), g[2].M(), GetTagger()->GetTaggedTime(tag));
+
+
                IM6g_fit_eta2pi->Fill( etap_fit.M(), GetTagger()->GetTaggedTime(tag) );
                for(Int_t isix = 0; isix < 6; isix++)
                {
@@ -960,10 +973,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
                        etapr_eta_v_BeamE->Fill((GetTagger()->GetVector(set_min[0])).E(), etap_fit_eta.M(), GetTagger()->GetTaggedTime(tag));
                    }
-
                }
-
-
                // here fill Energy vs IM(gg) vs detector nr for eta and pi0 separately
                etapr_v_BeamE->Fill((GetTagger()->GetVector(set_min[0])).E(), etap_fit.M(), GetTagger()->GetTaggedTime(tag));
 
@@ -991,18 +1001,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                deltaX_v_DPbin->Fill(DP_binnr_fit, Xfit - Xtrue);
                deltaY_v_DPbin->Fill(DP_binnr_fit, Yfit - Ytrue);
            }
-
-
         }
-
-    } // end loop over tagged time hits
-
-    // run kinfit again now enforcing eta mass (and pi0 pi0 as well?)
-
-    // final results: Dalitz plot, m_pi0pi0, eta prime production as fcn energy
-    // DalitzPlot();
-    // m2pi0_metapi0;
-
+    }
 }
 
 void AdlarsonPhysics::tengAnalysis(UInt_t ipr)

@@ -116,6 +116,14 @@ private:
     GH1*            best_2pi;
     GHistBGSub2*    best_eta_EvTh;
 
+    // to check the energy of the  eta pi0 system vs its inv mass
+    GHistBGSub2*    best_etaMvsE;
+    GHistBGSub2*    best_2pi0MvsE;
+
+    // to check the energy of the pi0 system vs its inv mass
+    GHistBGSub2*    best_3pi0MvsE;
+
+
     GH1*            M_pi1pi2_fit;
     GH1*            M_etapi_fit;
     GHistBGSub2*    deltaMpipi_v_Mpipi_fit;
