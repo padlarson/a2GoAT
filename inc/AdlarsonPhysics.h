@@ -107,10 +107,14 @@ private:
     GH1*            IM6g_fit_eta2pi;
     GH1*            IM2g_eta;
 
+    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
     TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
     TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
     TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
     TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
+    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
 
     GH1*            best_eta;
     GH1*            best_2pi;
