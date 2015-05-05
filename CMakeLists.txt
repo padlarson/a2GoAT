@@ -144,6 +144,17 @@ add_executable(pi0-example
    )
 target_link_libraries(pi0-example goatbase ghist ${LIBS} ${ROOT_LIBRARIES})
 
+add_executable(ProtonChargeRadius
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/GTrue.h
+   src/GTrue.cc
+   inc/ProtonChargeRadius.h
+   src/ProtonChargeRadius.cc
+   src/ProtonChargeRadius_main.cc
+   )
+target_link_libraries(ProtonChargeRadius goatbase ghist ${LIBS} ${ROOT_LIBRARIES})
+
 add_executable(AdlarsonAnalysis
    ${GOAT_BASE}
    ${GOAT_GHIST}
