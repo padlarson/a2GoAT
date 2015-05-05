@@ -65,10 +65,10 @@ void	ProtonChargeRadius::ProcessEvent()
 
     TrueObs.Start(*GetPluto(), *GetGeant());
 
-//    Double_t weight = 1.0;
+    Double_t weight = 1.0;
     True_BeamEnergy->Fill( TrueObs.GetTrueBeamEnergy(), TrueObs.GetWeight() );
 
-    int reaction = 0;
+//    int reaction = 0;
     // reaction:
     // 0  p e+e- production   : 1/E x Bethe-Heidler process.
     // 1  p mu+mu- production   : 1/E x Bethe-Heidler process.
@@ -77,7 +77,7 @@ void	ProtonChargeRadius::ProcessEvent()
     // 4  p pi0pi0            : 1/E x Total cross section.
     // 5  p pi+pi-            : 1/E x Total cross section.
 
-    TrueAnalysis_ll(reaction); //lepton-lepton analysis
+//    TrueAnalysis_ll(reaction); //lepton-lepton analysis
 
     // Double_t protonE = TrueObs.GetTrueProtonLV().E();
 
