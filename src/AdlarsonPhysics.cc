@@ -124,7 +124,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     IM10g_fit            = new GH1("IM10g_fit", "IM(10#gamma) after APLCON fit", 500, 400., 1400.);
 
-// Physics results
+// Physics results eta'
 
     DP_fit             = new GHistBGSub2("DP_fit", "Rec fitted Dalitz Plot distribution vs run nr", 800, 0, 800, 100, 600., 1100.);
     M_pi1pi2_fit       = new GH1("M_pi1pi2_fit", "Rec M_{#pi#pi,fit}^{2}", 60 , 0.05, 0.20 );
@@ -137,6 +137,11 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     deltaX_v_DPbin     = new GHistBGSub2("deltaX_v_DPbin", "X_{fit} - X_{true} vd DP bin nr", 600, 0, 600, 40, -1.0, 1.0);
     deltaY_v_DPbin     = new GHistBGSub2("deltaY_v_DPbin", "Y_{fit} - Y_{true} vd DP bin nr", 600, 0, 600, 40, -1.0, 1.0);
+
+    // Physics results 3pi0'
+    M_pi12vpi13_3pi0    = new GHistBGSub2("M_pi12vpi13_3pi0", "M_{#pi1#pi2 v #pi1#pi3,fit 3pi0}^{2}", 80, 0.0, 0.20, 80, 0.0, 0.20);
+    M_pi12vpi23_3pi0    = new GHistBGSub2("M_pi12vpi23_3pi0", "M_{#pi1#pi2 v #pi2#pi3,fit 3pi0}^{2}", 80, 0.0, 0.20, 80, 0.0, 0.20);
+    M_pi13vpi23_3pi0    = new GHistBGSub2("M_pi13vpi23_3pi0", "M_{#pi1#pi3 v #pi2#pi3,fit 3pi0}^{2}", 80, 0.0, 0.20, 80, 0.0, 0.20);
 
     cutFile             = new TFile("configfiles/cuts/TAPSEdEPA.root");
     cutProtonTAPS       = (TCutG*)cutFile->Get("CutProton");
@@ -322,8 +327,6 @@ Bool_t	AdlarsonPhysics::Start()
     TraverseValidEvents();
 
     outputFile->cd();
-//    gDirectory->mkdir("MC")->cd();
-
 
     ClustersTAPSTime.Write();
     ClustersCBTime.Write();
@@ -397,6 +400,8 @@ void	AdlarsonPhysics::ProcessEvent()
 
     if(!good_multiplicity) return;
 
+    const std::vector<TLorentzVector> corrEnergyVectors = ClusterEnergyCorr(); // corrects the cluster energies;
+    //const std::vector<const TLorentzVector> corrEnergyVectors = ClusterEnergyCorr(); // corrects the cluster energies;
 
     MMp_vec.SetPxPyPzE(0., 0., 0., 0.);
     IM6g_vec.SetPxPyPzE(0., 0., 0., 0.);
@@ -529,58 +534,71 @@ void	AdlarsonPhysics::ProcessScalerRead()
 Bool_t	AdlarsonPhysics::Init(const char* configFile)
 {
 
-    /*
+    std::string         line;
 
-    ifstream  stream;
-    stream.open("/home/adlarson/a2GoAT/configfiles/TAPSvsTAGGERoffsetsAug2012.dat");
-    std::vector<double> EPT_TAPS_TOFoff;
-    EPT_TAPS_TOFoff.resize(0);
-    std::string   line;
-    std::getline(stream, line);
-
-
-    Double newVal1;
-    Double newVal2;
-    Double newVal3;
-    sscanf(GConfigFile::ReadConfig("TOFcorrections", 0, configFile).c_str(), "%lf %lf %lf", &newVal1, &newVal2, &newVal3);
-
-    
-    printf("try to enable CBEnergy correction per Run\n");
-    
-    if (sscanf(line, "%s", tmp) == 1) 
+// read in file0
+    std::ifstream file0("configfiles/Aug2012/TAPSvsTAGGERoffsets.dat");
+    std::getline(file0, line); // first line describes input
+    while(std::getline(file0,line))
     {
-      FILE*	f = fopen(tmp,"r");	
-      if(!f)
-      {
-        Char_t tmp2[140];
-        sprintf(tmp2,"data/%s",tmp);
-        f = fopen(tmp2,"r");	
-      }
-      if(!f)
-      {
-        printf("\nERROR: could not open %s as calibration per Run file! --> exiting\n", tmp);
-        printf("   correct the filename after the 'Use-CaLib-CBEnergyPerRun:' keyword in the physics class config file\n");
-        printf("   or comment it out. Then no CBEnergy Calibration per Run is done.\n\n");
-        exit(1);
-      }
+        std::string         buffer;
+        std::stringstream   ss;
+        UInt_t  det_elem;
+        std::vector<Double_t> vec;
+        ss << line;
+        std::getline(ss,buffer, '\t');
+        atoi(buffer.c_str());
+        while(std::getline(ss, buffer, '\t')){
+            vec.push_back((std::stod(buffer)));
+        }
+        TOF_corr.insert(EPT_TAPS_pair(det_elem,vec));
+        //    typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
+        //    std::map<UInt_t, std::vector<Double_t>> TOF_corr;
 
-      ifstream  stream;
-      stream.open(tmp);
-      std::vector<double> gainsCB;
-      gainsCB.resize(0);
+    }
+    file0.close();
 
-      while( (!feof(f)) && (!file_found) )
-      {
-          std::string   line;
-          std::getline(stream, line);
+    std::ifstream file1("configfiles/Aug2012/CB_gain_vs_erec.dat");
+    std::getline(file1, line); // first line describes input
 
-          //std::string   runnr(line.substr(0,5));
-          std::stringstream s_line(line);
-          int runnumber;
+    while(std::getline(file1, line))
+    {
+        std::string         buffer;
+        std::stringstream   ss;
+        UInt_t  det_elem;
+        std::vector<Double_t> vec;
+        ss << line;
+        std::getline(ss, buffer, '\t');
+        det_elem = atoi(buffer.c_str());  // atoi only reads everything from a string until a non-integer type occurs
+        while (std::getline(ss, buffer, '\t')) {
+            vec.push_back(std::stod(buffer));
+        }
+        CB_Ecorr.insert(corr_pair(det_elem, vec));
+    }
 
-          */
-    
-    std::cout << "No Init function specified for this class." << std::endl;
+   file1.close();
+
+   std::ifstream file2("configfiles/Aug2012/TAPS_gain_vs_erec.dat");
+   std::getline(file2, line); // first line describes input
+   std::getline(file2, line);
+   std::string         buffer;
+   std::stringstream   ss;
+   UInt_t  det_elem;
+   ss << line;
+   std::getline(ss, buffer, '\t');
+   det_elem = atoi(buffer.c_str());
+   while (std::getline(ss, buffer, '\t'))
+   {
+       TAPS_Ecorr.push_back(std::stod(buffer));
+   }
+   file2.close();
+
+
+
+//    std::cout << "No Init function specified for this class." << std::endl;
+    std::cout << "Tagger - TAPS ToF corrections implemented" << std::endl;
+    std::cout << "Crystal Ball Energy corrections implemented" << std::endl;
+    std::cout << "TAPS Energy corrections implemented" << std::endl;
     return kTRUE;
 
 }
@@ -892,7 +910,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
            IM6g_fit->Fill( etap_fit.M(),GetTagger()->GetTaggedTime(tag) );
 
 //           sigma_eta = 25; sigma_pi0 = 14;
-            sigma_eta = 45; sigma_pi0 = 25;
+            sigma_eta = 25; sigma_pi0 = 10;
 
            Double_t    chi2min_eta2pi  = 1.0e6;
            Double_t    chi2min_3pi     = 1.0e6;
@@ -921,6 +939,14 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                best_3pi0MvsE->Fill(h[0].E(), h[0].M(), GetTagger()->GetTaggedTime(tag));
                best_3pi0MvsE->Fill(h[1].E(), h[1].M(), GetTagger()->GetTaggedTime(tag));
                best_3pi0MvsE->Fill(h[2].E(), h[2].M(), GetTagger()->GetTaggedTime(tag));
+
+               // plot the im(pipi) combinations, where 1 is the most high energetic pi0 pair and 3 is the lowest;
+
+//               if((h[0].E() > h[1].E() && (h[0].E() > h[2].E())
+
+//               GHistBGSub2*    M_pi12vpi13_3pi0;
+//               GHistBGSub2*    M_pi12vpi23_3pi0;
+//               GHistBGSub2*    M_pi13vpi23_3pi0;
 
                 IM6g_fit_3pi->Fill(etap_fit.M(), GetTagger()->GetTaggedTime(tag));
                 for(Int_t isix = 0; isix < 6; isix++)
@@ -1584,7 +1610,7 @@ void AdlarsonPhysics::Kinfit_test()
     TLorentzVector beam_true, proton_true;
     TLorentzVector photons_true[6];
 
-    beam_true.SetPxPyPzE(0., 0.,  etapr_6gTrue.GetTrueBeamEnergy()*1000, etapr_6gTrue.GetTrueBeamEnergy()*1000);
+    beam_true.SetPxPyPzE(0., 0., etapr_6gTrue.GetTrueBeamEnergy()*1000, etapr_6gTrue.GetTrueBeamEnergy()*1000);
 //    beam.SetFromVector( beam_true );
 //    beam.Smear(3, true);
 
@@ -1623,6 +1649,78 @@ void AdlarsonPhysics::Kinfit_test()
        }
 
     }
+};
+
+const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
+{
+    UInt_t det;
+    // parameters p in positions:
+    // double: Emax_range, coeff N, coeff x, coeff x^2, coeff x^3 ,coeff x^4
+    std::vector<double> p;
+    Double_t E, Ec;
+    TLorentzVector TLVbuff;
+    std::vector<TLorentzVector> GetCorrVector;
+
+   //  test = CB_Ecorr.find(detector_element)->second;
+
+    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+    {
+        TLVbuff = GetTracks()->GetVector(i);
+//        double test0 = TLVbuff.E();
+//        double test1 = TLVbuff.Theta();
+//        double test2 = TLVbuff.Phi();
+//        double test7 = TLVbuff.Py();
+        if( GetTracks()->HasCB(i) )
+        {
+            det = GetTracks()->GetCentralCrystal(i);
+            p = CB_Ecorr.find(det)->second;
+
+            if(!(TMath::Abs(p[0]) < 1.0e-4) || !(GetTracks()->GetVector(i).E() > p[0]))
+            {
+                E = GetTracks()->GetVector(i).E();
+                Ec = 0.0;
+                for(Int_t it = 1; it < 6; it++)
+                {
+                    Ec += p[it]*TMath::Power(E, (it));
+
+                }
+                TLVbuff.SetPxPyPzE( Ec*sin(TLVbuff.Theta())*cos(TLVbuff.Phi()) , Ec*sin(TLVbuff.Theta())*sin(TLVbuff.Phi()), Ec*cos(TLVbuff.Theta()), Ec);
+//                double test3 = TLVbuff.E();
+//                double test4 = TLVbuff.Theta();
+//                double test5 = TLVbuff.Phi();
+//                double test6 = TLVbuff.Py();
+//                Int_t hej2 = 1;
+            }
+
+            GetCorrVector.push_back(TLVbuff);
+        }
+        if( GetTracks()->HasTAPS(i) )
+        {
+//                    double test0 = TLVbuff.E();
+//                    double test1 = TLVbuff.Theta();
+//                    double test2 = TLVbuff.Phi();
+//                    double test7 = TLVbuff.Py();
+            p = TAPS_Ecorr;
+            if(!(TMath::Abs(p[0]) < 1.0e-4) || !(GetTracks()->GetVector(i).E() > p[0]))
+            {
+                E = GetTracks()->GetVector(i).E();
+                Ec = 0.0;
+                for(Int_t it = 1; it < 6; it++)
+                {
+                    Ec += p[it]*TMath::Power(E, (it));
+                }
+                TLVbuff.SetPxPyPzE( Ec*sin(TLVbuff.Theta())*cos(TLVbuff.Phi()) , Ec*sin(TLVbuff.Theta())*sin(TLVbuff.Phi()), Ec*cos(TLVbuff.Theta()), Ec);
+//                                double test3 = TLVbuff.E();
+//                                double test4 = TLVbuff.Theta();
+//                                double test5 = TLVbuff.Phi();
+//                                double test6 = TLVbuff.Py();
+//                                Int_t hej2 = 1;
+            }
+            GetCorrVector.push_back(TLVbuff);
+        }
+
+    }
+        return GetCorrVector;
 };
 
 

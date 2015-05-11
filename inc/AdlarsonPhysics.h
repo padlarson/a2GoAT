@@ -138,6 +138,11 @@ private:
     GHistBGSub2*    deltaX_v_DPbin;
     GHistBGSub2*    deltaY_v_DPbin;
 
+    GHistBGSub2*    M_pi12vpi13_3pi0;
+    GHistBGSub2*    M_pi12vpi23_3pi0;
+    GHistBGSub2*    M_pi13vpi23_3pi0;
+
+
     // Kinfit related variables 10g
 
     GH1*            kfit_chi2_10g;
@@ -196,6 +201,14 @@ private:
     Double_t    sigma_pi0;
 
     const Double_t    taggerTimeCut = 6.0;
+
+    typedef std::pair<UInt_t, std::vector<Double_t>> corr_pair;
+    std::map<UInt_t, std::vector<Double_t>> CB_Ecorr;
+
+    std::vector<Double_t> TAPS_Ecorr;
+
+    typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
+    std::map<UInt_t, std::vector<Double_t>> TOF_corr;
 
 
 protected:
@@ -307,6 +320,7 @@ public:
     void tengAnalysis(UInt_t ipr );
     void GetBest6gCombination10g(Double_t& sigma_eta, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi );
 
+    const std::vector<TLorentzVector> ClusterEnergyCorr();
 
 
     void DalitzPlot( const TLorentzVector g[3] , Double_t &X, Double_t &Y, Int_t &DP_nr );
