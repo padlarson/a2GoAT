@@ -77,6 +77,12 @@ AdlarsonPhysics::AdlarsonPhysics():
     ThvEp_rec           = new GHistBGSub2("ThvEp_rec", "Rec E_{p} vs #theta_{p}", 120, 0., 600, 50, 0., 25.);
     MM_p                = new GHistBGSub("MM_p", "Missing Mass calculated for proton", 300, 800., 1100.);
 
+
+    IMgg_v_det_b4corr_CB =      new GHistBGSub2("IMgg_v_det_b4corr_CB", "IM(gg) combinations BEFORE Energy corr, CB", 500, 0, 1000, 720, 0, 720);
+    IMgg_v_det_afcorr_CB =      new GHistBGSub2("IMgg_v_det_afcorr_CB", "IM(gg) combinations AFTER Energy corr, CB", 500, 0, 1000, 720, 0, 720);
+    IMgg_v_det_b4corr_TAPS =    new GHistBGSub2("IMgg_v_det_b4corr_TAPS", "IM(gg) combinations BEFORE Energy corr, TAPS", 500, 0, 1000, 440, 0, 440);
+    IMgg_v_det_afcorr_TAPS =    new GHistBGSub2("IMgg_v_det_afcorr_TAPS", "IM(gg) combinations AFTER Energy corr, TAPS", 500, 0, 1000, 440, 0, 440);
+
 // Rec. Photons
     IM_10g	= new GH1("IM_10g", "IM_10g", 	240,   200, 1400);
 
@@ -361,6 +367,7 @@ void	AdlarsonPhysics::ProcessEvent()
     UInt_t AllTimes = 0;
 
 
+
     for( Int_t i = 0; i < GetTracks()->GetNTracks(); i++ )
     {
         if( GetTracks()->HasTAPS(i) )
@@ -390,7 +397,8 @@ void	AdlarsonPhysics::ProcessEvent()
     ClustersinTime.Fill(InTime);
 
     Bool_t good_multiplicity = 0;
-
+    if( InTime == 3 )
+        good_multiplicity = 1;
     if( InTime == 5 )
         good_multiplicity = 1;
     if( (InTime > 6) && (InTime < 9) )
@@ -400,8 +408,63 @@ void	AdlarsonPhysics::ProcessEvent()
 
     if(!good_multiplicity) return;
 
+
+    Double_t mass_temp = 1.0e6;
+    for( Int_t ic = 0; ic < GetTracks()->GetNTracks(); ic++ )
+    {
+
+            for( Int_t jc = ic+1; jc < GetTracks()->GetNTracks(); jc++ )
+            {
+                mass_temp = 1.0e6;
+                mass_temp = (GetTracks()->GetVector(ic) + GetTracks()->GetVector(jc)).M();
+
+                if(GetTracks()->HasTAPS(ic)){
+                    IMgg_v_det_b4corr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                }
+                if(GetTracks()->HasTAPS(jc)){
+                    IMgg_v_det_b4corr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                }
+                if(GetTracks()->HasCB(ic)){
+                    IMgg_v_det_b4corr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                }
+                if(GetTracks()->HasCB(jc)){
+                    IMgg_v_det_b4corr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                }
+
+            }
+    }
+
+
+
+
+
     const std::vector<TLorentzVector> corrEnergyVectors = ClusterEnergyCorr(); // corrects the cluster energies;
-    //const std::vector<const TLorentzVector> corrEnergyVectors = ClusterEnergyCorr(); // corrects the cluster energies;
+
+    mass_temp = 1.0e6;
+    for( Int_t ic = 0; ic < GetTracks()->GetNTracks(); ic++ )
+    {
+            for( Int_t jc = ic+1; jc < GetTracks()->GetNTracks(); jc++ )
+            {
+                mass_temp = 1.0e6;
+                mass_temp = (GetTracks()->GetVector(ic) + GetTracks()->GetVector(jc)).M();
+
+                if(GetTracks()->HasTAPS(ic)){
+                    IMgg_v_det_afcorr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                }
+                if(GetTracks()->HasTAPS(jc)){
+                    IMgg_v_det_afcorr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                }
+                if(GetTracks()->HasCB(ic)){
+                    IMgg_v_det_afcorr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                }
+                if(GetTracks()->HasCB(jc)){
+                    IMgg_v_det_afcorr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                }
+
+            }
+    }
+
+
 
     MMp_vec.SetPxPyPzE(0., 0., 0., 0.);
     IM6g_vec.SetPxPyPzE(0., 0., 0., 0.);
@@ -1657,7 +1720,7 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
     // parameters p in positions:
     // double: Emax_range, coeff N, coeff x, coeff x^2, coeff x^3 ,coeff x^4
     std::vector<double> p;
-    Double_t E, Ec;
+    double Erec, Ec;
     TLorentzVector TLVbuff;
     std::vector<TLorentzVector> GetCorrVector;
 
@@ -1674,22 +1737,30 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
         {
             det = GetTracks()->GetCentralCrystal(i);
             p = CB_Ecorr.find(det)->second;
+            Erec = GetTracks()->GetVector(i).E();
 
-            if(!(TMath::Abs(p[0]) < 1.0e-4) || !(GetTracks()->GetVector(i).E() > p[0]))
+            if( !(TMath::Abs(p[0]) < 1.0e-4) && (Erec < p[0]))
             {
-                E = GetTracks()->GetVector(i).E();
+ //               if( Erec < p[0] ){
+                Erec = GetTracks()->GetVector(i).E();
                 Ec = 0.0;
                 for(Int_t it = 1; it < 6; it++)
                 {
-                    Ec += p[it]*TMath::Power(E, (it));
+                    Ec += p[it]*TMath::Power(Erec, (it-1));
 
                 }
+                Ec *= Erec;
+                if(Ec > 10000)
+                 int   hej = 1;
+
+                tracks->SetClusterEnergy(i, Ec);
                 TLVbuff.SetPxPyPzE( Ec*sin(TLVbuff.Theta())*cos(TLVbuff.Phi()) , Ec*sin(TLVbuff.Theta())*sin(TLVbuff.Phi()), Ec*cos(TLVbuff.Theta()), Ec);
 //                double test3 = TLVbuff.E();
 //                double test4 = TLVbuff.Theta();
 //                double test5 = TLVbuff.Phi();
 //                double test6 = TLVbuff.Py();
 //                Int_t hej2 = 1;
+//                }
             }
 
             GetCorrVector.push_back(TLVbuff);
@@ -1701,14 +1772,16 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
 //                    double test2 = TLVbuff.Phi();
 //                    double test7 = TLVbuff.Py();
             p = TAPS_Ecorr;
-            if(!(TMath::Abs(p[0]) < 1.0e-4) || !(GetTracks()->GetVector(i).E() > p[0]))
+            Erec = GetTracks()->GetVector(i).E();
+            if(!(TMath::Abs(p[0]) < 1.0e-4) && (Erec < p[0]) )
             {
-                E = GetTracks()->GetVector(i).E();
+                Erec = GetTracks()->GetVector(i).E();
                 Ec = 0.0;
                 for(Int_t it = 1; it < 6; it++)
                 {
-                    Ec += p[it]*TMath::Power(E, (it));
+                    Ec += p[it]*TMath::Power(Erec, (it));
                 }
+                tracks->SetClusterEnergy(i, Ec);
                 TLVbuff.SetPxPyPzE( Ec*sin(TLVbuff.Theta())*cos(TLVbuff.Phi()) , Ec*sin(TLVbuff.Theta())*sin(TLVbuff.Phi()), Ec*cos(TLVbuff.Theta()), Ec);
 //                                double test3 = TLVbuff.E();
 //                                double test4 = TLVbuff.Theta();

@@ -68,6 +68,7 @@ public:
             Double_t        GetVetoEnergy(const Int_t index)    const	{return vetoEnergy[index];}
     const	Double_t*       GetClusterEnergy()                  const	{return clusterEnergy;}
             Double_t        GetClusterEnergy(const Int_t index) const	{return clusterEnergy[index];}
+            void            SetClusterEnergy(const Int_t index, Double_t E_new) {clusterEnergy[index] = E_new;}
             Int_t           GetNTracks()                        const	{return nTracks;}
     inline  Int_t           GetNCB()                            const;
     inline  Int_t           GetNTAPS()                          const;

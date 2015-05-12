@@ -6,6 +6,8 @@
 #include <TH1.h>
 #include <TDatabasePDG.h>
 
+
+
 #include "GConfigFile.h"
 #include "GTreeTrack.h"
 #include "GTreeTagger.h"
@@ -24,6 +26,7 @@
 #endif
 
 #include "GTreeA2Geant.h"
+
 
 #include <stdio.h>
 #include <TSystem.h>
@@ -168,6 +171,7 @@ public:
     friend  class GTreeParticle;
     friend  class GTreeMeson;
     friend  class GTreeTagger;
+    friend  class AdlarsonPhysics;
 
 };
 

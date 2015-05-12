@@ -72,6 +72,11 @@ private:
     GHistBGSub2*    EvTOFAllVeto;
     GHistBGSub2*    EvTOF_pr_norm_to_c;
 
+    GHistBGSub2*    IMgg_v_det_b4corr_CB;
+    GHistBGSub2*    IMgg_v_det_afcorr_CB;
+    GHistBGSub2*    IMgg_v_det_b4corr_TAPS;
+    GHistBGSub2*    IMgg_v_det_afcorr_TAPS;
+
     TH2F    ClustersTAPSTime;
     TH2F    ClustersCBTime;
     TH1D    AllClusters;
