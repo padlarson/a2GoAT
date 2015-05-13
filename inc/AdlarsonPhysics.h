@@ -93,8 +93,10 @@ private:
     GH1*            IM_4g_rec;
     GH1*            IM_4g_fit;
     GHistBGSub2*    PDF_etapi_v_2pi;
-    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
+    GHistBGSub3    Ekfit_v_Eg_v_detnrCB_4g;
+    GHistBGSub3    Ekfit_v_Eg_v_detnrTAPS_4g;
 
     // Kinfit related variables 6g
 
@@ -112,14 +114,25 @@ private:
     GH1*            IM6g_fit_eta2pi;
     GH1*            IM2g_eta;
 
-    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
-    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
-    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
-    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
+
+    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_6g;
+    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_6g;
+    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_3pi0;
+    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_eta2pi0;
+    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_3pi0;
+    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
+    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_ng;
+    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_ng;
+
+
 
     GH1*            best_eta;
     GH1*            best_2pi;

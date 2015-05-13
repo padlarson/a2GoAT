@@ -13,16 +13,16 @@ AdlarsonPhysics::AdlarsonPhysics():
     AllClusters("AllClusters", "nr of all detected clusters",15, 0, 15),
     ClustersinTime("ClustersinTime", "nr of detected clusters in time",15, 0, 15),
     TaggedTime("TaggedTime", "Tagger time for the events ", 2000, -500, 500),
-    Ekfit_v_Eg_v_detnrCB_4g("Ekfit_v_Eg_v_detnrCB_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in CB", 100, 0., 1000., 400, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_4g("Ekfit_v_Eg_v_detnrTAPS_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in TAPS", 100, 0., 1000., 400, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_6g("Ekfit_v_Eg_v_detnrCB_6g", "E_fit/E_rec vs E_{#gamma} for 6#gamma in CB", 100, 0., 1000., 400, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_6g("Ekfit_v_Eg_v_detnrTAPS_6g", "E_fit/E_rec vs E_{#gamma} for 6#gamma in TAPS", 100, 0., 1000., 400, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_3pi0("Ekfit_v_Eg_v_detnrCB_3pi0", "E_fit/E_rec v E_{#gamma}, 3#pi^{0} CB", 100, 0., 1000., 400, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrCB_eta2pi0("Ekfit_v_Eg_v_detnrCB_eta2pi0","E_fit/E_rec vs E_{#gamma} for #eta2#pi^{0} in CB", 100, 0., 1000., 400, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_3pi0("Ekfit_v_Eg_v_detnrTAPS_3pi0", "E_fit/E_rec vs E_{#gamma} for 3#pi^{0} in TAPS", 100, 0., 1000., 400, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrTAPS_eta2pi0("Ekfit_v_Eg_v_detnrTAPS_eta2pi0", "E_fit/E_rec vs E_{#gamma} for #eta2#pi^{0} in TAPS", 100, 0., 1000., 400, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_ng("Ekfit_v_Eg_v_detnrCB_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in CB", 100, 0., 1000., 400, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_ng("Ekfit_v_Eg_v_detnrTAPS_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in TAPS", 100, 0., 1000., 400, 0., 2., 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_4g("Ekfit_v_Eg_v_detnrCB_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_4g("Ekfit_v_Eg_v_detnrTAPS_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
+    Ekfit_v_Eg_v_detnrCB_6g("Ekfit_v_Eg_v_detnrCB_6g", "E_fit/E_rec vs E for 6g in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_6g("Ekfit_v_Eg_v_detnrTAPS_6g", "E_fit/E_rec vs E for 6g in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_3pi0("Ekfit_v_Eg_v_detnrCB_3pi0", "E_fit/E_rec v E_{#gamma}, 3#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
+    Ekfit_v_Eg_v_detnrCB_eta2pi0("Ekfit_v_Eg_v_detnrCB_eta2pi0","E_fit/E_rec vs E #eta2#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_3pi0("Ekfit_v_Eg_v_detnrTAPS_3pi0", "E_fit/E_rec vs E 3#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
+    Ekfit_v_Eg_v_detnrTAPS_eta2pi0("Ekfit_v_Eg_v_detnrTAPS_eta2pi0", "E_fit/E_rec vs E #eta2#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_ng("Ekfit_v_Eg_v_detnrCB_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_ng("Ekfit_v_Eg_v_detnrTAPS_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
     detnr(720),
     photons_rec(nPhotons_six),
     photons_fit(nPhotons_six),
@@ -42,6 +42,18 @@ AdlarsonPhysics::AdlarsonPhysics():
     TH1D    AllClusters;
     TH1D    ClustersinTime;
     TH1D    TaggedTime;
+
+//    Ekfit_v_Eg_v_detnrCB_4g     = new GHistBGSub3("Ekfit_v_Eg_v_detnrCB_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720);
+//    Ekfit_v_Eg_v_detnrTAPS_4g   = new GHistBGSub3("Ekfit_v_Eg_v_detnrTAPS_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440);
+//    Ekfit_v_Eg_v_detnrCB_6g     = new GHistBGSub3("Ekfit_v_Eg_v_detnrCB_6g", "E_fit/E_rec vs E for 6g in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720);
+//    Ekfit_v_Eg_v_detnrTAPS_6g   = new GHistBGSub3("Ekfit_v_Eg_v_detnrTAPS_6g", "E_fit/E_rec vs E for 6g in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440);
+//    Ekfit_v_Eg_v_detnrCB_3pi0   = new GHistBGSub3("Ekfit_v_Eg_v_detnrCB_3pi0", "E_fit/E_rec v E_{#gamma}, 3#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720);
+//    Ekfit_v_Eg_v_detnrCB_eta2pi0= new GHistBGSub3("Ekfit_v_Eg_v_detnrCB_eta2pi0","E_fit/E_rec vs E #eta2#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720);
+//    Ekfit_v_Eg_v_detnrTAPS_3pi0 = new GHistBGSub3("Ekfit_v_Eg_v_detnrTAPS_3pi0", "E_fit/E_rec vs E 3#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440);
+//    Ekfit_v_Eg_v_detnrTAPS_eta2pi0 = new GHistBGSub3("Ekfit_v_Eg_v_detnrTAPS_eta2pi0", "E_fit/E_rec vs E #eta2#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440);
+//    Ekfit_v_Eg_v_detnrCB_ng     = new GHistBGSub3("Ekfit_v_Eg_v_detnrCB_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720);
+//    Ekfit_v_Eg_v_detnrTAPS_ng   = new GHistBGSub3("Ekfit_v_Eg_v_detnrTAPS_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440);
+
 
 // TRUE OBSERVABLES
 // Beam energy
@@ -155,8 +167,10 @@ AdlarsonPhysics::AdlarsonPhysics():
     cutFile2             = new TFile("configfiles/cuts/TAPS_TOF_PA2.root");
     cutProtonETOF       = (TCutG*)cutFile2->Get("Hadron");
 
-    GHistBGSub::InitCuts(-10, 10, -530, -30);
-    GHistBGSub::AddRandCut(30, 530);
+//    GHistBGSub::InitCuts(-10, 10, -530, -30);
+//    GHistBGSub::AddRandCut(30, 530);
+    GHistBGSub::InitCuts(-10, 10, -130, -30);
+    GHistBGSub::AddRandCut(30, 130);
 
 //  For final states including 6g
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
@@ -322,12 +336,12 @@ Bool_t	AdlarsonPhysics::Start()
     ClustersinTime.Reset();
     TaggedTime.Reset();
     AllClusters.Reset();
-    Ekfit_v_Eg_v_detnrCB_4g.Reset();
-    Ekfit_v_Eg_v_detnrTAPS_4g.Reset();
-    Ekfit_v_Eg_v_detnrCB_3pi0.Reset();
-    Ekfit_v_Eg_v_detnrCB_eta2pi0.Reset();
-    Ekfit_v_Eg_v_detnrTAPS_3pi0.Reset();
-    Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Reset();
+//    Ekfit_v_Eg_v_detnrCB_4g.Reset();
+//    Ekfit_v_Eg_v_detnrTAPS_4g.Reset();
+//    Ekfit_v_Eg_v_detnrCB_3pi0.Reset();
+//    Ekfit_v_Eg_v_detnrCB_eta2pi0.Reset();
+//    Ekfit_v_Eg_v_detnrTAPS_3pi0.Reset();
+//    Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Reset();
 
 
     TraverseValidEvents();
@@ -339,12 +353,12 @@ Bool_t	AdlarsonPhysics::Start()
     ClustersinTime.Write();
     TaggedTime.Write();
     AllClusters.Write();
-    Ekfit_v_Eg_v_detnrCB_4g.Write();
-    Ekfit_v_Eg_v_detnrTAPS_4g.Write();
-    Ekfit_v_Eg_v_detnrCB_3pi0.Write();
-    Ekfit_v_Eg_v_detnrCB_eta2pi0.Write();
-    Ekfit_v_Eg_v_detnrTAPS_3pi0.Write();
-    Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Write();
+//    Ekfit_v_Eg_v_detnrCB_4g.Write();
+//    Ekfit_v_Eg_v_detnrTAPS_4g.Write();
+//    Ekfit_v_Eg_v_detnrCB_3pi0.Write();
+//    Ekfit_v_Eg_v_detnrCB_eta2pi0.Write();
+//    Ekfit_v_Eg_v_detnrTAPS_3pi0.Write();
+//    Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Write();
 
 	return kTRUE;
 }
@@ -409,9 +423,12 @@ void	AdlarsonPhysics::ProcessEvent()
     if(!good_multiplicity) return;
 
 
-    Double_t mass_temp = 1.0e6;
-    for( Int_t ic = 0; ic < GetTracks()->GetNTracks(); ic++ )
+    for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
     {
+//        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
+        Double_t mass_temp = 1.0e6;
+        for( Int_t ic = 0; ic < GetTracks()->GetNTracks(); ic++ )
+        {
 
             for( Int_t jc = ic+1; jc < GetTracks()->GetNTracks(); jc++ )
             {
@@ -419,49 +436,53 @@ void	AdlarsonPhysics::ProcessEvent()
                 mass_temp = (GetTracks()->GetVector(ic) + GetTracks()->GetVector(jc)).M();
 
                 if(GetTracks()->HasTAPS(ic)){
-                    IMgg_v_det_b4corr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                    IMgg_v_det_b4corr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic), GetTagger()->GetTaggedTime(tag));
                 }
                 if(GetTracks()->HasTAPS(jc)){
-                    IMgg_v_det_b4corr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                    IMgg_v_det_b4corr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc), GetTagger()->GetTaggedTime(tag));
                 }
                 if(GetTracks()->HasCB(ic)){
-                    IMgg_v_det_b4corr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                    IMgg_v_det_b4corr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic), GetTagger()->GetTaggedTime(tag));
                 }
                 if(GetTracks()->HasCB(jc)){
-                    IMgg_v_det_b4corr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                    IMgg_v_det_b4corr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc), GetTagger()->GetTaggedTime(tag));
                 }
 
             }
+        }
     }
 
 
 
 
-
-    const std::vector<TLorentzVector> corrEnergyVectors = ClusterEnergyCorr(); // corrects the cluster energies;
-
-    mass_temp = 1.0e6;
-    for( Int_t ic = 0; ic < GetTracks()->GetNTracks(); ic++ )
+//    const std::vector<TLorentzVector> corrEnergyVectors = ClusterEnergyCorr(); // corrects the cluster energies;
+    for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
     {
+//        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
+
+        Double_t mass_temp = 1.0e6;
+        for( Int_t ic = 0; ic < GetTracks()->GetNTracks(); ic++ )
+        {
             for( Int_t jc = ic+1; jc < GetTracks()->GetNTracks(); jc++ )
             {
                 mass_temp = 1.0e6;
                 mass_temp = (GetTracks()->GetVector(ic) + GetTracks()->GetVector(jc)).M();
 
                 if(GetTracks()->HasTAPS(ic)){
-                    IMgg_v_det_afcorr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                    IMgg_v_det_afcorr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic),GetTagger()->GetTaggedTime(tag) );
                 }
                 if(GetTracks()->HasTAPS(jc)){
-                    IMgg_v_det_afcorr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                    IMgg_v_det_afcorr_TAPS->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc),GetTagger()->GetTaggedTime(tag));
                 }
                 if(GetTracks()->HasCB(ic)){
-                    IMgg_v_det_afcorr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic));
+                    IMgg_v_det_afcorr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(ic),GetTagger()->GetTaggedTime(tag));
                 }
                 if(GetTracks()->HasCB(jc)){
-                    IMgg_v_det_afcorr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc));
+                    IMgg_v_det_afcorr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc),GetTagger()->GetTaggedTime(tag));
                 }
 
             }
+        }
     }
 
 
@@ -491,7 +512,7 @@ void	AdlarsonPhysics::ProcessEvent()
     Double_t TOF = -100.0;
     for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++)
     {
-        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
+ //       if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
         for (UInt_t i = 0; i < ClustersInTime.size() ; i++)
         {
             UInt_t j = ClustersInTime[i];
@@ -534,9 +555,9 @@ void	AdlarsonPhysics::ProcessEvent()
         Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(iprtrack) );
         for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++)
         {
-            if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
+
             TOF_corr = (GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(iprtrack))/radnm + offset - c_ns_per_m;
-            EvTOF_pr_norm_to_c->Fill(-TOF_corr, GetTracks()->GetClusterEnergy(iprtrack));
+            EvTOF_pr_norm_to_c->Fill(-TOF_corr, GetTracks()->GetClusterEnergy(iprtrack),GetTagger()->GetTaggedTime(tag));
         }
     }
 
@@ -716,7 +737,7 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 
     for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++)
     {
-        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
+//        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
 
         set.resize(0);
         set_min.resize(0);
@@ -759,7 +780,8 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
             }
         }
 
-        if( (prob_min < 0.001) || ( TMath::Abs(prob_min - 1.0e6) < 1.0e-4) ) continue;
+
+        if( (prob_min < 0.01) || ( TMath::Abs(prob_min - 1.0e6) < 1.0e-4) ) continue;
 
 
         kfit_chi2_4g->Fill( result4g.ChiSquare, GetTagger()->GetTaggedTime(tag));
@@ -812,18 +834,15 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 
             for ( Int_t jgam_min = 0; jgam_min < 4 ; jgam_min++ )
             {
-    //                double erec = (double)photons_rec[jgam_min].E();
-    //                double efit = (double)photons_fit[jgam_min].E();
-
-                if( GetTracks()->HasCB(ClustersInTime[set_min[jgam_min+2]]) )
+                if( GetTracks()->HasCB(set_min[jgam_min+2]))
                 {
-                    Ekfit_v_Eg_v_detnrCB_4g.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min]);
-                    Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min]);
+                    Ekfit_v_Eg_v_detnrCB_4g.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min], GetTagger()->GetTaggedTime(tag));
+                    Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min], GetTagger()->GetTaggedTime(tag));
                 }
                 else // in TAPS
                 {
-                    Ekfit_v_Eg_v_detnrTAPS_4g.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min]);
-                    Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min]);
+//                    Ekfit_v_Eg_v_detnrTAPS_4g.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min], GetTagger()->GetTaggedTime(tag));
+                    Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[jgam_min].E(), photons_fit[jgam_min].E()/photons_rec[jgam_min].E(), detnr[jgam_min], GetTagger()->GetTaggedTime(tag));
                 }
             }
         }
@@ -838,7 +857,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
         IM6g_vec.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
         TaggedTime.Fill(GetTagger()->GetTaggedTime(tag));
-        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
+//        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
 
         std::vector<Int_t> set;     // particle conf: tagger, proton, photon 1, 2, 3, 4, 5, 6;
         std::vector<Int_t> set_min; // best particle configuration
@@ -854,7 +873,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
         Double_t chi2_min = 1.0e6;
         Double_t prob_min = 1.0e6;
-
 
         set.push_back(tag);
 
@@ -902,7 +920,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
         // Here run kinfit with the best combination:
 
         if( set_min.size() == 0 ) continue;
-        if( (prob_min < 0.001) || ( TMath::Abs(prob_min - 1.0e6) < 1.0e-4) ) continue;
+        if( (prob_min < 0.01) || ( TMath::Abs(prob_min - 1.0e6) < 1.0e-4) ) continue;
 
 
         // For the best combination with pdf >= 0.01 obtain the result.
@@ -948,11 +966,13 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
            Int_t inr = 0;
            for(const auto& it_map : result.Variables) {
-//               const string& varname = it_map.first;
+                const string& varname = it_map.first;
                 const APLCON::Result_Variable_t& var = it_map.second;
                 kfit_Pulls->Fill(var.Pull, inr, GetTagger()->GetTaggedTime(tag));
                 inr++;
            }
+
+
            for(UInt_t igam_fit = 0; igam_fit < Photons_six.size(); igam_fit++)
            {
                photons_fit[igam_fit] = FitParticle::Make(Photons_six[igam_fit], 0);
@@ -960,13 +980,13 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
                if( GetTracks()->HasCB(ClustersInTime[set_min[igam_fit+2]]) )
                {
-                   Ekfit_v_Eg_v_detnrCB_6g.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
-                   Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
+//                   Ekfit_v_Eg_v_detnrCB_6g->Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit], GetTagger()->GetTaggedTime(tag));
+//                   Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit], GetTagger()->GetTaggedTime(tag));
                }
                else // in TAPS
                {
-                   Ekfit_v_Eg_v_detnrTAPS_6g.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
-                   Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
+//                   Ekfit_v_Eg_v_detnrTAPS_6g->Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit], GetTagger()->GetTaggedTime(tag));
+//                   Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit], GetTagger()->GetTaggedTime(tag));
                }
 
            }
@@ -1016,11 +1036,11 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                 {
                     if( GetTracks()->HasCB( set_min[imin_3pi[isix]+2]) )
                     {
-                        Ekfit_v_Eg_v_detnrCB_3pi0.Fill( photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
+                        Ekfit_v_Eg_v_detnrCB_3pi0.Fill( photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]],GetTagger()->GetTaggedTime(tag));
                     }
                     else
                     {
-                        Ekfit_v_Eg_v_detnrTAPS_3pi0.Fill(photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
+                        Ekfit_v_Eg_v_detnrTAPS_3pi0.Fill(photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]],GetTagger()->GetTaggedTime(tag));
                     }
                 }
            }
@@ -1036,11 +1056,11 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                {
                    if( GetTracks()->HasCB( set_min[imin_eta2pi[isix]+2]) )
                    {
-                        Ekfit_v_Eg_v_detnrCB_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
+                        Ekfit_v_Eg_v_detnrCB_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]],GetTagger()->GetTaggedTime(tag));
                    }
                    else
                    {
-                       Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
+                       Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]],GetTagger()->GetTaggedTime(tag));
                    }
                }
 
@@ -1125,7 +1145,7 @@ void AdlarsonPhysics::tengAnalysis(UInt_t ipr)
 
     for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
     {
-        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
+//        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
 
         std::vector<Int_t> set;     // particle conf: tagger, proton, photon 1, 2, 3, 4, 5, 6, 7, 8, 9, 10;
         set.resize(0);
@@ -1729,10 +1749,6 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
     for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
     {
         TLVbuff = GetTracks()->GetVector(i);
-//        double test0 = TLVbuff.E();
-//        double test1 = TLVbuff.Theta();
-//        double test2 = TLVbuff.Phi();
-//        double test7 = TLVbuff.Py();
         if( GetTracks()->HasCB(i) )
         {
             det = GetTracks()->GetCentralCrystal(i);
@@ -1741,7 +1757,7 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
 
             if( !(TMath::Abs(p[0]) < 1.0e-4) && (Erec < p[0]))
             {
- //               if( Erec < p[0] ){
+
                 Erec = GetTracks()->GetVector(i).E();
                 Ec = 0.0;
                 for(Int_t it = 1; it < 6; it++)
@@ -1750,17 +1766,9 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
 
                 }
                 Ec *= Erec;
-                if(Ec > 10000)
-                 int   hej = 1;
 
                 tracks->SetClusterEnergy(i, Ec);
                 TLVbuff.SetPxPyPzE( Ec*sin(TLVbuff.Theta())*cos(TLVbuff.Phi()) , Ec*sin(TLVbuff.Theta())*sin(TLVbuff.Phi()), Ec*cos(TLVbuff.Theta()), Ec);
-//                double test3 = TLVbuff.E();
-//                double test4 = TLVbuff.Theta();
-//                double test5 = TLVbuff.Phi();
-//                double test6 = TLVbuff.Py();
-//                Int_t hej2 = 1;
-//                }
             }
 
             GetCorrVector.push_back(TLVbuff);
