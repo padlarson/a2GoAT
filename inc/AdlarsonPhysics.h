@@ -334,6 +334,8 @@ public:
     void sixgAnalysis( UInt_t ipr );
     void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi );
 
+    void sevengAnalysis( UInt_t ipr );
+
     // functions specifically related to 10g analysis
     void tengAnalysis(UInt_t ipr );
     void GetBest6gCombination10g(Double_t& sigma_eta, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi );
