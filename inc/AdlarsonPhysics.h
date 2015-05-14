@@ -31,88 +31,139 @@ class	AdlarsonPhysics  : public GTreeManager
 private:
     // Histograms and scatterplots
     // True
-    GH1*            True_BeamEnergy;
-    GHistBGSub2*    ThpvsThetaprCM;
-    GHistBGSub2*    ThvE_p;
-    GHistBGSub2*    ThvE_eta_g;
-    GHistBGSub2*    ThvE_pi0_g;
-    GHistBGSub2*    DP_true;
-    GH1*            M_pi1pi2_true;
-    GH1*            M_etapi_true;
+    GH1*            true_BeamE;
+    GHistBGSub2*    true_th_p_v_th_etapr_CM;
+    GHistBGSub2*    true_th_v_E_p;
+    GHistBGSub2*    true_th_v_E_eta_g;
+    GHistBGSub2*    true_th_v_E_pi0_g;
+    GHistBGSub2*    true_DP;
+    GH1*            true_M_pi1pi2_e2p;
+    GH1*            true_M_etapi_e2p;
+
+    // in 6g analaysis
+    GHistBGSub2*    true_six_phy_dX_v_DPbin;
+    GHistBGSub2*    true_six_phy_dY_v_DPbin;
+    GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
 
     // Tagger related
-    GH1*            Tagged_BeamEnergy;
+    GH1*            tag_BeamE;
 
     // Proton related
     TLorentzVector  MMp_vec;
 
-    GHistBGSub*     Nrprotons;
-    GHistBGSub*     MM_p;
-    GHistBGSub2*    ThvEp_rec;
+    GHistBGSub*     p_nr;
+    GHistBGSub*     p_MM;
+    GHistBGSub2*    p_th_v_E;
+    GHistBGSub2*    p_E_v_dE_all;   // hits
+    GHistBGSub2*    p_E_v_dE_cc;    // for random times
+    GHistBGSub2*    p_E_v_dE_pr;    // for proton sel
+    GHistBGSub2*    p_E_v_TOF;
+    GHistBGSub2*    p_E_v_TOF_All;
+    GHistBGSub2*    p_E_v_TOF_All_wVeto;
+    GHistBGSub2*    p_E_v_TOF_norm_to_c;
+
 
 
     // Photon related
     TLorentzVector  IM6g_vec;
-    GH1*            IM_6g;
-    GHistBGSub2*    IM6gvMMp;
+
 
     TLorentzVector  IM10g_vec;
-    GH1*            IM_10g;
-    GHistBGSub2*    IM10gvMMp;
+
+    // 10g analysis
+    GH1*            ten_rec_IM;
+    GHistBGSub2*    ten_rec_IM_v_MMp;
 
     GH1*            fi_diff_TAPSCB;
     GHistBGSub2*    fi_TAPSvsCB;
     GHistBGSub2*    fi_th_diff_TAPSCB;
 
-    GHistBGSub2*    EvdE_TAPS_all;
-    GHistBGSub2*    EvdE_TAPS_cc;
-    GHistBGSub2*    EvdE_TAPS_proton;
-    GHistBGSub2*    EvTOF;
-    GHistBGSub2*    EvTOFAll;
-    GHistBGSub2*    EvTOFAllVeto;
-    GHistBGSub2*    EvTOF_pr_norm_to_c;
+
 
     GHistBGSub2*    IMgg_v_det_b4corr_CB;
     GHistBGSub2*    IMgg_v_det_afcorr_CB;
     GHistBGSub2*    IMgg_v_det_b4corr_TAPS;
     GHistBGSub2*    IMgg_v_det_afcorr_TAPS;
 
-    TH2F    ClustersTAPSTime;
-    TH2F    ClustersCBTime;
-    TH1D    AllClusters;
-    TH1D    ClustersinTime;
-    TH1D    TaggedTime;
+    TH2F    time_clusters_TAPS;
+    TH2F    time_clusters_CB;
+    TH1D    time_nr_AllClusters;
+    TH1D    time_nr_ClustersinTime;
+    TH1D    six_time_TaggedTime;
 
-    // Kinfit related variables 4g
+   // Analysis 4g
 
     TLorentzVector  IM4g_vec;
     TLorentzVector  IM4g_fit;
 
-    GH1*            kfit_chi2_4g;
-    GH1*            kfit_pdf_4g;
-    GH1*            IM_4g_rec;
-    GH1*            IM_4g_fit;
-    GHistBGSub2*    PDF_etapi_v_2pi;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
-    GHistBGSub3    Ekfit_v_Eg_v_detnrCB_4g;
-    GHistBGSub3    Ekfit_v_Eg_v_detnrTAPS_4g;
+    // 4g analysis
+    GH1*            four_rec_IM;
+    GH1*            four_fit_IM;
 
-    // Kinfit related variables 6g
+    GH1*            four_fit_chi2;
+    GH1*            four_fit_pdf;
 
-    GH1*            kfit_chi2;
-    GH1*            kfit_pdf;
-    GH1*            kfit_pdf_eta;
-    GHistBGSub2*    kfit_Pulls;
+    GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
+    GHistBGSub3     Ekfit_v_Eg_v_detnrCB_4g;
+    GHistBGSub3     Ekfit_v_Eg_v_detnrTAPS_4g;
 
-    GH1*            IM6g_rec;
-    GH1*            IM6g_fit;
-    GH1*            IM6g_fit_rec;
+    //    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
+    //    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
 
-    GHistBGSub2*    PDF_eta2pi_v_3pi;
-    GH1*            IM6g_fit_3pi;
-    GH1*            IM6g_fit_eta2pi;
-    GH1*            IM2g_eta;
+
+    // 6g analysis
+    // test analysis to test that kinfit APLCON is working properly
+    GH1*            test_six_rec_IM;
+    GH1*            test_six_fit_chi2;
+    GH1*            test_six_fit_pdf;
+    GHistBGSub2*    test_six_fit_Pulls;
+
+    // normal 6g analysis
+
+    GH1*            six_rec_IM;
+    GHistBGSub2*    six_rec_IM_v_MMp;
+
+    GH1*            six_fit_chi2;
+    GH1*            six_fit_pdf;
+    GH1*            six_fit_eta_pdf;
+    GHistBGSub2*    six_fit_Pulls;
+
+    GH1*            six_fit_IM;
+    GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
+
+    GHistBGSub2*    six_PDF_eta2pi_v_3pi;
+    GH1*            six_fit_IM_3pi;
+    GH1*            six_fit_IM_eta2pi;
+    GH1*            six_fiteta_IM2g;
+    GH1*            six_fit_best_eta;
+    GHistBGSub2*    six_fit_best_eta_E_v_th;
+    GH1*            six_fit_best_2pi;
+
+    // to check the energy of the  eta 2pi0 system vs its inv mass
+    GHistBGSub2*    six_fit_best_eta_IM_v_E;
+    GHistBGSub2*    six_fit_best_2pi_IM_v_E;
+
+    // to check the energy of the 3pi0 system vs its inv mass
+    GHistBGSub2*    six_fit_best_3pi_IM_v_E;
+
+    GHistBGSub2*    six_phy_etapr_v_BeamE;
+    GHistBGSub2*    six_phy_etapr_eta_v_BeamE;
+
+    GHistBGSub2*    six_phy_DP;
+    GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
+    GHistBGSub2*    six_phy_M_etapi_v_etapr;
+
+
+
+
+
+
+
+
+    GHistBGSub2*    M_pi12vpi13_3pi0;
+    GHistBGSub2*    M_pi12vpi23_3pi0;
+    GHistBGSub2*    M_pi13vpi23_3pi0;
+
 
 //    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
 //    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
@@ -134,31 +185,16 @@ private:
 
 
 
-    GH1*            best_eta;
-    GH1*            best_2pi;
-    GHistBGSub2*    best_eta_EvTh;
-
-    // to check the energy of the  eta pi0 system vs its inv mass
-    GHistBGSub2*    best_etaMvsE;
-    GHistBGSub2*    best_2pi0MvsE;
-
-    // to check the energy of the pi0 system vs its inv mass
-    GHistBGSub2*    best_3pi0MvsE;
 
 
-    GH1*            M_pi1pi2_fit;
-    GH1*            M_etapi_fit;
-    GHistBGSub2*    deltaMpipi_v_Mpipi_fit;
-    GHistBGSub2*    etapr_v_BeamE;
-    GHistBGSub2*    etapr_eta_v_BeamE;
 
-    GHistBGSub2*    DP_fit;
-    GHistBGSub2*    deltaX_v_DPbin;
-    GHistBGSub2*    deltaY_v_DPbin;
 
-    GHistBGSub2*    M_pi12vpi13_3pi0;
-    GHistBGSub2*    M_pi12vpi23_3pi0;
-    GHistBGSub2*    M_pi13vpi23_3pi0;
+
+
+
+    // 7g analysis
+    GH1*            seven_rec_IM;
+    GHistBGSub2*    seven_rec_IM_v_MMp;
 
 
     // Kinfit related variables 10g
