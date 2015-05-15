@@ -45,6 +45,12 @@ private:
     GHistBGSub2*    true_six_phy_dY_v_DPbin;
     GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
 
+    // in 7g analaysis
+    GHistBGSub2*    true_seven_phy_dX_v_DPbin;
+    GHistBGSub2*    true_seven_phy_dY_v_DPbin;
+    GHistBGSub2*    true_seven_phy_dMpipi_v_Mpipi;
+
+
     // Tagger related
     GH1*            tag_BeamE;
 
@@ -62,8 +68,6 @@ private:
     GHistBGSub2*    p_E_v_TOF_All_wVeto;
     GHistBGSub2*    p_E_v_TOF_norm_to_c;
 
-
-
     // Photon related
     TLorentzVector  IM6g_vec;
 
@@ -77,8 +81,6 @@ private:
     GH1*            fi_diff_TAPSCB;
     GHistBGSub2*    fi_TAPSvsCB;
     GHistBGSub2*    fi_th_diff_TAPSCB;
-
-
 
     GHistBGSub2*    IMgg_v_det_b4corr_CB;
     GHistBGSub2*    IMgg_v_det_afcorr_CB;
@@ -104,12 +106,6 @@ private:
     GH1*            four_fit_pdf;
 
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
-    GHistBGSub3     Ekfit_v_Eg_v_detnrCB_4g;
-    GHistBGSub3     Ekfit_v_Eg_v_detnrTAPS_4g;
-
-    //    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
-    //    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
-
 
     // 6g analysis
     // test analysis to test that kinfit APLCON is working properly
@@ -130,8 +126,10 @@ private:
 
     GH1*            six_fit_IM;
     GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
+    GH1*            six_fit_cos_th_cm;
 
-    GHistBGSub2*    six_PDF_eta2pi_v_3pi;
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi;
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_2;
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
     GH1*            six_fiteta_IM2g;
@@ -154,47 +152,67 @@ private:
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
 
 
-
-
-
-
-
-
     GHistBGSub2*    M_pi12vpi13_3pi0;
     GHistBGSub2*    M_pi12vpi23_3pi0;
     GHistBGSub2*    M_pi13vpi23_3pi0;
 
+    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
+    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
+    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
+    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
+    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
 
-//    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
-
-    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_6g;
-    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_6g;
-    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_3pi0;
-    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_eta2pi0;
-    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_3pi0;
-    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
-    GHistBGSub3            Ekfit_v_Eg_v_detnrCB_ng;
-    GHistBGSub3            Ekfit_v_Eg_v_detnrTAPS_ng;
-
-
-
-
-
+    TH3F            Ekfit_v_Eg_v_detnrCB_4g_bg;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g_bg;
+    TH3F            Ekfit_v_Eg_v_detnrCB_6g_bg;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g_bg;
+    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0_bg;
+    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0_bg;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0_bg;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg;
+    TH3F            Ekfit_v_Eg_v_detnrCB_ng_bg;
+    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng_bg;
 
 
+    //seven gamma analysis
 
-
-
-    // 7g analysis
     GH1*            seven_rec_IM;
     GHistBGSub2*    seven_rec_IM_v_MMp;
+
+    GH1*            seven_fit_chi2;
+    GH1*            seven_fit_pdf;
+    GH1*            seven_fit_eta_pdf;
+    GHistBGSub2*    seven_fit_Pulls;
+
+    GH1*            seven_fit_IM;
+    GH1*            seven_fit_IM_rec;     // rec IM(6g) for events which passed the fit
+
+    GHistBGSub2*    seven_fit_PDF_eta2pi_v_3pi;
+    GH1*            seven_fit_IM_3pi;
+    GH1*            seven_fit_IM_eta2pi;
+    GH1*            seven_fiteta_IM2g;
+    GH1*            seven_fit_best_eta;
+    GHistBGSub2*    seven_fit_best_eta_E_v_th;
+    GH1*            seven_fit_best_2pi;
+
+    // to check the energy of the  eta 2pi0 system vs its inv mass
+    GHistBGSub2*    seven_fit_best_eta_IM_v_E;
+    GHistBGSub2*    seven_fit_best_2pi_IM_v_E;
+
+    // to check the energy of the 3pi0 system vs its inv mass
+    GHistBGSub2*    seven_fit_best_3pi_IM_v_E;
+
+    GHistBGSub2*    seven_phy_etapr_v_BeamE;
+    GHistBGSub2*    seven_phy_etapr_eta_v_BeamE;
+
+    GHistBGSub2*    seven_phy_DP;
+    GHistBGSub2*    seven_phy_M_pi1pi2_v_etapr;
+    GHistBGSub2*    seven_phy_M_etapi_v_etapr;
 
 
     // Kinfit related variables 10g
@@ -239,6 +257,7 @@ private:
 
     TLorentzVector etapr_tengam[10];
 
+    static Int_t perm4g[3][4];
     static Int_t perm6g[15][6];
     static Int_t perm6outof7g[7][6];
     static Int_t perm6outof8g[28][6];
@@ -335,18 +354,26 @@ protected:
     APLCON kinfit4g;
     APLCON kinfit;
     APLCON kinfit_eta;
+    APLCON kinfit3pi;
+    APLCON kinfiteta2pi;
     APLCON kinfit10g;
 
     FitParticle beam4g;
     FitParticle beam;
+    FitParticle beam_3pi;
+    FitParticle beam_eta2pi;
     FitParticle beam_eta;
     FitParticle beam10g;
     std::vector<FitParticle> Photons_four;
     std::vector<FitParticle> Photons_six;
+    std::vector<FitParticle> Photons_six_3pi;
+    std::vector<FitParticle> Photons_six_eta2pi;
     std::vector<FitParticle> Photons_six_eta;
     std::vector<FitParticle> Photons_ten;
     FitParticle proton4g;
     FitParticle proton;
+    FitParticle proton_3pi;
+    FitParticle proton_eta2pi;
     FitParticle proton_eta;
     FitParticle proton10g;
 			
@@ -369,12 +396,14 @@ public:
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
     void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi );
+    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi);
+
 
     void sevengAnalysis( UInt_t ipr );
 
     // functions specifically related to 10g analysis
     void tengAnalysis(UInt_t ipr );
-    void GetBest6gCombination10g(Double_t& sigma_eta, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi );
+    void GetBest10gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi2pi );
 
     const std::vector<TLorentzVector> ClusterEnergyCorr();
 
