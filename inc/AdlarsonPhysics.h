@@ -87,6 +87,13 @@ private:
     GHistBGSub2*    IMgg_v_det_b4corr_TAPS;
     GHistBGSub2*    IMgg_v_det_afcorr_TAPS;
 
+    GHistBGSub2*    IMgg_v_det_2pi0_CB;
+    GHistBGSub2*    IMgg_v_det_etapi0_CB;
+    GHistBGSub2*    IMgg_v_det_3pi0_CB;
+    GHistBGSub2*    IMgg_v_det_2pi0_TAPS;
+    GHistBGSub2*    IMgg_v_det_etapi0_TAPS;
+    GHistBGSub2*    IMgg_v_det_3pi0_TAPS;
+
     TH2F    time_clusters_TAPS;
     TH2F    time_clusters_CB;
     TH1D    time_nr_AllClusters;
@@ -123,6 +130,14 @@ private:
     GH1*            six_fit_pdf;
     GH1*            six_fit_eta_pdf;
     GHistBGSub2*    six_fit_Pulls;
+    GHistBGSub2*    six_fit_Pulls_g_E_vs_Eth;
+    GHistBGSub2*    six_fit_Pulls_g_th_vs_Eth;
+    GHistBGSub2*    six_fit_Pulls_g_fi_vs_Eth;
+
+    GHistBGSub2*    six_fit_Pulls_p_th_vs_Eth;
+    GHistBGSub2*    six_fit_Pulls_p_fi_vs_Eth;
+
+
 
     GH1*            six_fit_IM;
     GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
@@ -130,6 +145,10 @@ private:
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi;
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_2;
+
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_Meta2pi;
+     GHistBGSub2*   six_fit_PDF_2_eta2pi_v_Meta2pi;
+    GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
     GH1*            six_fiteta_IM2g;
@@ -143,6 +162,7 @@ private:
 
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
+    GHistBGSub2*    six_phy_3pi_IMpipi_v_IMppi;
 
     GHistBGSub2*    six_phy_etapr_v_BeamE;
     GHistBGSub2*    six_phy_etapr_eta_v_BeamE;
@@ -151,10 +171,6 @@ private:
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
 
-
-    GHistBGSub2*    M_pi12vpi13_3pi0;
-    GHistBGSub2*    M_pi12vpi23_3pi0;
-    GHistBGSub2*    M_pi13vpi23_3pi0;
 
     TH3F            Ekfit_v_Eg_v_detnrCB_4g;
     TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
@@ -181,7 +197,6 @@ private:
 
     //seven gamma analysis
 
-    GH1*            seven_rec_IM;
     GHistBGSub2*    seven_rec_IM_v_MMp;
 
     GH1*            seven_fit_chi2;
@@ -257,7 +272,7 @@ private:
 
     TLorentzVector etapr_tengam[10];
 
-    static Int_t perm4g[3][4];
+    static Int_t perm4g[9][4];
     static Int_t perm6g[15][6];
     static Int_t perm6outof7g[7][6];
     static Int_t perm6outof8g[28][6];
@@ -266,6 +281,8 @@ private:
     GTrue   etapr_6gTrue;
 
     std::vector<int> detnr;
+    std::vector<bool> CB_region;
+
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
     std::vector<TLorentzVector> photons_fit_eta;
@@ -392,6 +409,7 @@ public:
 
     // functions specifically related to 4g analysis
     void fourgAnalysis( UInt_t ipr );
+    void Best4g_comb(std::vector<TLorentzVector>& photons_rec, std::vector<int> &detnr , std::vector<bool> &CB_region);
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
