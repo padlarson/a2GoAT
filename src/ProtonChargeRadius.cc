@@ -33,9 +33,7 @@ ProtonChargeRadius::ProtonChargeRadius()
 ProtonChargeRadius::~ProtonChargeRadius()
 {
 
-
 }
-
 Bool_t	ProtonChargeRadius::Start()
 {
 //    if(!IsGoATFile())
@@ -50,11 +48,6 @@ Bool_t	ProtonChargeRadius::Start()
 
     outputFile->cd();
     gDirectory->mkdir("MC")->cd();
-
-
-
-
-
 
 
 	return kTRUE;
