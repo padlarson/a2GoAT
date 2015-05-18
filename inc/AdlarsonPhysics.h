@@ -114,6 +114,7 @@ private:
 
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
 
+
     // 6g analysis
     // test analysis to test that kinfit APLCON is working properly
     GH1*            test_six_rec_IM;
@@ -136,8 +137,6 @@ private:
 
     GHistBGSub2*    six_fit_Pulls_p_th_vs_Eth;
     GHistBGSub2*    six_fit_Pulls_p_fi_vs_Eth;
-
-
 
     GH1*            six_fit_IM;
     GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
@@ -265,7 +264,6 @@ private:
 
     TLorentzVector proton_vec;
     Double_t MMp;
-
 
     TLorentzVector etapr_sixgam[6];
     TLorentzVector dir3pi0_sixgam[6];
