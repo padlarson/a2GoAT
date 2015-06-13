@@ -154,6 +154,17 @@ add_executable(ProtonChargeRadius
    src/ProtonChargeRadius_main.cc
    )
 target_link_libraries(ProtonChargeRadius goatbase ghist ${LIBS} ${ROOT_LIBRARIES})
+add_executable(TrueRecParticleGun
+   ${GOAT_BASE}
+   ${GOAT_GHIST}
+   inc/GTrue.h
+   src/GTrue.cc
+   inc/TrueRecParticleGun.h
+   src/TrueRecParticleGun.cc
+   src/TrueRecParticleGun_main.cc
+   )
+target_link_libraries(TrueRecParticleGun goatbase ghist ${LIBS} ${ROOT_LIBRARIES})
+
 
 add_executable(AdlarsonAnalysis
    ${GOAT_BASE}
