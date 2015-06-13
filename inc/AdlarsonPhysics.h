@@ -36,9 +36,15 @@ private:
     GHistBGSub2*    true_th_v_E_p;
     GHistBGSub2*    true_th_v_E_eta_g;
     GHistBGSub2*    true_th_v_E_pi0_g;
-    GHistBGSub2*    true_DP;
-    GH1*            true_M_pi1pi2_e2p;
-    GH1*            true_M_etapi_e2p;
+    // Kinfit tests
+    GHistBGSub2*    true_six_dth_vs_th_p;
+    GHistBGSub2*    true_six_z_v_Ncl;
+    GHistBGSub2*    true_six_fit_dz_v_z;
+    // Physics Results
+    TH2*            true_DP;
+    TH1*            true_phy_DP;
+    TH1*            true_M_pi1pi2_e2p;
+    TH1*            true_M_etapi_e2p;
 
     // in 6g analaysis
     GHistBGSub2*    true_six_phy_dX_v_DPbin;
@@ -70,8 +76,6 @@ private:
 
     // Photon related
     TLorentzVector  IM6g_vec;
-
-
     TLorentzVector  IM10g_vec;
 
     // 10g analysis
@@ -94,11 +98,13 @@ private:
     GHistBGSub2*    IMgg_v_det_etapi0_TAPS;
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS;
 
-    TH2F    time_clusters_TAPS;
-    TH2F    time_clusters_CB;
-    TH1D    time_nr_AllClusters;
-    TH1D    time_nr_ClustersinTime;
-    TH1D    six_time_TaggedTime;
+    TH2F            time_clusters_TAPS;
+    TH2F            time_clusters_CB;
+    TH1D            time_nr_AllClusters;
+    TH1D            time_nr_ClustersinTime;
+    TH1D            time_nr_CltimeVeto;
+    TH1D            six_time_TaggedTime;
+
 
    // Analysis 4g
 
@@ -146,7 +152,7 @@ private:
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_2;
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_Meta2pi;
-     GHistBGSub2*   six_fit_PDF_2_eta2pi_v_Meta2pi;
+    GHistBGSub2*    six_fit_PDF_2_eta2pi_v_Meta2pi;
     GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
@@ -243,6 +249,9 @@ private:
     TCutG*          cutProtonTAPS;
     TFile*          cutFile2;       // File which contains EToF cut
     TCutG*          cutProtonETOF;
+    TFile*          cutFile3;       // File which contains MinIon cut
+    TCutG*          cutMinIon;
+
     TCutG*          cutPionTAPS;
     TCutG*          cutElectronTAPS;
 
@@ -252,8 +261,8 @@ private:
     TLorentzVector  pi02_true;
     TLorentzVector  etapr_true[3];
 
-    Double_t        Xtrue, Ytrue;
-    Int_t           DPnrTrue;
+    Double_t        Xtrue1, Xtrue2, Ytrue;
+    Int_t           DPnrTrue1, DPnrTrue2;
     Double_t        m_etapi01True, m_etapi02True, m_2pi0True;
 
     // Reconstructed Lorentz Vectors
@@ -280,6 +289,7 @@ private:
 
     std::vector<int> detnr;
     std::vector<bool> CB_region;
+    std::vector<bool> Is_CB_6g;
 
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
@@ -310,7 +320,7 @@ protected:
     // choose here what you want to do
     // please also provide GoAT trees with matching MC true information...
     static constexpr bool includeIMconstraint = true;
- //   static constexpr bool includeVertexFit = true;
+    static constexpr bool includeVertexFit = true;
     static constexpr size_t nPhotons_four = 4;
     static constexpr size_t nPhotons_six = 6;
     static constexpr size_t nPhotons_ten = 10;
@@ -342,6 +352,7 @@ protected:
                         std::addressof(Theta_Sigma),
                         std::addressof(Phi_Sigma)};
             }
+
             std::vector<APLCON::Variable_Settings_t> LinkSettings()
             {
                 return{Ek_Setting, Theta_Setting, Phi_Setting};
@@ -360,6 +371,8 @@ protected:
             double Phi;
             double Phi_Sigma;
             APLCON::Variable_Settings_t Phi_Setting;
+
+            bool isCB;
 
         private:
             static std::default_random_engine generator;
@@ -424,7 +437,7 @@ public:
     const std::vector<TLorentzVector> ClusterEnergyCorr();
 
 
-    void DalitzPlot( const TLorentzVector g[3] , Double_t &X, Double_t &Y, Int_t &DP_nr );
+    void DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Double_t &X2, Double_t &Y, Int_t &DP_nr1, Int_t &DP_nr2);
     void m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 );
 
 };
