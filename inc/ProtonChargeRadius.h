@@ -31,13 +31,47 @@ private:
    GHistBGSub2* t_v_mll;
    GHistBGSub2* thlabpr_v_mll;
 
+   GHistBGSub2* thlabpr_v_t;
+
+   GHistBGSub2* thlabpr_v_th_e_1;
+   GHistBGSub2* thlabpr_v_th_mu_1;
+   GHistBGSub2* thlabpr_v_Tp_1;
+   GHistBGSub2* thlabpr_v_th_e_2;
+   GHistBGSub2* thlabpr_v_th_mu_2;
+   GHistBGSub2* thlabpr_v_Tp_2;
+   GHistBGSub2* thlabpr_v_th_e_3;
+   GHistBGSub2* thlabpr_v_th_mu_3;
+   GHistBGSub2* thlabpr_v_Tp_3;
+   GHistBGSub2* thlabpr_v_Tp_13;
+
+   GH1*         Ntracks;
+
+   GHistBGSub2* E_v_dE;
+   GHistBGSub2* dt_vs_t_rec;
+   GHistBGSub2* dth_p_v_th_p;
+   GHistBGSub2* dE_p_v_E_p;
+   GHistBGSub2* proton_dtheta_v_E;
+   GHistBGSub2* proton_rE_v_E;
+   GHistBGSub2* proton_rt_v_E;
+
    GH1* MC_weight;
    GH1* mll;
+
+   GHistBGSub2*        proton_E_v_th;
+   GHistBGSub2*        proton_t_v_th;
+   GHistBGSub3*        proton_rE_v_2D;
+   GHistBGSub3*        proton_rt_v_2D;
+   GHistBGSub3*        proton_dtheta_v_2D;
+   GHistBGSub3*        proton_dphi_v_2D;
+
+   TFile*      cutFile;        // File which contains EdE cut
+   TCutG*      cutProtonCB;
 
    // Where all true observables are stored
    GTrue TrueObs;
 
    Double_t BeamE;
+   Double_t t_true;
 
 
 
