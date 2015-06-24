@@ -27,6 +27,7 @@ private:
     TH2*        photon_true_Evth_rec;
 
     TH3*        photon_secondary_Evth;
+    TH3*        proton_secondary_Evth;
 
     TH3*        photon_rE_v_2D_CB;
     TH3*        photon_rE_v_2D_TAPS;
@@ -36,9 +37,14 @@ private:
     TH3*        photon_dphi_v_2D_TAPS;
 
     //proton
+    TH2*        proton_true_Evth;
     TH3*        proton_rE_v_2D_TAPS;
     TH3*        proton_dtheta_v_2D_TAPS;
     TH3*        proton_dphi_v_2D_TAPS;
+
+    TH2*        proton_dth_v_detnr;
+    TH2*        proton_dphi_v_detnr;
+    TH2*        proton_re_v_theta;
 
     TH2*        proton_EvDE_TAPS;
 
