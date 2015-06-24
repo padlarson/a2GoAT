@@ -90,6 +90,9 @@ public:
     virtual Bool_t	Init(const char* configfile);
 
     void TrueAnalysis_ll(int reaction);
+    Double_t GEp(Double_t Qsqr);
+    Double_t GMp(Double_t Qsqr);
+
 
 
 };
