@@ -80,6 +80,7 @@ public:
     const	Double_t*       GetTheta()                          const	{return theta;}
             Double_t        GetTheta(const Int_t index)         const	{return theta[index];}
             Double_t        GetThetaRad(const Int_t index)      const	{return theta[index] * TMath::DegToRad();}
+            void            SetTheta(const Int_t index, Double_t Theta_new) {theta[index] = Theta_new;}
     const	Double_t*       GetTime()                           const	{return time;}
             Double_t        GetTime(const Int_t index)          const	{return time[index];}
     inline  TLorentzVector	GetVector(const Int_t index)        const;
