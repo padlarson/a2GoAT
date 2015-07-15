@@ -94,9 +94,11 @@ private:
     GHistBGSub2*    IMgg_v_det_2pi0_CB;
     GHistBGSub2*    IMgg_v_det_etapi0_CB;
     GHistBGSub2*    IMgg_v_det_3pi0_CB;
+    GHistBGSub2*    IMgg_v_det_3pi0_CB_fit;
     GHistBGSub2*    IMgg_v_det_2pi0_TAPS;
     GHistBGSub2*    IMgg_v_det_etapi0_TAPS;
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS;
+    GHistBGSub2*    IMgg_v_det_3pi0_TAPS_fit;
 
     TH2F            time_clusters_TAPS;
     TH2F            time_clusters_CB;
@@ -176,7 +178,6 @@ private:
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
 
-
     TH3F            Ekfit_v_Eg_v_detnrCB_4g;
     TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
     TH3F            Ekfit_v_Eg_v_detnrCB_6g;
@@ -234,7 +235,6 @@ private:
     GHistBGSub2*    seven_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    seven_phy_M_etapi_v_etapr;
 
-
     // Kinfit related variables 10g
 
     GH1*            kfit_chi2_10g;
@@ -254,6 +254,19 @@ private:
 
     TCutG*          cutPionTAPS;
     TCutG*          cutElectronTAPS;
+
+    TFile*          g_unc;
+    TFile*          p_unc;
+    // histograms with unc
+    TH2*            g_CB_e;
+    TH2*            g_CB_th;
+    TH2*            g_CB_fi;
+    TH2*            g_TAPS_e;
+    TH2*            g_TAPS_th;
+    TH2*            g_TAPS_fi;
+    TH2*            p_TAPS_e;
+    TH2*            p_TAPS_th;
+    TH2*            p_TAPS_fi;
 
     // True LorentzVectors
     TLorentzVector  eta_true;
@@ -291,6 +304,9 @@ private:
     std::vector<bool> CB_region;
     std::vector<bool> Is_CB_6g;
 
+    std::vector<double> obs;
+    std::vector<double> unc;
+
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
     std::vector<TLorentzVector> photons_fit_eta;
@@ -307,6 +323,11 @@ private:
 
     typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
     std::map<UInt_t, std::vector<Double_t>> TOF_corr;
+
+    TFile*          thcorr_CB;        // File which contains TProfile
+    TProfile*       dthvth_CB;
+    TFile*          thcorr_TAPS;        // File which contains TProfile
+    TProfile*       dthvth_TAPS;
 
 
 protected:
@@ -358,7 +379,10 @@ protected:
                 return{Ek_Setting, Theta_Setting, Phi_Setting};
             }
 
-            void Smear(int itr_nr, Bool_t measured );
+//            void Smear(int itr_nr, Bool_t measured );
+            void Smear(int itr_nr, Bool_t measured);
+            void Smear_tmp(std::vector<double> unc , int particle);
+
             void APLCONSettings();
 
 
@@ -410,6 +434,7 @@ public:
     virtual ~AdlarsonPhysics();
 
     virtual Bool_t	Init(const char* configfile);
+    void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
 
     // calculates IM for n photons
     Double_t    IM_Ng( UInt_t n );
@@ -417,6 +442,8 @@ public:
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
     void Kinfit_test();
+
+    std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
 
     // functions specifically related to 4g analysis
     void fourgAnalysis( UInt_t ipr );
