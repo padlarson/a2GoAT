@@ -172,6 +172,8 @@ public:
     friend  class GTreeMeson;
     friend  class GTreeTagger;
     friend  class AdlarsonPhysics;
+    friend  class TrueRecParticleGun;
+    friend  class ProtonChargeRadius;
 
 };
 
