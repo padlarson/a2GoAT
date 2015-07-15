@@ -58,6 +58,7 @@ TrueRecParticleGun::TrueRecParticleGun()
     proton_dtheta_v_theta_TAPS   = new TH2F("proton_dtheta_v_theta_TAPS", "proton TAPS; #theta_{rec} (^{o});  #theta_{rec} - #theta_{true} (^{o})", 60, 0, 30, 100, -10., 10.);
 
     z_vertex                    = new TH1F("z_vertex", "z_vertex", 200, -10., 10.);
+    logRelE                     = new TH1F("logRelE", "logRelE", 500, 0, 5);
 
     thcorr_CB                   = new TFile("configfiles/corr/CB_th_corr.root");
     dthvth_CB                   = (TProfile*)thcorr_CB->Get("dthvth");
@@ -171,6 +172,8 @@ void	TrueRecParticleGun::ProcessEvent()
                 photon_EtEr_v_det_CB->Fill(E_rec,  GetTracks()->GetCentralCrystal(i), E_true/E_rec);
 
                 photon_dtheta_v_theta_CB->Fill(th_rec,dth );
+                double test = (TMath::Log(-rel_E));
+                logRelE->Fill(test);
 
             }
             else if(GetTracks()->HasTAPS(i)) //TAPS

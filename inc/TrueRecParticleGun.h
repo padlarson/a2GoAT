@@ -68,6 +68,7 @@ private:
 
     TH2*        proton_EvDE_TAPS;
     TH1*        z_vertex;
+    TH1*        logRelE;
 
     TFile*          thcorr_CB;        // File which contains TProfile
     TProfile*       dthvth_CB;
