@@ -20,9 +20,10 @@ class	ProtonChargeRadius  : public GTreeManager
 {
 private:
     // histograms and scatterplots
-   GH1* True_BeamEnergy;
+   GHistBGSub* True_BeamEnergy;
    // Phase space observables
    GHistBGSub2* ThvT_p;
+   GHistBGSub2* BeamEvETh_p;
    GHistBGSub2* ThvT_e;
    GHistBGSub2* ThvT_mu;
 
@@ -54,7 +55,7 @@ private:
    GHistBGSub2* proton_rE_v_E;
    GHistBGSub2* proton_rt_v_E;
 
-   GH1* MC_weight;
+   GHistBGSub* MC_weight;
    GH1* mll;
 
    GHistBGSub2*        proton_E_v_th;
