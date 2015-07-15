@@ -725,6 +725,7 @@ void	AdlarsonPhysics::ProcessEvent()
                 if( cutProtonETOF->IsInside( TOF/radnm, GetTracks()->GetClusterEnergy(j)) )
                 {
                     p_E_v_TOF->Fill( TOF /(radnm), GetTracks()->GetClusterEnergy(j));
+                    // uncomment for EXP
                     nrprotons++;
                     if(nrprotons >= 1)
                     {
@@ -2028,7 +2029,7 @@ void AdlarsonPhysics::FitParticle::Smear(Int_t apparatus_nr, Bool_t measured) {
 void AdlarsonPhysics::FitParticle::Smear_tmp(std::vector<double> unc, int particle) {
     if( particle == 0 ) // gamma
     {
-        Ek_Sigma = unc[0]*Ek;
+        Ek_Sigma = unc[0]*Ek*2.0;
         Theta_Sigma = unc[1]*TMath::DegToRad();
         Phi_Sigma = unc[2]*TMath::DegToRad();
     }
@@ -2611,7 +2612,7 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
 
     if( particle == 1 )         // gamma
     {
-        double Ek = obs[0]*3.0;
+        double Ek = obs[0];
         double theta = obs[1]*TMath::RadToDeg();
         if(apparatus_nr == 1 )  // CB
         {
