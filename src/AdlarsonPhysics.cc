@@ -262,7 +262,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     p_TAPS_fi = (TH2F*)p_unc->Get("TAPS_phi")->Clone();
 
     thcorr_CB                   = new TFile("configfiles/corr/CB_th_corr.root");
-    dthvth_CB                   = (TProfile*)thcorr_CB->Get("dthvth")->Clone();
+    dthvth_CB                   = (TProfile*)thcorr_CB->Get("photon_dtheta_v_theta_CB_pfx")->Clone();
 
     thcorr_TAPS                 = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                 = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
@@ -457,7 +457,6 @@ AdlarsonPhysics::AdlarsonPhysics():
            else
                R = R_CB;
 
-
            double theta_p = std::atan2( R*sin(theta), R*cos(theta) - v_z);
            args[i][1] = theta_p;                // now set the re-defined theta angle as the new theta
            if(i == 1)
@@ -561,6 +560,8 @@ void	AdlarsonPhysics::ProcessEvent()
 //    etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //    TrueAnalysis_etapr6g();                         // obtains the true observables
 
+//    Energy_corr_MC();
+    Energy_corr_EXP();
     theta_corr();
 //    Kinfit_test();                                  // runs kinematical fit with true observables- for testing purposes
 
@@ -613,8 +614,6 @@ void	AdlarsonPhysics::ProcessEvent()
     time_nr_ClustersinTime.Fill(InTime);
     time_nr_CltimeVeto.Fill(InTime_minion);
 
-
-
     Bool_t good_multiplicity = 0;
     if( InTime == 3 )
         good_multiplicity = 1;
@@ -653,12 +652,13 @@ void	AdlarsonPhysics::ProcessEvent()
                 if(GetTracks()->HasCB(jc)){
                     IMgg_v_det_b4corr_CB->Fill(mass_temp, GetTracks()->GetCentralCrystal(jc),GetTagger()->GetTaggedTime(tag));
                 }
-
             }
         }
     }
 
 //    const std::vector<TLorentzVector> corrEnergyVectors = ClusterEnergyCorr(); // corrects the cluster energies;
+
+
     for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
     {
 //        if( TMath::Abs(GetTagger()->GetTaggedTime(tag)) > taggerTimeCut ) continue;
@@ -842,7 +842,7 @@ void	AdlarsonPhysics::ProcessScalerRead()
 Bool_t	AdlarsonPhysics::Init(const char* configFile)
 {
 
-//    std::string         line;
+    std::string         line;
 
 //// read in file0
 //    std::ifstream file0("configfiles/Aug2012/TAPSvsTAGGERoffsets.dat");
@@ -902,8 +902,32 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
 //   file2.close();
 
 
+       std::ifstream fileMC("configfiles/corr/CB_lingain_MC.txt");
+       std::getline(fileMC, line);
+       std::string         buffer2;
+       std::stringstream   ss;
+       ss << line;
+       while (std::getline(ss, buffer2, '\t'))
+       {
+           CBgainMC.push_back(std::stod(buffer2));
+       }
+       fileMC.close();
 
-    std::cout << "No Init function specified for this class." << std::endl;
+       std::ifstream fileEXP("configfiles/corr/CB_lingain_Aug2012.txt");
+       std::getline(fileEXP, line);
+       std::string         buffer;
+       std::stringstream   ss2;
+
+       ss2 << line;
+       while (std::getline(ss2, buffer, '\t'))
+       {
+           CBgainEXP.push_back(std::stod(buffer));
+       }
+       fileEXP.close();
+
+
+      std::cout << " CB gain correction MC applied" << std::endl;
+//    std::cout << "No Init function specified for this class." << std::endl;
 //    std::cout << "Tagger - TAPS ToF corrections implemented" << std::endl;
 //    std::cout << "Crystal Ball Energy corrections implemented" << std::endl;
 //    std::cout << "TAPS Energy corrections implemented" << std::endl;
@@ -981,7 +1005,7 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
         // proton
         set.push_back(ipr);
         proton4g.SetFromVector( GetTracks()->GetVector(ipr) );
-        proton4g.Smear(2, false);
+//        proton4g.Smear(2, false);
         obs.resize(0);
         obs.push_back(proton4g.Ek);
         obs.push_back(proton4g.Theta);
@@ -1352,8 +1376,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
            rc[1] = photons_rec[imin_3pi[2]] + photons_rec[imin_3pi[3]];
            rc[2] = photons_rec[imin_3pi[4]] + photons_rec[imin_3pi[5]];
 
-//           if( (TMath::Prob(chi2min_3pi,2) > 0.01) && (TMath::Prob(chi2min_eta2pi,2) < 0.20) ) // dir 3pi0
-           if( (probmin_3pi_2 > 0.01) && (probmin_eta2pi_2 < 0.20) ) // dir 3pi0
+           if( (TMath::Prob(chi2min_3pi,2) > 0.01) && (TMath::Prob(chi2min_eta2pi,2) < 0.20) ) // dir 3pi0
+//           if( (probmin_3pi_2 > 0.01) && (probmin_eta2pi_2 < 0.20) ) // dir 3pi0
            {
                six_fit_best_3pi_IM_v_E->Fill(h[0].E(), h[0].M(), GetTagger()->GetTaggedTime(tag));
                six_fit_best_3pi_IM_v_E->Fill(h[1].E(), h[1].M(), GetTagger()->GetTaggedTime(tag));
@@ -1406,8 +1430,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                     }
                 }
            }
-           if( (probmin_eta2pi_2 > 0.01) && (probmin_3pi_2 < 0.2) ) //eta prime
-//           if( (TMath::Prob(chi2min_eta2pi,2) > 0.01) && (TMath::Prob(chi2min_3pi,2) < 0.20) ) //eta prime
+//           if( (probmin_eta2pi_2 > 0.01) && (probmin_3pi_2 < 0.2) ) //eta prime
+           if( (TMath::Prob(chi2min_eta2pi,2) > 0.01) && (TMath::Prob(chi2min_3pi,2) < 0.20) ) //eta prime
            {
                six_fit_PDF_eta2pi_v_Meta2pi->Fill(TMath::Prob(chi2min_eta2pi,2),etap_fit.M(),GetTagger()->GetTaggedTime(tag));
                six_fit_PDF_2_eta2pi_v_Meta2pi->Fill(probmin_eta2pi_2,etap_fit.M(),GetTagger()->GetTaggedTime(tag));
@@ -1842,12 +1866,26 @@ void AdlarsonPhysics::tengAnalysis(UInt_t ipr)
         set.push_back(tag);
 
         beam10g.SetFromVector( GetTagger()->GetVector(tag) );
-        beam10g.Smear(3, true);
+        std::vector<double> obs;
+        std::vector<double> unc;
+        obs.resize(0);
+        unc.resize(0);
+        unc = Get_unc(3,0,obs);
+        beam10g.Smear_tmp(unc, 2);
+//        beam10g.Smear(3, true);
         beam10g.APLCONSettings();
+
+
 
         set.push_back(ipr);
         proton10g.SetFromVector( GetTracks()->GetVector(ipr) );
-        proton10g.Smear(2, false);
+//        proton10g.Smear(2, false);
+        obs.resize(0);
+        obs.push_back(proton10g.Ek);
+        obs.push_back(proton10g.Theta);
+        unc.resize(0);
+        unc = Get_unc( 2, 2, obs);
+        proton10g.Smear_tmp(unc, 1);
 
         UInt_t n_photons = 0;
         for ( UInt_t jgam = 0; jgam < ClustersInTime.size() ; jgam++ )
@@ -1861,9 +1899,25 @@ void AdlarsonPhysics::tengAnalysis(UInt_t ipr)
                 Photons_ten[n_photons].SetFromVector( GetTracks()->GetVector(kgam) );
 
                 if( GetTracks()->HasCB(kgam) )
-                    Photons_ten[n_photons].Smear(1, true);
+                {
+                    obs.resize(0);
+                    obs.push_back(Photons_ten[n_photons].Ek);
+                    obs.push_back(Photons_ten[n_photons].Theta);
+                    unc.resize(0);
+                    unc = Get_unc( 1, 1, obs);
+                    Photons_ten[n_photons].Smear_tmp(unc, 0);
+//                    Photons_ten[n_photons].Smear(1, true);
+                }
                 else // ( GetTracks()->HasTAPS(kgam) )
-                    Photons_ten[n_photons].Smear(2, true);
+                {
+                    obs.resize(0);
+                    obs.push_back(Photons_ten[n_photons].Ek);
+                    obs.push_back(Photons_ten[n_photons].Theta);
+                    unc.resize(0);
+                    unc = Get_unc( 2, 1, obs);
+                    Photons_ten[n_photons].Smear_tmp(unc, 0);
+//                    Photons_ten[n_photons].Smear(2, true);
+                }
                 n_photons++;
             }
         }
@@ -2552,6 +2606,36 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
 
     }
         return GetCorrVector;
+};
+
+void AdlarsonPhysics::Energy_corr_MC()
+{
+    double Erec, Ec;
+    int det;
+    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+    {
+        if( GetTracks()->HasCB(i) )
+        {
+            Erec = GetTracks()->GetVector(i).E();
+            Ec = CBgainMC[GetTracks()->GetCentralCrystal(i)]*Erec;
+            tracks->SetClusterEnergy(i, Ec);
+        }
+    }
+};
+
+void AdlarsonPhysics::Energy_corr_EXP()
+{
+    double Erec, Ec;
+    int det;
+    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+    {
+        if( GetTracks()->HasCB(i) )
+        {
+            Erec = GetTracks()->GetVector(i).E();
+            Ec = CBgainEXP[GetTracks()->GetCentralCrystal(i)]*Erec;
+            tracks->SetClusterEnergy(i, Ec);
+        }
+    }
 };
 
 void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_eta2pi, Double_t& prob_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi)
