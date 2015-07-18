@@ -321,8 +321,8 @@ private:
 
     std::vector<Double_t> TAPS_Ecorr;
 
-    std::vector<Double_t> CBgainMC;         //gain corr factors norm pi0 from 3pi0 at pipeak
-    std::vector<Double_t> CBgainEXP;
+    std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
+    std::vector<Double_t> TAPSgain;
 
     typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
     std::map<UInt_t, std::vector<Double_t>> TOF_corr;
@@ -437,8 +437,7 @@ public:
     virtual ~AdlarsonPhysics();
 
     virtual Bool_t	Init(const char* configfile);
-    void            Energy_corr_MC();      // corrects theta for CB and TAPS for all clusters (Tracks).
-    void            Energy_corr_EXP();      // corrects theta for CB and TAPS for all clusters (Tracks).
+    void            Energy_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
 
     // calculates IM for n photons

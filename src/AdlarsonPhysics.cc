@@ -560,8 +560,7 @@ void	AdlarsonPhysics::ProcessEvent()
 //    etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //    TrueAnalysis_etapr6g();                         // obtains the true observables
 
-//    Energy_corr_MC();
-    Energy_corr_EXP();
+    Energy_corr();
     theta_corr();
 //    Kinfit_test();                                  // runs kinematical fit with true observables- for testing purposes
 
@@ -726,14 +725,14 @@ void	AdlarsonPhysics::ProcessEvent()
                 {
                     p_E_v_TOF->Fill( TOF /(radnm), GetTracks()->GetClusterEnergy(j));
                     // uncomment for EXP
-                    nrprotons++;
-                    if(nrprotons >= 1)
-                    {
-                        if( GetTracks()->GetVetoEnergy(j) > GetTracks()->GetVetoEnergy(iprtrack))
-                            iprtrack = j;
-                    }
-                    else
-                        iprtrack = j;
+//                    nrprotons++;
+//                    if(nrprotons >= 1)
+//                    {
+//                        if( GetTracks()->GetVetoEnergy(j) > GetTracks()->GetVetoEnergy(iprtrack))
+//                            iprtrack = j;
+//                    }
+//                    else
+//                        iprtrack = j;
                 }
 
                 if(  GetTracks()->GetVetoEnergy(j) > ( 4.5 -(4.5/180)*GetTracks()->GetClusterEnergy(j)) )
@@ -771,14 +770,14 @@ void	AdlarsonPhysics::ProcessEvent()
             p_E_v_dE_all->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
             if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(ii), GetTracks()->GetVetoEnergy(ii)))
             {
-//                nrprotons++;
-//                if(nrprotons >= 1)
-//                {
-//                    if( GetTracks()->GetVetoEnergy(ii) > GetTracks()->GetVetoEnergy(iprtrack))
-//                        iprtrack =ii;
-//                }
-//                else
-//                    iprtrack = ii;
+                nrprotons++;
+                if(nrprotons >= 1)
+                {
+                    if( GetTracks()->GetVetoEnergy(ii) > GetTracks()->GetVetoEnergy(iprtrack))
+                        iprtrack =ii;
+                }
+                else
+                    iprtrack = ii;
 
                 p_E_v_dE_pr->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
 
@@ -814,7 +813,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
     if( (ClustersInTime.size() == 5) )
     {
-        fourgAnalysis(iprtrack);
+//        fourgAnalysis(iprtrack);
     }
 
     if( ClustersInTime.size() == 7 )
@@ -829,7 +828,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
     if( ClustersInTime.size() == 11)
     {
-        tengAnalysis(iprtrack);
+//        tengAnalysis(iprtrack);
     }
 }
 
@@ -902,31 +901,31 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
 //   file2.close();
 
 
-       std::ifstream fileMC("configfiles/corr/CB_lingain_MC.txt");
-       std::getline(fileMC, line);
+       std::ifstream fileCB("configfiles/data/CB_lingain.txt");
+       std::getline(fileCB, line);
        std::string         buffer2;
        std::stringstream   ss;
        ss << line;
        while (std::getline(ss, buffer2, '\t'))
        {
-           CBgainMC.push_back(std::stod(buffer2));
+           CBgain.push_back(std::stod(buffer2));
        }
-       fileMC.close();
+       fileCB.close();
 
-       std::ifstream fileEXP("configfiles/corr/CB_lingain_Aug2012.txt");
-       std::getline(fileEXP, line);
-       std::string         buffer;
+       std::ifstream fileTAPS("configfiles/data/TAPS_lingain.txt");
+       std::getline(fileTAPS, line);
+       std::string         buffer3;
        std::stringstream   ss2;
-
        ss2 << line;
-       while (std::getline(ss2, buffer, '\t'))
+       while (std::getline(ss2, buffer3, '\t'))
        {
-           CBgainEXP.push_back(std::stod(buffer));
+           TAPSgain.push_back(std::stod(buffer3));
        }
-       fileEXP.close();
+       fileTAPS.close();
 
 
-      std::cout << " CB gain correction MC applied" << std::endl;
+      std::cout << " CB gain correction applied" << std::endl;
+      std::cout << " TAPS gain correction applied" << std::endl;
 //    std::cout << "No Init function specified for this class." << std::endl;
 //    std::cout << "Tagger - TAPS ToF corrections implemented" << std::endl;
 //    std::cout << "Crystal Ball Energy corrections implemented" << std::endl;
@@ -2608,7 +2607,8 @@ const std::vector<TLorentzVector> AdlarsonPhysics::ClusterEnergyCorr()
         return GetCorrVector;
 };
 
-void AdlarsonPhysics::Energy_corr_MC()
+
+void AdlarsonPhysics::Energy_corr()
 {
     double Erec, Ec;
     int det;
@@ -2617,22 +2617,13 @@ void AdlarsonPhysics::Energy_corr_MC()
         if( GetTracks()->HasCB(i) )
         {
             Erec = GetTracks()->GetVector(i).E();
-            Ec = CBgainMC[GetTracks()->GetCentralCrystal(i)]*Erec;
+            Ec = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec;
             tracks->SetClusterEnergy(i, Ec);
         }
-    }
-};
-
-void AdlarsonPhysics::Energy_corr_EXP()
-{
-    double Erec, Ec;
-    int det;
-    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
-    {
-        if( GetTracks()->HasCB(i) )
+        else if(GetTracks()->HasTAPS(i) )
         {
             Erec = GetTracks()->GetVector(i).E();
-            Ec = CBgainEXP[GetTracks()->GetCentralCrystal(i)]*Erec;
+            Ec = TAPSgain[GetTracks()->GetCentralCrystal(i)]*Erec;
             tracks->SetClusterEnergy(i, Ec);
         }
     }
