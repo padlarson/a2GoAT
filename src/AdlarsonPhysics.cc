@@ -725,14 +725,14 @@ void	AdlarsonPhysics::ProcessEvent()
                 {
                     p_E_v_TOF->Fill( TOF /(radnm), GetTracks()->GetClusterEnergy(j));
                     // uncomment for EXP
-//                    nrprotons++;
-//                    if(nrprotons >= 1)
-//                    {
-//                        if( GetTracks()->GetVetoEnergy(j) > GetTracks()->GetVetoEnergy(iprtrack))
-//                            iprtrack = j;
-//                    }
-//                    else
-//                        iprtrack = j;
+                    nrprotons++;
+                    if(nrprotons >= 1)
+                    {
+                        if( GetTracks()->GetVetoEnergy(j) > GetTracks()->GetVetoEnergy(iprtrack))
+                            iprtrack = j;
+                    }
+                    else
+                        iprtrack = j;
                 }
 
                 if(  GetTracks()->GetVetoEnergy(j) > ( 4.5 -(4.5/180)*GetTracks()->GetClusterEnergy(j)) )
@@ -770,16 +770,16 @@ void	AdlarsonPhysics::ProcessEvent()
             p_E_v_dE_all->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
             if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(ii), GetTracks()->GetVetoEnergy(ii)))
             {
-                nrprotons++;
-                if(nrprotons >= 1)
-                {
-                    if( GetTracks()->GetVetoEnergy(ii) > GetTracks()->GetVetoEnergy(iprtrack))
-                        iprtrack =ii;
-                }
-                else
-                    iprtrack = ii;
+//                nrprotons++;
+//                if(nrprotons >= 1)
+//                {
+//                    if( GetTracks()->GetVetoEnergy(ii) > GetTracks()->GetVetoEnergy(iprtrack))
+//                        iprtrack =ii;
+//                }
+//                else
+//                    iprtrack = ii;
 
-                p_E_v_dE_pr->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
+//                p_E_v_dE_pr->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
 
             }
 
