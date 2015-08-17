@@ -2,6 +2,7 @@
 #define __AdlarsonPhysics_h__
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <cstdio>
 #include <string> 
@@ -140,6 +141,8 @@ private:
     GH1*            six_fit_eta_pdf;
     GHistBGSub2*    six_fit_Pulls;
     GHistBGSub2*    six_fit_Pulls_g_E_vs_Eth;
+    GHistBGSub2*    six_fit_Pulls_g_E_vs_E_CB;
+    GHistBGSub2*    six_fit_Pulls_g_E_vs_det;
     GHistBGSub2*    six_fit_Pulls_g_th_vs_Eth;
     GHistBGSub2*    six_fit_Pulls_g_fi_vs_Eth;
 
@@ -331,6 +334,8 @@ private:
     TProfile*       dthvth_CB;
     TFile*          thcorr_TAPS;        // File which contains TProfile
     TProfile*       dthvth_TAPS;
+    TFile*          Ecorr_CB;         // File which contains TH2F
+    TH2F*            EvdetCB;
 
 
 protected:
