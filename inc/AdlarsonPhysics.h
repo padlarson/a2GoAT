@@ -52,12 +52,6 @@ private:
     GHistBGSub2*    true_six_phy_dY_v_DPbin;
     GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
 
-    // in 7g analaysis
-    GHistBGSub2*    true_seven_phy_dX_v_DPbin;
-    GHistBGSub2*    true_seven_phy_dY_v_DPbin;
-    GHistBGSub2*    true_seven_phy_dMpipi_v_Mpipi;
-
-
     // Tagger related
     GH1*            tag_BeamE;
 
@@ -202,41 +196,6 @@ private:
     TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg;
     TH3F            Ekfit_v_Eg_v_detnrCB_ng_bg;
     TH3F            Ekfit_v_Eg_v_detnrTAPS_ng_bg;
-
-
-    //seven gamma analysis
-
-    GHistBGSub2*    seven_rec_IM_v_MMp;
-
-    GH1*            seven_fit_chi2;
-    GH1*            seven_fit_pdf;
-    GH1*            seven_fit_eta_pdf;
-    GHistBGSub2*    seven_fit_Pulls;
-
-    GH1*            seven_fit_IM;
-    GH1*            seven_fit_IM_rec;     // rec IM(6g) for events which passed the fit
-
-    GHistBGSub2*    seven_fit_PDF_eta2pi_v_3pi;
-    GH1*            seven_fit_IM_3pi;
-    GH1*            seven_fit_IM_eta2pi;
-    GH1*            seven_fiteta_IM2g;
-    GH1*            seven_fit_best_eta;
-    GHistBGSub2*    seven_fit_best_eta_E_v_th;
-    GH1*            seven_fit_best_2pi;
-
-    // to check the energy of the  eta 2pi0 system vs its inv mass
-    GHistBGSub2*    seven_fit_best_eta_IM_v_E;
-    GHistBGSub2*    seven_fit_best_2pi_IM_v_E;
-
-    // to check the energy of the 3pi0 system vs its inv mass
-    GHistBGSub2*    seven_fit_best_3pi_IM_v_E;
-
-    GHistBGSub2*    seven_phy_etapr_v_BeamE;
-    GHistBGSub2*    seven_phy_etapr_eta_v_BeamE;
-
-    GHistBGSub2*    seven_phy_DP;
-    GHistBGSub2*    seven_phy_M_pi1pi2_v_etapr;
-    GHistBGSub2*    seven_phy_M_etapi_v_etapr;
 
     // Kinfit related variables 10g
 
@@ -463,8 +422,6 @@ public:
     void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi );
     void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi);
 
-
-    void sevengAnalysis( UInt_t ipr );
 
     // functions specifically related to 10g analysis
     void tengAnalysis(UInt_t ipr );
