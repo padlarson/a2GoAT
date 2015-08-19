@@ -16,26 +16,26 @@ AdlarsonPhysics::AdlarsonPhysics():
     time_nr_ClustersinTime("time_nr_ClustersinTime", "nr of detected clusters in time window",15, 0, 15),
     time_nr_CltimeVeto("CltimeVeto", "nr of detected clusters in time window and not e+/-",15, 0, 15),
     six_time_TaggedTime("six_time_TaggedTime", "Tagger time for the events with 7 clusters", 2000, -500, 500),
-    Ekfit_v_Eg_v_detnrCB_4g("Ekfit_v_Eg_v_detnrCB_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_4g("Ekfit_v_Eg_v_detnrTAPS_4g", "E_fit/E_rec vs E_{#gamma} for 4#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrCB_6g("Ekfit_v_Eg_v_detnrCB_6g", "E_fit/E_rec vs E for 6g in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_6g("Ekfit_v_Eg_v_detnrTAPS_6g", "E_fit/E_rec vs E for 6g in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_3pi0("Ekfit_v_Eg_v_detnrCB_3pi0", "E_fit/E_rec v E_{#gamma}, 3#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrCB_eta2pi0("Ekfit_v_Eg_v_detnrCB_eta2pi0","E_fit/E_rec vs E #eta2#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_3pi0("Ekfit_v_Eg_v_detnrTAPS_3pi0", "E_fit/E_rec vs E 3#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrTAPS_eta2pi0("Ekfit_v_Eg_v_detnrTAPS_eta2pi0", "E_fit/E_rec vs E #eta2#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_ng("Ekfit_v_Eg_v_detnrCB_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_ng("Ekfit_v_Eg_v_detnrTAPS_ng", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_4g_bg("Ekfit_v_Eg_v_detnrCB_4g_bg", "E_fit/E_rec vs E_{#gamma} for 4#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_4g_bg("Ekfit_v_Eg_v_detnrTAPS_4g_bg", "E_fit/E_rec vs E_{#gamma} for 4#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_6g_bg("Ekfit_v_Eg_v_detnrCB_6g_bg", "E_fit/E_rec vs E for 6g in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_6g_bg("Ekfit_v_Eg_v_detnrTAPS_6g_bg", "E_fit/E_rec vs E for 6g in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_3pi0_bg("Ekfit_v_Eg_v_detnrCB_3pi0_bg", "E_fit/E_rec v E_{#gamma}, 3#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrCB_eta2pi0_bg("Ekfit_v_Eg_v_detnrCB_eta2pi0_bg","E_fit/E_rec vs E #eta2#pi^{0} CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_3pi0_bg("Ekfit_v_Eg_v_detnrTAPS_3pi0_bg", "E_fit/E_rec vs E 3#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg("Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg", "E_fit/E_rec vs E #eta2#pi^{0} TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
-    Ekfit_v_Eg_v_detnrCB_ng_bg("Ekfit_v_Eg_v_detnrCB_ng_bg", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in CB", 50, 0., 1000., 200, 0., 2., 720, 0, 720),
-    Ekfit_v_Eg_v_detnrTAPS_ng_bg("Ekfit_v_Eg_v_detnrTAPS_ng_bg", "E_fit/E_rec vs E_{#gamma} for 4 or 6#gamma in TAPS", 50, 0., 1000., 200, 0., 2., 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_4g("Ekfit_v_Eg_v_detnrCB_4g", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4#gamma in CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_4g("Ekfit_v_Eg_v_detnrTAPS_4g", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4#gamma in TAPS", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrCB_6g("Ekfit_v_Eg_v_detnrCB_6g", "(E_fit-Erec)/E_rec vs E for 6g in CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_6g("Ekfit_v_Eg_v_detnrTAPS_6g", "(E_fit-Erec)/E_rec vs E for 6g in TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_3pi0("Ekfit_v_Eg_v_detnrCB_3pi0", "(E_fit-Erec)/E_rec v E_{#gamma}, 3#pi^{0} CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrCB_eta2pi0("Ekfit_v_Eg_v_detnrCB_eta2pi0","(E_fit-Erec)/E_rec vs E #eta2#pi^{0} CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_3pi0("Ekfit_v_Eg_v_detnrTAPS_3pi0", "(E_fit-Erec)/E_rec vs E 3#pi^{0} TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrTAPS_eta2pi0("Ekfit_v_Eg_v_detnrTAPS_eta2pi0", "(E_fit-Erec)/E_rec vs E #eta2#pi^{0} TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_ng("Ekfit_v_Eg_v_detnrCB_ng", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4 or 6#gamma in CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_ng("Ekfit_v_Eg_v_detnrTAPS_ng", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4 or 6#gamma in TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_4g_bg("Ekfit_v_Eg_v_detnrCB_4g_bg", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4#gamma in CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_4g_bg("Ekfit_v_Eg_v_detnrTAPS_4g_bg", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4#gamma in TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_6g_bg("Ekfit_v_Eg_v_detnrCB_6g_bg", "(E_fit-Erec)/E_rec vs E for 6g in CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_6g_bg("Ekfit_v_Eg_v_detnrTAPS_6g_bg", "(E_fit-Erec)/E_rec vs E for 6g in TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_3pi0_bg("Ekfit_v_Eg_v_detnrCB_3pi0_bg", "(E_fit-Erec)/E_rec v E_{#gamma}, 3#pi^{0} CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrCB_eta2pi0_bg("Ekfit_v_Eg_v_detnrCB_eta2pi0_bg","(E_fit-Erec)/E_rec vs E #eta2#pi^{0} CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_3pi0_bg("Ekfit_v_Eg_v_detnrTAPS_3pi0_bg", "(E_fit-Erec)/E_rec vs E 3#pi^{0} TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg("Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg", "(E_fit-Erec)/E_rec vs E #eta2#pi^{0} TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
+    Ekfit_v_Eg_v_detnrCB_ng_bg("Ekfit_v_Eg_v_detnrCB_ng_bg", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4 or 6#gamma in CB", 50, 0., 1000., 200, -0.2, 0.2, 720, 0, 720),
+    Ekfit_v_Eg_v_detnrTAPS_ng_bg("Ekfit_v_Eg_v_detnrTAPS_ng_bg", "(E_fit-Erec)/E_rec vs E_{#gamma} for 4 or 6#gamma in TAPS", 50, 0., 1000., 200, -0.2, 0.2, 440, 0, 440),
     detnr(6),
     CB_region(4),
     Is_CB_6g(7),
@@ -141,9 +141,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_fit_pdf                 = new GH1("six_fit_pdf", "pdf kinfit for 6#gamma", 100, 0, 1.);
     six_fit_eta_pdf             = new GH1("six_fit_eta_pdf", "pdf kinfit with eta mass enforced 6#gamma", 100, 0, 1.);
     six_fit_Pulls               = new GHistBGSub2("six_fit_Pulls", "Pulls 6#gamma", 50, -5., 5., 25, 0, 25);
-    six_fit_Pulls_g_E_vs_Eth    = new GHistBGSub2("six_fit_Pulls_g_E_vs_Eth", "Pulls #gamma E vs binr int(E/20 + 50*(th/10)", 2500, 0, 2500, 50, -5., 5.);
-    six_fit_Pulls_g_th_vs_Eth   = new GHistBGSub2("six_fit_Pulls_g_th_vs_Eth", "Pulls #gamma th vs binr int(E/20 + 50*(th/10)", 2500, 0, 2500, 50, -5., 5. );
-    six_fit_Pulls_g_fi_vs_Eth   = new GHistBGSub2("six_fit_Pulls_g_fi_vs_Eth", "Pulls #gamma fi vs binr int(E/20 + 50*(th/10)", 2500, 0, 2500, 50, -5., 5.);
     six_fit_Pulls_g_E_vs_det    = new GHistBGSub2("six_fit_Pulls_g_E_vs_det", "Pulls #gamma E vs 16ch", 2500, 0, 2500, 50, -5., 5.);
     six_fit_Pulls_g_E_vs_E_CB    = new GHistBGSub2("six_fit_Pulls_g_E_vs_E_CB", "Pulls #gamma E vs E", 100, 0, 1000, 50, -5., 5.);
     six_fit_IM                  = new GH1("six_fit_IM", "IM(6#gamma) after APLCON fit", 500, 400., 1400.);
@@ -678,14 +675,14 @@ void	AdlarsonPhysics::ProcessEvent()
                 {
                     p_E_v_TOF->Fill( TOF /(radnm), GetTracks()->GetClusterEnergy(j));
 //                    // uncomment for EXP
-//                    nrprotons++;
-//                    if(nrprotons >= 1)
-//                    {
-//                        if( GetTracks()->GetVetoEnergy(j) > GetTracks()->GetVetoEnergy(iprtrack))
-//                            iprtrack = j;
-//                    }
-//                    else
-//                        iprtrack = j;
+                    nrprotons++;
+                    if(nrprotons >= 1)
+                    {
+                        if( GetTracks()->GetVetoEnergy(j) > GetTracks()->GetVetoEnergy(iprtrack))
+                            iprtrack = j;
+                    }
+                    else
+                        iprtrack = j;
                 }
 
                 if(  GetTracks()->GetVetoEnergy(j) > ( 4.5 -(4.5/180)*GetTracks()->GetClusterEnergy(j)) )
@@ -723,14 +720,14 @@ void	AdlarsonPhysics::ProcessEvent()
             p_E_v_dE_all->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
             if( cutProtonTAPS->IsInside(GetTracks()->GetClusterEnergy(ii), GetTracks()->GetVetoEnergy(ii)))
             {
-                nrprotons++;
-                if(nrprotons >= 1)
-                {
-                    if( GetTracks()->GetVetoEnergy(ii) > GetTracks()->GetVetoEnergy(iprtrack))
-                        iprtrack =ii;
-                }
-                else
-                    iprtrack = ii;
+//                nrprotons++;
+//                if(nrprotons >= 1)
+//                {
+//                    if( GetTracks()->GetVetoEnergy(ii) > GetTracks()->GetVetoEnergy(iprtrack))
+//                        iprtrack =ii;
+//                }
+//                else
+//                    iprtrack = ii;
 
                 p_E_v_dE_pr->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
 
@@ -789,87 +786,29 @@ void	AdlarsonPhysics::ProcessScalerRead()
 Bool_t	AdlarsonPhysics::Init(const char* configFile)
 {
 
-    std::string         line;
+   std::string         line;
 
-//// read in file0
-//    std::ifstream file0("configfiles/Aug2012/TAPSvsTAGGERoffsets.dat");
-//    std::getline(file0, line); // first line describes input
-//    while(std::getline(file0,line))
-//    {
-//        std::string         buffer;
-//        std::stringstream   ss;
-//        UInt_t  det_elem;
-//        std::vector<Double_t> vec;
-//        ss << line;
-//        std::getline(ss,buffer, '\t');
-//        atoi(buffer.c_str());
-//        while(std::getline(ss, buffer, '\t')){
-//            vec.push_back((std::stod(buffer)));
-//        }
-//        TOF_corr.insert(EPT_TAPS_pair(det_elem,vec));
-//        //    typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
-//        //    std::map<UInt_t, std::vector<Double_t>> TOF_corr;
+   std::ifstream fileCB("configfiles/data/CB_lingain.txt");
+   std::getline(fileCB, line);
+   std::string         buffer2;
+   std::stringstream   ss;
+   ss << line;
+   while (std::getline(ss, buffer2, '\t'))
+   {
+       CBgain.push_back(std::stod(buffer2));
+   }
+   fileCB.close();
 
-//    }
-//    file0.close();/home/adlarson/data201208/GoAT/newcl
-
-//    std::ifstream file1("configfiles/Aug2012/CB_gain_vs_erec.dat");
-//    std::getline(file1, line); // first line describes input
-
-//    while(std::getline(file1, line))
-//    {
-//        std::string         buffer;
-//        std::stringstream   ss;
-//        UInt_t  det_elem;
-//        std::vector<Double_t> vec;
-//        ss << line;
-//        std::getline(ss, buffer, '\t');
-//        det_elem = atoi(buffer.c_str());  // atoi only reads everything from a string until a non-integer type occurs
-//        while (std::getline(ss, buffer, '\t')) {
-//            vec.push_back(std::stod(buffer));
-//        }
-//        CB_Ecorr.insert(corr_pair(det_elem, vec));
-//    }
-
-//   file1.close();
-
-//   std::ifstream file2("configfiles/Aug2012/TAPS_gain_vs_erec.dat");
-//   std::getline(file2, line); // first line describes input
-//   std::getline(file2, line);
-//   std::string         buffer;
-//   std::stringstream   ss;
-//   UInt_t  det_elem;
-//   ss << line;
-//   std::getline(ss, buffer, '\t');
-//   det_elem = atoi(buffer.c_str());
-//   while (std::getline(ss, buffer, '\t'))
-//   {
-//       TAPS_Ecorr.push_back(std::stod(buffer));
-//   }
-//   file2.close();
-
-
-       std::ifstream fileCB("configfiles/data/CB_lingain.txt");
-       std::getline(fileCB, line);
-       std::string         buffer2;
-       std::stringstream   ss;
-       ss << line;
-       while (std::getline(ss, buffer2, '\t'))
-       {
-           CBgain.push_back(std::stod(buffer2));
-       }
-       fileCB.close();
-
-       std::ifstream fileTAPS("configfiles/data/TAPS_lingain.txt");
-       std::getline(fileTAPS, line);
-       std::string         buffer3;
-       std::stringstream   ss2;
-       ss2 << line;
-       while (std::getline(ss2, buffer3, '\t'))
-       {
-           TAPSgain.push_back(std::stod(buffer3));
-       }
-       fileTAPS.close();
+   std::ifstream fileTAPS("configfiles/data/TAPS_lingain.txt");
+   std::getline(fileTAPS, line);
+   std::string         buffer3;
+   std::stringstream   ss2;
+   ss2 << line;
+   while (std::getline(ss2, buffer3, '\t'))
+   {
+       TAPSgain.push_back(std::stod(buffer3));
+   }
+   fileTAPS.close();
 
 
       std::cout << " CB gain correction applied" << std::endl;
@@ -1024,13 +963,13 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                 CB_region.push_back(true);
                 if( (TMath::Abs( GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                 {
-                    Ekfit_v_Eg_v_detnrCB_4g.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
-                    Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrCB_4g.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
                 }
                 if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0 ))
                 {
-                    Ekfit_v_Eg_v_detnrCB_4g_bg.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
-                    Ekfit_v_Eg_v_detnrCB_ng_bg.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrCB_4g_bg.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrCB_ng_bg.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
                 }
             }
             else // in TAPS
@@ -1038,13 +977,13 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                 CB_region.push_back(false);
                 if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                 {
-                    Ekfit_v_Eg_v_detnrTAPS_4g.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
-                    Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrTAPS_4g.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
                 }
                 if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0))
                 {
-                    Ekfit_v_Eg_v_detnrTAPS_4g_bg.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
-                    Ekfit_v_Eg_v_detnrTAPS_ng_bg.Fill(photons_rec[jgam].E(), photons_fit[jgam].E()/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrTAPS_4g_bg.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
+                    Ekfit_v_Eg_v_detnrTAPS_ng_bg.Fill(photons_rec[jgam].E(), (photons_fit[jgam].E()-photons_rec[jgam].E())/photons_rec[jgam].E(), detnr[jgam]);
                 }
             }
         }
@@ -1057,7 +996,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 {
     for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
     {
-
         IM6g_vec.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
         six_time_TaggedTime.Fill(GetTagger()->GetTaggedTime(tag));
 
@@ -1244,11 +1182,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                 string t = Form("Photon%0i[1]", iPull+1);
                 string u = Form("Photon%0i[2]", iPull+1);
 
-
-                six_fit_Pulls_g_E_vs_Eth->Fill( ibin , result_min.Variables.at(s).Pull , GetTagger()->GetTaggedTime(tag));
-                six_fit_Pulls_g_th_vs_Eth->Fill( ibin , result_min.Variables.at(t).Pull , GetTagger()->GetTaggedTime(tag));
-                six_fit_Pulls_g_fi_vs_Eth->Fill( ibin , result_min.Variables.at(u).Pull , GetTagger()->GetTaggedTime(tag));
-
                 if( GetTracks()->HasCB( set[iPull+2]) ){
 
                     int ndet = 50*int(detnr[iPull]/16);
@@ -1269,26 +1202,26 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                {
                    if( (TMath::Abs( GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                    {
-                       Ekfit_v_Eg_v_detnrCB_6g.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
-                       Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrCB_6g.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrCB_ng.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
                    }
                    if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0 ))
                    {
-                       Ekfit_v_Eg_v_detnrCB_6g_bg.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
-                       Ekfit_v_Eg_v_detnrCB_ng_bg.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrCB_6g_bg.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrCB_ng_bg.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
                    }
                }
                else // in TAPS
                {
                    if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                    {
-                       Ekfit_v_Eg_v_detnrTAPS_6g.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
-                       Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrTAPS_6g.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrTAPS_ng.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
                    }
                    if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0))
                    {
-                       Ekfit_v_Eg_v_detnrTAPS_6g_bg.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
-                       Ekfit_v_Eg_v_detnrTAPS_ng_bg.Fill(photons_rec[igam_fit].E(), photons_fit[igam_fit].E()/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrTAPS_6g_bg.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
+                       Ekfit_v_Eg_v_detnrTAPS_ng_bg.Fill(photons_rec[igam_fit].E(), (photons_fit[igam_fit].E()-photons_rec[igam_fit].E())/photons_rec[igam_fit].E(), detnr[igam_fit]);
                    }
                }
 
@@ -1327,7 +1260,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
            rc[1] = photons_rec[imin_3pi[2]] + photons_rec[imin_3pi[3]];
            rc[2] = photons_rec[imin_3pi[4]] + photons_rec[imin_3pi[5]];
 
-           if( (TMath::Prob(chi2min_3pi,2) > 0.01) && (TMath::Prob(chi2min_eta2pi,2) < 0.20) ) // dir 3pi0
+           if( (TMath::Prob(chi2min_3pi,2) > 0.0) && (TMath::Prob(chi2min_eta2pi,2) < 0.20) ) // dir 3pi0
            {
                six_fit_best_3pi_IM_v_E->Fill(h[0].E(), h[0].M(), GetTagger()->GetTaggedTime(tag));
                six_fit_best_3pi_IM_v_E->Fill(h[1].E(), h[1].M(), GetTagger()->GetTaggedTime(tag));
@@ -1358,22 +1291,22 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                     {
                         if( (TMath::Abs( GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                         {
-                            Ekfit_v_Eg_v_detnrCB_3pi0.Fill(photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
+                            Ekfit_v_Eg_v_detnrCB_3pi0.Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit[imin_3pi[isix]].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
                         }
                         if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0 ))
                         {
-                            Ekfit_v_Eg_v_detnrCB_3pi0_bg.Fill(photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
+                            Ekfit_v_Eg_v_detnrCB_3pi0_bg.Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit[imin_3pi[isix]].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
                         }
                     }
                     else // in TAPS
                     {unc = Get_unc(3,0,obs);
                         if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                         {
-                            Ekfit_v_Eg_v_detnrTAPS_3pi0.Fill(photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
+                            Ekfit_v_Eg_v_detnrTAPS_3pi0.Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit[imin_3pi[isix]].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
                         }
                         if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0))
                         {
-                            Ekfit_v_Eg_v_detnrTAPS_3pi0_bg.Fill(photons_rec[imin_3pi[isix]].E(), photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
+                            Ekfit_v_Eg_v_detnrTAPS_3pi0_bg.Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit[imin_3pi[isix]].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), detnr[imin_3pi[isix]]);
                         }
                     }
                 }
@@ -1402,22 +1335,22 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                    {
                        if( (TMath::Abs( GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                        {
-                           Ekfit_v_Eg_v_detnrCB_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
+                           Ekfit_v_Eg_v_detnrCB_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), (photons_fit[imin_eta2pi[isix]].E()-photons_rec[imin_eta2pi[isix]].E())/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
                        }
                        if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0 ))
                        {
-                           Ekfit_v_Eg_v_detnrCB_eta2pi0_bg.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
+                           Ekfit_v_Eg_v_detnrCB_eta2pi0_bg.Fill(photons_rec[imin_eta2pi[isix]].E(), (photons_fit[imin_eta2pi[isix]].E()-photons_rec[imin_eta2pi[isix]].E())/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
                        }
                    }
                    else // in TAPS
                    {
                        if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 10.0 ))
                        {
-                           Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
+                           Ekfit_v_Eg_v_detnrTAPS_eta2pi0.Fill(photons_rec[imin_eta2pi[isix]].E(), (photons_fit[imin_eta2pi[isix]].E()-photons_rec[imin_eta2pi[isix]].E())/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
                        }
                        if( (TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 30.0) && (TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 130.0))
                        {
-                           Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg.Fill(photons_rec[imin_eta2pi[isix]].E(), photons_fit[imin_eta2pi[isix]].E()/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
+                           Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg.Fill(photons_rec[imin_eta2pi[isix]].E(), (photons_fit[imin_eta2pi[isix]].E()-photons_rec[imin_eta2pi[isix]].E())/photons_rec[imin_eta2pi[isix]].E(), detnr[imin_eta2pi[isix]]);
                        }
                    }
                }
@@ -1705,14 +1638,6 @@ void AdlarsonPhysics::m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, 
     // 0 1 2 - eta pi01 pi02
     // Dalitz plot variables
 
-//        Double_t meta, mpi01, mpi02, metapr; // use for double check
-
-
-//    meta = g[0].M();
-//    mpi01 = g[1].M();
-//    mpi02 = g[2].M();
-//    metapr = ( g[0] + g[1] + g[2] ).M();
-
 
     m_etapi01   = ( g[0] + g[1] ).M2();
     m_etapi02   = ( g[0] + g[2] ).M2();
@@ -1774,7 +1699,7 @@ void AdlarsonPhysics::FitParticle::Smear(Int_t apparatus_nr, Bool_t measured) {
 void AdlarsonPhysics::FitParticle::Smear_tmp(std::vector<double> unc, int particle) {
     if( particle == 0 ) // gamma
     {
-        Ek_Sigma = unc[0]*Ek*1.50;
+        Ek_Sigma = unc[0]*Ek;
         Theta_Sigma = unc[1]*TMath::DegToRad();
         Phi_Sigma = unc[2]*TMath::DegToRad();
     }
