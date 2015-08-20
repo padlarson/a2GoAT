@@ -81,13 +81,14 @@ private:
     GHistBGSub2*    fi_TAPSvsCB;
     GHistBGSub2*    fi_th_diff_TAPSCB;
 
-    GHistBGSub2*    IMgg_v_det_b4corr_CB;
-    GHistBGSub2*    IMgg_v_det_afcorr_CB;
-    GHistBGSub2*    IMgg_v_det_b4corr_TAPS;
-    GHistBGSub2*    IMgg_v_det_afcorr_TAPS;
+//    GHistBGSub2*    IMgg_v_det_b4corr_CB;
+//    GHistBGSub2*    IMgg_v_det_afcorr_CB;
+//    GHistBGSub2*    IMgg_v_det_b4corr_TAPS;
+//    GHistBGSub2*    IMgg_v_det_afcorr_TAPS;
 
     GHistBGSub2*    IMgg_v_det_2pi0_CB;
-    GHistBGSub2*    IMgg_v_det_etapi0_CB;
+    GHistBGSub2*    IMgg_v_det_etapi0_eta_CB;
+    GHistBGSub2*    IMgg_v_det_etapi0_pi0_CB;
     GHistBGSub2*    IMgg_v_det_3pi0_CB;
     GHistBGSub2*    IMgg_v_det_3pi0_CB_fit;
     GHistBGSub2*    IMgg_v_det_2pi0_TAPS;
@@ -175,27 +176,27 @@ private:
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
 
-    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
-    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
-    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
-    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
-    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
 
-    TH3F            Ekfit_v_Eg_v_detnrCB_4g_bg;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g_bg;
-    TH3F            Ekfit_v_Eg_v_detnrCB_6g_bg;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g_bg;
-    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0_bg;
-    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0_bg;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0_bg;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg;
-    TH3F            Ekfit_v_Eg_v_detnrCB_ng_bg;
-    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_4g_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_6g_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrCB_ng_bg;
+//    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng_bg;
 
     // Kinfit related variables 10g
 
