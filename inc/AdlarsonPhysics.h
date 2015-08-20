@@ -137,12 +137,12 @@ private:
     GHistBGSub2*    six_fit_Pulls;
     GHistBGSub2*    six_fit_Pulls_g_E_vs_Eth;
     GHistBGSub2*    six_fit_Pulls_g_E_vs_E_CB;
-    GHistBGSub2*    six_fit_Pulls_g_E_vs_det;
-    GHistBGSub2*    six_fit_Pulls_g_th_vs_Eth;
-    GHistBGSub2*    six_fit_Pulls_g_fi_vs_Eth;
+//    GHistBGSub2*    six_fit_Pulls_g_E_vs_det;
+//    GHistBGSub2*    six_fit_Pulls_g_th_vs_Eth;
+//    GHistBGSub2*    six_fit_Pulls_g_fi_vs_Eth;
 
-    GHistBGSub2*    six_fit_Pulls_p_th_vs_Eth;
-    GHistBGSub2*    six_fit_Pulls_p_fi_vs_Eth;
+//    GHistBGSub2*    six_fit_Pulls_p_th_vs_Eth;
+//    GHistBGSub2*    six_fit_Pulls_p_fi_vs_Eth;
 
     GH1*            six_fit_IM;
     GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
