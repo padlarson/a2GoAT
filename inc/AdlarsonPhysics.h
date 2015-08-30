@@ -81,11 +81,6 @@ private:
     GHistBGSub2*    fi_TAPSvsCB;
     GHistBGSub2*    fi_th_diff_TAPSCB;
 
-//    GHistBGSub2*    IMgg_v_det_b4corr_CB;
-//    GHistBGSub2*    IMgg_v_det_afcorr_CB;
-//    GHistBGSub2*    IMgg_v_det_b4corr_TAPS;
-//    GHistBGSub2*    IMgg_v_det_afcorr_TAPS;
-
     GHistBGSub2*    IMgg_v_det_2pi0_CB;
     GHistBGSub2*    IMgg_v_det_etapi0_eta_CB;
     GHistBGSub2*    IMgg_v_det_etapi0_pi0_CB;
@@ -116,7 +111,21 @@ private:
     GH1*            four_fit_chi2;
     GH1*            four_fit_pdf;
 
+
+    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_CB;
+    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_CB;
+    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_CB;
+    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_TAPS;
+    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_TAPS;
+    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_TAPS;
+
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
+    GHistBGSub2*    four_fit_best_2pi_IM_v_E;
+    GHistBGSub2*    four_fit_best_etapi_IM_v_E;
+
+    GHistBGSub2*    four_fit_mgg_v_eth;
+    GHistBGSub2*    four_fit_mgg_v_edet;
+    GHistBGSub2*    four_fit_re_v_eth;
 
 
     // 6g analysis
@@ -163,6 +172,14 @@ private:
     GHistBGSub2*    six_fit_best_eta_IM_v_E;
     GHistBGSub2*    six_fit_best_2pi_IM_v_E;
 
+    GHistBGSub2*    six_fit_mgg_v_eth;
+    GHistBGSub2*    six_fit_mgg_v_edet;
+    GHistBGSub2*    six_fit_re_v_eth;
+
+
+    GHistBGSub2*    n_fit_mgg_v_eth;
+    GHistBGSub2*    n_fit_mgg_v_edet;
+
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
     GHistBGSub2*    six_phy_3pi_IMpipi_v_IMppi;
@@ -173,28 +190,6 @@ private:
     GHistBGSub2*    six_phy_DP;
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
-
-//    TH3F            Ekfit_v_Eg_v_detnrCB_4g;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_6g;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_ng;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng;
-
-//    TH3F            Ekfit_v_Eg_v_detnrCB_4g_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_4g_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_6g_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_6g_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_3pi0_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_eta2pi0_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_3pi0_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_eta2pi0_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrCB_ng_bg;
-//    TH3F            Ekfit_v_Eg_v_detnrTAPS_ng_bg;
 
     // Kinfit related variables 10g
 
