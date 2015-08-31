@@ -494,7 +494,7 @@ void	AdlarsonPhysics::ProcessEvent()
 //    etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //    TrueAnalysis_etapr6g();                         // obtains the true observables
 
-    Energy_corr();
+//    Energy_corr();
     theta_corr();
 //    Kinfit_test();                                  // runs kinematical fit with true observables- for testing purposes
 
