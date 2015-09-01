@@ -2258,7 +2258,7 @@ void AdlarsonPhysics::Energy_corr()
 //
             if(pol[0] > Ec_temp){
                 Ec = 0;
-                for(int j = 1; j < 6; j++)
+                for(int j = 1; j < 8; j++)
                 {
                     Ec += pol[j]*TMath::Power(Ec_temp,j);
                 }
