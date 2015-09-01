@@ -494,7 +494,7 @@ void	AdlarsonPhysics::ProcessEvent()
 //    etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //    TrueAnalysis_etapr6g();                         // obtains the true observables
 
-//    Energy_corr();
+    Energy_corr();
     theta_corr();
 //    Kinfit_test();                                  // runs kinematical fit with true observables- for testing purposes
 
@@ -729,6 +729,28 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
        CBgain.push_back(std::stod(buffer2));
    }
    fileCB.close();
+
+
+   std::ifstream file1("configfiles/data/CB_gain_vs_erec_mod_2.txt");
+   std::getline(file1, line); // first line describes input
+
+
+   while(std::getline(file1, line)){
+       std::string         buffer;
+       std::stringstream   ss;
+       Int_t  module;
+       std::vector<Double_t> vec;
+       ss << line;
+       std::getline(ss, buffer, '\t');
+       module = atoi(buffer.c_str());
+       while (std::getline(ss, buffer, '\t')) {
+            vec.push_back(std::stod(buffer));
+       }
+       CB_Ecorr.insert(corr_pair(module, vec));
+   }
+
+   file1.close();
+
 
    std::ifstream fileTAPS("configfiles/data/TAPS_lingain.txt");
    std::getline(fileTAPS, line);
@@ -2217,19 +2239,36 @@ void AdlarsonPhysics::Kinfit_test()
 void AdlarsonPhysics::Energy_corr()
 {
     Double_t Erec, Ec_temp, DeltaE, Ec;
-    int det;
+    std::vector<double> pol;
+    int mod;
     for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
     {
         if( GetTracks()->HasCB(i) )
         {
+
+            //            DeltaE = Ec_temp*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetTheta(i)));
+            //             ( GetTracks()->GetClusterEnergy(i) - E_true )/(GetTracks()->GetClusterEnergy(i));
+            //            Ec = Ec_temp; //(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetCentralCrystal(i)));
+
             Erec = GetTracks()->GetVector(i).E();
-//            Ec = Ec_temp; //(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetCentralCrystal(i)));
-            Ec_temp = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec;
-//            DeltaE = Ec_temp*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetTheta(i)));
-//             ( GetTracks()->GetClusterEnergy(i) - E_true )/(GetTracks()->GetClusterEnergy(i));
+            Ec_temp = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec; // linear gain
+
+            mod = (GetTracks()->GetCentralCrystal(i)/16);             // energy dependence
+            pol = CB_Ecorr.at(mod);
+//
+            if(pol[0] > Ec_temp){
+                Ec = 0;
+                for(int j = 1; j < 6; j++)
+                {
+                    Ec += pol[j]*TMath::Power(Ec_temp,j);
+                }
+            }
+            else
+                Ec = Ec_temp;
 
 //            Ec = Ec_temp - DeltaE;
-            Ec = Ec_temp;
+//            Ec = Ec_temp;
+            double hej = Ec/Ec_temp;
             tracks->SetClusterEnergy(i, Ec);
         }
         else if(GetTracks()->HasTAPS(i) )

@@ -272,7 +272,7 @@ private:
 
     const Double_t    taggerTimeCut = 6.0;
 
-    typedef std::pair<UInt_t, std::vector<Double_t>> corr_pair;
+    typedef std::pair<Int_t, std::vector<Double_t>> corr_pair;
     std::map<UInt_t, std::vector<Double_t>> CB_Ecorr;
 
     std::vector<Double_t> TAPS_Ecorr;
