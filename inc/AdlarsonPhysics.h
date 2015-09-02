@@ -91,8 +91,9 @@ private:
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS;
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS_fit;
 
-    TH2F            time_clusters_TAPS;
-    TH2F            time_clusters_CB;
+    TH2D            time_TOF;
+    TH2D            time_clusters_TAPS;
+    TH2D            time_clusters_CB;
     TH1D            time_nr_AllClusters;
     TH1D            time_nr_ClustersinTime;
     TH1D            time_nr_CltimeVeto;
@@ -125,6 +126,7 @@ private:
 
     GHistBGSub2*    four_fit_mgg_v_eth;
     GHistBGSub2*    four_fit_mgg_v_edet;
+    GHistBGSub2*    four_fit_mgg_v_edet_TAPS;
     GHistBGSub2*    four_fit_re_v_eth;
 
 
@@ -151,6 +153,9 @@ private:
     GHistBGSub2*    six_fit_Pulls_g_th_vs_th_TAPS;
     GHistBGSub2*    six_fit_Pulls_g_phi_vs_th_TAPS;
 
+    GHistBGSub2*    six_fit_Pulls_p_th_vs_th_TAPS;
+    GHistBGSub2*    six_fit_Pulls_p_phi_vs_th_TAPS;
+
     GH1*            six_fit_IM;
     GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
     GH1*            six_fit_cos_th_cm;
@@ -174,11 +179,13 @@ private:
 
     GHistBGSub2*    six_fit_mgg_v_eth;
     GHistBGSub2*    six_fit_mgg_v_edet;
+    GHistBGSub2*    six_fit_mgg_v_edet_TAPS;
     GHistBGSub2*    six_fit_re_v_eth;
 
 
     GHistBGSub2*    n_fit_mgg_v_eth;
     GHistBGSub2*    n_fit_mgg_v_edet;
+    GHistBGSub2*    n_fit_mgg_v_edet_TAPS;
 
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
