@@ -2238,7 +2238,8 @@ void AdlarsonPhysics::Kinfit_test()
 
 void AdlarsonPhysics::Energy_corr()
 {
-    Double_t Erec, Ec_temp, DeltaE, Ec;
+    Double_t Erec, Ec1, Ec2, Efin;
+    Double_t g1;
     std::vector<double> pol;
     int mod;
     for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
@@ -2251,31 +2252,35 @@ void AdlarsonPhysics::Energy_corr()
             //            Ec = Ec_temp; //(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetCentralCrystal(i)));
 
             Erec = GetTracks()->GetVector(i).E();
-            Ec_temp = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec; // linear gain
+            Ec1 = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec; // linear gain
 
-            mod = (GetTracks()->GetCentralCrystal(i)/16);             // energy dependence
-            pol = CB_Ecorr.at(mod);
+            mod = (GetTracks()->GetCentralCrystal(i)/16);             // energy dependence as fcn of module
+            pol = CB_Ecorr.at(mod);                                   // mod is the key to vector
 //
-            if(pol[0] > Ec_temp){
-                Ec = 0;
-                for(int j = 1; j < 8; j++)
+            if(pol[0] > 0){
+                if(Ec1 > pol[0])  // to have continuity as fcn of energy
+                    Ec2 = pol[0];
+                else
+                    Ec2 = Ec1;
+
+                g1 = 0;
+                for(int j = 1; j < 6; j++)
                 {
-                    Ec += pol[j]*TMath::Power(Ec_temp,j);
+                    g1 += pol[j]*TMath::Power(Ec2,j-1);
                 }
+                Efin = Ec1*(g1*g1);
             }
             else
-                Ec = Ec_temp;
+                Efin = Ec1;
 
-//            Ec = Ec_temp - DeltaE;
-//            Ec = Ec_temp;
-            double hej = Ec/Ec_temp;
-            tracks->SetClusterEnergy(i, Ec);
+            double hej = Efin;
+            tracks->SetClusterEnergy(i, Efin);
         }
         else if(GetTracks()->HasTAPS(i) )
         {
             Erec = GetTracks()->GetVector(i).E();
-            Ec = TAPSgain[GetTracks()->GetCentralCrystal(i)]*Erec;
-            tracks->SetClusterEnergy(i, Ec);
+            Ec1 = TAPSgain[GetTracks()->GetCentralCrystal(i)]*Erec;
+            tracks->SetClusterEnergy(i, Ec1);
         }
     }
 };
