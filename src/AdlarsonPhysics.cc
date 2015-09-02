@@ -10,7 +10,7 @@
 std::default_random_engine AdlarsonPhysics::FitParticle::generator;
 
 AdlarsonPhysics::AdlarsonPhysics():
-    time_TOF("time_TOF", "TAPS time_TOF time" ,23000, 0, 23000, 100, -10., 10.),
+    time_TOF("time_TOF", "TAPS time_TOF time" ,23000, 0, 23000, 400, -10., 10.),
     time_clusters_TAPS("time_clusters_TAPS", "TAPS cluster time" ,200, -50., 50., 450, 0, 450),
     time_clusters_CB("time_clusters_CB", "CB cluster time", 200, -50., 50., 720, 0, 720),
     time_nr_AllClusters("time_nr_AllClusters", "nr of all detected clusters",15, 0, 15),
@@ -564,24 +564,18 @@ void	AdlarsonPhysics::ProcessEvent()
     nrprotons = 0;
     iprtrack = 10000;
     Double_t TOF = -100.0;
-    for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++)
-    {
-        for (UInt_t i = 0; i < ClustersInTime.size() ; i++)
-        {
+    for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++){
+        for(UInt_t i = 0; i < ClustersInTime.size() ; i++){
             UInt_t j = ClustersInTime[i];
-            if( GetTracks()->HasTAPS(j) )
-            {
-                TOF = GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j);
+            if( GetTracks()->HasTAPS(j) ){
+                Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
+                TOF = ( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm;
                 if(TMath::Abs(TOF) < 10.1){
                     int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
                     time_TOF.Fill(nbin, TOF);
                 }
-
-                Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
-
                 p_E_v_TOF_All->Fill( TOF/radnm , GetTracks()->GetClusterEnergy(j));
-                if( cutProtonETOF->IsInside( TOF/radnm, GetTracks()->GetClusterEnergy(j)) )
-                {
+                if( cutProtonETOF->IsInside( TOF/radnm, GetTracks()->GetClusterEnergy(j)) ){
                     p_E_v_TOF->Fill( TOF /(radnm), GetTracks()->GetClusterEnergy(j));
                     // uncomment for EXP
                     nrprotons++;
@@ -779,6 +773,9 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
    }
    fileTAPS.close();
 
+//   typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
+//   std::map<UInt_t, std::vector<Double_t>> TOF_corr;
+
 
       std::cout << " CB gain correction applied" << std::endl;
       std::cout << " TAPS gain correction applied" << std::endl;
@@ -930,14 +927,14 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
         chi2_2pi0.resize(0);
 
 
-        Double_t chi2min_etapi0 = 1.0e6;
-        Double_t chi2min_2pi0 = 1.0e6;
+        Double_t chi2min_etapi0     = 1.0e6;
+        Double_t chi2min_2pi0       = 1.0e6;
 
-        Double_t chi2_etapi0_tmp = 1.0e6;
-        Double_t chi2_2pi0_tmp = 1.0e6;
+        Double_t chi2_etapi0_tmp    = 1.0e6;
+        Double_t chi2_2pi0_tmp      = 1.0e6;
 
         int imin_etapi0 = -1;
-        int imin_2pi0 = -1;
+        int imin_2pi0   = -1;
         int idet;
 
         for(int i = 0; i < 9; i++){
@@ -992,10 +989,10 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                     int nBIN2 = nEN + nDET;
 
                     IMgg_v_det_2pi0_CB->Fill( (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag));
-                    four_fit_mgg_v_eth->Fill(nBIN,mgg, GetTagger()->GetTaggedTime(tag));
-                    four_fit_mgg_v_edet->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
+                    four_fit_mgg_v_eth->Fill(nBIN, mgg, GetTagger()->GetTaggedTime(tag));
+                    four_fit_mgg_v_edet->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
 
-                    n_fit_mgg_v_eth->Fill(nBIN,mgg, GetTagger()->GetTaggedTime(tag));
+                    n_fit_mgg_v_eth->Fill(nBIN, mgg, GetTagger()->GetTaggedTime(tag));
                     n_fit_mgg_v_edet->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
                 }
                 else{
@@ -1006,20 +1003,29 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                     int nDET = 100*(int( detnr[idet]/16 ));
                     int nBIN2 = nEN + nDET;
 
-                    four_fit_mgg_v_edet_TAPS->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
-                    n_fit_mgg_v_edet_TAPS->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
+                    four_fit_mgg_v_edet_TAPS->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
+                    n_fit_mgg_v_edet_TAPS->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
                 }
             }
         }
         else if( (chi2min_etapi0 < chi2min_2pi0  ) && ( TMath::Prob(chi2min_etapi0,1) > 0.001)){   //etapi0
             for(int j = 0; j < 4; j++){
                 int imass = int(j/2);
-                idet = perm4g[imin_etapi0][j]-1;
+//                idet = perm4g[imin_etapi0][j]-1;
+                idet = perm4g[imin_etapi0][j];
                 if(CB_region[j]){
                     if(imass == 0)
                         IMgg_v_det_etapi0_eta_CB->Fill( (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
-                    else
+                    else{
+                        double En = (photons_rec[perm4g[ imin_etapi0 ][ j ]]).E();
+                        double mgg = (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M();
+                        int nEN =  int(En/10.0);
+                        int nDET = 100*(int( detnr[idet]/16 ));
+                        int nBIN2 = nEN + nDET;
+                        four_fit_mgg_v_edet->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
+
                         IMgg_v_det_etapi0_pi0_CB->Fill( (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
+                    }
                 }
                 else
                     IMgg_v_det_etapi0_TAPS->Fill( (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
@@ -1773,27 +1779,31 @@ void AdlarsonPhysics::tengAnalysis(UInt_t ipr)
 void AdlarsonPhysics::GetBest10gCombination( Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi2pi )
 {
     TLorentzVector  eta_6g_cand;
-    Double_t        im6g;
-    Double_t        chi2[210];
+    Double_t        im6g, im6g_min;
+    Double_t        chi2;
     Double_t        chi2_min = 1.0e6;
     UInt_t          imin = 211;
     for(Int_t iperm = 0; iperm < 210; iperm++)
     {
         eta_6g_cand.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
         im6g = 0;
+        chi2 = 1.0e6;
         for(Int_t jperm = 0; jperm < 6; jperm++)
         {
             eta_6g_cand += ( photons_fit[perm6outof10g[iperm][jperm]] );
         }
         im6g = eta_6g_cand.M();
-        chi2[iperm] = TMath::Power( (im6g - MASS_ETA )/sigma_eta ,2);
-        if( chi2[iperm] < chi2_min )
+        chi2 = TMath::Power( (im6g - MASS_ETA )/sigma_eta ,2);
+        if( chi2 < chi2_min )
         {
-            chi2_min = chi2[iperm];
+            chi2_min = chi2;
             imin     = iperm;
-        }
+            im6g_min = im6g;
 
+        }
     }
+
+    double hej = im6g_min;
 }
 
 
