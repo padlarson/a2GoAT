@@ -569,9 +569,10 @@ void	AdlarsonPhysics::ProcessEvent()
             UInt_t j = ClustersInTime[i];
             if( GetTracks()->HasTAPS(j) ){
                 Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
-                TOF = ( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm;
+                int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
+                TOF = ( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm - TAPS_EPT_toff[nbin];
                 if(TMath::Abs(TOF) < 10.1){
-                    int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
+//                    int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
                     time_TOF.Fill(nbin, TOF);
                 }
                 p_E_v_TOF_All->Fill( TOF , GetTracks()->GetClusterEnergy(j));
@@ -772,6 +773,25 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
        TAPSgain.push_back(std::stod(buffer3));
    }
    fileTAPS.close();
+
+   std::ifstream file_EPT_TAPS_off("configfiles/data/TAPS_EPT_offsets.txt");
+   std::getline(file_EPT_TAPS_off, line);
+   std::string         buffer4;
+   std::stringstream   ss3;
+   ss3 << line;
+   while (std::getline(file_EPT_TAPS_off, line))
+   {
+       std::string         buffer;
+       std::stringstream   ss;
+       ss << line;
+
+       while (std::getline(ss, buffer, '\t')) {
+            TAPS_EPT_toff.push_back(std::stod(buffer));
+       }
+   }
+   file_EPT_TAPS_off.close();
+
+
 
 //   typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
 //   std::map<UInt_t, std::vector<Double_t>> TOF_corr;
@@ -2277,26 +2297,26 @@ void AdlarsonPhysics::Energy_corr()
             Erec = GetTracks()->GetVector(i).E();
             Ec1 = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec; // linear gain
 
-//            mod = (GetTracks()->GetCentralCrystal(i)/16);             // energy dependence as fcn of module
-//            pol = CB_Ecorr.at(mod);                                   // mod is the key to vector
-////
-//            if(pol[0] > 0){
-//                if(Ec1 > pol[0])  // to have continuity as fcn of energy
-//                    Ec2 = pol[0];
-//                else
-//                    Ec2 = Ec1;
+            mod = (GetTracks()->GetCentralCrystal(i)/16);             // energy dependence as fcn of module
+            pol = CB_Ecorr.at(mod);                                   // mod is the key to vector
+//
+            if(pol[0] > 0){
+                if(Ec1 > pol[0])  // to have continuity as fcn of energy
+                    Ec2 = pol[0];
+                else
+                    Ec2 = Ec1;
 
-//                g1 = 0;
-//                for(int j = 1; j < 6; j++)
-//                {
-//                    g1 += pol[j]*TMath::Power(Ec2,j-1);
-//                }
-//                Efin = Ec1*(g1*g1);
-//            }
-//            else
-//                Efin = Ec1;
+                g1 = 0;
+                for(int j = 1; j < 6; j++)
+                {
+                    g1 += pol[j]*TMath::Power(Ec2,j-1);
+                }
+                Efin = Ec1*(g1*g1);
+            }
+            else
+                Efin = Ec1;
 
-            tracks->SetClusterEnergy(i, Ec1);
+            tracks->SetClusterEnergy(i, Efin);
         }
         else if(GetTracks()->HasTAPS(i) )
         {

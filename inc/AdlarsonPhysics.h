@@ -282,6 +282,7 @@ private:
     typedef std::pair<Int_t, std::vector<Double_t>> corr_pair;
     std::map<UInt_t, std::vector<Double_t>> CB_Ecorr;
 
+    std::vector<Double_t> TAPS_EPT_toff;
     std::vector<Double_t> TAPS_Ecorr;
 
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
