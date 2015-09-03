@@ -574,9 +574,9 @@ void	AdlarsonPhysics::ProcessEvent()
                     int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
                     time_TOF.Fill(nbin, TOF);
                 }
-                p_E_v_TOF_All->Fill( TOF/radnm , GetTracks()->GetClusterEnergy(j));
-                if( cutProtonETOF->IsInside( TOF/radnm, GetTracks()->GetClusterEnergy(j)) ){
-                    p_E_v_TOF->Fill( TOF /(radnm), GetTracks()->GetClusterEnergy(j));
+                p_E_v_TOF_All->Fill( TOF , GetTracks()->GetClusterEnergy(j));
+                if( cutProtonETOF->IsInside( TOF, GetTracks()->GetClusterEnergy(j)) ){
+                    p_E_v_TOF->Fill( TOF, GetTracks()->GetClusterEnergy(j));
                     // uncomment for EXP
                     nrprotons++;
                     if(nrprotons >= 1)
@@ -592,7 +592,7 @@ void	AdlarsonPhysics::ProcessEvent()
                 {
                     if(GetTracks()->GetVetoEnergy(j) > 1.0)
                     {
-                        p_E_v_TOF_All_wVeto->Fill(TOF/radnm, GetTracks()->GetClusterEnergy(j));
+                        p_E_v_TOF_All_wVeto->Fill(TOF, GetTracks()->GetClusterEnergy(j));
                     }
                 }
 
