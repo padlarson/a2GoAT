@@ -156,7 +156,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     n_fit_mgg_v_eth              = new GHistBGSub2("n_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 5000, 0, 5000, 200, 0, 1000);
     n_fit_mgg_v_edet              = new GHistBGSub2("n_fit_mgg_v_edet", "m_{#gamma#gamma} vs E, #detnr", 5000, 0, 5000, 200, 0, 1000);
 
-    n_fit_mgg_v_edet_TAPS       = new GHistBGSub2("n_fit_mgg_v_edet_TAPS", "m_{#gamma#gamma} vs E, #detnr, TAPS", 2500, 0, 2500, 200, 0, 1000);
+    n_fit_mgg_v_e_TAPS       = new GHistBGSub2("n_fit_mgg_v_e_TAPS", "m_{#gamma#gamma} vs E, TAPS", 100, 0, 1000, 200, 0, 1000);
+    n_fit_mgg_v_edet_TAPS       = new GHistBGSub2("n_fit_mgg_v_edet_TAPS", "m_{#gamma#gamma} vs E, #detnr TAPS", 2500, 0, 2500, 200, 0, 1000);
 
 
     six_fit_IM                  = new GH1("six_fit_IM", "IM(6#gamma) after APLCON fit", 500, 400., 1400.);
@@ -1025,6 +1026,7 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 
                     four_fit_mgg_v_edet_TAPS->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
                     n_fit_mgg_v_edet_TAPS->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
+                    n_fit_mgg_v_e_TAPS->Fill(En, mgg, GetTagger()->GetTaggedTime(tag));
                 }
             }
         }
@@ -1047,8 +1049,14 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                         IMgg_v_det_etapi0_pi0_CB->Fill( (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
                     }
                 }
-                else
+                else{
                     IMgg_v_det_etapi0_TAPS->Fill( (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
+                    if(imass != 0){
+                        double En = (photons_rec[perm4g[ imin_etapi0 ][ j ]]).E();
+                        double mgg = (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M();
+                        n_fit_mgg_v_e_TAPS->Fill(En, mgg, GetTagger()->GetTaggedTime(tag));
+                    }
+                }
             }
         }
     }
@@ -1363,6 +1371,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
                         six_fit_mgg_v_edet_TAPS->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
                         n_fit_mgg_v_edet_TAPS->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
+                        n_fit_mgg_v_e_TAPS->Fill(En, mgg, GetTagger()->GetTaggedTime(tag));
 
                     }
                }
@@ -2307,7 +2316,7 @@ void AdlarsonPhysics::Energy_corr()
                     Ec2 = Ec1;
 
                 g1 = 0;
-                for(int j = 1; j < 6; j++)
+                for(int j = 1; j < 8; j++)
                 {
                     g1 += pol[j]*TMath::Power(Ec2,j-1);
                 }

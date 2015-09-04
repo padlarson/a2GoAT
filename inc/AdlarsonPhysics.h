@@ -186,6 +186,7 @@ private:
     GHistBGSub2*    n_fit_mgg_v_eth;
     GHistBGSub2*    n_fit_mgg_v_edet;
     GHistBGSub2*    n_fit_mgg_v_edet_TAPS;
+    GHistBGSub2*    n_fit_mgg_v_e_TAPS;
 
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
