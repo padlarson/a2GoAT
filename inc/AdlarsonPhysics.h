@@ -182,7 +182,7 @@ private:
     GHistBGSub2*    six_fit_mgg_v_edet_TAPS;
     GHistBGSub2*    six_fit_re_v_eth;
 
-
+    GHistBGSub2*    n_fit_mgg_v_e;
     GHistBGSub2*    n_fit_mgg_v_eth;
     GHistBGSub2*    n_fit_mgg_v_edet;
     GHistBGSub2*    n_fit_mgg_v_edet_TAPS;

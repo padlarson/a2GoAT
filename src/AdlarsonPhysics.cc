@@ -152,7 +152,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_fit_mgg_v_edet               = new GHistBGSub2("six_fit_mgg_v_edet", "m_{#gamma#gamma} vs E, det mod", 5000, 0, 5000, 200, 0., 1000.);
     six_fit_mgg_v_edet_TAPS       = new GHistBGSub2("six_fit_mgg_v_edet_TAPS", "m_{#gamma#gamma} vs E, #detnr, TAPS", 2500, 0, 2500, 200, 0, 1000);
 
-
+    n_fit_mgg_v_e              = new GHistBGSub2("n_fit_mgg_v_e", "m_{#gamma#gamma} vs E", 100, 0, 1000, 200, 0, 1000);
     n_fit_mgg_v_eth              = new GHistBGSub2("n_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 5000, 0, 5000, 200, 0, 1000);
     n_fit_mgg_v_edet              = new GHistBGSub2("n_fit_mgg_v_edet", "m_{#gamma#gamma} vs E, #detnr", 5000, 0, 5000, 200, 0, 1000);
 
@@ -571,7 +571,7 @@ void	AdlarsonPhysics::ProcessEvent()
             if( GetTracks()->HasTAPS(j) ){
                 Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
                 int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
-                TOF = ( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm - TAPS_EPT_toff[nbin];
+                TOF = -1*(( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm); //- TAPS_EPT_toff[nbin];
                 if(TMath::Abs(TOF) < 10.1){
 //                    int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
                     time_TOF.Fill(nbin, TOF);
@@ -601,6 +601,8 @@ void	AdlarsonPhysics::ProcessEvent()
            }
         }
     }
+
+
     // test TOF in terms of ns per meter
     if(iprtrack != 10000)
     {
@@ -744,6 +746,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
 
 
    std::ifstream file1("configfiles/data/CB_gain_vs_erec_mod_2.txt");
+   if(file1){
    std::getline(file1, line); // first line describes input
 
 
@@ -762,6 +765,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
    }
 
    file1.close();
+   }
 
 
    std::ifstream fileTAPS("configfiles/data/TAPS_lingain.txt");
@@ -776,6 +780,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
    fileTAPS.close();
 
    std::ifstream file_EPT_TAPS_off("configfiles/data/TAPS_EPT_offsets.txt");
+   if(file_EPT_TAPS_off){
    std::getline(file_EPT_TAPS_off, line);
    std::string         buffer4;
    std::stringstream   ss3;
@@ -791,6 +796,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
        }
    }
    file_EPT_TAPS_off.close();
+   }
 
 
 
@@ -1013,6 +1019,7 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                     four_fit_mgg_v_eth->Fill(nBIN, mgg, GetTagger()->GetTaggedTime(tag));
                     four_fit_mgg_v_edet->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
 
+                    n_fit_mgg_v_e->Fill(En,mgg, GetTagger()->GetTaggedTime(tag));
                     n_fit_mgg_v_eth->Fill(nBIN, mgg, GetTagger()->GetTaggedTime(tag));
                     n_fit_mgg_v_edet->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
                 }
@@ -1353,7 +1360,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                         six_fit_mgg_v_eth->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
                         six_fit_mgg_v_edet->Fill(nBIN2, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
 
-
+                        n_fit_mgg_v_e->Fill(En,mgg, GetTagger()->GetTaggedTime(tag));
                         n_fit_mgg_v_eth->Fill(nBIN,mgg, GetTagger()->GetTaggedTime(tag));
                         n_fit_mgg_v_edet->Fill(nBIN2,mgg, GetTagger()->GetTaggedTime(tag));
 
@@ -2290,6 +2297,7 @@ void AdlarsonPhysics::Kinfit_test()
 
 void AdlarsonPhysics::Energy_corr()
 {
+    Double_t DeltaE;
     Double_t Erec, Ec1, Ec2, Efin;
     Double_t g1;
     std::vector<double> pol;
@@ -2306,24 +2314,29 @@ void AdlarsonPhysics::Energy_corr()
             Erec = GetTracks()->GetVector(i).E();
             Ec1 = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec; // linear gain
 
-            mod = (GetTracks()->GetCentralCrystal(i)/16);             // energy dependence as fcn of module
-            pol = CB_Ecorr.at(mod);                                   // mod is the key to vector
-//
-            if(pol[0] > 0){
-                if(Ec1 > pol[0])  // to have continuity as fcn of energy
-                    Ec2 = pol[0];
-                else
-                    Ec2 = Ec1;
+//            mod = (GetTracks()->GetCentralCrystal(i)/16);             // energy dependence as fcn of module
+//            pol = CB_Ecorr.at(mod);                                   // mod is the key to vector
+////
+//            if(pol[0] > 0){
+//                if(Ec1 > pol[0])  // to have continuity as fcn of energy
+//                    Ec2 = pol[0];
+//                else
+//                    Ec2 = Ec1;
 
-                g1 = 0;
-                for(int j = 1; j < 8; j++)
-                {
-                    g1 += pol[j]*TMath::Power(Ec2,j-1);
-                }
-                Efin = Ec1*(g1*g1);
-            }
-            else
-                Efin = Ec1;
+//                g1 = 0;
+//                for(int j = 1; j < 8; j++)
+//                {
+//                    g1 += pol[j]*TMath::Power(Ec2,j-1);
+//                }
+//                Efin = Ec1*(g1*g1);
+//            }
+//            else
+//                Efin = Ec1;
+
+            DeltaE = Ec1*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec1, GetTracks()->GetTheta(i)));
+            Efin = Ec1 - DeltaE;
+            //             ( GetTracks()->GetClusterEnergy(i) - E_true )/(GetTracks()->GetClusterEnergy(i));
+            //            Ec = Ec_temp; //(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetCentralCrystal(i)));
 
             tracks->SetClusterEnergy(i, Efin);
         }
