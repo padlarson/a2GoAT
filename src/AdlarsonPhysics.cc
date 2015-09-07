@@ -571,9 +571,9 @@ void	AdlarsonPhysics::ProcessEvent()
             if( GetTracks()->HasTAPS(j) ){
                 Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
                 int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
-                TOF = -1*(( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm); //- TAPS_EPT_toff[nbin];
+                TOF = (( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm)-TAPS_EPT_toff[nbin];
                 if(TMath::Abs(TOF) < 10.1){
-//                    int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
+                    int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
                     time_TOF.Fill(nbin, TOF);
                 }
                 p_E_v_TOF_All->Fill( TOF , GetTracks()->GetClusterEnergy(j));
