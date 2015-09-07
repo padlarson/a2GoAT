@@ -1966,15 +1966,15 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
         double theta = obs[1]*TMath::RadToDeg();
         if(apparatus_nr == 1 )  // CB
         {
-            Ek_s = (0.02*(Ek/1.0e3)*pow((Ek/1.0e3),-0.36))*1.0e3*2.0/Ek;
-//            Ek_s = g_CB_e->GetBinContent( g_CB_e->FindBin(Ek,theta) );
+//            Ek_s = (0.02*(Ek/1.0e3)*pow((Ek/1.0e3),-0.36))*1.0e3*2.0/Ek;
+            Ek_s = g_CB_e->GetBinContent( g_CB_e->FindBin(Ek,theta) );
             Theta_s = g_CB_th->GetBinContent( g_CB_th->FindBin(Ek,theta) );
             Phi_s = g_CB_fi->GetBinContent( g_CB_fi->FindBin(Ek,theta) );
         }
         else                    // TAPS
         {
-            Ek_s = ((0.018 + 0.008*TMath::Sqrt(Ek/1.0e3))*(Ek/1.0e3))*1.0e3*2.0/Ek;
-//            Ek_s = g_TAPS_e->GetBinContent( g_TAPS_e->FindBin( Ek,theta ) );
+//            Ek_s = ((0.018 + 0.008*TMath::Sqrt(Ek/1.0e3))*(Ek/1.0e3))*1.0e3*2.0/Ek;
+            Ek_s = g_TAPS_e->GetBinContent( g_TAPS_e->FindBin( Ek,theta ) );
             Theta_s = g_TAPS_th->GetBinContent(g_TAPS_th->FindBin( Ek,theta ));
             Phi_s = g_TAPS_fi->GetBinContent(g_TAPS_fi->FindBin( Ek,theta ));
         }
