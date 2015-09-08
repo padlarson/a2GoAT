@@ -573,8 +573,8 @@ void	AdlarsonPhysics::ProcessEvent()
             if( GetTracks()->HasTAPS(j) ){
                 Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
                 int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
-                TOF = (( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm) - TAPS_EPT_toff[nbin];
-                TOF2 = (( GetTagger()->GetTaggedTime(tag) + GetTracks()->GetTime(j))/radnm) - TAPS_EPT_toff[nbin];
+                TOF = (( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm);// - TAPS_EPT_toff[nbin];
+                TOF2 = (( GetTagger()->GetTaggedTime(tag) + GetTracks()->GetTime(j))/radnm);// - TAPS_EPT_toff[nbin];
 
                 if(TMath::Abs(TOF) < 40.1){
                     int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
@@ -1250,10 +1250,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
         const APLCON::Result_t& result_min = kinfit.DoFit();
         if(result_min.Status == APLCON::Result_Status_t::Success)
         {
-            Double_t zrec = result_min.Variables.at("v_z").Value.After;
-            Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
-            Double_t diff = zrec -ztrue;
-            true_six_fit_dz_v_z->Fill(ztrue, ztrue - zrec);
+ //           Double_t zrec = result_min.Variables.at("v_z").Value.After;
+ //           Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
+ //           Double_t diff = zrec -ztrue;
+ //           true_six_fit_dz_v_z->Fill(ztrue, ztrue - zrec);
 
 
            six_fit_chi2->Fill( result_min.ChiSquare, GetTagger()->GetTaggedTime(tag) );
