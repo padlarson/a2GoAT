@@ -92,6 +92,7 @@ private:
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS_fit;
 
     TH2D            time_TOF;
+    TH2D            time_TOF2;
     TH2D            time_clusters_TAPS;
     TH2D            time_clusters_CB;
     TH1D            time_nr_AllClusters;
