@@ -526,7 +526,7 @@ void	AdlarsonPhysics::ProcessEvent()
         {
             AllTimes++;
             time_clusters_TAPS.Fill( GetTracks()->GetTime(i), GetTracks()->GetCentralCrystal(i) );
-            if( ( GetTracks()->GetTime(i) > -38.0) &&  ( GetTracks()->GetTime(i) < 15.0 ) )
+            if( ( GetTracks()->GetTime(i) > -8.0) &&  ( GetTracks()->GetTime(i) < 15.0 ) )
             {
 
                 InTime++;
@@ -548,7 +548,7 @@ void	AdlarsonPhysics::ProcessEvent()
         {
             AllTimes++;
             time_clusters_CB.Fill( GetTracks()->GetTime(i), GetTracks()->GetCentralCrystal(i) );
-            if( TMath::Abs( GetTracks()->GetTime(i) ) < 30.0 )
+            if( TMath::Abs( GetTracks()->GetTime(i) ) < 20.0 )
             {
                 if(GetTracks()->GetClusterEnergy(i) > 0.0)
                 {
