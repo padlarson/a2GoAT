@@ -246,6 +246,8 @@ private:
     // Reconstructed Lorentz Vectors
     std::vector<Int_t> ClustersInTime;
 
+    std::vector<Int_t> PbWO4;
+
     UInt_t nrprotons;
     UInt_t iprtrack;
 

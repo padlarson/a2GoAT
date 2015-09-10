@@ -346,7 +346,7 @@ AdlarsonPhysics::AdlarsonPhysics():
         return {diff.X(), diff.Y(), diff.Z(), diff.T()};
 
     };
-//    kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
+    kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
     kinfit_eta.AddConstraint("EnergyMomentumBalance", all_names_eta, EnergyMomentumBalance);
 
 
@@ -476,6 +476,7 @@ Bool_t	AdlarsonPhysics::Start()
     SetAsPhysicsFile();
 
     time_TOF.Reset();
+    time_TOF2.Reset();
     time_clusters_TAPS.Reset();
     time_clusters_CB.Reset();
     time_nr_AllClusters.Reset();
@@ -488,6 +489,7 @@ Bool_t	AdlarsonPhysics::Start()
     outputFile->cd();
 
     time_TOF.Write();
+    time_TOF2.Write();
     time_clusters_TAPS.Write();
     time_clusters_CB.Write();
     time_nr_AllClusters.Write();
@@ -524,7 +526,7 @@ void	AdlarsonPhysics::ProcessEvent()
         {
             AllTimes++;
             time_clusters_TAPS.Fill( GetTracks()->GetTime(i), GetTracks()->GetCentralCrystal(i) );
-            if( ( GetTracks()->GetTime(i) > -8.0) &&  ( GetTracks()->GetTime(i) < 15.0 ) )
+            if( ( GetTracks()->GetTime(i) > -38.0) &&  ( GetTracks()->GetTime(i) < 15.0 ) )
             {
 
                 InTime++;
@@ -573,13 +575,13 @@ void	AdlarsonPhysics::ProcessEvent()
             if( GetTracks()->HasTAPS(j) ){
                 Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
                 int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
-                TOF = (( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j))/radnm);// - TAPS_EPT_toff[nbin];
-                TOF2 = (( GetTagger()->GetTaggedTime(tag) + GetTracks()->GetTime(j))/radnm);// - TAPS_EPT_toff[nbin];
+
+                TOF = (( GetTagger()->GetTaggedTime(tag) -(PbWO4[GetTracks()->GetCentralCrystal(j)])*GetTracks()->GetTime(j) )/radnm) - TAPS_EPT_toff[nbin];
 
                 if(TMath::Abs(TOF) < 40.1){
                     int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
                     time_TOF.Fill(nbin, TOF);
-                    time_TOF2.Fill(nbin, TOF2);
+
                 }
                 p_E_v_TOF_All->Fill( TOF , GetTracks()->GetClusterEnergy(j));
                 if( cutProtonETOF->IsInside( TOF, GetTracks()->GetClusterEnergy(j)) ){
@@ -684,6 +686,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
     if(!good_multiplicity) return;
 
+
     // do for all clusters energy check. If Energy of cluster less than x MeV reject?
 
 
@@ -705,6 +708,8 @@ void	AdlarsonPhysics::ProcessEvent()
             }
         }
     }
+
+
 
     if(GetTracks()->GetTheta(iprtrack) > 18.0 )
     {
@@ -803,6 +808,22 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
    file_EPT_TAPS_off.close();
    }
 
+   PbWO4.resize(0);
+   for(int iPbWO = 0; iPbWO < 438; iPbWO++){
+       if( iPbWO < 12 ) PbWO4.push_back(-1);
+       else if( iPbWO > 72 && iPbWO < 85)
+           PbWO4.push_back(-1);
+       else if( iPbWO > 145 && iPbWO < 158)
+           PbWO4.push_back(-1);
+       else if( iPbWO > 218 && iPbWO < 231)
+           PbWO4.push_back(-1);
+       else if( iPbWO > 291 && iPbWO < 304)
+           PbWO4.push_back(-1);
+       else if( iPbWO > 364 && iPbWO < 377)
+           PbWO4.push_back(-1);
+       else
+           PbWO4.push_back(1);
+   }
 
 
 //   typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
@@ -1250,10 +1271,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
         const APLCON::Result_t& result_min = kinfit.DoFit();
         if(result_min.Status == APLCON::Result_Status_t::Success)
         {
- //           Double_t zrec = result_min.Variables.at("v_z").Value.After;
- //           Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
- //           Double_t diff = zrec -ztrue;
- //           true_six_fit_dz_v_z->Fill(ztrue, ztrue - zrec);
+//            Double_t zrec = result_min.Variables.at("v_z").Value.After;
+//            Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
+//            Double_t diff = zrec -ztrue;
+//            true_six_fit_dz_v_z->Fill(ztrue, ztrue - zrec);
 
 
            six_fit_chi2->Fill( result_min.ChiSquare, GetTagger()->GetTaggedTime(tag) );
@@ -1396,7 +1417,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
            }
 //           if( (TMath::Prob(chi2min_eta2pi,2) > 0.01) && (TMath::Prob(chi2min_3pi,2) < 0.20) ) //eta prime
-           if( (probmin_3pi_2 < 0.2) && (probmin_eta2pi_2 > 0.05) ) //eta prime
+           if( (probmin_3pi_2 < 0.2) && (probmin_eta2pi_2 > 0.01) ) //eta prime
            {
                six_fit_PDF_eta2pi_v_Meta2pi->Fill(TMath::Prob(chi2min_eta2pi,2),etap_fit.M(),GetTagger()->GetTaggedTime(tag));
                six_fit_PDF_2_eta2pi_v_Meta2pi->Fill(probmin_eta2pi_2,etap_fit.M(),GetTagger()->GetTaggedTime(tag));
@@ -1978,8 +1999,8 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
         {
 //            Ek_s = (0.02*(Ek/1.0e3)*pow((Ek/1.0e3),-0.36))*1.0e3*2.0/Ek;
             Ek_s = g_CB_e->GetBinContent( g_CB_e->FindBin(Ek,theta) );
-//            Theta_s = g_CB_th->GetBinContent( g_CB_th->FindBin(Ek,theta) );
-            Theta_s = 1.5;
+            Theta_s = g_CB_th->GetBinContent( g_CB_th->FindBin(Ek,theta) );
+//            Theta_s = 1.5;
             Phi_s = g_CB_fi->GetBinContent( g_CB_fi->FindBin(Ek,theta) );
         }
         else                    // TAPS
@@ -2025,7 +2046,7 @@ void AdlarsonPhysics::FitParticle::Smear_tmp(std::vector<double> unc, int partic
     if( particle == 0 ) // gamma
     {
         Ek_Sigma = unc[0]*Ek;
-        Theta_Sigma = unc[1]*TMath::DegToRad();
+        Theta_Sigma = unc[1]*TMath::DegToRad()*1.2;
         Phi_Sigma = unc[2]*TMath::DegToRad();
     }
     else if(particle == 1) //proton
