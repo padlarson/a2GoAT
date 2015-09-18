@@ -30,9 +30,12 @@ class	AdlarsonPhysics  : public GTreeManager
 {
 
 private:
+
+    TRandom3*       pRandoms;
     // Histograms and scatterplots
     // True
     GH1*            true_BeamE;
+
     GHistBGSub2*    true_th_p_v_th_etapr_CM;
     GHistBGSub2*    true_th_v_E_p;
     GHistBGSub2*    true_th_v_E_eta_g;
@@ -51,6 +54,11 @@ private:
     GHistBGSub2*    true_six_phy_dX_v_DPbin;
     GHistBGSub2*    true_six_phy_dY_v_DPbin;
     GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
+
+    // in 10g analysis
+    GHistBGSub2*    true_ten_phy_dMpipi_v_Mpipi;
+    GHistBGSub2*    true_ten_phy_dX_v_DPbin;
+    GHistBGSub2*    true_ten_phy_dY_v_DPbin;
 
     // Tagger related
     GH1*            tag_BeamE;
@@ -92,7 +100,6 @@ private:
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS_fit;
 
     TH2D            time_TOF;
-    TH2D            time_TOF2;
     TH2D            time_clusters_TAPS;
     TH2D            time_clusters_CB;
     TH1D            time_nr_AllClusters;
@@ -112,7 +119,6 @@ private:
 
     GH1*            four_fit_chi2;
     GH1*            four_fit_pdf;
-
 
     GHistBGSub2*    four_fit_Pulls_g_E_vs_E_CB;
     GHistBGSub2*    four_fit_Pulls_g_th_vs_th_CB;
@@ -206,7 +212,12 @@ private:
     GH1*            kfit_pdf_10g;
     GHistBGSub2*    kfit_Pulls_10g;
 
-    GH1*            IM10g_fit;
+    GH1*            IM10g_fit;  
+    GHistBGSub2*    ten_fit_PDF_eta2pi_v_eta6g;
+    GH1*            IM10g_fit_best_cand;
+
+    GH1*            ten_fit_PDF_eta2pi;
+    GHistBGSub2*    ten_fit_true_v_pdf_eta2pi;
 
     // proton identified from TAPS_E vs VETO_dE
 
@@ -266,10 +277,12 @@ private:
     static Int_t perm6outof10g[210][6];
 
     GTrue   etapr_6gTrue;
+    GTrue   etapr_10gTrue;
 
     std::vector<int> detnr;
     std::vector<bool> CB_region;
     std::vector<bool> Is_CB_6g;
+    std::vector<bool> Is_CB_10g;
 
     std::vector<double> obs;
     std::vector<double> unc;
@@ -295,12 +308,15 @@ private:
     typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
     std::map<UInt_t, std::vector<Double_t>> TOF_corr;
 
+    typedef std::pair<std::vector<Int_t>, Double_t> comb;
+    std::vector<comb> teng_comb;
+
     TFile*          thcorr_CB;        // File which contains TProfile
     TProfile*       dthvth_CB;
     TFile*          thcorr_TAPS;        // File which contains TProfile
     TProfile*       dthvth_TAPS;
     TFile*          Ecorr_CB;         // File which contains TH2F
-    TH2F*            EvdetCB;
+    TH2F*           EvdetCB;
 
 
 protected:
@@ -311,14 +327,11 @@ protected:
     virtual void	ProcessScalerRead();
 
 
-    // choose here what you want to do
-    // please also provide GoAT trees with matching MC true information...
     static constexpr bool includeIMconstraint = true;
     static constexpr bool includeVertexFit = true;
     static constexpr size_t nPhotons_four = 4;
     static constexpr size_t nPhotons_six = 6;
     static constexpr size_t nPhotons_ten = 10;
-
 
 
     // lightweight structure for linking to fitter
@@ -353,8 +366,8 @@ protected:
             }
 
 //            void Smear(int itr_nr, Bool_t measured );
-            void Smear(int itr_nr, Bool_t measured);
-            void Smear_tmp(std::vector<double> unc , int particle);
+//            void Smear(int itr_nr, Bool_t measured);
+            void Smear(std::vector<double> unc , int particle);
 
             void APLCONSettings();
 
@@ -382,6 +395,7 @@ protected:
     APLCON kinfit3pi;
     APLCON kinfiteta2pi;
     APLCON kinfit10g;
+    APLCON kinfit10g_eta2pi;
 
     FitParticle beam4g;
     FitParticle beam;
@@ -389,18 +403,21 @@ protected:
     FitParticle beam_eta2pi;
     FitParticle beam_eta;
     FitParticle beam10g;
+    FitParticle beam10g_eta2pi;
     std::vector<FitParticle> Photons_four;
     std::vector<FitParticle> Photons_six;
     std::vector<FitParticle> Photons_six_3pi;
     std::vector<FitParticle> Photons_six_eta2pi;
     std::vector<FitParticle> Photons_six_eta;
     std::vector<FitParticle> Photons_ten;
+    std::vector<FitParticle> Photons_ten_eta2pi;
     FitParticle proton4g;
     FitParticle proton;
     FitParticle proton_3pi;
     FitParticle proton_eta2pi;
     FitParticle proton_eta;
     FitParticle proton10g;
+    FitParticle proton10g_eta2pi;
 			
 public:
     AdlarsonPhysics();
@@ -415,6 +432,7 @@ public:
 
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
+    void TrueAnalysis_etapr10g();
     void Kinfit_test();
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
