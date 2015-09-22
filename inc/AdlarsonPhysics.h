@@ -32,6 +32,7 @@ class	AdlarsonPhysics  : public GTreeManager
 private:
 
     TRandom3*       pRandoms;
+    Bool_t          MC;
     // Histograms and scatterplots
     // True
     GH1*            true_BeamE;
@@ -320,7 +321,7 @@ private:
 
 
 protected:
- //   virtual Bool_t  Init(const char* configFile);
+//    virtual Bool_t  Init(const char* configFile);
     virtual Bool_t  Start();
 
     virtual void    ProcessEvent();
@@ -423,7 +424,7 @@ public:
     AdlarsonPhysics();
     virtual ~AdlarsonPhysics();
 
-    virtual Bool_t	Init(const char* configfile);
+    Bool_t	Init(const char* configfile);
     void            Energy_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
 

@@ -125,7 +125,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     four_fit_best_etapi_IM_v_E      = new GHistBGSub2("four_fit_best_etapi_IM_v_E", "E_{#pi^{0}} vs M_{#gamma#gamma} for #eta#pi^{0}", 100, 0., 1000., 250, 0., 1000.);
 
     four_fit_re_v_eth              = new GHistBGSub2("four_fit_re_v_eth", "#DeltaE vs E, #theta", 5000, 0, 5000, 200, -1.0, 1.0);
-    four_fit_mgg_v_eth             = new GHistBGSub2("four_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 5000, 0, 5000, 200, 0, 1000);
+    four_fit_mgg_v_eth             = new GHistBGSub2("four_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 21000, 0, 21000, 200, 0, 1000);
     four_fit_mgg_v_edet            = new GHistBGSub2("four_fit_mgg_v_edet", "m_{#gamma#gamma} vs E, #detnr", 5000, 0, 5000, 200, 0, 1000);
     four_fit_mgg_v_edet_TAPS       = new GHistBGSub2("four_fit_mgg_v_edet_TAPS", "m_{#gamma#gamma} vs E, #detnr, TAPS", 2500, 0, 2500, 200, 0, 1000);
 
@@ -156,7 +156,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_fit_Pulls_p_phi_vs_th_TAPS    = new GHistBGSub2("six_fit_Pulls_p_phi_vs_th_TAPS", "Pulls proton #phi vs #theta TAPS", 25, 0, 25, 50, -5., 5.);
 
     six_fit_re_v_eth                = new GHistBGSub2("six_fit_re_v_eth", "#DeltaE vs E, #theta", 5000, 0, 5000, 200, -1.0, 1.0);
-    six_fit_mgg_v_eth               = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 5000, 0, 5000, 200, 0., 1000.);
+    six_fit_mgg_v_eth               = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 21000, 0, 21000, 200, 0., 1000.);
     six_fit_mgg_v_edet               = new GHistBGSub2("six_fit_mgg_v_edet", "m_{#gamma#gamma} vs E, det mod", 5000, 0, 5000, 200, 0., 1000.);
     six_fit_mgg_v_edet_TAPS       = new GHistBGSub2("six_fit_mgg_v_edet_TAPS", "m_{#gamma#gamma} vs E, #detnr, TAPS", 2500, 0, 2500, 200, 0, 1000);
 
@@ -535,6 +535,12 @@ Bool_t	AdlarsonPhysics::Start()
         return kFALSE;
 //        return kTRUE;
     }
+
+    if (!GetScalers()->IsOpenForInput())
+        MC = true;
+    else
+        MC = false;
+
     SetAsPhysicsFile();
 
     time_TOF.Reset();
@@ -571,6 +577,9 @@ void	AdlarsonPhysics::ProcessEvent()
 
 //     etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //     TrueAnalysis_etapr10g();
+
+    /* check if the file contains MC data */
+
 
     Energy_corr();
     theta_corr();
@@ -629,9 +638,13 @@ void	AdlarsonPhysics::ProcessEvent()
                 Double_t radnm = 1.45/TMath::Cos( GetTracks()->GetThetaRad(j) );
                 int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
 
-                TOF = (( GetTagger()->GetTaggedTime(tag) -(PbWO4[GetTracks()->GetCentralCrystal(j)])*GetTracks()->GetTime(j) )/radnm) - TAPS_EPT_toff[nbin];
-//                TOF = -1*(( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j) )/radnm) - TAPS_EPT_toff[nbin];
-//              TOF += pRandoms->Gaus(0,0.35);
+                if(MC){
+                    TOF = -1*(( GetTagger()->GetTaggedTime(tag) - GetTracks()->GetTime(j) )/radnm) - TAPS_EPT_toff[nbin];
+                    TOF += pRandoms->Gaus(0,0.35);
+                }
+                else
+                    TOF = (( GetTagger()->GetTaggedTime(tag) -(PbWO4[GetTracks()->GetCentralCrystal(j)])*GetTracks()->GetTime(j) )/radnm) - TAPS_EPT_toff[nbin];
+
 
                 if(TMath::Abs(TOF) < 40.1){
                     int nbin = GetTagger()->GetTaggedChannel(tag) + GetTracks()->GetCentralCrystal(j)*50;
@@ -712,8 +725,8 @@ void	AdlarsonPhysics::ProcessEvent()
 //    }
 
 
-//    if( (ClustersInTime.size() == 5) && (nrprotons > 0) )
-//        fourgAnalysis(iprtrack);
+    if( (ClustersInTime.size() == 5) && (nrprotons > 0) )
+        fourgAnalysis(iprtrack);
 
     if( ClustersInTime.size() == 7 && (nrprotons > 0) )
         sixgAnalysis( iprtrack );
@@ -727,6 +740,7 @@ void	AdlarsonPhysics::ProcessScalerRead()
 //    hist_eta.ScalerReadCorrection(Double_t(scalers->GetScaler(0))/scalers->GetScaler(1));
 //    hist_etap.ScalerReadCorrection(Double_t(scalers->GetScaler(0))/scalers->GetScaler(1));
 }
+
 
 Bool_t	AdlarsonPhysics::Init(const char* configFile)
 {
@@ -1032,7 +1046,7 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                     double Th = (photons_rec[perm4g[ imin_2pi0 ][ j]]).Theta()*TMath::RadToDeg();
                     double mgg = (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M();
                     int nEN =  int(En/10.0);
-                    int nTH =  100*int(Th/5.0);
+                    int nTH =  250*int(Th/2.0);
                     int nBIN = nEN + nTH;
 
                     int nDET = 100*(int( detnr[idet]/16 ));
@@ -1343,7 +1357,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                         double Th = photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg();
                         double mgg = rc[imass].M();
                         int nEN =  int(photons_rec[imin_3pi[isix]].E()/10.);
-                        int nTH =  100*int(photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()/5.0);
+                        int nTH =  250*int(photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()/2.0);
                         int nBIN = nEN + nTH;
 
                         int nDET = 100*(int(detnr[imin_3pi[isix]]/16));
