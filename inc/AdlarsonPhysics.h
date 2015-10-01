@@ -121,21 +121,21 @@ private:
     GH1*            four_fit_chi2;
     GH1*            four_fit_pdf;
 
-    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_CB;
-    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_CB;
-    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_CB;
-    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_TAPS;
-    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_TAPS;
-    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_TAPS;
+//    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_CB;
+//    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_CB;
+//    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_CB;
+//    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_TAPS;
+//    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_TAPS;
+//    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_TAPS;
+
 
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
     GHistBGSub2*    four_fit_best_2pi_IM_v_E;
     GHistBGSub2*    four_fit_best_etapi_IM_v_E;
 
     GHistBGSub2*    four_fit_mgg_v_eth;
-    GHistBGSub2*    four_fit_mgg_v_edet;
-    GHistBGSub2*    four_fit_mgg_v_edet_TAPS;
-    GHistBGSub2*    four_fit_re_v_eth;
+    GHistBGSub2*    four_fit_mgg_v_eth_BaF2;
+    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4;
 
 
     // 6g analysis
@@ -152,7 +152,7 @@ private:
 
     GH1*            six_fit_chi2;
     GH1*            six_fit_pdf;
-    GH1*            six_fit_eta_pdf;
+    GH1*            six_fit_etaprfinal_pdf;
     GHistBGSub2*    six_fit_Pulls;
     GHistBGSub2*    six_fit_Pulls_g_E_vs_E_CB;
     GHistBGSub2*    six_fit_Pulls_g_th_vs_th_CB;
@@ -161,40 +161,48 @@ private:
     GHistBGSub2*    six_fit_Pulls_g_th_vs_th_TAPS;
     GHistBGSub2*    six_fit_Pulls_g_phi_vs_th_TAPS;
 
+    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth_CB;
+    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth_CB;
+    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth_CB;
+    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth_PbWO4;
+    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth_PbWO4;
+    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth_PbWO4;
+    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth_BaF2;
+    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth_BaF2;
+    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth_BaF2;
+
     GHistBGSub2*    six_fit_Pulls_p_th_vs_th_TAPS;
     GHistBGSub2*    six_fit_Pulls_p_phi_vs_th_TAPS;
 
     GH1*            six_fit_IM;
     GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
-    GH1*            six_fit_cos_th_cm;
+
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi;
-    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_2;
+    GH1*            six_fit_PDF_joint;
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_Meta2pi;
-    GHistBGSub2*    six_fit_PDF_2_eta2pi_v_Meta2pi;
     GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
-    GH1*            six_fiteta_IM2g;
+    GHistBGSub2*    six_fit_test_mass_constr;
     GH1*            six_fit_best_eta;
-    GHistBGSub2*    six_fit_best_eta_E_v_th;
+    GHistBGSub2*    six_fit_best_etapr_eta_E_v_th;
+    GHistBGSub2*    six_fit_best_etapr_pi_E_v_th;
+    GHistBGSub2*    six_fit_best_3pi0_pi_E_v_th;
     GH1*            six_fit_best_2pi;
+
+    GHistBGSub2*    six_fit_best_etapr_eta_mgg_v_thth;
+    GHistBGSub2*    six_fit_best_etapr_pi0_mgg_v_thth;
+    GHistBGSub2*    six_fit_best_3pi0_mgg_v_thth;
 
     // to check the energy of the  eta 2pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_eta_IM_v_E;
     GHistBGSub2*    six_fit_best_2pi_IM_v_E;
 
     GHistBGSub2*    six_fit_mgg_v_eth;
-    GHistBGSub2*    six_fit_mgg_v_edet;
-    GHistBGSub2*    six_fit_mgg_v_edet_TAPS;
-    GHistBGSub2*    six_fit_re_v_eth;
-
-    GHistBGSub2*    n_fit_mgg_v_e;
-    GHistBGSub2*    n_fit_mgg_v_eth;
-    GHistBGSub2*    n_fit_mgg_v_edet;
-    GHistBGSub2*    n_fit_mgg_v_edet_TAPS;
-    GHistBGSub2*    n_fit_mgg_v_e_TAPS;
+    GHistBGSub2*    six_fit_mgg_v_eth_BaF2;
+    GHistBGSub2*    six_fit_mgg_v_eth_PbWO4;
 
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
@@ -245,6 +253,11 @@ private:
     TH2*            p_TAPS_th;
     TH2*            p_TAPS_fi;
 
+    TFile*          fin_sel;
+    TH2*            etapr_eta;
+    TH2*            etapr_pi;
+    TH2*            dir3pi_gg;
+
     // True LorentzVectors
     TLorentzVector  eta_true;
     TLorentzVector  pi01_true;
@@ -273,8 +286,6 @@ private:
 
     static Int_t perm4g[9][4];
     static Int_t perm6g[15][6];
-    static Int_t perm6outof7g[7][6];
-    static Int_t perm6outof8g[28][6];
     static Int_t perm6outof10g[210][6];
 
     GTrue   etapr_6gTrue;
@@ -290,7 +301,7 @@ private:
 
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
-    std::vector<TLorentzVector> photons_fit_eta;
+    std::vector<TLorentzVector> photons_fit_final;
 
     Double_t    sigma_eta;
     Double_t    sigma_pi0;
@@ -318,6 +329,10 @@ private:
     TProfile*       dthvth_TAPS;
     TFile*          Ecorr_CB;         // File which contains TH2F
     TH2F*           EvdetCB;
+    TFile*          Ecorr_CB2;         // File which contains TH2F
+    TH2F*           EvdetCB2;
+    TFile*          Ecorr_TAPS;         // File which contains TH2F
+    TH2F*           EvdetTAPS;
 
 
 protected:
@@ -392,7 +407,7 @@ protected:
 
     APLCON kinfit4g;
     APLCON kinfit;
-    APLCON kinfit_eta;
+    APLCON kinfit_final;
     APLCON kinfit3pi;
     APLCON kinfiteta2pi;
     APLCON kinfit10g;
@@ -402,21 +417,21 @@ protected:
     FitParticle beam;
     FitParticle beam_3pi;
     FitParticle beam_eta2pi;
-    FitParticle beam_eta;
+    FitParticle beam_final;
     FitParticle beam10g;
     FitParticle beam10g_eta2pi;
     std::vector<FitParticle> Photons_four;
     std::vector<FitParticle> Photons_six;
     std::vector<FitParticle> Photons_six_3pi;
     std::vector<FitParticle> Photons_six_eta2pi;
-    std::vector<FitParticle> Photons_six_eta;
+    std::vector<FitParticle> Photons_six_final;
     std::vector<FitParticle> Photons_ten;
     std::vector<FitParticle> Photons_ten_eta2pi;
     FitParticle proton4g;
     FitParticle proton;
     FitParticle proton_3pi;
     FitParticle proton_eta2pi;
-    FitParticle proton_eta;
+    FitParticle proton_final;
     FitParticle proton10g;
     FitParticle proton10g_eta2pi;
 			
