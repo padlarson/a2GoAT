@@ -78,6 +78,8 @@ private:
     GHistBGSub2*    p_E_v_TOF_All_wVeto;
     GHistBGSub2*    p_E_v_TOF_norm_to_c;
 
+    GHistBGSub*     CB_EnergySum;
+
     // Photon related
     TLorentzVector  IM6g_vec;
     TLorentzVector  IM10g_vec;
@@ -187,6 +189,13 @@ private:
     GH1*            six_fit_IM_eta2pi;
     GHistBGSub2*    six_fit_test_mass_constr;
     GH1*            six_fit_best_eta;
+    GH1*            six_fit_n_eta;
+    GH1*            six_fit_n_eta_final;
+    GH1*            six_fit_n_pi0;
+    GH1*            six_fit_n_pi0_final;
+    GHistBGSub2*    six_fit_neta_v_npi0;
+    GHistBGSub2*    six_fit_neta_v_npi0_final;
+    GHistBGSub2*    six_fit_EvTh_g;
     GHistBGSub2*    six_fit_best_etapr_eta_E_v_th;
     GHistBGSub2*    six_fit_best_etapr_pi_E_v_th;
     GHistBGSub2*    six_fit_best_3pi0_pi_E_v_th;
@@ -203,6 +212,8 @@ private:
     GHistBGSub2*    six_fit_mgg_v_eth;
     GHistBGSub2*    six_fit_mgg_v_eth_BaF2;
     GHistBGSub2*    six_fit_mgg_v_eth_PbWO4;
+    GHistBGSub2*    six_fit_mgg_v_e_BaF2;
+    GHistBGSub2*    six_fit_mgg_v_e_PbWO4;
 
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
@@ -239,6 +250,11 @@ private:
 
     TCutG*          cutPionTAPS;
     TCutG*          cutElectronTAPS;
+
+    TFile*          eta_cand;
+    TCutG*          eta_g_cand;
+    TFile*          pi0_cand;
+    TCutG*          pi0_g_cand;
 
     TFile*          g_unc;
     TFile*          p_unc;
