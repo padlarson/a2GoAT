@@ -267,8 +267,6 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     Ecorr_CB                    = new TFile("configfiles/corr/CB_e_corr.root");
     EvdetCB                     = (TH2F*)Ecorr_CB->Get("g_peak_E_CB");
-    Ecorr_CB2                    = new TFile("configfiles/corr/CB_e_corr2.root");
-    EvdetCB2                     = (TH2F*)Ecorr_CB2->Get("plot_mgg_v_e_v_th_CB_MC");
 
     Ecorr_TAPS                  = new TFile("configfiles/corr/TAPS_e_corr.root");
     EvdetTAPS                   = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
