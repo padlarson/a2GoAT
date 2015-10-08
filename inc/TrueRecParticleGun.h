@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cstdio>
-#include <string> 
+#include <string>
 
 #include <TCutG.h>
 #include "GTreeManager.h"
@@ -36,6 +37,8 @@ private:
     TH3*        photon_dphi_v_2D_CB;
     TH3*        photon_dphi_v_2D_TAPS;
 
+    TH2*        photon_theta_phi_CB;
+
     TH3*        photon_rE_v_det_CB;
     TH3*        photon_dtheta_v_det_CB;
     TH3*        photon_dphi_v_det_CB;
@@ -44,6 +47,7 @@ private:
     TH3*        photon_dphi_v_det_TAPS;
 
     TH3*        photon_EtEr_v_det_CB;  // Etrue/Erec CB
+    TH3*        photon_EtEr_v_detmod_CB;
     TH3*        photon_EtEr_v_det_TAPS;// Etrue/Erec TAPS
 
 
@@ -65,6 +69,8 @@ private:
     TH2*        photon_dtheta_v_theta_TAPS;
     TH2*        proton_dtheta_v_theta_TAPS;
 
+    TH2*        photon_rE_v_E_CB;
+
 
     TH2*        proton_EvDE_TAPS;
     TH1*        z_vertex;
@@ -72,8 +78,16 @@ private:
 
     TFile*          thcorr_CB;        // File which contains TProfile
     TProfile*       dthvth_CB;
+    TFile*          Ecorr_CB;         // File which contains TH2F
+    TH2F*           EvdetCB;
+    TFile*          Ecorr_TAPS;         // File which contains TH2F
+    TH2F*           EvdetTAPS;
+
     TFile*          thcorr_TAPS;        // File which contains TProfile
     TProfile*       dthvth_TAPS;
+
+    std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
+    std::vector<Double_t> TAPSgain;
 
 
 protected:
@@ -89,6 +103,7 @@ public:
     virtual Bool_t	Init(const char* configfile);
 
     void            theta_corr();
+    void            Energy_corr();
 
 
 

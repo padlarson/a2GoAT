@@ -11,39 +11,42 @@ TrueRecParticleGun::TrueRecParticleGun()
 {
     //Relative Energy
     proton_true_Evth        = new TH2F("proton_true_Evth", "proton; E_{true} (MeV); #theta_{true} (^{o})", 30 , 0., 600., 30, 0, 30);
-    photon_true_Evth        = new TH2F("photon_true_Evth", "#gamma; E_{true} (MeV); #theta_{true} (^{o})", 75, 0., 1500., 36, 0, 180);
-    photon_true_Evth_CB     = new TH2F("photon_true_Evth_CB", "#gamma; E_{true} (MeV); #theta_{true} (^{o})", 75, 0., 1500., 36, 0, 180);
-    photon_true_Evth_TAPS   = new TH2F("photon_true_Evth_TAPS", "#gamma; E_{true} (MeV); #theta_{true} (^{o})",  75, 0., 1500., 30, 0, 30);
-    photon_true_Evth_rec    = new TH2F("photon_true_Evth_rec", "#gamma nr tracks ; E_{true} (MeV); #theta_{true} (^{o})", 75, 0., 1500., 36, 0, 180);
+    photon_true_Evth        = new TH2F("photon_true_Evth", "#gamma; E_{true} (MeV); #theta_{true} (^{o})", 150, 0., 1500., 36, 0, 180);
+    photon_true_Evth_CB     = new TH2F("photon_true_Evth_CB", "#gamma; E_{true} (MeV); #theta_{true} (^{o})", 150, 0., 1500., 90, 0, 180);
+    photon_true_Evth_TAPS   = new TH2F("photon_true_Evth_TAPS", "#gamma; E_{true} (MeV); #theta_{true} (^{o})",  150, 0., 1500., 30, 0, 30);
+    photon_true_Evth_rec    = new TH2F("photon_true_Evth_rec", "#gamma nr tracks ; E_{true} (MeV); #theta_{true} (^{o})", 75, 0., 1500., 90, 0, 180);
 
     photon_secondary_Evth   = new TH3F("photon_secondary_Evth", "Split-off photon; E_{rec} (MeV); #theta_{rec} (^{o}); E_{true} MeV", 150, 0., 1500, 90, 0., 180., 120, 0., 1200.);
     proton_secondary_Evth   = new TH3F("proton_secondary_Evth", "Split-off proton; E_{rec} (MeV); #theta_{rec} (^{o}); E_{true} MeV", 150, 0., 1500, 40, 0., 40., 60, 0., 600.);
 
-    photon_rE_v_2D_CB       = new TH3F("photon_rE_v_2D_CB", "#gamma CB; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 75, 0., 1500., 36, 0, 180, 400, -2., 2.);
-    photon_dtheta_v_2D_CB   = new TH3F("photon_dtheta_v_2D_CB", "#gamma CB; E_{rec} (MeV); #theta_{rec} (^{o});  #theta_{rec} - #theta_{true} (^{o})", 75, 0., 1500., 36, 0, 180, 160, -20., 20.);
+    photon_rE_v_2D_CB       = new TH3F("photon_rE_v_2D_CB", "#gamma CB; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 150, 0., 1500., 90, 0, 180, 400, -2., 2.);
+    photon_dtheta_v_2D_CB   = new TH3F("photon_dtheta_v_2D_CB", "#gamma CB; E_{rec} (MeV); #theta_{rec} (^{o});  #theta_{rec} - #theta_{true} (^{o})", 150, 0., 1500., 90, 0, 180, 160, -20., 20.);
 
-    photon_dphi_v_2D_CB     = new TH3F("photon_dphi_v_2D_CB", "#gamma CB; E_{rec} (MeV); #theta_{rec} (^{o});  #phi_{rec} - #phi_{true} (^{o})", 75, 0., 1500., 36, 0, 180, 160, -20., 20.);
+    photon_theta_phi_CB   = new TH2F("photon_theta_phi_CB", "#gamma CB; #theta_{rec} (MeV); #phi_{rec} (^{o});", 720, 0., 180., 720, 0., 180.);
+
+    photon_dphi_v_2D_CB     = new TH3F("photon_dphi_v_2D_CB", "#gamma CB; E_{rec} (MeV); #theta_{rec} (^{o});  #phi_{rec} - #phi_{true} (^{o})", 150, 0., 1500., 90, 0, 180, 160, -20., 20.);
 
     photon_rE_v_det_CB      = new TH3F("photon_rE_v_det_CB", "#gamma CB; E_{rec} (MeV); det.nr; relative (E_{rec} - E_{true}) / E_{rec} ", 75, 0., 1500., 720, 0, 720, 200, -5., 5.);
     photon_dtheta_v_det_CB  = new TH3F("photon_dtheta_v_det_CB", "#gamma CB; E_{rec} (MeV); det.nr;  #theta_{rec} - #theta_{true} (^{o})", 75, 0., 1500., 720, 0, 720, 20, -40., 40.);
     photon_dphi_v_det_CB    = new TH3F("photon_dphi_v_det_CB", "#gamma CB; E_{rec} (MeV); det.nr;  #phi_{rec} - #phi_{true} (^{o})", 75, 0., 1500., 720, 0, 720, 800, -40., 40.);
 
-    photon_rE_v_2D_TAPS     = new TH3F("photon_rE_v_2D_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 75, 0., 1500., 30, 0, 30, 500, -5., 5.);
+    photon_rE_v_2D_TAPS     = new TH3F("photon_rE_v_2D_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 150, 0., 1500., 30, 0, 30, 500, -5., 5.);
     proton_rE_v_2D_TAPS     = new TH3F("proton_rE_v_2D_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 30, 0., 600., 30, 0, 30, 500, -5., 5.);
-    photon_dtheta_v_2D_TAPS = new TH3F("photon_dtheta_v_2D_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 75, 0., 1500., 30, 0, 30, 160, -20., 20.);
+    photon_dtheta_v_2D_TAPS = new TH3F("photon_dtheta_v_2D_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 150, 0., 1500., 30, 0, 30, 160, -20., 20.);
     proton_dtheta_v_2D_TAPS = new TH3F("proton_dtheta_v_2D_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 30, 0., 600., 30, 0, 30, 160, -20., 20.);
-    photon_dphi_v_2D_TAPS   = new TH3F("photon_dphi_v_2D_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #phi_{rec} - #phi_{true} (^{o})", 75, 0., 1500., 30, 0, 30, 160, -40., 40.);
+    photon_dphi_v_2D_TAPS   = new TH3F("photon_dphi_v_2D_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #phi_{rec} - #phi_{true} (^{o})", 150, 0., 1500., 30, 0, 30, 160, -40., 40.);
     proton_dphi_v_2D_TAPS   = new TH3F("proton_dphi_v_2D_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #phi_{rec} - #phi_{true} (^{o})", 30, 0., 600., 30, 0, 30, 160, -40., 40.);
 
-    photon_rE_v_det_TAPS     = new TH3F("photon_rE_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 75, 0., 1500., 440, 0, 440, 500, -5., 5.);
+    photon_rE_v_det_TAPS     = new TH3F("photon_rE_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 150, 0., 1500., 440, 0, 440, 500, -5., 5.);
     proton_rE_v_det_TAPS     = new TH3F("proton_rE_v_det_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 30, 0., 600., 440, 0, 440, 500, -5., 5.);
-    photon_dtheta_v_det_TAPS = new TH3F("photon_dtheta_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 75, 0., 1500., 440, 0, 440, 160, -20., 20.);
+    photon_dtheta_v_det_TAPS = new TH3F("photon_dtheta_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 150, 0., 1500., 440, 0, 440, 160, -20., 20.);
     proton_dtheta_v_det_TAPS = new TH3F("proton_dtheta_v_det_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 30, 0., 600., 440, 0, 440, 160, -20., 20.);
     photon_dphi_v_det_TAPS   = new TH3F("photon_dphi_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #phi_{rec} - #phi_{true} (^{o})", 150, 0., 1500., 440, 0, 440, 160, -40., 40.);
     proton_dphi_v_det_TAPS   = new TH3F("proton_dphi_v_det_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #phi_{rec} - #phi_{true} (^{o})", 30, 0., 600., 440, 0, 440, 160, -40., 40.);
 
-    photon_EtEr_v_det_CB     = new TH3F("photon_EtEr_v_det_CB", "#gamma CB; E_{rec} (MeV); det nr CB; E_{true} / E_{rec} ", 120, 0., 1200., 720, 0, 720, 250, 0.5, 1.5);
-    photon_EtEr_v_det_TAPS   = new TH3F("photon_EtEr_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); det nr TAPS; E_{true} / E_{rec} ", 120, 0., 1200., 440, 0, 440, 250, 0.5, 1.5);
+    photon_EtEr_v_det_CB     = new TH3F("photon_EtEr_v_det_CB", "#gamma CB; E_{rec} (MeV); det nr CB; E_{true} / E_{rec} ", 120, 0., 1200., 720, 0, 720, 200, 0.5, 1.5);
+    photon_EtEr_v_detmod_CB  = new TH3F("photon_EtEr_v_detmod_CB", "#gamma CB; E_{rec} (MeV); det nr CB; E_{true} / E_{rec} ", 1200, 0., 1200., 45, 0, 45, 400, 0.8, 1.2);
+    photon_EtEr_v_det_TAPS   = new TH3F("photon_EtEr_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); det nr TAPS; E_{true} / E_{rec} ", 120, 0., 1200., 440, 0, 440, 200, 0.5, 1.5);
 
     proton_dth_v_detnr      = new TH2F("proton_dth_v_detnr", "proton; #Delta #theta ; TAPS element nr ", 160, -40., 40., 440, 0, 440);
     proton_dphi_v_detnr     = new TH2F("proton_dphi_v_detnr", "proton; #Delta #phi ; TAPS element nr ", 160, -40., 40., 440, 0, 440);
@@ -57,14 +60,23 @@ TrueRecParticleGun::TrueRecParticleGun()
     photon_dtheta_v_theta_TAPS   = new TH2F("photon_dtheta_v_theta_TAPS", "#gamma TAPS; #theta_{rec} (^{o});  #theta_{rec} - #theta_{true} (^{o})", 150, 0, 30, 200, -10., 10.);
     proton_dtheta_v_theta_TAPS   = new TH2F("proton_dtheta_v_theta_TAPS", "proton TAPS; #theta_{rec} (^{o});  #theta_{rec} - #theta_{true} (^{o})", 60, 0, 30, 100, -10., 10.);
 
+    photon_rE_v_E_CB            = new TH2F("photon_rE_v_E_CB", "#gamma CB; E_{rec} (MeV); photon rel En", 1000, 0, 1000, 400, -2., 2.);
+
     z_vertex                    = new TH1F("z_vertex", "z_vertex", 200, -10., 10.);
     logRelE                     = new TH1F("logRelE", "logRelE", 500, 0, 5);
 
     thcorr_CB                   = new TFile("configfiles/corr/CB_th_corr.root");
-    dthvth_CB                   = (TProfile*)thcorr_CB->Get("dthvth");
+    dthvth_CB                   = (TProfile*)thcorr_CB->Get("photon_dtheta_v_theta_CB_pfx");
+
+    Ecorr_CB                    = new TFile("configfiles/corr/CB_e_corr.root");
+    EvdetCB                     = (TH2F*)Ecorr_CB->Get("g_peak_E_CB");
+
+    Ecorr_TAPS                  = new TFile("configfiles/corr/TAPS_e_corr.root");
+    EvdetTAPS                   = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
 
     thcorr_TAPS                 = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                 = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx");
+
 
 
 
@@ -106,7 +118,10 @@ void	TrueRecParticleGun::ProcessEvent()
     Double_t th_true = trueobs.Theta()*TMath::RadToDeg();
     Double_t fi_true = trueobs.Phi()*TMath::RadToDeg();
 
+
+    Energy_corr();
     theta_corr();
+
 
 
 
@@ -122,6 +137,10 @@ void	TrueRecParticleGun::ProcessEvent()
         UInt_t k = 999;
         for( UInt_t j = 0; j < GetTracks()->GetNTracks(); j++ )
         {
+
+
+
+
             photon_true_Evth_rec->Fill(E_true, th_true);
             if( GetTracks()->GetNTracks() == 1)
                 i = j;
@@ -148,6 +167,9 @@ void	TrueRecParticleGun::ProcessEvent()
         }
         if( i < 2 )
         {
+
+            photon_theta_phi_CB->Fill(GetTracks()->GetTheta(i), GetTracks()->GetPhi(i));
+
             Double_t E_rec    =  GetTracks()->GetClusterEnergy(i);
             Double_t th_rec   =  GetTracks()->GetTheta(i);
 
@@ -171,9 +193,15 @@ void	TrueRecParticleGun::ProcessEvent()
 
                 photon_EtEr_v_det_CB->Fill(E_rec,  GetTracks()->GetCentralCrystal(i), E_true/E_rec);
 
+                int idet_mod = int(GetTracks()->GetCentralCrystal(i)/16);
+                photon_EtEr_v_detmod_CB->Fill(E_rec, idet_mod, rel_E);
+
+
                 photon_dtheta_v_theta_CB->Fill(th_rec,dth );
                 double test = (TMath::Log(-rel_E));
                 logRelE->Fill(test);
+
+                photon_rE_v_E_CB->Fill(E_rec, rel_E);
 
             }
             else if(GetTracks()->HasTAPS(i)) //TAPS
@@ -270,6 +298,33 @@ void	TrueRecParticleGun::ProcessScalerRead()
 }
 Bool_t	TrueRecParticleGun::Init(const char* configfile)
 {
+    std::string         line;
+
+    std::ifstream fileCB("configfiles/data/CB_lingain.txt");
+    std::getline(fileCB, line);
+    std::string         buffer2;
+    stringstream        ss;
+    ss << line;
+    while (std::getline(ss, buffer2, '\t'))
+    {
+        CBgain.push_back(std::stod(buffer2));
+    }
+    fileCB.close();
+
+    std::ifstream fileTAPS("configfiles/data/TAPS_lingain.txt");
+    std::getline(fileTAPS, line);
+    std::string         buffer3;
+    std::stringstream   ss2;
+    ss2 << line;
+    while (std::getline(ss2, buffer3, '\t'))
+    {
+        TAPSgain.push_back(std::stod(buffer3));
+    }
+    fileTAPS.close();
+
+
+   std::cout << " CB gain correction applied" << std::endl;
+   std::cout << " TAPS gain correction applied" << std::endl;
     return kTRUE;
 }
 
@@ -294,3 +349,33 @@ void    TrueRecParticleGun::theta_corr()
     }
     return;
 }
+
+void TrueRecParticleGun::Energy_corr()
+{
+    Double_t Erec, Ec_temp, DeltaE, Ec;
+    int det;
+    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+    {
+        if( GetTracks()->HasCB(i) )
+        {
+            Erec = GetTracks()->GetVector(i).E();
+            Ec_temp = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec;
+            DeltaE = Ec_temp*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetTheta(i)));
+//             ( GetTracks()->GetClusterEnergy(i) - E_true )/(GetTracks()->GetClusterEnergy(i));
+
+            Ec = Ec_temp - DeltaE;
+//            Ec = Ec_temp*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetCentralCrystal(i)));
+//            Ec  = Ec_temp;
+            tracks->SetClusterEnergy(i, Ec);
+        }
+        else if(GetTracks()->HasTAPS(i) )
+        {
+            Erec = GetTracks()->GetVector(i).E();
+            Ec_temp = TAPSgain[GetTracks()->GetCentralCrystal(i)]*Erec;
+            DeltaE = Ec_temp*(Double_t)EvdetTAPS->GetBinContent(EvdetTAPS->FindBin(Ec_temp, GetTracks()->GetTheta(i)));
+            Ec = Ec_temp - DeltaE;
+
+            tracks->SetClusterEnergy(i, Ec);
+        }
+    }
+};
