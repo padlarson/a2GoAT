@@ -282,10 +282,10 @@ AdlarsonPhysics::AdlarsonPhysics():
     p_TAPS_th = (TH2F*)p_unc->Get("TAPS_theta")->Clone();
     p_TAPS_fi = (TH2F*)p_unc->Get("TAPS_phi")->Clone();
 
-    g_corr_cb_it0               = new TFile("configfiles/data/gcorr_it0.root");
-    g_CB_e1 =                    (TH2F*)g_corr_cb_it0->Get("3pi0_it0")->Clone();
-    g_corr_cb_it1               = new TFile("configfiles/data/gcorr_it1.root");
-    g_CB_e2 =                    (TH2F*)g_corr_cb_it1->Get("3pi0_it1")->Clone();
+//    g_corr_cb_it0               = new TFile("configfiles/data/gcorr_it0.root");
+//    g_CB_e1 =                    (TH2F*)g_corr_cb_it0->Get("3pi0_it0")->Clone();
+//    g_corr_cb_it1               = new TFile("configfiles/data/gcorr_it1.root");
+//    g_CB_e2 =                    (TH2F*)g_corr_cb_it1->Get("3pi0_it1")->Clone();
 
 
     fin_sel                    = new TFile("configfiles/cuts/final_state_selection.root");
