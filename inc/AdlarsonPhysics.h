@@ -40,6 +40,7 @@ private:
     GHistBGSub2*    true_th_p_v_th_etapr_CM;
     GHistBGSub2*    true_th_v_E_p;
     GHistBGSub2*    true_th_v_E_eta_g;
+    GHistBGSub2*    true_th_v_E_eta_6g;
     GHistBGSub2*    true_th_v_E_pi0_g;
     // Kinfit tests
     GHistBGSub2*    true_six_dth_vs_th_p;
@@ -79,6 +80,7 @@ private:
     GHistBGSub2*    p_E_v_TOF_norm_to_c;
 
     GHistBGSub*     CB_EnergySum;
+    GHistBGSub*     CB_EnergySum_3pi0;
 
     // Photon related
     TLorentzVector  IM6g_vec;
@@ -87,6 +89,7 @@ private:
     // 10g analysis
     GH1*            ten_rec_IM;
     GHistBGSub2*    ten_rec_IM_v_MMp;
+    GHistBGSub2*    ten_fit_EvTh_g;
 
     GH1*            fi_diff_TAPSCB;
     GHistBGSub2*    fi_TAPSvsCB;
@@ -123,12 +126,6 @@ private:
     GH1*            four_fit_chi2;
     GH1*            four_fit_pdf;
 
-//    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_CB;
-//    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_CB;
-//    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_CB;
-//    GHistBGSub2*    four_fit_Pulls_g_E_vs_E_TAPS;
-//    GHistBGSub2*    four_fit_Pulls_g_th_vs_th_TAPS;
-//    GHistBGSub2*    four_fit_Pulls_g_phi_vs_th_TAPS;
 
 
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
@@ -139,6 +136,20 @@ private:
     GHistBGSub2*    four_fit_mgg_v_eth_BaF2;
     GHistBGSub2*    four_fit_mgg_v_eth_PbWO4;
 
+    GHistBGSub2*    four_fit_m_eta_gg_v_eth;
+    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2;
+    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4;
+
+    GHistBGSub2*    four_fit_mgg_v_eth_2;
+    GHistBGSub2*    four_fit_mgg_v_eth_BaF2_2;
+    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4_2;
+
+    GHistBGSub2*    four_fit_m_eta_gg_v_eth_2;
+    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2_2;
+    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4_2;
+
+    GHistBGSub2*    four_fit_best_2pi0_pi_E_v_th;
+    GHistBGSub2*    four_fit_best_etapi0_pi_E_v_th;
 
     // 6g analysis
     // test analysis to test that kinfit APLCON is working properly
@@ -215,6 +226,10 @@ private:
     GHistBGSub2*    six_fit_mgg_v_e_BaF2;
     GHistBGSub2*    six_fit_mgg_v_e_PbWO4;
 
+    GHistBGSub2*    six_fit_mgg_v_eth_2;
+    GHistBGSub2*    six_fit_mgg_v_eth_BaF2_2;
+    GHistBGSub2*    six_fit_mgg_v_eth_PbWO4_2;
+
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
     GHistBGSub2*    six_phy_3pi_IMpipi_v_IMppi;
@@ -237,7 +252,8 @@ private:
     GH1*            IM10g_fit_best_cand;
 
     GH1*            ten_fit_PDF_eta2pi;
-    GHistBGSub2*    ten_fit_true_v_pdf_eta2pi;
+    GHistBGSub2*    ten_fit_X_v_pdf_eta2pi;
+    GHistBGSub2*    ten_fit_Y_v_pdf_eta2pi;
 
     // proton identified from TAPS_E vs VETO_dE
 
@@ -256,6 +272,12 @@ private:
     TFile*          pi0_cand;
     TCutG*          pi0_g_cand;
 
+
+    TFile*          threepi_Evth;
+    TCutG*          threepi_g_cand;
+    TFile*          twopi_Evth;
+    TCutG*          twopi_g_cand;
+
     TFile*          g_unc;
     TFile*          p_unc;
     // histograms with unc
@@ -268,6 +290,11 @@ private:
     TH2*            p_TAPS_e;
     TH2*            p_TAPS_th;
     TH2*            p_TAPS_fi;
+
+    TFile*          g_corr_cb_it0;
+    TH2*            g_CB_e1;
+    TFile*          g_corr_cb_it1;
+    TH2*            g_CB_e2;
 
     TFile*          fin_sel;
     TH2*            etapr_eta;
@@ -314,6 +341,8 @@ private:
 
     std::vector<double> obs;
     std::vector<double> unc;
+
+    std::vector<double> Legendre; //etapr photo pr Legendre values
 
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
@@ -458,6 +487,8 @@ public:
     Bool_t	Init(const char* configfile);
     void            Energy_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
+
+    void            CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
     // calculates IM for n photons
     Double_t    IM_Ng( UInt_t n );
