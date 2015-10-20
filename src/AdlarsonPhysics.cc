@@ -689,6 +689,7 @@ void	AdlarsonPhysics::ProcessEvent()
     nrprotons = 0;
     iprtrack = 10000;
     Double_t TOF = -100.0;
+//    Double_t TOF_CB = -100.; // obtain the CB time from the crystal with highest energy (least impact from TimeWalk) and compare this time to the TAPS time
     for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++){
         for(UInt_t i = 0; i < ClustersInTime.size() ; i++){
             UInt_t j = ClustersInTime[i];
