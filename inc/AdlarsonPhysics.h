@@ -277,6 +277,8 @@ private:
     TCutG*          threepi_g_cand;
     TFile*          twopi_Evth;
     TCutG*          twopi_g_cand;
+    TFile*          etapi_Evth;
+    TCutG*          etapi_g_cand;
 
     TFile*          g_unc;
     TFile*          p_unc;
