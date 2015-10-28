@@ -76,11 +76,16 @@ private:
     GHistBGSub2*    p_E_v_dE_pr;    // for proton sel
     GHistBGSub2*    p_E_v_TOF;
     GHistBGSub2*    p_E_v_TOF_All;
+    GHistBGSub2*    p_E_v_TOF_CB_All;
+    GHistBGSub2*    p_E_v_TOF_CB_2PrID;
     GHistBGSub2*    p_E_v_TOF_All_wVeto;
     GHistBGSub2*    p_E_v_TOF_norm_to_c;
 
     GHistBGSub*     CB_EnergySum;
+    GHistBGSub*     CB_EnergySum_2pi0;
+    GHistBGSub*     CB_EnergySum_etapi0;
     GHistBGSub*     CB_EnergySum_3pi0;
+    GHistBGSub*     CB_EnergySum_etapr;
 
     // Photon related
     TLorentzVector  IM6g_vec;
@@ -108,6 +113,8 @@ private:
     TH2D            time_TOF;
     TH2D            time_clusters_TAPS;
     TH2D            time_clusters_CB;
+    TH2D            time_clusters_CBavg_TAPSdiff;
+    TH2D            time_clusters_CBavg_EPT;
     TH1D            time_nr_AllClusters;
     TH1D            time_nr_ClustersinTime;
     TH1D            time_nr_CltimeVeto;
@@ -126,7 +133,8 @@ private:
     GH1*            four_fit_chi2;
     GH1*            four_fit_pdf;
 
-
+    GHistBGSub2*    fit_mgg_v_CB_2;
+    GHistBGSub2*    fit_mgg_v_TAPS_2;
 
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
     GHistBGSub2*    four_fit_best_2pi_IM_v_E;
