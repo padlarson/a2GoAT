@@ -78,6 +78,7 @@ private:
     GHistBGSub2*    p_E_v_TOF_All;
     GHistBGSub2*    p_E_v_TOF_CB_All;
     GHistBGSub2*    p_E_v_TOF_CB_2PrID;
+    GHistBGSub2*    p_E_v_TOF_CB_best;
     GHistBGSub2*    p_E_v_TOF_All_wVeto;
     GHistBGSub2*    p_E_v_TOF_norm_to_c;
 
