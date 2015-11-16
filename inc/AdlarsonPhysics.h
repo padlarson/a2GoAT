@@ -67,6 +67,7 @@ private:
 
     // Proton related
     TLorentzVector  MMp_vec;
+    TLorentzVector g[3], h[3], rc[3];
 
     GHistBGSub*     p_nr;
     GHistBGSub*     p_MM;
