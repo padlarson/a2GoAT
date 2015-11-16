@@ -76,8 +76,11 @@ private:
     GHistBGSub2*    p_E_v_dE_pr;    // for proton sel
     GHistBGSub2*    p_E_v_TOF;
     GHistBGSub2*    p_E_v_TOF_All;
+    GHistBGSub2*    p_E_v_TOF_TAPS_1cl;
     GHistBGSub2*    p_E_v_TOF_CB_All;
     GHistBGSub2*    p_E_v_TOF_CB_2PrID;
+    GHistBGSub2*    p_E_v_TOF_TAPS_All;
+    GHistBGSub2*    p_E_v_TOF_TAPS_2PrID;
     GHistBGSub2*    p_E_v_TOF_CB_best;
     GHistBGSub2*    p_E_v_TOF_All_wVeto;
     GHistBGSub2*    p_E_v_TOF_norm_to_c;
@@ -114,11 +117,13 @@ private:
     TH2D            time_TOF;
     TH2D            time_clusters_TAPS;
     TH2D            time_clusters_CB;
+    TH2D            time_clusters_CBavg_CBdiff;
     TH2D            time_clusters_CBavg_TAPSdiff;
+    TH2D            time_clusters_TAPS_TAPSdiff;
     TH2D            time_clusters_CBavg_EPT;
     TH1D            time_nr_AllClusters;
     TH1D            time_nr_ClustersinTime;
-    TH1D            time_nr_CltimeVeto;
+    TH1D            time_nr_FinalClusterSel;
     TH1D            six_time_TaggedTime;
 
 
@@ -134,12 +139,18 @@ private:
     GH1*            four_fit_chi2;
     GH1*            four_fit_pdf;
 
-    GHistBGSub2*    fit_mgg_v_CB_2;
-    GHistBGSub2*    fit_mgg_v_TAPS_2;
+    GHistBGSub2*    fit_mgg_pi_v_CB_2;
+    GHistBGSub2*    fit_mgg_eta_v_CB_2;
+    GHistBGSub2*    fit_mgg_pi_v_TAPS_2;
+    GHistBGSub2*    fit_mgg_eta_v_TAPS_2;
 
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
     GHistBGSub2*    four_fit_best_2pi_IM_v_E;
     GHistBGSub2*    four_fit_best_etapi_IM_v_E;
+
+    GHistBGSub2*    four_fit_Pulls_g_E_vs_eth_CB;
+    GHistBGSub2*    four_fit_Pulls_g_th_vs_eth_CB;
+    GHistBGSub2*    four_fit_Pulls_g_phi_vs_eth_CB;
 
     GHistBGSub2*    four_fit_mgg_v_eth;
     GHistBGSub2*    four_fit_mgg_v_eth_BaF2;
@@ -171,10 +182,18 @@ private:
 
     GH1*            six_rec_IM;
     GHistBGSub2*    six_rec_IM_v_MMp;
+    GHistBGSub2*    six_rec_EvTh_5g;
+    GHistBGSub2*    six_rec_EvTh_6g_from_5g_sample;
+    GHistBGSub2*    six_rec_EvTh_6g;
+    GHistBGSub2*    six_rec_EvTh_7g;
+    GHistBGSub2*    time_clusters_CB_3pi0;
 
     GH1*            six_fit_chi2;
     GH1*            six_fit_pdf;
     GH1*            six_fit_etaprfinal_pdf;
+
+    GHistBGSub2*    proton_fit_e_v_th;
+    GHistBGSub2*    proton_fit_e_v_th_final;
     GHistBGSub2*    six_fit_Pulls;
     GHistBGSub2*    six_fit_Pulls_g_E_vs_E_CB;
     GHistBGSub2*    six_fit_Pulls_g_th_vs_th_CB;
@@ -183,23 +202,17 @@ private:
     GHistBGSub2*    six_fit_Pulls_g_th_vs_th_TAPS;
     GHistBGSub2*    six_fit_Pulls_g_phi_vs_th_TAPS;
 
-    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth_CB;
-    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth_CB;
-    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth_CB;
-    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth_PbWO4;
-    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth_PbWO4;
-    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth_PbWO4;
-    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth_BaF2;
-    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth_BaF2;
-    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth_BaF2;
+    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth;
+    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth;
+    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth;
 
-    GHistBGSub2*    six_fit_Pulls_p_th_vs_th_TAPS;
-    GHistBGSub2*    six_fit_Pulls_p_phi_vs_th_TAPS;
+    GHistBGSub2*    six_fit_Pulls_p_th_vs_det_TAPS;
+    GHistBGSub2*    six_fit_Pulls_p_phi_vs_det_TAPS;
 
     GH1*            six_fit_IM;
-    GH1*            six_fit_IM_rec;     // rec IM(6g) for events which passed the fit
 
-
+    GH1*            six_fit_which_place_best_3pi_cand;
+    GH1*            six_fit_which_place_best_etapr_cand;
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi;
     GH1*            six_fit_PDF_joint;
 
@@ -207,15 +220,13 @@ private:
     GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
-    GHistBGSub2*    six_fit_test_mass_constr;
     GH1*            six_fit_best_eta;
-    GH1*            six_fit_n_eta;
-    GH1*            six_fit_n_eta_final;
-    GH1*            six_fit_n_pi0;
-    GH1*            six_fit_n_pi0_final;
-    GHistBGSub2*    six_fit_neta_v_npi0;
-    GHistBGSub2*    six_fit_neta_v_npi0_final;
+    GH1*            six_fit_final_coplanarity;
+    GH1*            six_fit_final_theta_diff;
+
     GHistBGSub2*    six_fit_EvTh_g;
+    GHistBGSub2*    six_fit_EvTh_g_final;
+    GHistBGSub2*    six_fit_EvTh_g_final_removed;
     GHistBGSub2*    six_fit_best_etapr_eta_E_v_th;
     GHistBGSub2*    six_fit_best_etapr_pi_E_v_th;
     GHistBGSub2*    six_fit_best_3pi0_pi_E_v_th;
@@ -264,6 +275,10 @@ private:
     GHistBGSub2*    ten_fit_X_v_pdf_eta2pi;
     GHistBGSub2*    ten_fit_Y_v_pdf_eta2pi;
 
+    GHistBGSub2*    ten_fit_nfit_v_pdf_5pi0_v_eta2pi0;
+    GHistBGSub2*    ten_fit_dX_v_pdf_5pi0_v_eta2pi0;
+    GHistBGSub2*    ten_fit_dY_v_pdf_5pi0_v_eta2pi0;
+
     // proton identified from TAPS_E vs VETO_dE
 
     TFile*          cutFile;        // File which contains EdE cut
@@ -275,6 +290,13 @@ private:
 
     TCutG*          cutPionTAPS;
     TCutG*          cutElectronTAPS;
+
+    TFile*          Evth_g_sel;
+    TCutG*          sixg_cand;
+    TFile*          Evth_7g_sel;
+    TCutG*          seveng_cand;
+    TFile*          PDF_cut_file;
+    TCutG*          PDF_cut;
 
     TFile*          eta_cand;
     TCutG*          eta_g_cand;
@@ -292,20 +314,25 @@ private:
     TFile*          g_unc;
     TFile*          p_unc;
     // histograms with unc
-    TH2*            g_CB_e;
-    TH2*            g_CB_th;
-    TH2*            g_CB_fi;
-    TH2*            g_TAPS_e;
-    TH2*            g_TAPS_th;
-    TH2*            g_TAPS_fi;
-    TH2*            p_TAPS_e;
-    TH2*            p_TAPS_th;
-    TH2*            p_TAPS_fi;
+//    TH2*            g_CB_e;
+//    TH2*            g_CB_th;
+//    TH2*            g_CB_fi;
+//    TH2*            g_TAPS_e;
+//    TH2*            g_TAPS_th;
+//    TH2*            g_TAPS_fi;
+    TH2*            g_e;
+    TH2*            g_th;
+    TH2*            g_phi;
+//    TH2*            p_TAPS_e;
+    TH1*            p_TAPS_th;
+    TH1*            p_TAPS_fi;
 
-    TFile*          g_corr_cb_it0;
-    TH2*            g_CB_e1;
-    TFile*          g_corr_cb_it1;
-    TH2*            g_CB_e2;
+
+    TFile*          unc_corr;
+    TH2*            g_e_c1;
+    TH2*            g_th_c1;
+    TH1*            p_th_c1;
+    TH1*            p_fi_c1;
 
     TFile*          fin_sel;
     TH2*            etapr_eta;
@@ -323,9 +350,13 @@ private:
     Double_t        m_etapi01True, m_etapi02True, m_2pi0True;
 
     // Reconstructed Lorentz Vectors
-    std::vector<Int_t> ClustersInTime;
+    std::vector<int> ClustersInTime;
+    std::vector<int> IgnoreTAPSCluster;
+    std::vector<int> FinalClusterSelection;
 
-    std::vector<Int_t> PbWO4;
+    std::vector<int> PbWO4;
+    std::vector<int> ring3_or_ring4_CB;
+    Bool_t edge_CB;
 
     UInt_t nrprotons;
     UInt_t iprtrack;
@@ -362,7 +393,6 @@ private:
     Double_t    sigma_eta;
     Double_t    sigma_pi0;
 
-    const Double_t    taggerTimeCut = 6.0;
 
     typedef std::pair<Int_t, std::vector<Double_t>> corr_pair;
     std::map<UInt_t, std::vector<Double_t>> CB_Ecorr;
@@ -376,7 +406,10 @@ private:
     typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
     std::map<UInt_t, std::vector<Double_t>> TOF_corr;
 
+
     typedef std::pair<std::vector<Int_t>, Double_t> comb;
+    std::vector<comb> threepi_comb;
+    std::vector<comb> etatwopi_comb;
     std::vector<comb> teng_comb;
 
     TFile*          thcorr_CB;        // File which contains TProfile
@@ -496,6 +529,7 @@ public:
     virtual ~AdlarsonPhysics();
 
     Bool_t	Init(const char* configfile);
+    void            RandomTime();
     void            Energy_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
 
@@ -517,8 +551,8 @@ public:
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
-    void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi );
-    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi);
+    void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& eta2pi_comb, std::vector<comb>& threepi_comb);
+    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& eta2pi_comb, std::vector<comb>& threepi_comb);
 
 
     // functions specifically related to 10g analysis
