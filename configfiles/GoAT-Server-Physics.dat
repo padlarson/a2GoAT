@@ -1,2 +1,6 @@
-Input-Directory: /local/raid1/work/adlarson/analysis/Aug2012/GoAT/root/
-Output-Directory: /local/raid1/work/adlarson/analysis/Aug2012/Physics/
+#Input-Directory: /local/raid1/work/adlarson/analysis/Aug2012/GoAT/root/
+#Output-Directory: /local/raid1/work/adlarson/analysis/Aug2012/Physics/
+Input-Directory: /local/raid2/work/adlarson/analysis/July2014/GoAT/NoShiftFullTarget/root/
+Output-Directory: /local/raid2/work/adlarson/analysis/July2014/Physics/NoShiftFullTarget/
+#Input-Directory: /local/raid1/work/adlarson/analysis/Oct2014/GoAT/root/
+#Output-Directory: /local/raid1/work/adlarson/analysis/Oct2014/Physics/
