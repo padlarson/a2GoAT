@@ -345,8 +345,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     etapi_g_cand                = (TCutG*)etapi_Evth->Get("CutProton")->Clone();
 
 
-    GHistBGSub::InitCuts(-15., 15., -80., -20.);
-    GHistBGSub::AddRandCut(20., 80.);
+    GHistBGSub::InitCuts(-15., 15., -35., -20.);
+    GHistBGSub::AddRandCut(20., 35.);
 
 //  For final states including 6g
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
