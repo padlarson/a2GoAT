@@ -345,8 +345,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     etapi_g_cand                = (TCutG*)etapi_Evth->Get("CutProton")->Clone();
 
 
-    GHistBGSub::InitCuts(-15., 15., -35., -20.);
-    GHistBGSub::AddRandCut(20., 35.);
+    GHistBGSub::InitCuts(-12., 12., -30., -20.);
+    GHistBGSub::AddRandCut(20., 30.);
 
 //  For final states including 6g
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
@@ -612,12 +612,12 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    kinfit3pi.AddConstraint("VertexConstraint", all_names_3pi + std::vector<string>{"v_z"}, VertexConstraint);
 
     APLCON::Fit_Settings_t settings = kinfit.GetSettings();
-    settings.MaxIterations = 20;
+    settings.MaxIterations = 15;
 
     APLCON::Fit_Settings_t settings_eta2pi = kinfiteta2pi.GetSettings();
-    settings_eta2pi.MaxIterations = 20;
+    settings_eta2pi.MaxIterations = 15;
     APLCON::Fit_Settings_t settings_3pi = kinfit3pi.GetSettings();
-    settings_3pi.MaxIterations = 20;
+    settings_3pi.MaxIterations = 15;
 
 
 //    settings.DebugLevel = 5;
@@ -1038,14 +1038,14 @@ void	AdlarsonPhysics::ProcessEvent()
     ClustersInTime = FinalClusterSelection;
 
 
-    if( (FinalClusterSelection.size() == 5) && (nrprotons > 0) )
-        fourgAnalysis(iprtrack);
+//    if( (FinalClusterSelection.size() == 5) && (nrprotons > 0) )
+//        fourgAnalysis(iprtrack);
 
     if( FinalClusterSelection.size() == 7 && (nrprotons > 0) )
         sixgAnalysis( iprtrack );
 
-    if( FinalClusterSelection.size() == 11 && (nrprotons > 0) )
-        tengAnalysis(iprtrack);
+//    if( FinalClusterSelection.size() == 11 && (nrprotons > 0) )
+//        tengAnalysis(iprtrack);
 }
 
 void	AdlarsonPhysics::ProcessScalerRead()
@@ -1189,9 +1189,6 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(){
     leg3 = (1/2)*( 3*TMath::Power(x,2) - 1 );
     leg4 = (1/2)*( 5*TMath::Power(x,3) - 3*x );
     leg5 = (1/8)*( 35*TMath::Power(x,4) - 30*TMath::Power(x,2) + 3);
-
-
-
 
 
     
@@ -2584,16 +2581,16 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
         Theta_s = g_th->GetBinContent( g_th->FindBin(Ek,theta) );
         Phi_s   = g_phi->GetBinContent( g_phi->FindBin(Ek,theta) );
 
-        e_g     = g_e_c1->GetBinContent(g_e_c1->FindBin(Ek,theta) );
-        th_g    = g_th_c1->GetBinContent(g_th_c1->FindBin(Ek,theta) );
+//        e_g     = g_e_c1->GetBinContent(g_e_c1->FindBin(Ek,theta) );
+//        th_g    = g_th_c1->GetBinContent(g_th_c1->FindBin(Ek,theta) );
 
-        if( e_g < 0.5 || e_g > 1.5 )
-            e_g = 1.0;
-        if( th_g < 0.5 || th_g > 1.5 )
-            th_g = 1.0;
+//        if( e_g < 0.5 || e_g > 1.5 )
+//            e_g = 1.0;
+//        if( th_g < 0.5 || th_g > 1.5 )
+//            th_g = 1.0;
 
-        Ek_s    = Ek_s*e_g*e_g;
-        Theta_s = Theta_s*th_g*th_g;
+//        Ek_s    = Ek_s*e_g*e_g;
+//        Theta_s = Theta_s*th_g*th_g;
 
         if(TMath::Abs(Ek_s) < 1.0e-5){
             if(apparatus_nr == 1 )
@@ -2624,13 +2621,13 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
         p_th    = p_th_c1->GetBinContent(p_th_c1->FindBin(inr) );
         p_fi    = p_fi_c1->GetBinContent(p_fi_c1->FindBin(inr) );
 
-        if( p_th < 0.5 || p_th > 1.7 )
-            p_th = 1.0;
-        if( p_fi < 0.5 || p_fi > 1.7 )
-            p_fi = 1.0;
+//        if( p_th < 0.5 || p_th > 1.7 )
+//            p_th = 1.0;
+//        if( p_fi < 0.5 || p_fi > 1.7 )
+//            p_fi = 1.0;
 
-        Theta_s = Theta_s*p_th*p_th;
-        Phi_s   = Phi_s*p_fi*p_fi;
+//        Theta_s = Theta_s*p_th*p_th;
+//        Phi_s   = Phi_s*p_fi*p_fi;
 
 
         if(TMath::Abs(Theta_s) < 1.0e-5)
