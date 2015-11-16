@@ -83,6 +83,7 @@ public:
             void            SetTheta(const Int_t index, Double_t Theta_new) {theta[index] = Theta_new;}
     const	Double_t*       GetTime()                           const	{return time;}
             Double_t        GetTime(const Int_t index)          const	{return time[index];}
+    void                    SetTime(const Int_t index, Double_t time_new) {time[index] = time_new;}
     inline  TLorentzVector	GetVector(const Int_t index)        const;
     inline  TLorentzVector	GetVector(const Int_t index, const Double_t mass)   const;
     const	Double_t*       GetMWPC0Energy()                          const	{return MWPC0Energy;}
