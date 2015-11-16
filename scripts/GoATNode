@@ -24,9 +24,9 @@ mkdir -p "${GoAT_OUTPUTDIR}/root"
 
 LogFile="${GoAT_OUTPUTDIR}/log/${tag}.log"
 
-#Now run GoAT
-echo "goat $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile"
-goat $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile
+#Now run goat or AdlarsonAnalysis
+echo "AdlarsonAnalysis $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile"
+AdlarsonAnalysis $GoAT_CONFIGFILE -f $GoAT_INPUTFILE -F $GoAT_OUTPUTFILE &> $LogFile
 
 #list all the files in the output directory                                     
 echo

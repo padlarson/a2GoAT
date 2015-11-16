@@ -23,7 +23,7 @@ exe=`basename $0`
 #the maximum time the job will be allowed HH:MM:SS
 #This is the max allowed on the batch_x86 queue.
 #Set high in case 
-WALLTIME=00:30:00
+WALLTIME=03:00:00
 
 print_usage(){
     echo
@@ -53,11 +53,11 @@ OutputDir=`gawk '{if($1=="Output-Directory:")print $2}' $ServerFile`
 OutputPre=`gawk '{if($1=="Output-Prefix:")print $2}' $ServerFile`
 
 MainDir=`pwd`
-
+# GoAT or Acqu_CBTaggTAPS
 if [ -z $InputDir ]; then InputDir=`pwd`; fi
-if [ -z $InputPre ]; then InputPre="Acqu"; fi
+if [ -z $InputPre ]; then InputPre="GoAT"; fi
 if [ -z $OutputDir ]; then OutputDir=`pwd`; fi
-if [ -z $OutputPre ]; then OutputPre="GoAT"; fi
+if [ -z $OutputPre ]; then OutputPre="Physics"; fi
 
 #make some subdirectories for job and setup files
 JobDir="jobs/$JobName"
