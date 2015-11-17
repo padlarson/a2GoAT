@@ -1552,7 +1552,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
         for ( Int_t jgam_min = 0; jgam_min < 6 ; jgam_min++ )
         {
             photons_rec[n_photons_min] = GetTracks()->GetVector( set_min[jgam_min+2] );
-            Photons_six[n_photons_min].SetFromVector( GetTracks()->GetVector(set_min[jgam_min+2]));
+//            Photons_six[n_photons_min].SetFromVector( GetTracks()->GetVector(set_min[jgam_min+2]));
             detnr.push_back( GetTracks()->GetCentralCrystal( set_min[jgam_min+2]) );
             IM6g_vec += photons_rec[n_photons_min];
             n_photons_min++;
@@ -1620,6 +1620,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
            }
            TLorentzVector proton_fit = FitParticle::Make(proton, MASS_PROTON);
 
+
+           double test = etap_fit.M();
            six_fit_IM->Fill( etap_fit.M(),GetTagger()->GetTaggedTime(tag) );
            proton_fit_e_v_th->Fill(proton_fit.E()-MASS_PROTON, proton_fit.Theta()*TMath::RadToDeg(), GetTagger()->GetTaggedTime(tag));
 
