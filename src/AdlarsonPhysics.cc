@@ -16,13 +16,13 @@ AdlarsonPhysics::AdlarsonPhysics():
     time_clusters_TAPS("time_clusters_TAPS", "TAPS cluster time" ,200, -50., 50., 450, 0, 450),
     time_clusters_CB("time_clusters_CB", "CB cluster time", 200, -50., 50., 720, 0, 720),
     time_clusters_CBavg_CBdiff("time_clusters_CBavg_CBdiff","time_clusters_CBavg_CBdiff",400, -20., 20., 720, 0, 720),
-    time_clusters_CBavg_TAPSdiff("time_clusters_CBavg_TAPSdiff", "CB avg time - TAPS cluster time" ,800, -50., 50., 450, 0, 450),
-    time_clusters_TAPS_TAPSdiff("time_clusters_TAPS_TAPSdiff", "TAPS - TAPS cluster time (for > 1 TAPS clusters)" ,800, -50., 50., 450, 0, 450),
-    time_clusters_CBavg_EPT("time_clusters_CBavg_EPT", "CB avg time - Tagger time" ,800, -50., 50., 50, 0, 50),
+    time_clusters_CBavg_TAPSdiff("time_clusters_CBavg_TAPSdiff", "CB avg time - TAPS cluster time" ,400, -50., 50., 450, 0, 450),
+    time_clusters_TAPS_TAPSdiff("time_clusters_TAPS_TAPSdiff", "TAPS - TAPS cluster time (for > 1 TAPS clusters)" ,400, -50., 50., 450, 0, 450),
+    time_clusters_CBavg_EPT("time_clusters_CBavg_EPT", "CB avg time - Tagger time" ,400, -50., 50., 50, 0, 50),
     time_nr_AllClusters("time_nr_AllClusters", "nr of all detected clusters",15, 0, 15),
     time_nr_ClustersinTime("time_nr_ClustersinTime", "nr of detected clusters in time window and above Cluster Energy cut",15, 0, 15),
     time_nr_FinalClusterSel("time_nr_FinalClusterSel", "nr of clusters fulfilling all cuts",15, 0, 15),
-    six_time_TaggedTime("six_time_TaggedTime", "Tagger time for the events with 7 clusters", 2000, -500, 500),
+    six_time_TaggedTime("six_time_TaggedTime", "Tagger time for the events with 7 clusters", 500, -250, 250),
     detnr(6),
     CB_region(4),
     photons_rec(nPhotons_six),
@@ -46,7 +46,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 // TRUE OBSERVABLES
 // Beam energy
     true_BeamE                  = new GH1("true_BeamE", "True Beam Energy", 250, 1.400, 1.650);
-    tag_BeamE                   = new GH1("tag_BeamE", "Tagged Beam Energy", 250, 1400, 1650);
+    tag_BeamE                   = new GH1("tag_BeamE", "Tagged Beam Energy", 125, 1400, 1650);
 // Phase space final state particles
     true_th_p_v_th_etapr_CM     = new GHistBGSub2("true_th_p_v_th_etapr_CM", "#theta_{p} vs #theta_{#eta^{'}}", 360, 0., 180, 360, 0., 180.);
     true_th_v_E_p               = new GHistBGSub2("true_th_v_E_p", "True E_{p} vs #theta_{p}", 100, 0., 0.6, 100, 0., 25.);
@@ -79,38 +79,37 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    fi_th_diff_TAPSCB           = new GHistBGSub2("fi_th_diff_TAPSCB", "#Delta#phi v #Delta#theta TAPS - CB", 200, -200., 200., 80, -20., 20.);
 //    fi_TAPSvsCB                 = new GHistBGSub2("fi_TAPSvsCB", "#phi TAPS vs CB", 100, -200.,200.,100, -200.,200.);
 // Rec. TAPS - proton analysis
-    p_E_v_dE_all                = new GHistBGSub2("p_E_v_dE_all", "All E vs dE TAPS", 1200, 0., 600., 200, 0.0, 10.);
-    p_E_v_dE_cc                 = new GHistBGSub2("p_E_v_dE_cc", "All E vs dE TAPS chance coinc", 1200, 0., 600., 200, 0.0, 10.);
-    p_E_v_dE_pr                 = new GHistBGSub2("p_E_v_dE_pr", "Best proton cand E vs dE TAPS", 1200, 0., 600, 200, 0.0, 10.);
-    p_E_v_TOF                   = new GHistBGSub2("p_E_v_TOF", "Energy TAPS vs TOF/ns", 800, -20., 20., 800, 0., 800.);
-    p_E_v_TOF_All               = new GHistBGSub2("p_E_v_TOF_All", "Energy TAPS vs TOF ", 800, -20., 20., 800, 0., 800.);
+//    p_E_v_dE_all                = new GHistBGSub2("p_E_v_dE_all", "All E vs dE TAPS", 120, 0., 600., 200, 0.0, 10.);
+//    p_E_v_dE_cc                 = new GHistBGSub2("p_E_v_dE_cc", "All E vs dE TAPS chance coinc", 120, 0., 600., 200, 0.0, 10.);
+//    p_E_v_dE_pr                 = new GHistBGSub2("p_E_v_dE_pr", "Best proton cand E vs dE TAPS", 120, 0., 600, 200, 0.0, 10.);
+//    p_E_v_TOF                   = new GHistBGSub2("p_E_v_TOF", "Energy TAPS vs TOF/ns", 800, -20., 20., 800, 0., 800.);
+//    p_E_v_TOF_All               = new GHistBGSub2("p_E_v_TOF_All", "Energy TAPS vs TOF ", 800, -20., 20., 800, 0., 800.);
     p_E_v_TOF_TAPS_1cl          = new GHistBGSub2("p_E_v_TOF_TAPS_1cl", "Energy TAPS vs TOF with 1 TAPS cl ", 800, -20., 20., 800, 0., 800.);
     p_E_v_TOF_CB_All            = new GHistBGSub2("p_E_v_TOF_CB_All", "Energy TAPS vs TOF (TAPS - CB) ", 800, -20., 20., 800, 0., 800.);
     p_E_v_TOF_TAPS_All          = new GHistBGSub2("p_E_v_TOF_TAPS_All", "Energy TAPS vs TOF (TAPS - TAPS) when > 1 TAPS cluster ", 800, -20., 20., 800, 0., 800.);
     p_E_v_TOF_CB_2PrID          = new GHistBGSub2("p_E_v_TOF_CB_2PrID", "Energy TAPS vs TOF (TAPS - CB) when more than one proton cand ", 800, -20., 20., 800, 0., 800.);
     p_E_v_TOF_CB_best           = new GHistBGSub2("p_E_v_TOF_CB_best", "Energy TAPS vs TOF (TAPS - CB) best out of multiple proton cand ", 800, -20., 20., 800, 0., 800.);
     p_E_v_TOF_TAPS_2PrID        = new GHistBGSub2("p_E_v_TOF_TAPS_2PrID", "Energy TAPS vs TOF (TAPS - TAPS) if more than 1 cluster in TAPS ", 800, -20., 20., 800, 0., 800.);
-    p_E_v_TOF_All_wVeto         = new GHistBGSub2("p_E_v_TOF_All_wVeto", "Energy TAPS vs TOF w VETO > 1MeV", 800, -20., 20., 800, 0., 800.);
 
     p_nr                        = new GHistBGSub("p_nr", "nr of protons", 5,  0, 5);
     p_th_v_E                    = new GHistBGSub2("p_th_v_E", "Rec E_{p} vs #theta_{p}", 120, 0., 600, 50, 0., 25.);
     p_MM                        = new GHistBGSub("MM_p", "Missing Mass calculated for proton", 300, 800., 1100.);
 
     CB_EnergySum                = new GHistBGSub("CB_EnergySum", "Crystal Ball Energy Sum", 400, 0., 2000.);
-    CB_EnergySum_2pi0           = new GHistBGSub("CB_EnergySum_2pi0", "Crystal Ball Energy Sum for 2pi0", 400, 0., 2000.);
-    CB_EnergySum_etapi0         = new GHistBGSub("CB_EnergySum_etapi0", "Crystal Ball Energy Sum for etapi0", 400, 0., 2000.);
+//    CB_EnergySum_2pi0           = new GHistBGSub("CB_EnergySum_2pi0", "Crystal Ball Energy Sum for 2pi0", 400, 0., 2000.);
+//    CB_EnergySum_etapi0         = new GHistBGSub("CB_EnergySum_etapi0", "Crystal Ball Energy Sum for etapi0", 400, 0., 2000.);
     CB_EnergySum_3pi0           = new GHistBGSub("CB_EnergySum_3pi0", "Crystal Ball Energy Sum for 3pi0", 400, 0., 2000.);
-    CB_EnergySum_etapr           = new GHistBGSub("CB_EnergySum_etapr", "Crystal Ball Energy Sum for eta prime", 400, 0., 2000.);
+//    CB_EnergySum_etapr           = new GHistBGSub("CB_EnergySum_etapr", "Crystal Ball Energy Sum for eta prime", 400, 0., 2000.);
 
-    IMgg_v_det_2pi0_CB          =   new GHistBGSub2("IMgg_v_det_2pi0_CB", "IM(gg) 2#pi^{0}, CB", 500, 0, 1000, 720, 0, 720);
-    IMgg_v_det_etapi0_pi0_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_pi0_CB", "IM(gg) #eta#pi^{0}, CB", 400, 0, 400, 720, 0, 720);
-    IMgg_v_det_etapi0_eta_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_eta_CB", "IM(gg) #eta#pi^{0}, CB", 400, 400, 800, 720, 0, 720);
-    IMgg_v_det_3pi0_CB          =   new GHistBGSub2("IMgg_v_det_3pi0_CB", "IM(gg) 3#pi^{0}, CB, CB", 500, 0, 1000, 720, 0, 720);
-    IMgg_v_det_3pi0_CB_fit      =   new GHistBGSub2("IMgg_v_det_3pi0_CB_fit", "IM(gg) 3#pi^{0} fit, CB, CB", 500, 0, 1000, 720, 0, 720);
-    IMgg_v_det_2pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_2pi0_TAPS", "IM(gg) 2#pi^{0}, TAPS", 500, 0, 1000, 440, 0, 440);
-    IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 500, 0, 1000, 440, 0, 440);
-    IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 500, 0, 1000, 440, 0, 440);
-    IMgg_v_det_3pi0_TAPS_fit    =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS_fit", "IM(gg) 3#pi^{0} fit, TAPS", 500, 0, 1000, 440, 0, 440);
+    IMgg_v_det_2pi0_CB          =   new GHistBGSub2("IMgg_v_det_2pi0_CB", "IM(gg) 2#pi^{0}, CB", 80, 0, 400, 720, 0, 720);
+    IMgg_v_det_etapi0_pi0_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_pi0_CB", "IM(gg) #eta#pi^{0}, CB", 80, 0, 400, 720, 0, 720);
+    IMgg_v_det_etapi0_eta_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_eta_CB", "IM(gg) #eta#pi^{0}, CB", 80, 400, 800, 720, 0, 720);
+    IMgg_v_det_3pi0_CB          =   new GHistBGSub2("IMgg_v_det_3pi0_CB", "IM(gg) 3#pi^{0}, CB, CB", 80, 0, 400, 720, 0, 720);
+//    IMgg_v_det_3pi0_CB_fit      =   new GHistBGSub2("IMgg_v_det_3pi0_CB_fit", "IM(gg) 3#pi^{0} fit, CB, CB", 500, 0, 1000, 720, 0, 720);
+    IMgg_v_det_2pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_2pi0_TAPS", "IM(gg) 2#pi^{0}, TAPS", 80, 0, 400, 440, 0, 440);
+    IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 200, 0, 1000, 440, 0, 440);
+    IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 80, 0, 400, 440, 0, 440);
+//    IMgg_v_det_3pi0_TAPS_fit    =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS_fit", "IM(gg) 3#pi^{0} fit, TAPS", 500, 0, 1000, 440, 0, 440);
 
 // Rec. Photons
 
@@ -132,22 +131,22 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    four_fit_Pulls_g_E_vs_E_TAPS       = new GHistBGSub2("four_fit_Pulls_g_E_vs_E_TAPS", "4g Pulls #gamma E vs E TAPS", 100, 0, 1000, 50, -5., 5.);
 //    four_fit_Pulls_g_th_vs_th_TAPS     = new GHistBGSub2("four_fit_Pulls_g_th_vs_th_TAPS", "4g Pulls #gamma #theta vs #theta TAPS", 25, 0, 50, 50, -5., 5.);
 //    four_fit_Pulls_g_phi_vs_th_TAPS    = new GHistBGSub2("four_fit_Pulls_g_phi_vs_th_TAPS", "4g Pulls #gamma #phi vs #theta TAPS", 25, 0, 50, 50, -5., 5.);
-    four_fit_Pulls_g_E_vs_eth_CB        = new GHistBGSub2("four_fit_Pulls_g_E_vs_eth_CB", "4g Pulls #gamma E vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
-    four_fit_Pulls_g_th_vs_eth_CB       = new GHistBGSub2("four_fit_Pulls_g_th_vs_eth_CB", "4g Pulls #gamma #theta vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
-    four_fit_Pulls_g_phi_vs_eth_CB      = new GHistBGSub2("four_fit_Pulls_g_phi_vs_eth_CB", "4gPulls #gamma #phi vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
+//    four_fit_Pulls_g_E_vs_eth_CB        = new GHistBGSub2("four_fit_Pulls_g_E_vs_eth_CB", "4g Pulls #gamma E vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
+//    four_fit_Pulls_g_th_vs_eth_CB       = new GHistBGSub2("four_fit_Pulls_g_th_vs_eth_CB", "4g Pulls #gamma #theta vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
+//    four_fit_Pulls_g_phi_vs_eth_CB      = new GHistBGSub2("four_fit_Pulls_g_phi_vs_eth_CB", "4gPulls #gamma #phi vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
 
     four_fit_best_2pi_IM_v_E        = new GHistBGSub2("four_fit_best_2pi_IM_v_E", "E_{#pi^{0}} vs M_{#gamma#gamma} for 2#pi^{0}", 100, 0., 1000., 100, 0., 400.);
     four_fit_best_etapi_IM_v_E      = new GHistBGSub2("four_fit_best_etapi_IM_v_E", "E_{#pi^{0}} vs M_{#gamma#gamma} for #eta#pi^{0}", 100, 0., 1000., 250, 0., 1000.);
 
     // 2pi0 inside phase space
-    four_fit_mgg_v_eth             = new GHistBGSub2("four_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 13500, 0, 13500, 200, 0., 1000.);
-    four_fit_mgg_v_eth_BaF2        = new GHistBGSub2("four_fit_mgg_v_eth_BaF2", "m_{#gamma#gamma} vE, #theta BaF2", 4000, 0, 4000, 200., 0, 1000.);
-    four_fit_mgg_v_eth_PbWO4       = new GHistBGSub2("four_fit_mgg_v_eth_PbWO4", "m_{#gamma#gamma} v E, #theta PbWO4", 1000, 0, 1000, 200., 0, 1000.);
+    four_fit_mgg_v_eth             = new GHistBGSub2("four_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 12500, 0, 12500, 80, 0., 400.);
+//    four_fit_mgg_v_eth_BaF2        = new GHistBGSub2("four_fit_mgg_v_eth_BaF2", "m_{#gamma#gamma} vE, #theta BaF2", 4000, 0, 4000, 80., 0, 400.);
+//    four_fit_mgg_v_eth_PbWO4       = new GHistBGSub2("four_fit_mgg_v_eth_PbWO4", "m_{#gamma#gamma} v E, #theta PbWO4", 1000, 0, 1000, 80., 0, 400.);
 
     // etapi0 eta-->gg cand inside phase space
-    four_fit_m_eta_gg_v_eth        = new GHistBGSub2("four_fit_m_eta_gg_v_eth", "m_{#gamma#gamma} vs E, #theta #eta-->#gamma#gamma" , 13500, 0, 13500, 200, 0., 1000.);
-    four_fit_m_etagg_v_eth_BaF2    = new GHistBGSub2("four_fit_m_etagg_v_eth_BaF2", "m_{#gamma#gamma} vE, #theta BaF2 #eta-->#gamma#gamma", 4000, 0, 4000, 200., 0, 1000.);
-    four_fit_m_etagg_v_eth_PbWO4   = new GHistBGSub2("four_fit_m_etagg_v_eth_PbWO4", "m_{#gamma#gamma} v E, #theta PbWO4 #eta-->#gamma#gamma", 1000, 0, 1000, 200., 0, 1000.);
+    four_fit_m_eta_gg_v_eth        = new GHistBGSub2("four_fit_m_eta_gg_v_eth", "m_{#gamma#gamma} vs E, #theta #eta-->#gamma#gamma" , 12500, 0, 12500, 80, 300., 700.);
+//    four_fit_m_etagg_v_eth_BaF2    = new GHistBGSub2("four_fit_m_etagg_v_eth_BaF2", "m_{#gamma#gamma} vE, #theta BaF2 #eta-->#gamma#gamma", 1000, 0, 1000, 200., 0, 1000.);
+//    four_fit_m_etagg_v_eth_PbWO4   = new GHistBGSub2("four_fit_m_etagg_v_eth_PbWO4", "m_{#gamma#gamma} v E, #theta PbWO4 #eta-->#gamma#gamma", 1000, 0, 1000, 200., 0, 1000.);
 
 //    four_fit_mgg_v_eth_2             = new GHistBGSub2("four_fit_mgg_v_eth_2", "m_{#gamma#gamma} vs E, #theta inside cut", 27000, 0, 27000, 200, 0., 1000.);
 //    four_fit_mgg_v_eth_BaF2_2        = new GHistBGSub2("four_fit_mgg_v_eth_BaF2_2", "m_{#gamma#gamma} vE, #theta BaF2 inside cut", 4000, 0, 4000, 200., 0, 1000.);
@@ -173,9 +172,9 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     time_clusters_CB_3pi0       = new GHistBGSub2("time_clusters_CB_3pi0", "CB cluster time for 3pi0 events", 200, -50., 50., 720, 0, 720),
 
-    six_rec_EvTh_5g             = new GHistBGSub2("six_rec_EvTh_5g", "E_{#gamma} vs #Theta_{#gamma} rec 5g cand", 200, 0., 1000., 200, 0., 200.);
+//    six_rec_EvTh_5g             = new GHistBGSub2("six_rec_EvTh_5g", "E_{#gamma} vs #Theta_{#gamma} rec 5g cand", 200, 0., 1000., 200, 0., 200.);
     six_rec_EvTh_6g             = new GHistBGSub2("six_rec_EvTh_6g", "E_{#gamma} vs #Theta_{#gamma} rec 6g cand", 200, 0., 1000., 200, 0., 200.);
-    six_rec_EvTh_7g             = new GHistBGSub2("six_rec_EvTh_7g", "E_{#gamma} vs #Theta_{#gamma} rec 7g cand", 200, 0., 1000., 200, 0., 200.);
+//    six_rec_EvTh_7g             = new GHistBGSub2("six_rec_EvTh_7g", "E_{#gamma} vs #Theta_{#gamma} rec 7g cand", 200, 0., 1000., 200, 0., 200.);
 
 //    six_rec_EvTh_6g_from_5g_sample = new GHistBGSub2("six_rec_EvTh_6g_from_5g_sample", "E_{#gamma} vs #Theta_{#gamma} rec 5g cand", 1000, 0., 1000., 200, 0., 200.);
 
@@ -187,66 +186,65 @@ AdlarsonPhysics::AdlarsonPhysics():
     proton_fit_e_v_th           = new GHistBGSub2("proton_fit_e_v_th", "proton E vs #theta", 200, 0., 1000., 50, 0, 25);
     proton_fit_e_v_th_final     = new GHistBGSub2("proton_fit_e_v_th_final", "proton E vs #theta final ev sample", 200, 0., 1000., 50, 0, 25);
 
-    six_fit_Pulls_g_E_vs_E_CB       = new GHistBGSub2("six_fit_Pulls_g_E_vs_E_CB", "Pulls #gamma E vs E CB", 100, 0, 1000, 50, -5., 5.);
-    six_fit_Pulls_g_th_vs_th_CB     = new GHistBGSub2("six_fit_Pulls_g_th_vs_th_CB", "Pulls #gamma #theta vs #theta CB", 90, 0, 180, 50, -5., 5.);
-    six_fit_Pulls_g_phi_vs_th_CB    = new GHistBGSub2("six_fit_Pulls_g_phi_vs_th_CB", "Pulls #gamma #phi vs #theta CB", 90, 0, 180., 50, -5., 5.);
-    six_fit_Pulls_g_E_vs_E_TAPS       = new GHistBGSub2("six_fit_Pulls_g_E_vs_E_TAPS", "Pulls #gamma E vs E TAPS", 100, 0, 1000, 50, -5., 5.);
-    six_fit_Pulls_g_th_vs_th_TAPS     = new GHistBGSub2("six_fit_Pulls_g_th_vs_th_TAPS", "Pulls #gamma #theta vs #theta TAPS", 50, 0, 50, 50, -5., 5.);
-    six_fit_Pulls_g_phi_vs_th_TAPS    = new GHistBGSub2("six_fit_Pulls_g_phi_vs_th_TAPS", "Pulls #gamma #phi vs #theta TAPS", 50, 0, 50, 50, -5., 5.);
+//    six_fit_Pulls_g_E_vs_E_CB       = new GHistBGSub2("six_fit_Pulls_g_E_vs_E_CB", "Pulls #gamma E vs E CB", 100, 0, 1000, 50, -5., 5.);
+//    six_fit_Pulls_g_th_vs_th_CB     = new GHistBGSub2("six_fit_Pulls_g_th_vs_th_CB", "Pulls #gamma #theta vs #theta CB", 90, 0, 180, 50, -5., 5.);
+//    six_fit_Pulls_g_phi_vs_th_CB    = new GHistBGSub2("six_fit_Pulls_g_phi_vs_th_CB", "Pulls #gamma #phi vs #theta CB", 90, 0, 180., 50, -5., 5.);
+//    six_fit_Pulls_g_E_vs_E_TAPS       = new GHistBGSub2("six_fit_Pulls_g_E_vs_E_TAPS", "Pulls #gamma E vs E TAPS", 100, 0, 1000, 50, -5., 5.);
+//    six_fit_Pulls_g_th_vs_th_TAPS     = new GHistBGSub2("six_fit_Pulls_g_th_vs_th_TAPS", "Pulls #gamma #theta vs #theta TAPS", 50, 0, 50, 50, -5., 5.);
+//    six_fit_Pulls_g_phi_vs_th_TAPS    = new GHistBGSub2("six_fit_Pulls_g_phi_vs_th_TAPS", "Pulls #gamma #phi vs #theta TAPS", 50, 0, 50, 50, -5., 5.);
 
-    six_fit_Pulls_g_E_vs_eth        = new GHistBGSub2("six_fit_Pulls_g_E_vs_eth", "Pulls #gamma E vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
-    six_fit_Pulls_g_th_vs_eth       = new GHistBGSub2("six_fit_Pulls_g_th_vs_eth", "Pulls #gamma #theta vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
-    six_fit_Pulls_g_phi_vs_eth      = new GHistBGSub2("six_fit_Pulls_g_phi_vs_eth", "Pulls #gamma #phi vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
+//    six_fit_Pulls_g_E_vs_eth        = new GHistBGSub2("six_fit_Pulls_g_E_vs_eth", "Pulls #gamma E vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
+//    six_fit_Pulls_g_th_vs_eth       = new GHistBGSub2("six_fit_Pulls_g_th_vs_eth", "Pulls #gamma #theta vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
+//    six_fit_Pulls_g_phi_vs_eth      = new GHistBGSub2("six_fit_Pulls_g_phi_vs_eth", "Pulls #gamma #phi vs E, #theta CB", 7000, 0, 7000, 50, -5., 5.);
 
-    six_fit_Pulls_p_th_vs_det_TAPS     = new GHistBGSub2("six_fit_Pulls_p_th_vs_det_TAPS", "Pulls proton #theta vs #theta TAPS", 440, 0, 440, 50, -5., 5.);
-    six_fit_Pulls_p_phi_vs_det_TAPS    = new GHistBGSub2("six_fit_Pulls_p_phi_vs_det_TAPS", "Pulls proton #phi vs #theta TAPS", 440, 0, 440, 50, -5., 5.);
+//    six_fit_Pulls_p_th_vs_det_TAPS     = new GHistBGSub2("six_fit_Pulls_p_th_vs_det_TAPS", "Pulls proton #theta vs #theta TAPS", 440, 0, 440, 50, -5., 5.);
+//    six_fit_Pulls_p_phi_vs_det_TAPS    = new GHistBGSub2("six_fit_Pulls_p_phi_vs_det_TAPS", "Pulls proton #phi vs #theta TAPS", 440, 0, 440, 50, -5., 5.);
 
-    six_fit_mgg_v_eth           = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 13500, 0, 13500, 200, 0., 1000.);
-    six_fit_mgg_v_eth_BaF2      = new GHistBGSub2("six_fit_mgg_v_eth_BaF2", "m_{#gamma#gamma} vs E, #theta for BaF2", 8000, 0, 8000, 200, 0., 1000.);
-    six_fit_mgg_v_eth_PbWO4     = new GHistBGSub2("six_fit_mgg_v_eth_PbWO4", "m_{#gamma#gamma} vs E, #theta for PbWO4", 2000, 0, 2000, 200, 0., 1000.);
-    six_fit_mgg_v_e_BaF2        = new GHistBGSub2("six_fit_mgg_v_e_BaF2", "m_{#gamma#gamma} vs E for BaF2", 100, 0, 1000, 200, 0., 1000.);
-    six_fit_mgg_v_e_PbWO4       = new GHistBGSub2("six_fit_mgg_v_e_PbWO4", "m_{#gamma#gamma} vs E for PbWO4", 100, 0, 1000, 200, 0., 1000.);
+    six_fit_mgg_v_eth           = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 13500, 0, 13500, 80, 0., 400.);
+//    six_fit_mgg_v_eth_BaF2      = new GHistBGSub2("six_fit_mgg_v_eth_BaF2", "m_{#gamma#gamma} vs E, #theta for BaF2", 8000, 0, 8000, 80, 0., 400.);
+//    six_fit_mgg_v_eth_PbWO4     = new GHistBGSub2("six_fit_mgg_v_eth_PbWO4", "m_{#gamma#gamma} vs E, #theta for PbWO4", 2000, 0, 2000, 80, 0., 400.);
+//    six_fit_mgg_v_e_BaF2        = new GHistBGSub2("six_fit_mgg_v_e_BaF2", "m_{#gamma#gamma} vs E for BaF2", 1000, 0, 1000, 80, 0., 400.);
+//    six_fit_mgg_v_e_PbWO4       = new GHistBGSub2("six_fit_mgg_v_e_PbWO4", "m_{#gamma#gamma} vs E for PbWO4", 1000, 0, 1000, 80, 0., 400.);
 
 //    six_fit_mgg_v_eth_2           = new GHistBGSub2("six_fit_mgg_v_eth_2", "m_{#gamma#gamma} vs E , #theta in cut", 42000, 0, 42000, 200, 0., 1000.);
 //    six_fit_mgg_v_eth_BaF2_2      = new GHistBGSub2("six_fit_mgg_v_eth_BaF2_2", "m_{#gamma#gamma} vs E, #theta for BaF2 in cut", 8000, 0, 8000, 200, 0., 1000.);
 //    six_fit_mgg_v_eth_PbWO4_2     = new GHistBGSub2("six_fit_mgg_v_eth_PbWO4_2", "m_{#gamma#gamma} vs E, #theta for PbWO4 in cut", 2000, 0, 2000, 200, 0., 1000.);
-    fit_mgg_pi_v_CB_2            = new GHistBGSub2("fit_mgg_pi_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 18500, 0, 18500, 400, 0., 2.0);
-    fit_mgg_eta_v_CB_2            = new GHistBGSub2("fit_mgg_eta_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 18500, 0, 18500, 400, 0., 2.0);
-    fit_mgg_pi_v_TAPS_2          = new GHistBGSub2("fit_mgg_pi_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 400, 0., 2.0);
-    fit_mgg_eta_v_TAPS_2          = new GHistBGSub2("fit_mgg_eta_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 400, 0., 2.0);
+    fit_mgg_pi_v_CB_2            = new GHistBGSub2("fit_mgg_pi_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 18500, 0, 18500, 80 , 0.4, 2.0);
+    fit_mgg_eta_v_CB_2            = new GHistBGSub2("fit_mgg_eta_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 18500, 0, 18500, 80, 0.4, 2.0);
+    fit_mgg_pi_v_TAPS_2          = new GHistBGSub2("fit_mgg_pi_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 80, 0., 2.0);
+    fit_mgg_eta_v_TAPS_2          = new GHistBGSub2("fit_mgg_eta_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 80, 0., 2.0);
 
-    six_fit_IM                  = new GH1("six_fit_IM", "IM(6#gamma) after APLCON fit", 500, 400., 1400.);
-    six_fit_IM_3pi              = new GH1("six_fit_IM_3pi", "IM(6#gamma) for 3#pi^{0} candidates", 500, 400., 1400.);
-    six_fit_IM_eta2pi           = new GH1("six_fit_IM_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 500, 400., 1400.);
+    six_fit_IM                  = new GH1("six_fit_IM", "IM(6#gamma) after APLCON fit", 200, 400., 1400.);
+    six_fit_IM_3pi              = new GH1("six_fit_IM_3pi", "IM(6#gamma) for 3#pi^{0} candidates", 200, 400., 1400.);
+    six_fit_IM_eta2pi           = new GH1("six_fit_IM_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 200, 400., 1400.);
 
-    six_fit_which_place_best_3pi_cand = new GH1("six_fit_which_place_best_3pi_cand", "from rough chi2 test which fits kinfit hypoth best 3pi0", 10, 0, 10);
-    six_fit_which_place_best_etapr_cand = new GH1("six_fit_which_place_best_etapr_cand", "from rough chi2 test which fits kinfit hypoth best eta prime", 10, 0, 10);;
+//    six_fit_which_place_best_3pi_cand = new GH1("six_fit_which_place_best_3pi_cand", "from rough chi2 test which fits kinfit hypoth best 3pi0", 10, 0, 10);
+//    six_fit_which_place_best_etapr_cand = new GH1("six_fit_which_place_best_etapr_cand", "from rough chi2 test which fits kinfit hypoth best eta prime", 10, 0, 10);;
 
     six_fit_PDF_eta2pi_v_3pi    = new GHistBGSub2("six_fit_PDF_eta2pi_v_3pi_2", "PDF_eta2pi_v_3pi 6#gamma using kinfit", 100, 0., 1., 100, 0., 1.);
     six_fit_PDF_eta2pi_v_Meta2pi= new GHistBGSub2("six_fit_PDF_eta2pi_v_Meta2pi", "PDF_eta2pi_v_3pi vs mass", 100, 0., 1., 200, 800., 1200.);
     six_fit_best_eta            = new GH1("six_fit_best_eta", "best #eta cand from comb", 500, 200, 700.);
+    six_fit_best_2pi                 = new GH1("six_fit_best_2pi", "best 2#pi^{0} cand from comb", 500, 0., 500.);
 
-    six_fit_EvTh_g                   = new GHistBGSub2("six_fit_EvTh_g", "E_{#gamma} vs #Theta_{#gamma}", 500, 0., 1000., 200, 0., 200.);
-    six_fit_EvTh_g_final             = new GHistBGSub2("six_fit_EvTh_g_final ev sample", "E_{#gamma} vs #Theta_{#gamma} final", 500, 0., 1000., 200, 0., 200.);
-    six_fit_EvTh_g_final_removed     = new GHistBGSub2("six_fit_EvTh_g_final_removed ev sample", "E_{#gamma} vs #Theta_{#gamma} final", 500, 0., 1000., 100, 0., 200.);
+    six_fit_EvTh_g                   = new GHistBGSub2("six_fit_EvTh_g", "E_{#gamma} vs #Theta_{#gamma}", 100, 0., 1000., 100, 0., 200.);
+    six_fit_EvTh_g_final             = new GHistBGSub2("six_fit_EvTh_g_final ev sample", "E_{#gamma} vs #Theta_{#gamma} final", 100, 0., 1000., 100, 0., 200.);
+    six_fit_EvTh_g_final_removed     = new GHistBGSub2("six_fit_EvTh_g_final_removed ev sample", "E_{#gamma} vs #Theta_{#gamma} final", 100, 0., 1000., 100, 0., 200.);
 
     six_fit_best_etapr_eta_E_v_th    = new GHistBGSub2("six_fit_best_etapr_eta_E_v_th", "E_{#eta, #gamma} vs #Theta_{#eta, #gamma}", 100, 0., 1000., 50, 0., 200.);
     six_fit_best_etapr_pi_E_v_th     = new GHistBGSub2("six_fit_best_etapr_pi_E_v_th", "E_{#pi^{0}, #gamma} vs #Theta_{#pi^{0}, #gamma}", 100, 0., 1000., 50, 0., 200.);
-    six_fit_best_3pi0_pi_E_v_th      = new GHistBGSub2("six_fit_best_3pi0_pi_E_v_th", "E_{#pi^{0}, #gamma} vs #Theta_{#pi^{0}, #gamma} 3#pi^{0}", 500, 0., 1000., 200, 0., 200.);
-    six_fit_best_3pi0_mgg_v_thth     = new GHistBGSub2("six_fit_best_3pi0_mgg_v_thth", "m_{#gamma#gamma} vs #theta #gamma1, #theta #gamma2 for 3#pi^{0}", 1600, 0, 1600, 200, 0., 1000.);
-    six_fit_best_2pi                 = new GH1("six_fit_best_2pi", "best 2#pi^{0} cand from comb", 500, 0., 500.);
+    six_fit_best_3pi0_pi_E_v_th      = new GHistBGSub2("six_fit_best_3pi0_pi_E_v_th", "E_{#pi^{0}, #gamma} vs #Theta_{#pi^{0}, #gamma} 3#pi^{0}", 100, 0., 1000., 50, 0., 200.);
 
-    six_fit_final_coplanarity        = new GH1("final_coplanarity", "#phi difference proton and #eta prime", 400, -20., 20.);
-    six_fit_final_theta_diff         = new GH1("six_fit_final_theta_diff", "#theta difference for vector beam target - proton and #eta prime}", 400, -20., 20.);
+    six_fit_final_coplanarity        = new GH1("final_coplanarity", "#phi difference proton and #eta prime", 200, -20., 20.);
+    six_fit_final_theta_diff         = new GH1("six_fit_final_theta_diff", "#theta difference for vector beam target - proton and #eta prime}", 200, -20., 20.);
 
     six_fit_eta_PDF_v_Metapr        = new GHistBGSub2("six_fit_eta_PDF_v_Metapr", "PDF when eta mass enforced vs IM, 6#gamma cand", 100, 0., 1., 100, 600., 1100.);
 
-    six_phy_etapr_v_BeamE       = new GHistBGSub2("six_phy_etapr_v_BeamE", "IM(6#gamma) vs Beam Energy", 20, 1400, 1600, 500, 600., 1100.);
-    six_phy_etapr_eta_v_BeamE   = new GHistBGSub2("six_phy_etapr_eta_v_BeamE", "IM(6#gamma) with enforced eta mass vs Beam Energy", 20, 1400, 1600, 500, 600., 1100.);
+    six_phy_etapr_v_BeamE       = new GHistBGSub2("six_phy_etapr_v_BeamE", "IM(6#gamma) vs Beam Energy", 20, 1400, 1600, 250, 600., 1100.);
+    six_phy_etapr_eta_v_BeamE   = new GHistBGSub2("six_phy_etapr_eta_v_BeamE", "IM(6#gamma) with enforced eta mass vs Beam Energy", 20, 1400, 1600, 100, 600., 1100.);
 
     six_phy_DP                  = new GHistBGSub2("six_phy_DP", "Rec fitted Dalitz Plot distribution vs bin nr 6#gamma", 800, 0, 800, 500, 600., 1100.);
-    six_phy_M_pi1pi2_v_etapr    = new GHistBGSub2("six_phy_M_pi1pi2_v_etapr", "Rec M_{#pi#pi,fit}^{2} 6#gamma", 400 , 0.0, 200, 200, 600., 1100. );
-    six_phy_M_etapi_v_etapr     = new GHistBGSub2("six_phy_M_etapi_v_etapr", "Rec M_{#eta#pi,fit}^{2} 6#gamma", 700 , 0.0, 700, 200, 600., 1100. );
+    six_phy_M_pi1pi2_v_etapr    = new GHistBGSub2("six_phy_M_pi1pi2_v_etapr", "Rec M_{#pi#pi,fit}^{2} 6#gamma", 200 , 0.0, 200., 100, 600., 1100. );
+    six_phy_M_etapi_v_etapr     = new GHistBGSub2("six_phy_M_etapi_v_etapr", "Rec M_{#eta#pi,fit}^{2} 6#gamma", 400 , 400.0, 800., 100, 600., 1100. );
 
     // to check the energy of the  eta pi0 system vs its inv mass
     six_fit_best_eta_IM_v_E     = new GHistBGSub2("six_fit_best_eta_IM_v_E", "E_{#eta} vs M_{#eta}", 100, 0., 1000., 150, 200., 800.);
@@ -259,7 +257,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 
 // Kinfit related variables 10g
 
-    kfit_chi2_10g       = new GH1("kfit_chi2_10g", "#chi^{2} kinfit 10#gamma", 100, 0, 100.);
+    kfit_chi2_10g       = new GH1("kfit_chi2_10g", "#chi^{2} kinfit 10#gamma", 20, 0, 20.);
     kfit_pdf_10g        = new GH1("kfit_pdf_10g", "#pdf kinfit 10#gamma", 100, 0, 1.);
     kfit_Pulls_10g      = new GHistBGSub2("kfit_Pulls_10g", "Pulls 10#gamma", 50, -5., 5., 40, 0, 40);
     ten_fit_EvTh_g      = new GHistBGSub2("ten_fit_EvTh_g", "E_{#eta, #gamma} vs #Theta_{#eta, #gamma} 10 #gamma", 200, 0., 1000., 100, 0., 200.);
@@ -278,11 +276,11 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     // Physics results eta'
 
-    cutFile             = new TFile("configfiles/cuts/TAPSEdEPA.root");
-    cutProtonTAPS       = (TCutG*)cutFile->Get("CutProton");
+//    cutFile             = new TFile("configfiles/cuts/TAPSEdEPA.root");
+//    cutProtonTAPS       = (TCutG*)cutFile->Get("CutProton");
 
-    cutFile2            = new TFile("configfiles/cuts/TAPS_TOF_PA4.root");
-    cutProtonETOF       = (TCutG*)cutFile2->Get("Hadron");
+//    cutFile2            = new TFile("configfiles/cuts/TAPS_TOF_PA4.root");
+//    cutProtonETOF       = (TCutG*)cutFile2->Get("Hadron");
 
     // APLCON kinfit uncertainties
 
@@ -299,54 +297,54 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     // corrections to kinfit based on Pull results for eta'
 
-    unc_corr                   = new TFile("configfiles/corr/unc_corr.root");
-    g_e_c1                     = (TH2F*)unc_corr->Get("Eg_unc_corr")->Clone();
-    g_th_c1                    = (TH2F*)unc_corr->Get("thg_unc_corr")->Clone();
-    p_th_c1                    = (TH1F*)unc_corr->Get("th_pr_unc_corr")->Clone();
-    p_fi_c1                    = (TH1F*)unc_corr->Get("phi_pr_unc_corr")->Clone();
+//    unc_corr                   = new TFile("configfiles/corr/unc_corr.root");
+//    g_e_c1                     = (TH2F*)unc_corr->Get("Eg_unc_corr")->Clone();
+//    g_th_c1                    = (TH2F*)unc_corr->Get("thg_unc_corr")->Clone();
+//    p_th_c1                    = (TH1F*)unc_corr->Get("th_pr_unc_corr")->Clone();
+//    p_fi_c1                    = (TH1F*)unc_corr->Get("phi_pr_unc_corr")->Clone();
 
-    fin_sel                    = new TFile("configfiles/cuts/final_state_selection.root");
-    etapr_eta                  = (TH2F*)fin_sel->Get("etapr_eta_gg")->Clone();
-    etapr_pi                   = (TH2F*)fin_sel->Get("etapr_pi0_gg")->Clone();
-    dir3pi_gg                  = (TH2F*)fin_sel->Get("3pi0_pi0_gg")->Clone();
+//    fin_sel                    = new TFile("configfiles/cuts/final_state_selection.root");
+//    etapr_eta                  = (TH2F*)fin_sel->Get("etapr_eta_gg")->Clone();
+//    etapr_pi                   = (TH2F*)fin_sel->Get("etapr_pi0_gg")->Clone();
+//    dir3pi_gg                  = (TH2F*)fin_sel->Get("3pi0_pi0_gg")->Clone();
 
-    thcorr_CB                   = new TFile("configfiles/corr/CB_th_corr.root");
-    dthvth_CB                   = (TProfile*)thcorr_CB->Get("photon_dtheta_v_theta_CB_pfx")->Clone();
+    thcorr_CB                  = new TFile("configfiles/corr/CB_th_corr.root");
+    dthvth_CB                  = (TProfile*)thcorr_CB->Get("photon_dtheta_v_theta_CB_pfx")->Clone();
 
-    Ecorr_CB                    = new TFile("configfiles/corr/CB_e_corr.root");
-    EvdetCB                     = (TH2F*)Ecorr_CB->Get("g_peak_E_CB");
+    Ecorr_CB                   = new TFile("configfiles/corr/CB_e_corr.root");
+    EvdetCB                    = (TH2F*)Ecorr_CB->Get("g_peak_E_CB");
 
-    Ecorr_TAPS                  = new TFile("configfiles/corr/TAPS_e_corr.root");
-    EvdetTAPS                   = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
+    Ecorr_TAPS                 = new TFile("configfiles/corr/TAPS_e_corr.root");
+    EvdetTAPS                  = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
 
-    thcorr_TAPS                 = new TFile("configfiles/corr/TAPS_th_corr.root");
-    dthvth_TAPS                 = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
+    thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
+    dthvth_TAPS                = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
 
-    Evth_g_sel                  = new TFile("configfiles/cuts/E_v_th_g_cut.root");
-    sixg_cand                   = (TCutG*)Evth_g_sel->Get("CutProton")->Clone();
+    Evth_g_sel                 = new TFile("configfiles/cuts/E_v_th_g_cut.root");
+    sixg_cand                  = (TCutG*)Evth_g_sel->Get("CutProton")->Clone();
 
-    Evth_7g_sel                  = new TFile("configfiles/cuts/E_vs_th_7g_cut.root");
-    seveng_cand                   = (TCutG*)Evth_7g_sel->Get("CutProton")->Clone();
+    Evth_7g_sel                = new TFile("configfiles/cuts/E_vs_th_7g_cut.root");
+    seveng_cand                = (TCutG*)Evth_7g_sel->Get("CutProton")->Clone();
 
-    eta_cand                    = new TFile("configfiles/cuts/eta_cand.root");
-    eta_g_cand                  = (TCutG*)eta_cand->Get("CutProton")->Clone();
-    pi0_cand                    = new TFile("configfiles/cuts/pi0_cand.root");
-    pi0_g_cand                  = (TCutG*)pi0_cand->Get("CutProton")->Clone();
+//    eta_cand                   = new TFile("configfiles/cuts/eta_cand.root");
+//    eta_g_cand                 = (TCutG*)eta_cand->Get("CutProton")->Clone();
+//    pi0_cand                   = new TFile("configfiles/cuts/pi0_cand.root");
+//    pi0_g_cand                 = (TCutG*)pi0_cand->Get("CutProton")->Clone();
 
-    PDF_cut_file                = new TFile("configfiles/cuts/PDF_cut.root");
+    PDF_cut_file              = new TFile("configfiles/cuts/PDF_cut.root");
     PDF_cut                   = (TCutG*)PDF_cut_file->Get("CUTG")->Clone();
 
     // cuts for 3pi phase space, 2pi phase space and etapi0 phase space
-    threepi_Evth                = new TFile("configfiles/cuts/threepi_Evth.root");
-    threepi_g_cand              = (TCutG*)threepi_Evth->Get("CutProton")->Clone();
-    twopi_Evth                  = new TFile("configfiles/cuts/twopi_Evth.root");
-    twopi_g_cand                = (TCutG*)twopi_Evth->Get("CutProton")->Clone();
-    etapi_Evth                  = new TFile("configfiles/cuts/etapi_Evth.root");
-    etapi_g_cand                = (TCutG*)etapi_Evth->Get("CutProton")->Clone();
+//    threepi_Evth                = new TFile("configfiles/cuts/threepi_Evth.root");
+//    threepi_g_cand              = (TCutG*)threepi_Evth->Get("CutProton")->Clone();
+//    twopi_Evth                  = new TFile("configfiles/cuts/twopi_Evth.root");
+//    twopi_g_cand                = (TCutG*)twopi_Evth->Get("CutProton")->Clone();
+//    etapi_Evth                  = new TFile("configfiles/cuts/etapi_Evth.root");
+//    etapi_g_cand                = (TCutG*)etapi_Evth->Get("CutProton")->Clone();
 
 
-    GHistBGSub::InitCuts(-15., 15., -35., -20.);
-    GHistBGSub::AddRandCut(20., 35.);
+    GHistBGSub::InitCuts(-12., 12., -40., -20.);
+    GHistBGSub::AddRandCut(20., 40.);
 
 //  For final states including 6g
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
@@ -462,31 +460,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     // Constraint: Invariant mass of nPhotons equals constant IM,
     // make lambda catch also this with [&] specification
 
-    // Constraint: Coplanarity between eta' and recoil proton
-//    auto CoplanarityConstraint = [] (const vector<vector<double>>& particles) -> double
-//    {
-//        TLorentzVector proton = FitParticle::Make(particles[1], MASS_PROTON);
-//        TLorentzVector etap(0., 0., 0., 0.);
-//        for(size_t i=2;i<particles.size();i++) {
-//            etap += FitParticle::Make(particles[i],0.0);
-//        }
-
-//        return abs(etap.Phi() - proton.Phi())*TMath::RadToDeg() - 180.;
-//    };
-
-//    kinfit.AddConstraint("CoplanarityConstraint", all_names, CoplanarityConstraint);
-
-//    kinfiteta2pi.AddConstraint("CoplanarityConstraint", all_names_eta2pi, CoplanarityConstraint);
-//    kinfit3pi.AddConstraint("CoplanarityConstraint", all_names_3pi, CoplanarityConstraint);
-
-//    auto RequireEtaprime = [&] (const vector< vector<double> >& photons) -> double
-//    {
-//        TLorentzVector sum(0,0,0,0);
-//        for(int i = 0; i < 6; i++) {
-//            sum += FitParticle::Make(photons[i], 0.0);
-//        }
-//        return sum.M() - MASS_ETAP;
-//    };
     auto RequireIM = [&] (const vector< vector<double> >& photons) -> double
     {
         TLorentzVector sum(0,0,0,0);
@@ -771,7 +744,7 @@ void	AdlarsonPhysics::ProcessEvent()
             }
 
             time_clusters_CBavg_TAPSdiff.Fill(TOF_CB, GetTracks()->GetCentralCrystal(j));
-            if( ( TOF_CB > -15.0) &&  ( TOF_CB < 2.0 ) ){
+            if( ( TOF_CB > -10.0) &&  ( TOF_CB < 2.0 ) ){
 
                 if(!sixg_cand->IsInside(GetTracks()->GetClusterEnergy(j), GetTracks()->GetTheta(j))){
                     TAPS_clusters++;
@@ -783,6 +756,8 @@ void	AdlarsonPhysics::ProcessEvent()
         }
 
     }
+
+    if(ClustersInTime.size() < 5) return;
 
     time_nr_ClustersinTime.Fill(ClustersInTime.size());
 
@@ -869,22 +844,22 @@ void	AdlarsonPhysics::ProcessEvent()
             }
         }
 
-    std::vector<Int_t> fin_temp;
-    fin_temp.resize(0);
-    if(FinalClusterSelection.size() == 8){
-        for(UInt_t p = 0; p < FinalClusterSelection.size(); p++){
-            UInt_t q = FinalClusterSelection[p];
-            if(q == iprtrack)
-                    fin_temp.push_back(q);
-            else if(!seveng_cand->IsInside(GetTracks()->GetClusterEnergy(q), GetTracks()->GetTheta(q)))
-                fin_temp.push_back(q);
+//    std::vector<Int_t> fin_temp;
+//    fin_temp.resize(0);
+//    if(FinalClusterSelection.size() == 8){
+//        for(UInt_t p = 0; p < FinalClusterSelection.size(); p++){
+//            UInt_t q = FinalClusterSelection[p];
+//            if(q == iprtrack)
+//                    fin_temp.push_back(q);
+//            else if(!seveng_cand->IsInside(GetTracks()->GetClusterEnergy(q), GetTracks()->GetTheta(q)))
+//                fin_temp.push_back(q);
 
-        }
+//        }
 
-        FinalClusterSelection.resize(0);
-        FinalClusterSelection = fin_temp;
+//        FinalClusterSelection.resize(0);
+//        FinalClusterSelection = fin_temp;
 
-    }
+//    }
 
     time_nr_FinalClusterSel.Fill(FinalClusterSelection.size());
 
@@ -899,13 +874,13 @@ void	AdlarsonPhysics::ProcessEvent()
 //                    six_rec_EvTh_5g->Fill(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q));
 //        }
 //    }
-//    if(FinalClusterSelection.size() == 7){
-//        for(UInt_t p = 0; p < FinalClusterSelection.size() ; p++){
-//            UInt_t q = FinalClusterSelection[p];
-//                if(q != iprtrack)
-//                    six_rec_EvTh_6g->Fill(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q));
-//        }
-//    }
+    if(FinalClusterSelection.size() == 7){
+        for(UInt_t p = 0; p < FinalClusterSelection.size() ; p++){
+            UInt_t q = FinalClusterSelection[p];
+                if(q != iprtrack)
+                    six_rec_EvTh_6g->Fill(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q));
+        }
+    }
 //    if(FinalClusterSelection.size() == 8){
 //        for(UInt_t p = 0; p < FinalClusterSelection.size() ; p++){
 //            UInt_t q = FinalClusterSelection[p];
@@ -984,9 +959,9 @@ void	AdlarsonPhysics::ProcessEvent()
 //    }
 
 
-    for (Int_t ii = 0; ii < GetTracks()->GetNTracks(); ii++)
-        if( GetTracks()->HasTAPS(ii) )
-            p_E_v_dE_all->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
+//    for (Int_t ii = 0; ii < GetTracks()->GetNTracks(); ii++)
+//        if( GetTracks()->HasTAPS(ii) )
+//            p_E_v_dE_all->Fill(GetTracks()->GetClusterEnergy(ii),GetTracks()->GetVetoEnergy(ii));
 
     p_nr->Fill(nrprotons);
     if( (iprtrack == 10000) || (nrprotons == 0) ) return;
@@ -994,7 +969,7 @@ void	AdlarsonPhysics::ProcessEvent()
     if(MC)
         true_six_dth_vs_th_p->Fill(GetTracks()->GetTheta(iprtrack),GetTracks()->GetTheta(iprtrack) - etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
 
-    p_E_v_dE_pr->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
+//    p_E_v_dE_pr->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetVetoEnergy(iprtrack));
     p_th_v_E->Fill(GetTracks()->GetClusterEnergy(iprtrack),GetTracks()->GetTheta(iprtrack));
     proton_vec = GetTracks()->GetVector(iprtrack, pdgDB->GetParticle("proton")->Mass()*1000);
 
@@ -1371,16 +1346,14 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 
                 int imass = int(j/2);
                 idet = perm4g[imin_2pi0][j];
-                if(CB_region[perm4g[ imin_2pi0 ][ j ]]){
-                    double En = (photons_rec[perm4g[ imin_2pi0 ][ j ]]).E();
-                    double Th = (photons_rec[perm4g[ imin_2pi0 ][ j]]).Theta()*TMath::RadToDeg();
-                    double mgg = (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M();
-                    int nEN =  int(En/10.0);
-                    int nTH =  150*int(Th/2.0);
-                    int nBIN = nEN + nTH;
+                int nEN =  int((photons_rec[perm4g[ imin_2pi0 ][ j ]]).E()/20.0);
+                int nTH =  75*int((photons_rec[perm4g[ imin_2pi0 ][ j]]).Theta()*TMath::RadToDeg()/1.0);
+                int nBIN = nEN + nTH;
+                double mgg = (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M();
 
+                four_fit_mgg_v_eth->Fill( nBIN, mgg, GetTagger()->GetTaggedTime(tag) );
+                if(CB_region[perm4g[ imin_2pi0 ][ j ]]){                    
                     IMgg_v_det_2pi0_CB->Fill( (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag));
-                    four_fit_mgg_v_eth->Fill( nBIN, mgg, GetTagger()->GetTaggedTime(tag) );
 
 //                    if(twopi_g_cand->IsInside( photons_rec[perm4g[ imin_2pi0 ][ j ]].E(), photons_rec[perm4g[ imin_2pi0 ][ j ]].Theta()*TMath::RadToDeg()))
 //                        four_fit_mgg_v_eth_2->Fill(nBIN, mgg, GetTagger()->GetTaggedTime(tag));
@@ -1388,24 +1361,21 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                 }
                 else{
                     IMgg_v_det_2pi0_TAPS->Fill((photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
-                    double En = (photons_rec[perm4g[ imin_2pi0 ][ j ]]).E();
-                    double Th = (photons_rec[perm4g[ imin_2pi0 ][ j]]).Theta()*TMath::RadToDeg();
-                    double mgg = (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M();
-                    int nEN =  int(En/10.0);
-                    int nTH =  150*int(Th/2.0);
-                    int nBIN2 = nEN + nTH;
-                    if( PbWO4[detnr[idet]] == -1 ){
-                        four_fit_mgg_v_eth_PbWO4->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
+//                    double En = (photons_rec[perm4g[ imin_2pi0 ][ j ]]).E();
+//                    double Th = (photons_rec[perm4g[ imin_2pi0 ][ j]]).Theta()*TMath::RadToDeg();
+//                    double mgg = (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M();
+//                    int nEN =  int(En/10.0);
+//                    int nTH =  150*int(Th/2.0);
+//                    int nBIN2 = nEN + nTH;
+//                    if( PbWO4[detnr[idet]] == -1 ){
+//                        four_fit_mgg_v_eth_PbWO4->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
 //                        if(twopi_g_cand->IsInside(photons_rec[perm4g[ imin_2pi0 ][ j ]].E(), photons_rec[perm4g[ imin_2pi0 ][ j ]].Theta()*TMath::RadToDeg()))
 //                            four_fit_mgg_v_eth_PbWO4_2->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
-                    }
-                    else{
-                        four_fit_mgg_v_eth_BaF2->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
+//                    }
+//                    else{
+//                        four_fit_mgg_v_eth_BaF2->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
 //                        if(twopi_g_cand->IsInside(photons_rec[perm4g[ imin_2pi0 ][ j ]].E(), photons_rec[perm4g[ imin_2pi0 ][ j ]].Theta()*TMath::RadToDeg()))
 //                            four_fit_mgg_v_eth_BaF2_2->Fill(nBIN2, mgg, GetTagger()->GetTaggedTime(tag));
-
-                    }
-
                 }
             }
         }
@@ -1440,16 +1410,16 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                         double En = (photons_rec[perm4g[ imin_etapi0 ][ j ]]).E();
                         double Th = (photons_rec[perm4g[ imin_etapi0 ][ j]]).Theta()*TMath::RadToDeg();
                         double mgg = (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M();
-                        int nEN =  int(En/10.0);
-                        int nTH =  150*int(Th/2.0);
+                        int nEN =  int(En/20.0);
+                        int nTH =  75*int(Th/1.0);
                         int nBIN = nEN + nTH;
                         four_fit_m_eta_gg_v_eth->Fill( nBIN, mgg, GetTagger()->GetTaggedTime(tag) );
-                        if(etapi_g_cand->IsInside(photons_rec[perm4g[ imin_etapi0 ][ j ]].E(), photons_rec[perm4g[ imin_etapi0 ][ j ]].Theta()*TMath::RadToDeg())){
+
 //                            four_fit_m_eta_gg_v_eth_2->Fill(nBIN, mgg, GetTagger()->GetTaggedTime(tag));
-                            int nEN =  int(En/40.0);
-                            int nBIN3 = 25*detnr[idet] + nEN;
+                            int nEN2 =  int(En/40.0);
+                            int nBIN3 = 25*detnr[idet] + nEN2;
                             fit_mgg_eta_v_CB_2->Fill(nBIN3, MASS_ETA/mgg, GetTagger()->GetTaggedTime(tag));
-                        }                        
+
                     }
                     else{  //pi0 cand
 //                        double En = (photons_rec[perm4g[ imin_etapi0 ][ j ]]).E();
@@ -1464,27 +1434,20 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
                         double En = (photons_rec[perm4g[ imin_etapi0 ][ j ]]).E();
                         double Th = (photons_rec[perm4g[ imin_etapi0 ][ j]]).Theta()*TMath::RadToDeg();
                         double mgg = (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M();
-                        int nEN =  int(En/10.0);
-                        int nTH =  150*int(Th/2.0);
+                        int nEN =  int(En/20.0);
+                        int nTH =  75*int(Th/1.0);
                         int nBIN2 = nEN + nTH;
-                        if( PbWO4[detnr[idet]] == -1 ){
-                            four_fit_m_etagg_v_eth_PbWO4->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
-                            if(etapi_g_cand->IsInside(photons_rec[perm4g[ imin_etapi0 ][ j ]].E(), photons_rec[perm4g[ imin_etapi0 ][ j ]].Theta()*TMath::RadToDeg())){
-//                                four_fit_m_etagg_v_eth_PbWO4_2->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
-                                int nEN =  int(En/40.0);
-                                int nBIN3 = 30*detnr[idet] + nEN;
-                                fit_mgg_eta_v_TAPS_2->Fill(nBIN3, MASS_ETA/mgg, GetTagger()->GetTaggedTime(tag));
-                            }
-                        }
-                        else{
-                            four_fit_m_etagg_v_eth_BaF2->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
-                            if(etapi_g_cand->IsInside(photons_rec[perm4g[ imin_etapi0 ][ j ]].E(), photons_rec[perm4g[ imin_etapi0 ][ j ]].Theta()*TMath::RadToDeg())){
+                        four_fit_m_eta_gg_v_eth->Fill( nBIN2, mgg, GetTagger()->GetTaggedTime(tag) );
+
+                        int nEN2 =  int(En/40.0);
+                        int nBIN3 = 30*detnr[idet] + nEN2;
+                        fit_mgg_eta_v_TAPS_2->Fill(nBIN3, MASS_ETA/mgg, GetTagger()->GetTaggedTime(tag));
+
+
+
 //                                four_fit_m_etagg_v_eth_BaF2_2->Fill( nBIN2, mgg , GetTagger()->GetTaggedTime(tag));
-                                int nEN =  int(En/40.0);
-                                int nBIN3 = 30*detnr[idet] + nEN;
-                                fit_mgg_eta_v_TAPS_2->Fill(nBIN3, MASS_ETA/mgg, GetTagger()->GetTaggedTime(tag));
-                            }
-                        }
+//                         fit_mgg_eta_v_TAPS_2->Fill(nBIN3, MASS_ETA/mgg, GetTagger()->GetTaggedTime(tag));
+
 
                     }
 //                    else{}
@@ -1510,8 +1473,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
         std::vector<Int_t> set_min; // best particle configuration
         set.resize(0);
         set_min.resize(0);
-//        Is_CB_6g.resize(0);
-
 
         for(UInt_t i = 0; i < nPhotons_six; i++)
         {
@@ -1569,11 +1530,12 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
         six_rec_IM->Fill(IM6g_vec.M());
         six_rec_IM_v_MMp->Fill(IM6g_vec.M(), MMp_vec.M());
-        const APLCON::Result_t& result = kinfit.DoFit();
-        if(result.Status == APLCON::Result_Status_t::Success){
-            if( result.ChiSquare <  chi2_min ){
-                chi2_min = result.ChiSquare;
-                prob_min = result.Probability;
+//        const APLCON::Result_t& result = kinfit.DoFit();
+        const APLCON::Result_t& result_min = kinfit.DoFit();
+        if(result_min.Status == APLCON::Result_Status_t::Success){
+            if( result_min.ChiSquare <  chi2_min ){
+                chi2_min = result_min.ChiSquare;
+                prob_min = result_min.Probability;
                 set_min = set;
             }
         }
@@ -1588,52 +1550,52 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
         IM6g_vec.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
         TLorentzVector etap_fit(0.0, 0.0, 0.0, 0.0);
 
-        beam.SetFromVector( GetTagger()->GetVector(set_min[0]) );
-        obs.resize(0);
-        unc.resize(0);
-        unc = Get_unc(3,0,obs);
-        beam.Smear(unc, 2);
-        beam.APLCONSettings();
+//        beam.SetFromVector( GetTagger()->GetVector(set_min[0]) );
+//        obs.resize(0);
+//        unc.resize(0);
+//        unc = Get_unc(3,0,obs);
+//        beam.Smear(unc, 2);
+//        beam.APLCONSettings();
 
-        proton.SetFromVector( GetTracks()->GetVector(set_min[1]) );
-        obs.resize(0);
-        obs.push_back(GetTracks()->GetCentralCrystal(set_min[1]));
-        unc.resize(0);
-        unc = Get_unc( 2, 2, obs);
-        proton.Smear(unc, 1);
+//        proton.SetFromVector( GetTracks()->GetVector(set_min[1]) );
+//        obs.resize(0);
+//        obs.push_back(GetTracks()->GetCentralCrystal(set_min[1]));
+//        unc.resize(0);
+//        unc = Get_unc( 2, 2, obs);
+//        proton.Smear(unc, 1);
 
-        Int_t n_photons_min = 0;
-        for ( Int_t jgam_min = 0; jgam_min < 6 ; jgam_min++ )
-        {
-            photons_rec[n_photons_min] = GetTracks()->GetVector( set_min[jgam_min+2] );
-            Photons_six[n_photons_min].SetFromVector( GetTracks()->GetVector(set_min[jgam_min+2]));
-            detnr.push_back( GetTracks()->GetCentralCrystal( set_min[jgam_min+2]) );
-            IM6g_vec += photons_rec[n_photons_min];
+//        Int_t n_photons_min = 0;
+//        for ( Int_t jgam_min = 0; jgam_min < 6 ; jgam_min++ )
+//        {
+//            photons_rec[n_photons_min] = GetTracks()->GetVector( set_min[jgam_min+2] );
+//            Photons_six[n_photons_min].SetFromVector( GetTracks()->GetVector(set_min[jgam_min+2]));
+//            detnr.push_back( GetTracks()->GetCentralCrystal( set_min[jgam_min+2]) );
+//            IM6g_vec += photons_rec[n_photons_min];
 
-            if( GetTracks()->HasCB(set_min[jgam_min+2]) ){
-                obs.resize(0);
-                obs.push_back(Photons_six[n_photons_min].Ek);
-                obs.push_back(Photons_six[n_photons_min].Theta);
-                unc.resize(0);
-                unc = Get_unc( 1, 1, obs);
-                Photons_six[n_photons_min].Smear(unc, 0);
-            }
-            else{
-                // ( GetTracks()->HasTAPS(jgam_min+2) )
-                obs.resize(0);
-                obs.push_back(Photons_six[n_photons_min].Ek);
-                obs.push_back(Photons_six[n_photons_min].Theta);
-                unc.resize(0);
-                unc = Get_unc( 2, 1, obs);
-                Photons_six[n_photons_min].Smear(unc, 0);
-            }
-            n_photons_min++;
-        }
+//            if( GetTracks()->HasCB(set_min[jgam_min+2]) ){
+//                obs.resize(0);
+//                obs.push_back(Photons_six[n_photons_min].Ek);
+//                obs.push_back(Photons_six[n_photons_min].Theta);
+//                unc.resize(0);
+//                unc = Get_unc( 1, 1, obs);
+//                Photons_six[n_photons_min].Smear(unc, 0);
+//            }
+//            else{
+//                // ( GetTracks()->HasTAPS(jgam_min+2) )
+//                obs.resize(0);
+//                obs.push_back(Photons_six[n_photons_min].Ek);
+//                obs.push_back(Photons_six[n_photons_min].Theta);
+//                unc.resize(0);
+//                unc = Get_unc( 2, 1, obs);
+//                Photons_six[n_photons_min].Smear(unc, 0);
+//            }
+//            n_photons_min++;
+//        }
 
         six_rec_IM->Fill(IM6g_vec.M(),GetTagger()->GetTaggedTime(tag));
         six_rec_IM_v_MMp->Fill( MMp, IM6g_vec.M(),GetTagger()->GetTaggedTime(tag) );
 
-        const APLCON::Result_t& result_min = kinfit.DoFit();
+//        const APLCON::Result_t& result_min = kinfit.DoFit();
         if(result_min.Status == APLCON::Result_Status_t::Success)
         {
 //            Double_t zrec = result_min.Variables.at("v_z").Value.After;
@@ -1664,34 +1626,34 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
            }
 
 
-           Int_t nEn, nTh, nbin;
-           for(UInt_t iPull = 0; iPull < nPhotons_six; iPull++){
-                string s = Form("Photon%0i[0]", iPull+1); // Energy
-                string t = Form("Photon%0i[1]", iPull+1); // theta
-                string u = Form("Photon%0i[2]", iPull+1); // phi
+//           Int_t nEn, nTh, nbin;
+//           for(UInt_t iPull = 0; iPull < nPhotons_six; iPull++){
+//                string s = Form("Photon%0i[0]", iPull+1); // Energy
+//                string t = Form("Photon%0i[1]", iPull+1); // theta
+//                string u = Form("Photon%0i[2]", iPull+1); // phi
 
-                nEn =  int(photons_rec[iPull].E()/20.);
-                nTh =  75*int(photons_rec[iPull].Theta()*TMath::RadToDeg()/2.0);
-                nbin = nEn + nTh;
+//                nEn =  int(photons_rec[iPull].E()/20.);
+//                nTh =  75*int(photons_rec[iPull].Theta()*TMath::RadToDeg()/2.0);
+//                nbin = nEn + nTh;
 
-                six_fit_Pulls_g_E_vs_eth->Fill(nbin, result_min.Variables.at(s).Pull, GetTagger()->GetTaggedTime(tag));
-                six_fit_Pulls_g_th_vs_eth->Fill(nbin, result_min.Variables.at(t).Pull, GetTagger()->GetTaggedTime(tag));
-                six_fit_Pulls_g_phi_vs_eth->Fill(nbin, result_min.Variables.at(u).Pull, GetTagger()->GetTaggedTime(tag));
+//                six_fit_Pulls_g_E_vs_eth->Fill(nbin, result_min.Variables.at(s).Pull, GetTagger()->GetTaggedTime(tag));
+//                six_fit_Pulls_g_th_vs_eth->Fill(nbin, result_min.Variables.at(t).Pull, GetTagger()->GetTaggedTime(tag));
+//                six_fit_Pulls_g_phi_vs_eth->Fill(nbin, result_min.Variables.at(u).Pull, GetTagger()->GetTaggedTime(tag));
 
-                if( GetTracks()->HasCB( set[iPull+2]) ){
-                    six_fit_Pulls_g_E_vs_E_CB->Fill(photons_rec[iPull].E(), result_min.Variables.at(s).Pull, GetTagger()->GetTaggedTime(tag));
-                    six_fit_Pulls_g_th_vs_th_CB->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(t).Pull, GetTagger()->GetTaggedTime(tag));
-                    six_fit_Pulls_g_phi_vs_th_CB->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(u).Pull, GetTagger()->GetTaggedTime(tag));
-                }
-                else{
-                    six_fit_Pulls_g_E_vs_E_TAPS->Fill(photons_rec[iPull].E(), result_min.Variables.at(s).Pull, GetTagger()->GetTaggedTime(tag));
-                    six_fit_Pulls_g_th_vs_th_TAPS->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(t).Pull, GetTagger()->GetTaggedTime(tag));
-                    six_fit_Pulls_g_phi_vs_th_TAPS->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(u).Pull, GetTagger()->GetTaggedTime(tag));
-                }
-           }
+//                if( GetTracks()->HasCB( set[iPull+2]) ){
+//                    six_fit_Pulls_g_E_vs_E_CB->Fill(photons_rec[iPull].E(), result_min.Variables.at(s).Pull, GetTagger()->GetTaggedTime(tag));
+//                    six_fit_Pulls_g_th_vs_th_CB->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(t).Pull, GetTagger()->GetTaggedTime(tag));
+//                    six_fit_Pulls_g_phi_vs_th_CB->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(u).Pull, GetTagger()->GetTaggedTime(tag));
+//                }
+//                else{
+//                    six_fit_Pulls_g_E_vs_E_TAPS->Fill(photons_rec[iPull].E(), result_min.Variables.at(s).Pull, GetTagger()->GetTaggedTime(tag));
+//                    six_fit_Pulls_g_th_vs_th_TAPS->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(t).Pull, GetTagger()->GetTaggedTime(tag));
+//                    six_fit_Pulls_g_phi_vs_th_TAPS->Fill(photons_rec[iPull].Theta()*TMath::RadToDeg(), result_min.Variables.at(u).Pull, GetTagger()->GetTaggedTime(tag));
+//                }
+//           }
 
-           six_fit_Pulls_p_th_vs_det_TAPS->Fill(GetTracks()->GetCentralCrystal(set_min[1]), result_min.Variables.at("Proton[1]").Pull, GetTagger()->GetTaggedTime(tag));
-           six_fit_Pulls_p_phi_vs_det_TAPS->Fill(GetTracks()->GetCentralCrystal(set_min[1]), result_min.Variables.at("Proton[2]").Pull, GetTagger()->GetTaggedTime(tag));
+//           six_fit_Pulls_p_th_vs_det_TAPS->Fill(GetTracks()->GetCentralCrystal(set_min[1]), result_min.Variables.at("Proton[1]").Pull, GetTagger()->GetTaggedTime(tag));
+//           six_fit_Pulls_p_phi_vs_det_TAPS->Fill(GetTracks()->GetCentralCrystal(set_min[1]), result_min.Variables.at("Proton[2]").Pull, GetTagger()->GetTaggedTime(tag));
 
            sigma_eta = 28; sigma_pi0 = 17;
 
@@ -1754,59 +1716,48 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
                     int imass = int(isix/2);
 //                    double mgg = rc[imass].M();
-                    int nEN =  int(photons_rec[imin_3pi[isix]].E()/10.);
-                    int nTH =  150*int(photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()/2.0);
+                    int nEN =  int(photons_rec[imin_3pi[isix]].E()/20.);
+                    int nTH =  75*int(photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()/1.0);
                     int nBIN = nEN + nTH;
+
+                    if(etap_fit.M() > 650.0){
+                        six_fit_mgg_v_eth->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
+
+                    }
 
                     if(GetTracks()->HasCB(set_min[imin_3pi[isix]+2]))
                     {
-                        if(etap_fit.M() > 650.0){
+                            int nEN =  int(photons_rec[imin_3pi[isix]].E()/40.0);
+                            int nBIN3 = 30*detnr[imin_3pi[isix]] + nEN;
                             IMgg_v_det_3pi0_CB->Fill( rc[imass].M(), detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));
-                            IMgg_v_det_3pi0_CB_fit->Fill( h[imass].M(), detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));
-                            six_fit_mgg_v_eth->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
-
-                            if(threepi_g_cand->IsInside(photons_rec[imin_3pi[isix]].E(), photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg())){
-//                                six_fit_mgg_v_eth_2->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
-                                int nEN =  int(photons_rec[imin_3pi[isix]].E()/40.0);
-                                int nBIN3 = 25*detnr[imin_3pi[isix]] + nEN;
-                                fit_mgg_pi_v_CB_2->Fill(nBIN3, MASS_PI0/rc[imass].M(), GetTagger()->GetTaggedTime(tag));
-                            }
-                        }
+//                            IMgg_v_det_3pi0_CB_fit->Fill( h[imass].M(), detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));
+                            fit_mgg_pi_v_CB_2->Fill(nBIN3, MASS_PI0/rc[imass].M(), GetTagger()->GetTaggedTime(tag));
                     }
                     else{
                         if(etap_fit.M() > 650.0){
                             IMgg_v_det_3pi0_TAPS->Fill( rc[imass].M() , detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));
-                            IMgg_v_det_3pi0_TAPS_fit->Fill( h[imass].M() , detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));
+//                            IMgg_v_det_3pi0_TAPS_fit->Fill( h[imass].M() , detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));
 
-
-                            string s = Form("Photon%0i[0]", isix+1); // Energy
-                            string t = Form("Photon%0i[1]", isix+1); // theta
-                            string u = Form("Photon%0i[2]", isix+1); // phi
                             int nEN =  int(photons_rec[imin_3pi[isix]].E()/20.);
                             int nTH =  75*int(photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()/2.0);
                             int nBIN2 = nEN + nTH;
 
                             if( PbWO4[detnr[imin_3pi[isix]]] == -1 ){
-                                six_fit_mgg_v_e_PbWO4->Fill(photons_rec[imin_3pi[isix]].E(), rc[imass].M());
-                                six_fit_mgg_v_eth_PbWO4->Fill(nBIN2, rc[imass].M(), GetTagger()->GetTaggedTime(tag));
+//                                six_fit_mgg_v_e_PbWO4->Fill(photons_rec[imin_3pi[isix]].E(), rc[imass].M());
+//                                six_fit_mgg_v_eth_PbWO4->Fill(nBIN2, rc[imass].M(), GetTagger()->GetTaggedTime(tag));
 
-                                if(threepi_g_cand->IsInside(photons_rec[imin_3pi[isix]].E(), photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg())){
-//                                    six_fit_mgg_v_eth_PbWO4_2->Fill(nBIN2, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
-                                    int nEN =  int(photons_rec[imin_3pi[isix]].E()/40.0);
-                                    int nBIN3 = 30*detnr[imin_3pi[isix]] + nEN;
-                                    fit_mgg_pi_v_TAPS_2->Fill(nBIN3, MASS_PI0/rc[imass].M(), GetTagger()->GetTaggedTime(tag));
+                                int nEN =  int(photons_rec[imin_3pi[isix]].E()/40.0);
+                                int nBIN3 = 30*detnr[imin_3pi[isix]] + nEN;
+                                fit_mgg_pi_v_TAPS_2->Fill(nBIN3, MASS_PI0/rc[imass].M(), GetTagger()->GetTaggedTime(tag));
                                 }
-                            }
+
                             else{
-                                six_fit_mgg_v_e_BaF2->Fill(photons_rec[imin_3pi[isix]].E(), rc[imass].M());
-                                six_fit_mgg_v_eth_BaF2->Fill(nBIN2, rc[imass].M() , GetTagger()->GetTaggedTime(tag));
-
-                                if(threepi_g_cand->IsInside(photons_rec[imin_3pi[isix]].E(), photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg())){
+//                                six_fit_mgg_v_e_BaF2->Fill(photons_rec[imin_3pi[isix]].E(), rc[imass].M());
+//                                six_fit_mgg_v_eth_BaF2->Fill(nBIN2, rc[imass].M() , GetTagger()->GetTaggedTime(tag));
 //                                    six_fit_mgg_v_eth_BaF2_2->Fill(nBIN2, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
-                                    int nEN =  int(photons_rec[imin_3pi[isix]].E()/40.0);
-                                    int nBIN3 = 30*detnr[imin_3pi[isix]] + nEN;
-                                    fit_mgg_pi_v_TAPS_2->Fill(nBIN3, MASS_PI0/rc[imass].M(), GetTagger()->GetTaggedTime(tag));
-                                }
+                                int nEN =  int(photons_rec[imin_3pi[isix]].E()/40.0);
+                                int nBIN3 = 30*detnr[imin_3pi[isix]] + nEN;
+                                fit_mgg_pi_v_TAPS_2->Fill(nBIN3, MASS_PI0/rc[imass].M(), GetTagger()->GetTaggedTime(tag));
                             }
                         }
                     }
@@ -2194,8 +2145,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_eta2pi, Double_t& p
         prob_3pi = 0.0;
 
 
-    six_fit_which_place_best_etapr_cand->Fill(iteration_place_etatwopi);
-    six_fit_which_place_best_3pi_cand->Fill(iteration_place_threepi);
+//    six_fit_which_place_best_etapr_cand->Fill(iteration_place_etatwopi);
+//    six_fit_which_place_best_3pi_cand->Fill(iteration_place_threepi);
 
     return;
 }
@@ -2630,8 +2581,8 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
         Phi_s = p_TAPS_fi->GetBinContent(p_TAPS_fi->FindBin( inr ));
 
 
-        p_th    = p_th_c1->GetBinContent(p_th_c1->FindBin(inr) );
-        p_fi    = p_fi_c1->GetBinContent(p_fi_c1->FindBin(inr) );
+//        p_th    = p_th_c1->GetBinContent(p_th_c1->FindBin(inr) );
+//        p_fi    = p_fi_c1->GetBinContent(p_fi_c1->FindBin(inr) );
 
 //        if( p_th < 0.5 || p_th > 1.7 )
 //            p_th = 1.0;
