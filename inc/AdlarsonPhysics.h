@@ -552,8 +552,8 @@ public:
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
-    void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& eta2pi_comb, std::vector<comb>& threepi_comb);
-    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& eta2pi_comb, std::vector<comb>& threepi_comb);
+    void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi);
+    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi);
 
 
     // functions specifically related to 10g analysis

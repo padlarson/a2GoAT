@@ -1704,18 +1704,18 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
            imin_eta2pi.resize(0);
            imin_3pi.resize(0);
 
-           std::vector<comb> threepi_comb;
-           std::vector<comb> etatwopi_comb;
-           threepi_comb.resize(0);
-           etatwopi_comb.resize(0);
+//           std::vector<comb> threepi_comb;
+//           std::vector<comb> etatwopi_comb;
+//           threepi_comb.resize(0);
+//           etatwopi_comb.resize(0);
 
-           GetBest6gCombination(sigma_eta, sigma_pi0, chi2min_eta2pi, chi2min_3pi, imin_eta2pi, imin_3pi , etatwopi_comb, threepi_comb  );
+           GetBest6gCombination(sigma_eta, sigma_pi0, chi2min_eta2pi, chi2min_3pi, imin_eta2pi, imin_3pi);
 
-           test_correct_hypothesis(probmin_eta2pi, probmin_3pi, set_min, imin_eta2pi, imin_3pi, etatwopi_comb, threepi_comb);
+           test_correct_hypothesis(probmin_eta2pi, probmin_3pi, set_min, imin_eta2pi, imin_3pi);
            six_fit_PDF_eta2pi_v_3pi->Fill(probmin_eta2pi, probmin_3pi, GetTagger()->GetTaggedTime(tag));
 
-           etatwopi_comb.resize(0);
-           threepi_comb.resize(0);
+//           etatwopi_comb.resize(0);
+//           threepi_comb.resize(0);
 
            // photons after kinematical fit only under energy and momentum constraint
 
@@ -1926,8 +1926,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 }
 
 
-void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb )
+void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi)
 {
+//    , std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb
     imin_eta2pi.resize(6);
     imin_3pi.resize(6);
     Double_t imgg[3];
@@ -1938,9 +1939,9 @@ void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_
     chi2min_3pi = 1.0e6;
 
 
-    std::vector<Int_t> sig_perm, bkgd_perm;
-    etatwopi_comb.resize(0);
-    threepi_comb.resize(0);
+//    std::vector<Int_t> sig_perm, bkgd_perm;
+//    etatwopi_comb.resize(0);
+//    threepi_comb.resize(0);
 
     for( Int_t i = 0; i < 15 ; i++)
     {
@@ -1959,74 +1960,105 @@ void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_
        chi2_eta2pi[2] = std::pow((imgg[2] - MASS_ETA )/(sgm_eta), 2.0) + std::pow((imgg[0] - MASS_PI0 )/(sgm_pi0), 2) + std::pow((imgg[1] - MASS_PI0 )/(sgm_pi0), 2.0);
 
        for( Int_t t = 0; t < 3; t++ ){
-           sig_perm.resize(0);
+//           sig_perm.resize(0);
 
            if(t == 0){
-               for(Int_t u = 0; u < 6; u++)
-                    sig_perm.push_back(perm6g[i][u]);
+//               for(Int_t u = 0; u < 6; u++)
+//                    sig_perm.push_back(perm6g[i][u]);
 
-               etatwopi_comb.push_back(comb(sig_perm, chi2_eta2pi[0]));
+//               etatwopi_comb.push_back(comb(sig_perm, chi2_eta2pi[0]));
+               if(chi2_eta2pi[0] < chi2min_eta2pi)
+               {
+                   imin_eta2pi.resize(0);
+                   chi2min_eta2pi = chi2_eta2pi[0];
+                   for(Int_t u = 0; u < 6; u++)
+                        imin_eta2pi.push_back(perm6g[i][u]);
+               }
            }
-           else if( t == 1){
-               sig_perm.push_back(perm6g[i][2]);
-               sig_perm.push_back(perm6g[i][3]);
-               sig_perm.push_back(perm6g[i][0]);
-               sig_perm.push_back(perm6g[i][1]);
-               sig_perm.push_back(perm6g[i][4]);
-               sig_perm.push_back(perm6g[i][5]);
+           else if( t == 1){               
+               if(chi2_eta2pi[1] < chi2min_eta2pi)
+               {
+                   imin_eta2pi.resize(0);
+                   chi2min_eta2pi = chi2_eta2pi[1];
+                   for(Int_t u = 0; u < 6; u++)
+                        imin_eta2pi.push_back(perm6g[i][u]);
+               }
+//               sig_perm.push_back(perm6g[i][2]);
+//               sig_perm.push_back(perm6g[i][3]);
+//               sig_perm.push_back(perm6g[i][0]);
+//               sig_perm.push_back(perm6g[i][1]);
+//               sig_perm.push_back(perm6g[i][4]);
+//               sig_perm.push_back(perm6g[i][5]);
 
-               etatwopi_comb.push_back(comb(sig_perm, chi2_eta2pi[1]));
+//               etatwopi_comb.push_back(comb(sig_perm, chi2_eta2pi[1]));
            }
            else{
-               sig_perm.push_back(perm6g[i][4]);
-               sig_perm.push_back(perm6g[i][5]);
-               sig_perm.push_back(perm6g[i][0]);
-               sig_perm.push_back(perm6g[i][1]);
-               sig_perm.push_back(perm6g[i][2]);
-               sig_perm.push_back(perm6g[i][3]);
+               if(chi2_eta2pi[2] < chi2min_eta2pi)
+               {
+                   imin_eta2pi.resize(0);
+                   chi2min_eta2pi = chi2_eta2pi[2];
+                   for(Int_t u = 0; u < 6; u++)
+                        imin_eta2pi.push_back(perm6g[i][u]);
+               }
+//               sig_perm.push_back(perm6g[i][4]);
+//               sig_perm.push_back(perm6g[i][5]);
+//               sig_perm.push_back(perm6g[i][0]);
+//               sig_perm.push_back(perm6g[i][1]);
+//               sig_perm.push_back(perm6g[i][2]);
+//               sig_perm.push_back(perm6g[i][3]);
 
-               etatwopi_comb.push_back(comb(sig_perm, chi2_eta2pi[2]));
+//               etatwopi_comb.push_back(comb(sig_perm, chi2_eta2pi[2]));
 
            }
         }
 
-        bkgd_perm.resize(0);
+//        bkgd_perm.resize(0);
         chi2_3pi = std::pow((imgg[0] - MASS_PI0 )/(sgm_3pi0), 2) + std::pow((imgg[1] - MASS_PI0 )/(sgm_3pi0), 2) + std::pow((imgg[2] - MASS_PI0 )/(sgm_3pi0), 2);
-        for(Int_t u = 0; u < 6; u++)
-            bkgd_perm.push_back(perm6g[i][u]);
 
-        threepi_comb.push_back(comb(bkgd_perm,chi2_3pi));
-
-    }
-
-    auto vec_it = etatwopi_comb.cbegin();
-    while( vec_it != etatwopi_comb.cend()){
-        if(vec_it->second < chi2min_eta2pi){
-            imin_eta2pi.resize(0);
-            chi2min_eta2pi = vec_it->second;
-            imin_eta2pi = vec_it->first;
-        }
-        ++vec_it;
-    }
-
-    std::sort(etatwopi_comb.begin(), etatwopi_comb.end(), [](const comb left, const comb right){ return left.second < right.second; });
-
-    auto vec_it_3pi = threepi_comb.cbegin();
-    while( vec_it_3pi != threepi_comb.cend()){
-        if(vec_it_3pi->second < chi2min_3pi ){
+        if(chi2_3pi < chi2min_3pi)
+        {
             imin_3pi.resize(0);
-            chi2min_3pi = vec_it_3pi->second;
-            imin_3pi = vec_it_3pi->first;
+            chi2min_3pi = chi2_3pi;
+            for(Int_t u = 0; u < 6; u++)
+                 imin_3pi.push_back(perm6g[i][u]);
+
+
         }
-        ++vec_it_3pi;
+        //        for(Int_t u = 0; u < 6; u++)
+//            bkgd_perm.push_back(perm6g[i][u]);
+
+//        threepi_comb.push_back(comb(bkgd_perm,chi2_3pi));
+
     }
 
-    std::sort(threepi_comb.begin(), threepi_comb.end(), [](const comb left, const comb right){ return left.second < right.second; });
+//    auto vec_it = etatwopi_comb.cbegin();
+//    while( vec_it != etatwopi_comb.cend()){
+//        if(vec_it->second < chi2min_eta2pi){
+//            imin_eta2pi.resize(0);
+//            chi2min_eta2pi = vec_it->second;
+//            imin_eta2pi = vec_it->first;
+//        }
+//        ++vec_it;
+//    }
+
+//    std::sort(etatwopi_comb.begin(), etatwopi_comb.end(), [](const comb left, const comb right){ return left.second < right.second; });
+
+//    auto vec_it_3pi = threepi_comb.cbegin();
+//    while( vec_it_3pi != threepi_comb.cend()){
+//        if(vec_it_3pi->second < chi2min_3pi ){
+//            imin_3pi.resize(0);
+//            chi2min_3pi = vec_it_3pi->second;
+//            imin_3pi = vec_it_3pi->first;
+//        }
+//        ++vec_it_3pi;
+//    }
+
+//    std::sort(threepi_comb.begin(), threepi_comb.end(), [](const comb left, const comb right){ return left.second < right.second; });
     return;
 }
 
 
-void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_eta2pi, Double_t& prob_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& imap_eta2pi, std::vector<comb>& imap_3pi)
+void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_eta2pi, Double_t& prob_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi)
 {
     Double_t prob_3pi_fit       = -1.0e6;
     Double_t prob_eta2pi_fit    = -1.0e6;
@@ -2035,8 +2067,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_eta2pi, Double_t& p
 
     Int_t iteration_place_etatwopi = -100;
     Int_t iteration_place_threepi = -100;
-    imin_eta2pi.resize(0);
-    imin_3pi.resize(0);
+//    imin_eta2pi.resize(0);
+//    imin_3pi.resize(0);
 
     std::vector<int> imin_eta2pi_temp;
     std::vector<int> imin_3pi_temp;
@@ -2077,8 +2109,10 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_eta2pi, Double_t& p
         imin_3pi_temp.resize(0);
         Photons_six_3pi.resize(0);
         Photons_six_eta2pi.resize(0);
-        imin_eta2pi_temp = imap_eta2pi.at(icand).first;
-        imin_3pi_temp = imap_3pi.at(icand).first;
+//        imin_eta2pi_temp = imap_eta2pi.at(icand).first;
+//        imin_3pi_temp = imap_3pi.at(icand).first;
+        imin_eta2pi_temp = imin_eta2pi;
+        imin_3pi_temp = imin_3pi;
         for ( Int_t jgam_min = 0; jgam_min < 6 ; jgam_min++ ){
             Photons_six_3pi[n_photons_min].SetFromVector( GetTracks()->GetVector( set_min[ imin_3pi_temp[jgam_min] + 2] ) );
             Photons_six_eta2pi[n_photons_min].SetFromVector( GetTracks()->GetVector( set_min[ imin_eta2pi_temp[jgam_min] + 2] ) );
