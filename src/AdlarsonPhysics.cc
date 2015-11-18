@@ -209,8 +209,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    six_fit_mgg_v_eth_2           = new GHistBGSub2("six_fit_mgg_v_eth_2", "m_{#gamma#gamma} vs E , #theta in cut", 42000, 0, 42000, 200, 0., 1000.);
 //    six_fit_mgg_v_eth_BaF2_2      = new GHistBGSub2("six_fit_mgg_v_eth_BaF2_2", "m_{#gamma#gamma} vs E, #theta for BaF2 in cut", 8000, 0, 8000, 200, 0., 1000.);
 //    six_fit_mgg_v_eth_PbWO4_2     = new GHistBGSub2("six_fit_mgg_v_eth_PbWO4_2", "m_{#gamma#gamma} vs E, #theta for PbWO4 in cut", 2000, 0, 2000, 200, 0., 1000.);
-    fit_mgg_pi_v_CB_2            = new GHistBGSub2("fit_mgg_pi_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 18500, 0, 18500, 80 , 0.4, 2.0);
-    fit_mgg_eta_v_CB_2            = new GHistBGSub2("fit_mgg_eta_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 18500, 0, 18500, 80, 0.4, 2.0);
+    fit_mgg_pi_v_CB_2            = new GHistBGSub2("fit_mgg_pi_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 22000, 0, 22000, 80 , 0.4, 2.0);
+    fit_mgg_eta_v_CB_2            = new GHistBGSub2("fit_mgg_eta_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 22000, 0, 22000, 80, 0.4, 2.0);
     fit_mgg_pi_v_TAPS_2          = new GHistBGSub2("fit_mgg_pi_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 80, 0., 2.0);
     fit_mgg_eta_v_TAPS_2          = new GHistBGSub2("fit_mgg_eta_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 80, 0., 2.0);
 
@@ -983,8 +983,8 @@ void	AdlarsonPhysics::ProcessEvent()
     ClustersInTime = FinalClusterSelection;
     FinalClusterSelection.resize(0);
 
-    if( (ClustersInTime.size() == 5) && (nrprotons > 0) )
-        fourgAnalysis(iprtrack);
+//    if( (ClustersInTime.size() == 5) && (nrprotons > 0) )
+//        fourgAnalysis(iprtrack);
 
     if( ClustersInTime.size() == 7 && (nrprotons > 0) )
         sixgAnalysis( iprtrack );
@@ -1415,7 +1415,7 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 
 //                            four_fit_m_eta_gg_v_eth_2->Fill(nBIN, mgg, GetTagger()->GetTaggedTime(tag));
                             int nEN2 =  int(En/40.0);
-                            int nBIN3 = 25*detnr[idet] + nEN2;
+                            int nBIN3 = 30*detnr[idet] + nEN2;
                             fit_mgg_eta_v_CB_2->Fill(nBIN3, MASS_ETA/mgg, GetTagger()->GetTaggedTime(tag));
 
                     }
