@@ -101,14 +101,14 @@ AdlarsonPhysics::AdlarsonPhysics():
     CB_EnergySum_3pi0           = new GHistBGSub("CB_EnergySum_3pi0", "Crystal Ball Energy Sum for 3pi0", 400, 0., 2000.);
 //    CB_EnergySum_etapr           = new GHistBGSub("CB_EnergySum_etapr", "Crystal Ball Energy Sum for eta prime", 400, 0., 2000.);
 
-    IMgg_v_det_2pi0_CB          =   new GHistBGSub2("IMgg_v_det_2pi0_CB", "IM(gg) 2#pi^{0}, CB", 80, 50, 250, 720, 0, 720);
-    IMgg_v_det_etapi0_pi0_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_pi0_CB", "IM(gg) #eta#pi^{0}, CB", 40, 50, 250, 720, 0, 720);
-    IMgg_v_det_etapi0_eta_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_eta_CB", "IM(gg) #eta#pi^{0}, CB", 80, 450, 650, 720, 0, 720);
-    IMgg_v_det_3pi0_CB          =   new GHistBGSub2("IMgg_v_det_3pi0_CB", "IM(gg) 3#pi^{0}, CB, CB", 80, 50, 250, 720, 0, 720);
+    IMgg_v_det_2pi0_CB          =   new GHistBGSub2("IMgg_v_det_2pi0_CB", "IM(gg) 2#pi^{0}, CB", 125, 0, 250, 720, 0, 720);
+    IMgg_v_det_etapi0_pi0_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_pi0_CB", "IM(gg) #eta#pi^{0}, CB", 125, 0, 250, 720, 0, 720);
+    IMgg_v_det_etapi0_eta_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_eta_CB", "IM(gg) #eta#pi^{0}, CB", 125, 400, 650, 720, 0, 720);
+    IMgg_v_det_3pi0_CB          =   new GHistBGSub2("IMgg_v_det_3pi0_CB", "IM(gg) 3#pi^{0}, CB, CB", 125, 0, 250, 720, 0, 720);
 //    IMgg_v_det_3pi0_CB_fit      =   new GHistBGSub2("IMgg_v_det_3pi0_CB_fit", "IM(gg) 3#pi^{0} fit, CB, CB", 500, 0, 1000, 720, 0, 720);
-    IMgg_v_det_2pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_2pi0_TAPS", "IM(gg) 2#pi^{0}, TAPS", 80, 50, 250, 440, 0, 440);
-    IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 200, 0, 1000, 440, 0, 440);
-    IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 80, 50, 250, 440, 0, 440);
+    IMgg_v_det_2pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_2pi0_TAPS", "IM(gg) 2#pi^{0}, TAPS", 125, 0, 250, 440, 0, 440);
+    IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 100, 0, 1000, 440, 0, 440);
+    IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 125, 0, 250, 440, 0, 440);
 //    IMgg_v_det_3pi0_TAPS_fit    =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS_fit", "IM(gg) 3#pi^{0} fit, TAPS", 500, 0, 1000, 440, 0, 440);
 
 // Rec. Photons
@@ -139,7 +139,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     four_fit_best_etapi_IM_v_E      = new GHistBGSub2("four_fit_best_etapi_IM_v_E", "E_{#pi^{0}} vs M_{#gamma#gamma} for #eta#pi^{0}", 100, 0., 1000., 250, 0., 1000.);
 
     // 2pi0 inside phase space
-    four_fit_mgg_v_eth             = new GHistBGSub2("four_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 12500, 0, 12500, 50, 50., 250.);
+    four_fit_mgg_v_eth             = new GHistBGSub2("four_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 12500, 0, 12500, 100, 50., 250.);
 //    four_fit_mgg_v_eth_BaF2        = new GHistBGSub2("four_fit_mgg_v_eth_BaF2", "m_{#gamma#gamma} vE, #theta BaF2", 4000, 0, 4000, 80., 0, 400.);
 //    four_fit_mgg_v_eth_PbWO4       = new GHistBGSub2("four_fit_mgg_v_eth_PbWO4", "m_{#gamma#gamma} v E, #theta PbWO4", 1000, 0, 1000, 80., 0, 400.);
 
@@ -200,7 +200,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    six_fit_Pulls_p_th_vs_det_TAPS     = new GHistBGSub2("six_fit_Pulls_p_th_vs_det_TAPS", "Pulls proton #theta vs #theta TAPS", 440, 0, 440, 50, -5., 5.);
 //    six_fit_Pulls_p_phi_vs_det_TAPS    = new GHistBGSub2("six_fit_Pulls_p_phi_vs_det_TAPS", "Pulls proton #phi vs #theta TAPS", 440, 0, 440, 50, -5., 5.);
 
-    six_fit_mgg_v_eth           = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 13500, 0, 13500, 50, 50., 250.);
+    six_fit_mgg_v_eth           = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 13500, 0, 13500, 100, 50., 250.);
+//    six_fit_metapr_v_eth           = new GHistBGSub2("six_fit_metapr_v_eth", "m_{#gamma#gamma} vs E, #theta #eta prime", 13500, 0, 13500, 50, 50., 250.);
 //    six_fit_mgg_v_eth_BaF2      = new GHistBGSub2("six_fit_mgg_v_eth_BaF2", "m_{#gamma#gamma} vs E, #theta for BaF2", 8000, 0, 8000, 80, 0., 400.);
 //    six_fit_mgg_v_eth_PbWO4     = new GHistBGSub2("six_fit_mgg_v_eth_PbWO4", "m_{#gamma#gamma} vs E, #theta for PbWO4", 2000, 0, 2000, 80, 0., 400.);
 //    six_fit_mgg_v_e_BaF2        = new GHistBGSub2("six_fit_mgg_v_e_BaF2", "m_{#gamma#gamma} vs E for BaF2", 1000, 0, 1000, 80, 0., 400.);
@@ -675,6 +676,7 @@ void	AdlarsonPhysics::ProcessEvent()
     for ( Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
         tag_BeamE->Fill(GetTagger()->GetTaggedEnergy(tag),GetTagger()->GetTaggedTime(tag));
 
+    Time_corr();
     theta_corr();
     Energy_corr();
 
@@ -983,8 +985,8 @@ void	AdlarsonPhysics::ProcessEvent()
     ClustersInTime = FinalClusterSelection;
     FinalClusterSelection.resize(0);
 
-//    if( (ClustersInTime.size() == 5) && (nrprotons > 0) )
-//        fourgAnalysis(iprtrack);
+    if( (ClustersInTime.size() == 5) && (nrprotons > 0) )
+        fourgAnalysis(iprtrack);
 
     if( ClustersInTime.size() == 7 && (nrprotons > 0) )
         sixgAnalysis( iprtrack );
@@ -1004,23 +1006,34 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
 {
    std::string         line;
 
-//   std::ifstream file_etapr_leg("configfiles/data/etaprime_Legendrecoeff.txt");
-//   if(file_etapr_leg){
-//       while(std::getline(file_etapr_leg, line)){
-//           std::string  buffer;
-//           std::stringstream ss;
-//           ss << line;
-//           while(std::getline(ss, buffer, '\t')){
-//                Legendre.push_back(buffer);
-//           }
-//       }
+   std::ifstream file_etapr_leg("configfiles/data/etaprime_Legendrecoeff.txt");
+   if(file_etapr_leg){
+       while(std::getline(file_etapr_leg, line)){
+           std::string  buffer;
+           std::stringstream ss;
+           ss << line;
+           while(std::getline(ss, buffer, '\t')){
+                Legendre.push_back(std::stod(buffer));
+           }
+       }
+   }
 
 
-
-//       while()
-
-
-//   }
+   std::ifstream fileCBtime("configfiles/data/time_corr_CB.txt");
+   if(fileCBtime){
+    std::getline(fileCBtime, line);
+    std::string         buffer1;
+    std::stringstream   ss0;
+    ss0 << line;
+    while (std::getline(ss0, buffer1, '\t'))
+    {
+       CBtime_corr.push_back(std::stod(buffer1));
+    }
+    fileCBtime.close();
+   }
+    else
+        for(int i = 0; i < 720; i++)
+            CBtime_corr.push_back(0.0);
 
 
    std::ifstream fileCB("configfiles/data/CB_lingain.txt");
@@ -1112,30 +1125,30 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
 
 void AdlarsonPhysics::TrueAnalysis_etapr6g(){
 
-    true_BeamE->Fill( etapr_6gTrue.GetTrueBeamEnergy() );
 
+
+    true_BeamE->Fill( etapr_6gTrue.GetTrueBeamEnergy() );
+    Double_t beam_e = etapr_6gTrue.GetTrueBeamEnergy();
     // calculate Physics
 
-    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
-    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
-    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
-    
-    // here calculate the boost
-    TVector3 etaprime_rest  = -(etapr_true[0]+etapr_true[1]+etapr_true[2]).BoostVector();
-    TLorentzVector etapr_rest  = etapr_6gTrue.GetTrueEtaPrimeLV();
-    etapr_rest.Boost(etaprime_rest);
+//    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
+//    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
+//    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
 
-    Double_t x = TMath::Cos(etapr_rest.Theta());
-    Double_t leg1, leg2, leg3, leg4, leg5;
-    Double_t weight, w1, w2;
+//    // here calculate the boost
+//    TVector3 etaprime_rest  = -(etapr_true[0]+etapr_true[1]+etapr_true[2]).BoostVector();
+//    TLorentzVector etapr_rest  = etapr_6gTrue.GetTrueEtaPrimeLV();
+//    etapr_rest.Boost(etaprime_rest);
 
-    leg1 = 1;
-    leg2 = x;
-    leg3 = (1/2)*( 3*TMath::Power(x,2) - 1 );
-    leg4 = (1/2)*( 5*TMath::Power(x,3) - 3*x );
-    leg5 = (1/8)*( 35*TMath::Power(x,4) - 30*TMath::Power(x,2) + 3);
+//    Double_t x = TMath::Cos(etapr_rest.Theta());
+//    Double_t leg1, leg2, leg3, leg4, leg5;
+//    Double_t weight, w1, w2;
 
-
+//    leg1 = 1;
+//    leg2 = x;
+//    leg3 = (1/2)*( 3*TMath::Power(x,2) - 1 );
+//    leg4 = (1/2)*( 5*TMath::Power(x,3) - 3*x );
+//    leg5 = (1/8)*( 35*TMath::Power(x,4) - 30*TMath::Power(x,2) + 3);
     
     // here calculate the eta prime theta as function of beam energy
     
@@ -1168,6 +1181,8 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(){
 void AdlarsonPhysics::TrueAnalysis_etapr10g()
 {
     true_BeamE->Fill( etapr_10gTrue.GetTrueBeamEnergy() );
+    Double_t beam_e = etapr_10gTrue.GetTrueBeamEnergy();
+    Double_t weight = Get_etapr_weight_MC( beam_e );
 
     // calculate Physics
 
@@ -1197,6 +1212,70 @@ void AdlarsonPhysics::TrueAnalysis_etapr10g()
             true_th_v_E_pi0_g->Fill(etapr_10gTrue.GetTrueGammaLV(i).E(),etapr_10gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
     }
     return;
+}
+
+Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame){
+
+    Double_t w = 1.0;
+    Double_t N, c1, c2, c3, c4;
+    Double_t leg0, leg1, leg2, leg3, leg4;
+    Double_t weight, w1, w2;
+    Double_t be = beame*1000;
+
+//    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
+//    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
+//    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
+
+
+    etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
+    etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
+    etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
+
+    Double_t test = (etapr_true[0]+ etapr_true[1] + etapr_true[2]).M();
+
+    // here calculate the boost
+    TVector3 etaprime_rest  = -(etapr_true[0]+etapr_true[1]+etapr_true[2]).BoostVector();
+//    TLorentzVector etapr_rest  = etapr_6gTrue.GetTrueEtaPrimeLV();
+    TLorentzVector etapr_rest  = etapr_10gTrue.GetTrueEtaPrimeLV();
+    etapr_rest.Boost(etaprime_rest);
+
+    //in the CM frame!
+    Double_t test2 = etapr_rest.Theta();
+    Double_t x = TMath::Cos(test2 );
+
+
+    leg0 = 1.;
+    leg1 = x;
+    leg2 = (0.5)*( 3.*TMath::Power(x,2) - 1. );
+    leg3 = (0.5)*( 5.*TMath::Power(x,3) - 3.*x );
+    leg4 = (0.5)*( 35.*TMath::Power(x,4) - 30.*TMath::Power(x,2.) + 3.);
+
+    if(be < Legendre[0]){
+        N   =   Legendre[0+1];
+        c1  =   Legendre[0+2];
+        c2  =   Legendre[0+3];
+        c3  =   Legendre[0+4];
+        c4  =   Legendre[0+5];
+        w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+    }
+    else if(be > Legendre[66]){
+        N   =   Legendre[66+1];
+        c1  =   Legendre[66+2];
+        c2  =   Legendre[66+3];
+        c3  =   Legendre[66+4];
+        c4  =   Legendre[66+5];
+
+        w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+    }
+    else
+        w = 1.0;
+
+
+
+
+
+    return w;
+
 }
 
 void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
@@ -2866,6 +2945,18 @@ void AdlarsonPhysics::Kinfit_test()
     }
 };
 
+
+void AdlarsonPhysics::Time_corr(){
+
+    if(TMath::Abs(CBtime_corr[0]) < 1.0e-5 ) return;
+
+    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
+    {
+        if( GetTracks()->HasCB(i) ){
+            tracks->SetTime(i, GetTracks()->GetTime(i) - CBtime_corr[GetTracks()->GetCentralCrystal(i)]);
+        }
+    }
+}
 
 void AdlarsonPhysics::Energy_corr()
 {
