@@ -401,6 +401,8 @@ private:
     std::vector<Double_t> TAPS_EPT_toff;
     std::vector<Double_t> TAPS_Ecorr;
 
+    std::vector<Double_t> CBtime_corr;
+
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
     std::vector<Double_t> TAPSgain;
 
@@ -531,6 +533,7 @@ public:
 
     Bool_t	Init(const char* configfile);
     void            RandomTime();
+    void            Time_corr();
     void            Energy_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
 
@@ -542,6 +545,7 @@ public:
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
     void TrueAnalysis_etapr10g();
+    Double_t Get_etapr_weight_MC(Double_t beame);
     void Kinfit_test();
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
