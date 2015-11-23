@@ -67,7 +67,7 @@ private:
 
     // Proton related
     TLorentzVector  MMp_vec;
-    TLorentzVector g[3], h[3], rc[3];
+    TLorentzVector g[3], h[3], rc[3], rc_sig[3];
 
     GHistBGSub*     p_nr;
     GHistBGSub*     p_MM;
@@ -142,8 +142,11 @@ private:
 
     GHistBGSub2*    fit_mgg_pi_v_CB_2;
     GHistBGSub2*    fit_mgg_eta_v_CB_2;
+    GHistBGSub2*    fit_mgg_pi_v_CB_3;
     GHistBGSub2*    fit_mgg_pi_v_TAPS_2;
     GHistBGSub2*    fit_mgg_eta_v_TAPS_2;
+    GHistBGSub2*    fit_Eg_Er_CB;
+    GHistBGSub2*    fit_Eg_Er_CB_fin;
 
     GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
     GHistBGSub2*    four_fit_best_2pi_IM_v_E;
@@ -242,12 +245,16 @@ private:
     GHistBGSub2*    six_fit_best_2pi_IM_v_E;
 
     GHistBGSub2*    six_fit_mgg_v_eth;
+    GHistBGSub2*    six_fit_mgg_sig_v_eth;
+    GHistBGSub2*    six_fit_fitted_etapr_de_v_eth;
+    GHistBGSub2*    six_fit_fitted_3pi0_de_v_eth;
     GHistBGSub2*    six_fit_mgg_v_eth_BaF2;
     GHistBGSub2*    six_fit_mgg_v_eth_PbWO4;
     GHistBGSub2*    six_fit_mgg_v_e_BaF2;
     GHistBGSub2*    six_fit_mgg_v_e_PbWO4;
 
     GHistBGSub2*    six_fit_mgg_v_eth_2;
+
     GHistBGSub2*    six_fit_mgg_v_eth_BaF2_2;
     GHistBGSub2*    six_fit_mgg_v_eth_PbWO4_2;
 
@@ -402,6 +409,7 @@ private:
     std::vector<Double_t> TAPS_Ecorr;
 
     std::vector<Double_t> CBtime_corr;
+    std::vector<Double_t> TAPS_CB_toff;
 
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
     std::vector<Double_t> TAPSgain;
