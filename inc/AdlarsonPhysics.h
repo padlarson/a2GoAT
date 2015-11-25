@@ -47,6 +47,7 @@ private:
     GHistBGSub2*    true_six_z_v_Ncl;
     GHistBGSub2*    true_six_fit_dz_v_z;
     // Physics Results
+    TH2*            true_eta_pr_production;
     TH2*            true_DP;
     TH1*            true_phy_DP;
     TH1*            true_M_pi1pi2_e2p;
@@ -66,8 +67,10 @@ private:
     GH1*            tag_BeamE;
 
     // Proton related
+    Double_t        TOF_CB;
+    Double_t        TOF_CB_proton;
     TLorentzVector  MMp_vec;
-    TLorentzVector g[3], h[3], rc[3], rc_sig[3];
+    TLorentzVector  g[3], h[3], rc[3], rc_sig[3];
 
     GHistBGSub*     p_nr;
     GHistBGSub*     p_MM;
@@ -83,8 +86,8 @@ private:
     GHistBGSub2*    p_E_v_TOF_TAPS_All;
     GHistBGSub2*    p_E_v_TOF_TAPS_2PrID;
     GHistBGSub2*    p_E_v_TOF_CB_best;
-    GHistBGSub2*    p_E_v_TOF_All_wVeto;
-    GHistBGSub2*    p_E_v_TOF_norm_to_c;
+    GHistBGSub2*    p_E_v_TOF_after_kfit;
+    GHistBGSub2*    p_Erec_v_TOF_after_kfit;
 
     GHistBGSub*     CB_EnergySum;
     GHistBGSub*     CB_EnergySum_2pi0;
