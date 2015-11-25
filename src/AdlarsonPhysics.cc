@@ -2708,7 +2708,7 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
         Theta_s = g_th->GetBinContent( g_th->FindBin(Ek,theta) );
         Phi_s   = g_phi->GetBinContent( g_phi->FindBin(Ek,theta) );
 
-//        e_g     = g_e_c1->GetBinContent(g_e_c1->FindBin(Ek,theta) );
+        e_g     = g_e_c1->GetBinContent(g_e_c1->FindBin(Ek,theta) );
         th_g    = g_th_c1->GetBinContent(g_th_c1->FindBin(Ek,theta) );
 
         if( e_g < 0.5 || e_g > 1.5 )
