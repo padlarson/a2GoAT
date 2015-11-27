@@ -205,8 +205,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     six_fit_mgg_v_eth               = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 13500, 0, 13500, 50, 0., 250.);
     six_fit_mgg_sig_v_eth           = new GHistBGSub2("six_fit_mgg_sig_v_eth", "m_{#gamma#gamma} for eta prime decay products; E (MeV); #theta", 13500, 0, 13500, 160, 0., 800.);
-    six_fit_fitted_etapr_de_v_eth   = new GHistBGSub2("six_fit_fitted_etapr_de_v_eth", "fitted cf rec energy g eta pr", 12000, 0, 12000, 100, -.5, .5);
-    six_fit_fitted_3pi0_de_v_eth     = new GHistBGSub2("six_fit_fitted_3pi0_de_v_eth", "fitted cf rec energy g 3pi0", 12000, 0, 12000, 100, -.5, .5);
+//    six_fit_fitted_etapr_de_v_eth   = new GHistBGSub2("six_fit_fitted_etapr_de_v_eth", "fitted cf rec energy g eta pr", 12000, 0, 12000, 100, -.5, .5);
+//    six_fit_fitted_3pi0_de_v_eth     = new GHistBGSub2("six_fit_fitted_3pi0_de_v_eth", "fitted cf rec energy g 3pi0", 12000, 0, 12000, 100, -.5, .5);
 //    six_fit_metapr_v_eth           = new GHistBGSub2("six_fit_metapr_v_eth", "m_{#gamma#gamma} vs E, #theta #eta prime", 13500, 0, 13500, 50, 50., 250.);
 //    six_fit_mgg_v_eth_BaF2      = new GHistBGSub2("six_fit_mgg_v_eth_BaF2", "m_{#gamma#gamma} vs E, #theta for BaF2", 8000, 0, 8000, 80, 0., 400.);
 //    six_fit_mgg_v_eth_PbWO4     = new GHistBGSub2("six_fit_mgg_v_eth_PbWO4", "m_{#gamma#gamma} vs E, #theta for PbWO4", 2000, 0, 2000, 80, 0., 400.);
@@ -221,8 +221,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    fit_mgg_eta_v_CB_2          = new GHistBGSub2("fit_mgg_eta_v_CB_2", "m_{#gamma#gamma} vs r vs detnr in cut CB", 22000, 0, 22000, 80, 0.4, 2.0);
 //    fit_mgg_pi_v_TAPS_2         = new GHistBGSub2("fit_mgg_pi_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 80, 0., 2.0);
 //    fit_mgg_eta_v_TAPS_2        = new GHistBGSub2("fit_mgg_eta_v_TAPS_2", "m_{#gamma#gamma} vs r vs detnr in cut TAPS", 13500, 0, 13500, 80, 0., 2.0);
-    fit_Eg_Er_CB                = new GHistBGSub2("fit_Eg_Er_CB", "gamma E_fit/E_rec as fcn of E_rec", 100, 0, 1000, 500, -1., 1.0);
-    fit_Eg_Er_CB_fin                = new GHistBGSub2("fit_Eg_Er_CB_fin", "gamma E_fit_final/E_rec as fcn of E_rec", 100, 0, 1000, 500, -1., 1.0);
+//    fit_Eg_Er_CB                = new GHistBGSub2("fit_Eg_Er_CB", "gamma E_fit/E_rec as fcn of E_rec", 100, 0, 1000, 500, -1., 1.0);
+//    fit_Eg_Er_CB_fin                = new GHistBGSub2("fit_Eg_Er_CB_fin", "gamma E_fit_final/E_rec as fcn of E_rec", 100, 0, 1000, 500, -1., 1.0);
 
     six_fit_IM                  = new GH1("six_fit_IM", "IM(6#gamma) after APLCON fit", 200, 400., 1400.);
     six_fit_IM_3pi              = new GH1("six_fit_IM_3pi", "IM(6#gamma) for 3#pi^{0} candidates", 200, 400., 1400.);
@@ -1825,8 +1825,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 
                     if(etap_fit.M() > 650.0){
                         six_fit_mgg_v_eth->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
-                        if(threepi_g_cand->IsInside( photons_rec[imin_3pi[isix]].E(), photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()))
-                            six_fit_fitted_3pi0_de_v_eth->Fill(nBIN, (photons_fit[imin_3pi[isix]].E() - photons_rec[imin_3pi[isix]].E())  / photons_rec[imin_3pi[isix]].E(),GetTagger()->GetTaggedTime(tag));
+//                        if(threepi_g_cand->IsInside( photons_rec[imin_3pi[isix]].E(), photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()))
+//                            six_fit_fitted_3pi0_de_v_eth->Fill(nBIN, (photons_fit[imin_3pi[isix]].E() - photons_rec[imin_3pi[isix]].E())  / photons_rec[imin_3pi[isix]].E(),GetTagger()->GetTaggedTime(tag));
                     }
 
                     if( GetTracks()->HasCB( set_min[imin_3pi[isix]+2]) )
@@ -1840,8 +1840,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
 //                            fit_mgg_pi_v_CB_3->Fill(nBIN3, photons_fit[imin_3pi[isix]].E()/photons_rec[imin_3pi[isix]].E(), GetTagger()->GetTaggedTime(tag));
 
 
-                            fit_Eg_Er_CB->Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit[imin_3pi[isix]].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), GetTagger()->GetTaggedTime(tag));
-                            fit_Eg_Er_CB_fin->Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit_final[isix].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), GetTagger()->GetTaggedTime(tag));
+//                            fit_Eg_Er_CB->Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit[imin_3pi[isix]].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), GetTagger()->GetTaggedTime(tag));
+//                            fit_Eg_Er_CB_fin->Fill(photons_rec[imin_3pi[isix]].E(), (photons_fit_final[isix].E()-photons_rec[imin_3pi[isix]].E())/photons_rec[imin_3pi[isix]].E(), GetTagger()->GetTaggedTime(tag));
 
                     }
                     else{
@@ -1885,14 +1885,14 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr)
                   int nTH =  75*int(photons_rec[imin_eta2pi[isix]].Theta()*TMath::RadToDeg()/1.0);
                   int nBIN = nEN + nTH;
 
-                  if(isix == 0 || isix ==1){
-                      if(eta_g_cand->IsInside(photons_rec[imin_eta2pi[isix]].E(), photons_rec[imin_eta2pi[isix]].Theta()*TMath::RadToDeg()))
-                        six_fit_fitted_etapr_de_v_eth->Fill(nBIN, (photons_fit[imin_eta2pi[isix]].E() - photons_rec[imin_eta2pi[isix]].E())  / photons_rec[imin_eta2pi[isix]].E(),GetTagger()->GetTaggedTime(tag));
-                  } // it is the eta
-                  else{ // it is the pi0 cand
-                      if(threepi_g_cand->IsInside(photons_rec[imin_eta2pi[isix]].E(), photons_rec[imin_eta2pi[isix]].Theta()*TMath::RadToDeg()))
-                        six_fit_fitted_etapr_de_v_eth->Fill(nBIN, (photons_fit[imin_eta2pi[isix]].E() - photons_rec[imin_eta2pi[isix]].E())  / photons_rec[imin_eta2pi[isix]].E(),GetTagger()->GetTaggedTime(tag));
-                  }
+//                  if(isix == 0 || isix ==1){
+//                      if(eta_g_cand->IsInside(photons_rec[imin_eta2pi[isix]].E(), photons_rec[imin_eta2pi[isix]].Theta()*TMath::RadToDeg()))
+//                        six_fit_fitted_etapr_de_v_eth->Fill(nBIN, (photons_fit[imin_eta2pi[isix]].E() - photons_rec[imin_eta2pi[isix]].E())  / photons_rec[imin_eta2pi[isix]].E(),GetTagger()->GetTaggedTime(tag));
+//                  } // it is the eta
+//                  else{ // it is the pi0 cand
+//                      if(threepi_g_cand->IsInside(photons_rec[imin_eta2pi[isix]].E(), photons_rec[imin_eta2pi[isix]].Theta()*TMath::RadToDeg()))
+//                        six_fit_fitted_etapr_de_v_eth->Fill(nBIN, (photons_fit[imin_eta2pi[isix]].E() - photons_rec[imin_eta2pi[isix]].E())  / photons_rec[imin_eta2pi[isix]].E(),GetTagger()->GetTaggedTime(tag));
+//                  }
               }
 
              for(int isix = 0; isix < 6; isix++){
