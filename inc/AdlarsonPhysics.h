@@ -46,6 +46,8 @@ private:
     GHistBGSub2*    true_six_dth_vs_th_p;
     GHistBGSub2*    true_six_z_v_Ncl;
     GHistBGSub2*    true_six_fit_dz_v_z;
+    GH1*            true_z_after_fit;
+    GH1*            true_z_after_final_fit;
     // Physics Results
     TH2*            true_eta_pr_production;
     TH2*            true_DP;
@@ -567,8 +569,8 @@ public:
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
-    void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi);
-    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi);
+    void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb );
+    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi,  std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb);
 
 
     // functions specifically related to 10g analysis
