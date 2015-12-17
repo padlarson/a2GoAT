@@ -325,16 +325,16 @@ AdlarsonPhysics::AdlarsonPhysics():
     Ecorr_TAPS                 = new TFile("configfiles/corr/TAPS_e_corr.root");
     EvdetTAPS                  = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
 
-    g_corr_peak_2pi0           = new TFile("configfiles/corr/e_corr_peak_2pi0_it0.root");
-    g_corr_twopi0              = (TH2F*)g_corr_peak_2pi0->Get("two_pi0_peak");
+//    g_corr_peak_2pi0           = new TFile("configfiles/corr/e_corr_peak_2pi0_it0.root");
+//    g_corr_twopi0              = (TH2F*)g_corr_peak_2pi0->Get("two_pi0_peak");
 
-    g_corr_peak                = new TFile("configfiles/corr/e_corr_peak_it0.root");
-    g_corr_threepi             = (TH2F*)g_corr_peak->Get("three_pi0_peak");
+//    g_corr_peak                = new TFile("configfiles/corr/e_corr_peak_it0.root");
+//    g_corr_threepi             = (TH2F*)g_corr_peak->Get("three_pi0_peak");
 
-    g_corr_peak_it1            = new TFile("configfiles/corr/e_corr_peak_it1.root");
-    g_corr_threepi_it1         = (TH2F*)g_corr_peak_it1->Get("three_pi0_peak");
-    g_corr_peak_it2            = new TFile("configfiles/corr/e_corr_peak_it2.root");
-    g_corr_threepi_it2         = (TH2F*)g_corr_peak_it2->Get("three_pi0_peak");
+//    g_corr_peak_it1            = new TFile("configfiles/corr/e_corr_peak_it1.root");
+//    g_corr_threepi_it1         = (TH2F*)g_corr_peak_it1->Get("three_pi0_peak");
+//    g_corr_peak_it2            = new TFile("configfiles/corr/e_corr_peak_it2.root");
+//    g_corr_threepi_it2         = (TH2F*)g_corr_peak_it2->Get("three_pi0_peak");
 
 
     // cluster corrections based on comparing fitted and reconstructed 6g photons
