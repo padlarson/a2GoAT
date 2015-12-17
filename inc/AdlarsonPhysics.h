@@ -59,6 +59,10 @@ private:
     GHistBGSub2*    true_six_phy_dX_v_DPbin;
     GHistBGSub2*    true_six_phy_dY_v_DPbin;
     GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
+    // for m_etapr forced in kinfit
+    GHistBGSub2*    true_six_phy_dX_v_DPbin_metapr;
+    GHistBGSub2*    true_six_phy_dY_v_DPbin_metapr;
+    GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi_metapr;
 
     // in 10g analysis
     GHistBGSub2*    true_ten_phy_dMpipi_v_Mpipi;
@@ -218,14 +222,41 @@ private:
     GHistBGSub2*    six_fit_Pulls_p_th_vs_det_TAPS;
     GHistBGSub2*    six_fit_Pulls_p_phi_vs_det_TAPS;
 
+    GHistBGSub2*        six_fit_Pulls_g_E_vs_eth_3pi0;
+    GHistBGSub2*        six_fit_Pulls_g_th_vs_eth_3pi0;
+    GHistBGSub2*        six_fit_Pulls_g_phi_vs_eth_3pi0;
+    GHistBGSub2*        six_fit_Pulls_g_E_vs_eth_eta2pi0;
+    GHistBGSub2*        six_fit_Pulls_g_th_vs_eth_eta2pi0;
+    GHistBGSub2*        six_fit_Pulls_g_phi_vs_eth_eta2pi0;
+    GHistBGSub2*        six_fit_Pulls_p_th_vs_det_TAPS_3pi0;
+    GHistBGSub2*        six_fit_Pulls_p_phi_vs_det_TAPS_3pi0;
+    GHistBGSub2*        six_fit_Pulls_p_th_vs_det_TAPS_eta2pi0;
+    GHistBGSub2*        six_fit_Pulls_p_phi_vs_det_TAPS_eta2pi0;
+
     GH1*            six_fit_IM;
 
     GH1*            six_fit_which_place_best_3pi_cand;
     GH1*            six_fit_which_place_best_etapr_cand;
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi;
-    GH1*            six_fit_PDF_joint;
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_b;
+
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_2;
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_4;
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_6;
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_8;
+    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_10;
+
+    GH1*            six_fit_IM_eta2pi0_b;
+    GH1*            six_fit_IM_eta2pi0_c;
+    GH1*            six_fit_IM_eta2pi0_d;
+    GH1*            six_fit_IM_eta2pi0_e;
+
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_Meta2pi;
+    GHistBGSub2*    six_fit_PDF_etapr_v_Meta2pi;
+
+
+
     GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
@@ -253,6 +284,12 @@ private:
     GHistBGSub2*    six_fit_mgg_sig_v_eth;
     GHistBGSub2*    six_fit_fitted_etapr_de_v_eth;
     GHistBGSub2*    six_fit_fitted_3pi0_de_v_eth;
+    GHistBGSub2*    six_fit_fitted_de_v_eth;
+    GHistBGSub2*    six_fit_fitted_dth_v_eth;
+    GHistBGSub2*    six_fit_fitted_p_th_v_det;
+    GHistBGSub2*    six_fit_fitted_p_fi_v_det;
+    GHistBGSub2*    six_fit_true_p_th_v_det;
+    GHistBGSub2*    six_fit_true_p_fi_v_det;
     GHistBGSub2*    six_fit_mgg_v_eth_BaF2;
     GHistBGSub2*    six_fit_mgg_v_eth_PbWO4;
     GHistBGSub2*    six_fit_mgg_v_e_BaF2;
@@ -273,6 +310,10 @@ private:
     GHistBGSub2*    six_phy_DP;
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
+
+    GH1*    six_phy_DP_fit_metapr;
+    GH1*    six_phy_M_pi1pi2_v_etapr_fit;
+    GH1*    six_phy_M_etapi_v_etapr_fit;
 
     // Kinfit related variables 10g
 
@@ -344,6 +385,7 @@ private:
     TFile*          unc_corr;
     TH2*            g_e_c1;
     TH2*            g_th_c1;
+    TH2*            g_fi_c1;
     TH1*            p_th_c1;
     TH1*            p_fi_c1;
 
@@ -402,6 +444,7 @@ private:
     std::vector<TLorentzVector> photons_rec;
     std::vector<TLorentzVector> photons_fit;
     std::vector<TLorentzVector> photons_fit_final;
+    std::vector<TLorentzVector> photons_fit_final_metapr;
 
     Double_t    sigma_eta;
     Double_t    sigma_pi0;
@@ -418,6 +461,8 @@ private:
 
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
     std::vector<Double_t> TAPSgain;
+
+    std::vector<Double_t> TAPSth_corr;
 
     typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
     std::map<UInt_t, std::vector<Double_t>> TOF_corr;
@@ -439,6 +484,36 @@ private:
     TFile*          Ecorr_TAPS;         // File which contains TH2F
     TH2F*           EvdetTAPS;
 
+    TFile*          g_corr_peak_2pi0;
+    TH2F*           g_corr_twopi0;
+
+    TFile*          g_corr_peak;
+    TH2F*           g_corr_threepi;
+    TFile*          g_corr_peak_it1;
+    TH2F*           g_corr_threepi_it1;
+    TFile*          g_corr_peak_it2;
+    TH2F*           g_corr_threepi_it2;
+
+    TFile*          g_corr_kfit;
+    TH2F*           g_corr_etapr;
+    TH2F*           g_corr_3pi;
+    TH2F*           g_corr_both;
+
+    TFile*          g_corr_kfit_it1;
+    TH2F*           g_corr_both_it1;
+    TFile*          g_corr_kfit_it2;
+    TH2F*           g_corr_both_it2;
+    TFile*          g_corr_kfit_it3;
+    TH2F*           g_corr_both_it3;
+    TFile*          g_corr_kfit_it4;
+    TH2F*           g_corr_both_it4;
+
+    TFile*          g_corr_th_kfit;
+    TH2F*           g_corr_th_both;
+    TFile*          g_corr_th_kfit_it1;
+    TH2F*           g_corr_th_both_it1;
+
+
 
 protected:
 //    virtual Bool_t  Init(const char* configFile);
@@ -450,6 +525,7 @@ protected:
 
     static constexpr bool includeIMconstraint = true;
     static constexpr bool includeVertexFit = true;
+    static constexpr size_t nPhotons_two = 2;
     static constexpr size_t nPhotons_four = 4;
     static constexpr size_t nPhotons_six = 6;
     static constexpr size_t nPhotons_ten = 10;
@@ -517,6 +593,8 @@ protected:
     APLCON kinfiteta2pi;
     APLCON kinfit10g;
     APLCON kinfit10g_eta2pi;
+    APLCON kinfit_2g_pi0;
+    APLCON kinfit_2g_eta;
 
     FitParticle beam4g;
     FitParticle beam;
@@ -525,6 +603,8 @@ protected:
     FitParticle beam_final;
     FitParticle beam10g;
     FitParticle beam10g_eta2pi;
+    std::vector<FitParticle> Photons_twog_pi0;
+    std::vector<FitParticle> Photons_twog_eta;
     std::vector<FitParticle> Photons_four;
     std::vector<FitParticle> Photons_six;
     std::vector<FitParticle> Photons_six_3pi;
@@ -552,9 +632,6 @@ public:
 
     void            CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
-    // calculates IM for n photons
-    Double_t    IM_Ng( UInt_t n );
-
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
     void TrueAnalysis_etapr10g();
@@ -570,7 +647,7 @@ public:
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
     void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb );
-    void test_correct_hypothesis(Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi,  std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb);
+    void test_correct_hypothesis(Double_t &prob_etapr, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi,  std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb);
 
 
     // functions specifically related to 10g analysis
