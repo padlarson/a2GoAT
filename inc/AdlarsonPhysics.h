@@ -33,9 +33,13 @@ private:
 
     TRandom3*       pRandoms;
     Bool_t          MC;
+    Bool_t          MC_weight  = false;
+    Double_t        MCw  = 1.0;
     // Histograms and scatterplots
     // True
     GH1*            true_BeamE;
+    GH1*            true_BeamE_weight;
+    TH1*            true_norm; // normalisation factor
 
     GHistBGSub2*    true_th_p_v_th_etapr_CM;
     GHistBGSub2*    true_th_v_E_p;
@@ -44,12 +48,16 @@ private:
     GHistBGSub2*    true_th_v_E_pi0_g;
     // Kinfit tests
     GHistBGSub2*    true_six_dth_vs_th_p;
-    GHistBGSub2*    true_six_z_v_Ncl;
+    GHistBGSub2*    true_six_dR_vs_R_p;
+    GHistBGSub2*    true_six_dR_vs_det_p;
     GHistBGSub2*    true_six_fit_dz_v_z;
+    GHistBGSub2*    true_six_fit_dz_v_p_th;
     GH1*            true_z_after_fit;
     GH1*            true_z_after_final_fit;
     // Physics Results
+    TH1*            true_etapr_diff_distr;
     TH2*            true_eta_pr_production;
+    TH2*            true_eta_pr_gg_effcorr;
     TH2*            true_DP;
     TH1*            true_phy_DP;
     TH1*            true_M_pi1pi2_e2p;
@@ -88,6 +96,7 @@ private:
     GHistBGSub2*    p_E_v_TOF_All;
     GHistBGSub2*    p_E_v_TOF_TAPS_1cl;
     GHistBGSub2*    p_E_v_TOF_CB_All;
+    GHistBGSub2*    p_E_v_TOF_CB_All_proton;
     GHistBGSub2*    p_E_v_TOF_CB_2PrID;
     GHistBGSub2*    p_E_v_TOF_TAPS_All;
     GHistBGSub2*    p_E_v_TOF_TAPS_2PrID;
@@ -135,7 +144,6 @@ private:
     TH1D            time_nr_ClustersinTime;
     TH1D            time_nr_FinalClusterSel;
     TH1D            six_time_TaggedTime;
-
 
    // Analysis 4g
 
@@ -234,6 +242,8 @@ private:
     GHistBGSub2*        six_fit_Pulls_p_phi_vs_det_TAPS_eta2pi0;
 
     GH1*            six_fit_IM;
+    GHistBGSub2*    six_fit_IM_vz;
+    GHistBGSub2*    six_fit_dthpr_vz;
 
     GH1*            six_fit_which_place_best_3pi_cand;
     GH1*            six_fit_which_place_best_etapr_cand;
@@ -242,20 +252,14 @@ private:
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_2;
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_4;
-    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_6;
-    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_8;
-    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_10;
 
     GH1*            six_fit_IM_eta2pi0_b;
     GH1*            six_fit_IM_eta2pi0_c;
     GH1*            six_fit_IM_eta2pi0_d;
     GH1*            six_fit_IM_eta2pi0_e;
 
-
     GHistBGSub2*    six_fit_PDF_eta2pi_v_Meta2pi;
     GHistBGSub2*    six_fit_PDF_etapr_v_Meta2pi;
-
-
 
     GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
@@ -266,7 +270,6 @@ private:
 
     GHistBGSub2*    six_fit_EvTh_g;
     GHistBGSub2*    six_fit_EvTh_g_final;
-    GHistBGSub2*    six_fit_EvTh_g_final_removed;
     GHistBGSub2*    six_fit_best_etapr_eta_E_v_th;
     GHistBGSub2*    six_fit_best_etapr_pi_E_v_th;
     GHistBGSub2*    six_fit_best_3pi0_pi_E_v_th;
@@ -305,15 +308,18 @@ private:
     GHistBGSub2*    six_phy_3pi_IMpipi_v_IMppi;
 
     GHistBGSub2*    six_phy_etapr_v_BeamE;
-    GHistBGSub2*    six_phy_etapr_eta_v_BeamE;
+    GHistBGSub2*    six_phy_etapr_eta2pi_v_BeamE;
+
+    GHistBGSub2*    six_phy_etapr_prod_diff_distr;
+    GH1*            six_phy_etapr_prod_diff_distr_metapr;
 
     GHistBGSub2*    six_phy_DP;
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
 
-    GH1*    six_phy_DP_fit_metapr;
-    GH1*    six_phy_M_pi1pi2_v_etapr_fit;
-    GH1*    six_phy_M_etapi_v_etapr_fit;
+    GH1*            six_phy_DP_fit_metapr;
+    GH1*            six_phy_M_pi1pi2_v_etapr_fit;
+    GH1*            six_phy_M_etapi_v_etapr_fit;
 
     // Kinfit related variables 10g
 
@@ -332,6 +338,9 @@ private:
     GHistBGSub2*    ten_fit_nfit_v_pdf_5pi0_v_eta2pi0;
     GHistBGSub2*    ten_fit_dX_v_pdf_5pi0_v_eta2pi0;
     GHistBGSub2*    ten_fit_dY_v_pdf_5pi0_v_eta2pi0;
+
+    GHistBGSub2*    ten_phy_etapr_prod_diff_distr;
+    GHistBGSub2*    ten_phy_etapr_prod_diff_distr_metapr;
 
     // proton identified from TAPS_E vs VETO_dE
 
@@ -377,9 +386,11 @@ private:
     TH2*            g_e;
     TH2*            g_th;
     TH2*            g_phi;
+    TH1*            g_R;
 //    TH2*            p_TAPS_e;
     TH1*            p_TAPS_th;
     TH1*            p_TAPS_fi;
+    TH1*            p_TAPS_R;
 
 
     TFile*          unc_corr;
@@ -411,6 +422,7 @@ private:
 
     std::vector<int> PbWO4;
     std::vector<int> ring3_or_ring4_CB;
+    std::vector<int> Is_CB;
     Bool_t edge_CB;
 
     UInt_t nrprotons;
@@ -431,7 +443,7 @@ private:
     GTrue   etapr_6gTrue;
     GTrue   etapr_10gTrue;
 
-    std::vector<int> detnr;
+    std::vector<int>  detnr;
     std::vector<bool> CB_region;
     std::vector<bool> Is_CB_6g;
     std::vector<bool> Is_CB_10g;
@@ -463,6 +475,8 @@ private:
     std::vector<Double_t> TAPSgain;
 
     std::vector<Double_t> TAPSth_corr;
+    std::vector<Double_t> R_TAPS;
+    std::vector<Double_t> R_TAPS_corr;
 
     typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
     std::map<UInt_t, std::vector<Double_t>> TOF_corr;
@@ -538,6 +552,11 @@ protected:
                 Theta = p_.Theta();
                 Phi = p_.Phi();
             }
+            void SetFromValues(const Double_t& E, const Double_t& th, const Double_t& ph) {
+                Ek = E;
+                Theta = th; // in case of TAPS, theta is replaced by Radius R
+                Phi = ph;
+            }
 
             static TLorentzVector Make(const std::vector<double>& EkThetaPhi,
                                                const Double_t m);
@@ -547,26 +566,45 @@ protected:
             }
 
             std::vector<double*> Link() {
-                return {std::addressof(Ek),
+                return {
+                        std::addressof(Ek),
                         std::addressof(Theta),
                         std::addressof(Phi)};
             }
             std::vector<double*> LinkSigma() {
-                return {std::addressof(Ek_Sigma),
+                return {
+                        std::addressof(Ek_Sigma),
                         std::addressof(Theta_Sigma),
                         std::addressof(Phi_Sigma)};
             }
-
             std::vector<APLCON::Variable_Settings_t> LinkSettings()
             {
                 return{Ek_Setting, Theta_Setting, Phi_Setting};
             }
 
-//            void Smear(int itr_nr, Bool_t measured );
-//            void Smear(int itr_nr, Bool_t measured);
+//            std::vector<APLCON::Variable_Settings_t> LinkSetting_vx()
+//            {
+//                return{v_z_Setting};
+//            }
+
+//            std::vector<double*> Link_vx() {
+//                return {
+//                        std::addressof(v_z)};
+//            }
+//            std::vector<double*> LinkSigma_vx() {
+//                return {
+//                std::addressof(v_z_Sigma)};
+//            }
+
+
             void Smear(std::vector<double> unc , int particle);
+            void Smear_R(std::vector<double> unc , int particle);
+
 
             void APLCONSettings();
+
+//            void Smear_vx();
+//            void APLCONSettings_vx();
 
 
             double Ek;
@@ -578,6 +616,11 @@ protected:
             double Phi;
             double Phi_Sigma;
             APLCON::Variable_Settings_t Phi_Setting;
+
+//            double v_z;
+//            double v_z_Sigma;
+//            APLCON::Variable_Settings_t v_z_Setting;
+
 
             bool isCB;
 
@@ -619,6 +662,8 @@ protected:
     FitParticle proton_final;
     FitParticle proton10g;
     FitParticle proton10g_eta2pi;
+
+//    FitParticle v_z;
 			
 public:
     AdlarsonPhysics();
@@ -639,6 +684,7 @@ public:
     void Kinfit_test();
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
+    std::vector<double> Get_unc_R(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
 
     // functions specifically related to 4g analysis
     void fourgAnalysis( UInt_t ipr );
