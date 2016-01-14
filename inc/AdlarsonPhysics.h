@@ -51,6 +51,7 @@ private:
     GHistBGSub2*    true_six_dR_vs_R_p;
     GHistBGSub2*    true_six_dR_vs_det_p;
     GHistBGSub2*    true_six_fit_dz_v_z;
+    GHistBGSub2*    fit_six_fit_dz_v_z;
     GHistBGSub2*    true_six_fit_dz_v_p_th;
     GH1*            true_z_after_fit;
     GH1*            true_z_after_final_fit;
@@ -86,7 +87,6 @@ private:
     TLorentzVector  MMp_vec;
     TLorentzVector  g[3], h[3], rc[3], rc_sig[3];
 
-    GHistBGSub*     p_nr;
     GHistBGSub*     p_MM;
     GHistBGSub2*    p_th_v_E;
     GHistBGSub2*    p_E_v_dE_all;   // hits
@@ -95,10 +95,8 @@ private:
     GHistBGSub2*    p_E_v_TOF;
     GHistBGSub2*    p_E_v_TOF_All;
     GHistBGSub2*    p_E_v_TOF_TAPS_1cl;
-    GHistBGSub2*    p_E_v_TOF_CB_All;
     GHistBGSub2*    p_E_v_TOF_CB_All_proton;
     GHistBGSub2*    p_E_v_TOF_CB_2PrID;
-    GHistBGSub2*    p_E_v_TOF_TAPS_All;
     GHistBGSub2*    p_E_v_TOF_TAPS_2PrID;
     GHistBGSub2*    p_E_v_TOF_CB_best;
     GHistBGSub2*    p_E_v_TOF_after_kfit;
@@ -127,11 +125,9 @@ private:
     GHistBGSub2*    IMgg_v_det_etapi0_eta_CB;
     GHistBGSub2*    IMgg_v_det_etapi0_pi0_CB;
     GHistBGSub2*    IMgg_v_det_3pi0_CB;
-    GHistBGSub2*    IMgg_v_det_3pi0_CB_fit;
     GHistBGSub2*    IMgg_v_det_2pi0_TAPS;
     GHistBGSub2*    IMgg_v_det_etapi0_TAPS;
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS;
-    GHistBGSub2*    IMgg_v_det_3pi0_TAPS_fit;
 
     TH2D            time_TOF;
     TH2D            time_clusters_TAPS;
@@ -213,6 +209,10 @@ private:
     GH1*            six_fit_pdf;
     GH1*            six_fit_etaprfinal_pdf;
 
+    GH1*            NI6g;
+    GH1*            NIeta2pi0;
+    GH1*            NItetapr;
+
     GHistBGSub2*    proton_fit_e_v_th;
     GHistBGSub2*    proton_fit_e_v_th_final;
     GHistBGSub2*    six_fit_Pulls;
@@ -236,10 +236,7 @@ private:
     GHistBGSub2*        six_fit_Pulls_g_E_vs_eth_eta2pi0;
     GHistBGSub2*        six_fit_Pulls_g_th_vs_eth_eta2pi0;
     GHistBGSub2*        six_fit_Pulls_g_phi_vs_eth_eta2pi0;
-    GHistBGSub2*        six_fit_Pulls_p_th_vs_det_TAPS_3pi0;
-    GHistBGSub2*        six_fit_Pulls_p_phi_vs_det_TAPS_3pi0;
-    GHistBGSub2*        six_fit_Pulls_p_th_vs_det_TAPS_eta2pi0;
-    GHistBGSub2*        six_fit_Pulls_p_phi_vs_det_TAPS_eta2pi0;
+
 
     GH1*            six_fit_IM;
     GHistBGSub2*    six_fit_IM_vz;
@@ -257,9 +254,10 @@ private:
     GH1*            six_fit_IM_eta2pi0_c;
     GH1*            six_fit_IM_eta2pi0_d;
     GH1*            six_fit_IM_eta2pi0_e;
+    GH1*            six_fit_IM_eta2pi0_f;
+    GH1*            six_fit_IM_eta2pi0_g;
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_Meta2pi;
-    GHistBGSub2*    six_fit_PDF_etapr_v_Meta2pi;
 
     GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
@@ -366,14 +364,6 @@ private:
     TFile*          pi0_cand;
     TCutG*          pi0_g_cand;
 
-
-    TFile*          threepi_Evth;
-    TCutG*          threepi_g_cand;
-    TFile*          twopi_Evth;
-    TCutG*          twopi_g_cand;
-    TFile*          etapi_Evth;
-    TCutG*          etapi_g_cand;
-
     TFile*          g_unc;
     TFile*          p_unc;
     // histograms with unc
@@ -399,11 +389,6 @@ private:
     TH2*            g_fi_c1;
     TH1*            p_th_c1;
     TH1*            p_fi_c1;
-
-    TFile*          fin_sel;
-    TH2*            etapr_eta;
-    TH2*            etapr_pi;
-    TH2*            dir3pi_gg;
 
     // True LorentzVectors
     TLorentzVector  eta_true;
@@ -582,30 +567,10 @@ protected:
                 return{Ek_Setting, Theta_Setting, Phi_Setting};
             }
 
-//            std::vector<APLCON::Variable_Settings_t> LinkSetting_vx()
-//            {
-//                return{v_z_Setting};
-//            }
-
-//            std::vector<double*> Link_vx() {
-//                return {
-//                        std::addressof(v_z)};
-//            }
-//            std::vector<double*> LinkSigma_vx() {
-//                return {
-//                std::addressof(v_z_Sigma)};
-//            }
-
-
             void Smear(std::vector<double> unc , int particle);
             void Smear_R(std::vector<double> unc , int particle);
 
-
             void APLCONSettings();
-
-//            void Smear_vx();
-//            void APLCONSettings_vx();
-
 
             double Ek;
             double Ek_Sigma;
@@ -616,11 +581,6 @@ protected:
             double Phi;
             double Phi_Sigma;
             APLCON::Variable_Settings_t Phi_Setting;
-
-//            double v_z;
-//            double v_z_Sigma;
-//            APLCON::Variable_Settings_t v_z_Setting;
-
 
             bool isCB;
 
@@ -674,6 +634,8 @@ public:
     void            Time_corr();
     void            Energy_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
+
+    TLorentzVector GetLVCorrForZ(std::vector<double> EkPThPhi, const double v_z, Int_t &idet, double mass);
 
     void            CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
