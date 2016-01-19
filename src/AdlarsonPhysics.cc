@@ -1905,19 +1905,22 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
             obs_kfit = {E, P, R, ph};
             TLorentzVector proton_fit = GetLVCorrForZ(obs_kfit, vx_z, idet, mass);
 
+
+            if(MC){
 //            Double_t p_th_fit = TMath::ATan(R/(145.7-vx_z))*TMath::RadToDeg();
             Double_t p_th_true = etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg();
 //            Double_t p_th_fit = proton_fit.Theta()*TMath::RadToDeg();
 //            Double_t p_th_fit = TMath::ATan(proton_fit.Theta()/145.7)*TMath::RadToDeg();
             Double_t p_E_true = etapr_6gTrue.GetTrueProtonLV().E()*1.0e3 - MASS_PROTON;
 
-//            Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
+            Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
             true_z_after_fit->Fill(ztrue, GetTagger()->GetTaggedTime(tag));
 
             Double_t diff = vx_z - ztrue;
             true_six_fit_dz_v_z->Fill(ztrue, diff);
             true_six_fit_dz_v_p_th->Fill(p_th_true, diff);
             fit_six_fit_dz_v_z->Fill(vx_z, diff);
+            }
 
             if(MC_weight){
                 six_fit_chi2->FillWeighted(result_min.ChiSquare, MCw );
@@ -1926,7 +1929,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 six_fit_IM->FillWeighted( etap_fit.M(), MCw );
 
                 six_fit_IM_vz->FillWeighted( etap_fit.M(), ztrue, MCw );
-                six_fit_dthpr_vz->FillWeighted(p_th_true - proton_fit.Theta()*TMath::RadToDeg(),ztrue,MCw);
+//                six_fit_dthpr_vz->FillWeighted(p_th_true - proton_fit.Theta()*TMath::RadToDeg(),ztrue,MCw);
 
                 proton_fit_e_v_th->FillWeighted(proton_fit.E() - MASS_PROTON, proton_fit.Theta()*TMath::RadToDeg(), MCw );
                 p_E_v_TOF_after_kfit->FillWeighted(TOF_CB_proton, proton_fit.E(), MCw );
@@ -1939,7 +1942,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                      six_fit_EvTh_g->FillWeighted(photons_fit[igam_fit].E(), photons_fit[igam_fit].Theta()*TMath::RadToDeg(), MCw );
 
                 // true observable only in MC
-                six_fit_true_p_th_v_det->FillWeighted(GetTracks()->GetCentralCrystal(iprtrack), p_th_true - proton_fit.Theta()*TMath::RadToDeg(), MCw );
+//                six_fit_true_p_th_v_det->FillWeighted(GetTracks()->GetCentralCrystal(iprtrack), p_th_true - proton_fit.Theta()*TMath::RadToDeg(), MCw );
             }
             else{
                 six_fit_chi2->Fill( result_min.ChiSquare, GetTagger()->GetTaggedTime(tag));
