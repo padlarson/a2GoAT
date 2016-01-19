@@ -230,14 +230,6 @@ private:
     GHistBGSub2*    six_fit_Pulls_p_th_vs_det_TAPS;
     GHistBGSub2*    six_fit_Pulls_p_phi_vs_det_TAPS;
 
-    GHistBGSub2*        six_fit_Pulls_g_E_vs_eth_3pi0;
-    GHistBGSub2*        six_fit_Pulls_g_th_vs_eth_3pi0;
-    GHistBGSub2*        six_fit_Pulls_g_phi_vs_eth_3pi0;
-    GHistBGSub2*        six_fit_Pulls_g_E_vs_eth_eta2pi0;
-    GHistBGSub2*        six_fit_Pulls_g_th_vs_eth_eta2pi0;
-    GHistBGSub2*        six_fit_Pulls_g_phi_vs_eth_eta2pi0;
-
-
     GH1*            six_fit_IM;
     GHistBGSub2*    six_fit_IM_vz;
     GHistBGSub2*    six_fit_dthpr_vz;
@@ -263,8 +255,6 @@ private:
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
     GH1*            six_fit_best_eta;
-    GH1*            six_fit_final_coplanarity;
-    GH1*            six_fit_final_theta_diff;
 
     GHistBGSub2*    six_fit_EvTh_g;
     GHistBGSub2*    six_fit_EvTh_g_final;
@@ -442,6 +432,7 @@ private:
     std::vector<TLorentzVector> photons_fit;
     std::vector<TLorentzVector> photons_fit_final;
     std::vector<TLorentzVector> photons_fit_final_metapr;
+    std::vector<TLorentzVector> photons_fit_10g;
 
     Double_t    sigma_eta;
     Double_t    sigma_pi0;
@@ -582,7 +573,7 @@ protected:
             double Phi_Sigma;
             APLCON::Variable_Settings_t Phi_Setting;
 
-            bool isCB;
+//            bool isCB;
 
         private:
             static std::default_random_engine generator;
@@ -642,7 +633,7 @@ public:
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
     void TrueAnalysis_etapr10g();
-    Double_t Get_etapr_weight_MC(Double_t beame);
+    Double_t Get_etapr_weight_MC(Double_t beame, TLorentzVector eta_pr[2]);
     void Kinfit_test();
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
@@ -664,7 +655,7 @@ public:
 
     const std::vector<TLorentzVector> ClusterEnergyCorr();
 
-
+    Int_t diff_distr(const Double_t beam_e, TLorentzVector& fin );
     void DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Double_t &X2, Double_t &Y, Int_t &DP_nr1, Int_t &DP_nr2);
     void m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 );
 
