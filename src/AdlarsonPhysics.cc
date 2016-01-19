@@ -1149,7 +1149,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
    }
    else{
        std::cout << "etaprime_Legendrecoeff.txt not found !" << std::endl;
-//       exit(0);
+       exit(0);
    }
    CBtime_corr.resize(0);
    std::ifstream fileCBtime("configfiles/data/time_corr_CB.txt");
