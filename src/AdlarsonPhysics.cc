@@ -1147,6 +1147,10 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
            }
        }
    }
+   else{
+       std::cout << "etaprime_Legendrecoeff.txt not found !" << std::endl;
+//       exit(0);
+   }
    CBtime_corr.resize(0);
    std::ifstream fileCBtime("configfiles/data/time_corr_CB.txt");
    if(fileCBtime){
@@ -1812,7 +1816,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
         Double_t PRec  =  GetTracks()->GetVector(ipr).E();
 
 
-        Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
 
 
         if(MC_weight){
@@ -1906,7 +1909,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
             TLorentzVector proton_fit = GetLVCorrForZ(obs_kfit, vx_z, idet, mass);
 
 
-            if(MC){
+            if(MC_weight){
 //            Double_t p_th_fit = TMath::ATan(R/(145.7-vx_z))*TMath::RadToDeg();
             Double_t p_th_true = etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg();
 //            Double_t p_th_fit = proton_fit.Theta()*TMath::RadToDeg();
@@ -1928,6 +1931,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                 six_fit_IM->FillWeighted( etap_fit.M(), MCw );
 
+
+                Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
                 six_fit_IM_vz->FillWeighted( etap_fit.M(), ztrue, MCw );
 //                six_fit_dthpr_vz->FillWeighted(p_th_true - proton_fit.Theta()*TMath::RadToDeg(),ztrue,MCw);
 
