@@ -75,6 +75,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     true_eta_pr_gg_effcorr      = new TH2D("true_eta_pr_gg_effcorr", "eta prime --> #gamma#gamma eff corr as fcn of #theta_{cm} divided in 12 beam ranges", 500, 0. ,25., 200, 0., 2.);
     true_DP                     = new TH2D("true_DP", "True Dalitz Plot distribution", 600, -1.5, 1.5, 600, -1.5, 1.5);
     true_phy_DP                 = new TH1D("true_phy_DP", "True Dalitz Plot distribution as bin nr 6#gamma", 800, 0, 800);
+    true_phy_DP_015             = new TH1D("true_phy_DP_015", "True Dalitz Plot distribution as bin nr 6#gamma 0.15 bin", 800, 0, 800);
     true_M_pi1pi2_e2p           = new TH1D("true_M_pi1pi2_e2p", "True M_{#pi#pi,true}^{2}", 200 , 0.0, 200.);
     true_M_etapi_e2p            = new TH1D("true_M_etapi_e2p", "True M_{#eta#pi,true}^{2}", 400, 400.0, 800.);
 // In 6g analysis
@@ -172,7 +173,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     NIeta2pi0                   = new GH1("NIeta2pi0", "Nr iterations eta2pi0", 100, 0, 100.);
     NItetapr                    = new GH1("NItetapr", "Nr iterations final etapr", 100, 0, 100.);
 
-
     proton_fit_e_v_th           = new GHistBGSub2("proton_fit_e_v_th", "proton E vs #theta", 200, 0., 1000., 25, 0, 25);
     proton_fit_e_v_th_final     = new GHistBGSub2("proton_fit_e_v_th_final", "proton E vs #theta final ev sample", 200, 0., 1000., 25, 0, 25);
 
@@ -230,14 +230,16 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     six_phy_etapr_v_BeamE               = new GHistBGSub2("six_phy_etapr_v_BeamE", "IM(6#gamma) vs Beam Energy", 20, 1400, 1600, 200, 750., 1050.);
     six_phy_etapr_eta2pi_v_BeamE        = new GHistBGSub2("six_phy_etapr_eta2pi_v_BeamE", "IM(6#gamma) with enforced eta and 2pi0 mass vs Beam Energy", 20, 1400, 1600, 200, 750., 1050.);
-    six_phy_etapr_prod_diff_distr       = new GHistBGSub2("six_phy_etapr_prod_diff_distr", "IM(6#gamma) w eta and 2pi0 mass vs E#gamma and #theta_{CM}", 260, 0, 260, 250, 800., 1050.);
+    six_phy_etapr_prod_diff_distr       = new GHistBGSub2("six_phy_etapr_prod_diff_distr", "IM(6#gamma) w eta and 2pi0 mass vs E#gamma and #theta_{CM}", 260, 0, 260, 200, 800., 1200.);
     six_phy_etapr_prod_diff_distr_metapr= new GH1("six_phy_etapr_prod_diff_distr_metapr", "IM(6#gamma) w eta2pi0, eta pr mass vs E#gamma and #theta_{CM}", 260, 0, 260);
 
     six_phy_DP                  = new GHistBGSub2("six_phy_DP", "Rec fitted Dalitz Plot distribution vs bin nr 6#gamma", 800, 0, 800, 250, 800., 1050.);
+    six_phy_DP_015              = new GHistBGSub2("six_phy_DP_015", "Rec fitted Dalitz Plot distribution vs bin nr 6#gamma with 0.15 bin", 800, 0, 800, 250, 800., 1050.);
     six_phy_M_pi1pi2_v_etapr    = new GHistBGSub2("six_phy_M_pi1pi2_v_etapr", "Fitted M_{#pi#pi,fit}^{2} 6#gamma", 400 , 0.0, 200., 250, 800., 1050. );
     six_phy_M_etapi_v_etapr     = new GHistBGSub2("six_phy_M_etapi_v_etapr", "Fitted M_{#eta#pi,fit}^{2} 6#gamma", 400 , 400.0, 800., 250, 800., 1050. );
 
     six_phy_DP_fit_metapr       = new GH1("six_phy_DP_fit_metapr","Dalitz plot for final ev sample with kinfit forced to eta prime mass", 800 , 0, 800.);
+    six_phy_DP_fit_015_metapr   = new GH1("six_phy_DP_fit_015_metapr","Dalitz plot for final ev sample with kinfit forced to eta prime mass w 0.15", 800 , 0, 800.);
     six_phy_M_pi1pi2_v_etapr_fit= new GH1("six_phy_M_pi1pi2_v_etapr_fit", "Fitted M_{#pi#pi,fit}^{2} 6#gamma with metapr fit", 200 , 0.0, 200.);
     six_phy_M_etapi_v_etapr_fit = new GH1("six_phy_M_etapi_v_etapr_fit", "Fitted M_{#eta#pi,fit}^{2} 6#gamma with metapr fit", 400 , 400.0, 800.);
 
@@ -258,8 +260,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     IM10g_fit           = new GH1("IM10g_fit", "IM(10#gamma) after APLCON fit", 500, 400., 1400.);
     IM10g_fit_best_cand = new GH1("IM10g_fit_best_cand", "IM(10#gamma) after APLCON fit with eta and 2pi0 mass enforced", 500, 400., 1400.);
 
-
-
     ten_fit_PDF_eta2pi_v_eta6g   = new GHistBGSub2("ten_fit_PDF_eta2pi_v_eta6g", "ten_fit_PDF_eta2pi_v_eta6g 6#gamma", 100, 0., 1., 100, 0., 1.);
 
     ten_fit_PDF_eta2pi          = new GH1("ten_fit_PDF_eta2pi", "ten_fit_PDF_eta2pi 10#gamma", 100, 0., 1.);
@@ -270,8 +270,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     ten_fit_dX_v_pdf_5pi0_v_eta2pi0 = new GHistBGSub2("ten_fit_dX_v_pdf_5pi0_v_eta2pi0", "ten #gamma", 10000, 0, 10000, 50, 0, 50);
     ten_fit_dY_v_pdf_5pi0_v_eta2pi0 = new GHistBGSub2("ten_fit_dY_v_pdf_5pi0_v_eta2pi0", "ten #gamma", 10000, 0, 10000, 50, 0, 50);
 
-    ten_phy_etapr_prod_diff_distr       = new GHistBGSub2("ten_phy_etapr_prod_diff_distr", "IM(10#gamma) w eta and 2pi0 mass vs E#gamma and #theta_{CM}", 260, 0, 260, 250, 800., 1050.);
-    ten_phy_etapr_prod_diff_distr_metapr= new GHistBGSub2("ten_phy_etapr_prod_diff_distr_metapr", "IM(10#gamma) w eta2pi0, eta pr mass vs E#gamma and #theta_{CM}", 260, 0, 260, 250,800., 1050.);
+    ten_phy_etapr_prod_diff_distr       = new GHistBGSub2("ten_phy_etapr_prod_diff_distr", "IM(10#gamma) w eta and 2pi0 mass vs E#gamma and #theta_{CM}", 260, 0, 260, 200, 800., 1200.);
+    ten_phy_etapr_prod_diff_distr_metapr= new GHistBGSub2("ten_phy_etapr_prod_diff_distr_metapr", "IM(10#gamma) w eta2pi0, eta pr mass vs E#gamma and #theta_{CM}", 260, 0, 260, 200,800., 1200.);
 
 
     // Physics results eta'
@@ -775,7 +775,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 
 
     APLCON::Fit_Settings_t settings10g = kinfit10g.GetSettings();
-    settings10g.MaxIterations = 50;
+    settings10g.MaxIterations = 30;
 //    settings10g.DebugLevel = 5;
 //    kinfit10g.SetSettings(settings10g);
 
@@ -848,10 +848,10 @@ void	AdlarsonPhysics::ProcessEvent()
 //       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //       TrueAnalysis_etapr6g();                    // obtains the true observables
 //       MCw = etapr_6gTrue.GetWeight();
-//       MCw = 1.0;
-        etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-        TrueAnalysis_etapr10g();
-        MCw = etapr_10gTrue.GetWeight();
+       MCw = 1.0;
+//        etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//        TrueAnalysis_etapr10g();
+//        MCw = etapr_10gTrue.GetWeight();
         RandomTime();
     }
 
@@ -1335,11 +1335,13 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(){
 
     // here calculate the eta prime theta as function of beam energy
         
-    DalitzPlot(etapr_true, Xtrue1, Xtrue2, Ytrue, DPnrTrue1, DPnrTrue2);
+    DalitzPlot(etapr_true, Xtrue1, Xtrue2, Ytrue, DPnrTrue1, DPnrTrue2, DPnrTrue3, DPnrTrue4);
     true_DP->Fill( Xtrue1, Ytrue );
     true_DP->Fill( Xtrue2, Ytrue );
     true_phy_DP->Fill(DPnrTrue1);
     true_phy_DP->Fill(DPnrTrue2);
+    true_phy_DP_015->Fill(DPnrTrue3);
+    true_phy_DP_015->Fill(DPnrTrue4);
 
     m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
     true_M_pi1pi2_e2p->Fill(m_2pi0True*1.0e3);
@@ -1381,7 +1383,7 @@ void AdlarsonPhysics::TrueAnalysis_etapr10g()
     etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
     etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
     etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
-    DalitzPlot(etapr_true, Xtrue1, Xtrue2, Ytrue, DPnrTrue1, DPnrTrue2);
+    DalitzPlot(etapr_true, Xtrue1, Xtrue2, Ytrue, DPnrTrue1, DPnrTrue2, DPnrTrue3, DPnrTrue4);
     true_DP->Fill( Xtrue1, Ytrue, weight);
     true_DP->Fill( Xtrue2, Ytrue, weight);
     true_phy_DP->Fill(DPnrTrue1, weight);
@@ -2254,7 +2256,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                Double_t Yfit = -2.0;
                Int_t DP_binnr_fit1 = -100;
                Int_t DP_binnr_fit2 = -100;
-               DalitzPlot(fin, Xfit1, Xfit2, Yfit, DP_binnr_fit1, DP_binnr_fit2);
+               Int_t DP_binnr_fit3 = -100;
+               Int_t DP_binnr_fit4 = -100;
+               DalitzPlot(fin, Xfit1, Xfit2, Yfit, DP_binnr_fit1, DP_binnr_fit2, DP_binnr_fit3, DP_binnr_fit4);
 
                // Filling of final results
 
@@ -2266,6 +2270,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                    six_phy_DP->FillWeighted(DP_binnr_fit1, etap_fit_final.M(), MCw );
                    six_phy_DP->FillWeighted(DP_binnr_fit2, etap_fit_final.M(), MCw );
+                   six_phy_DP_015->FillWeighted(DP_binnr_fit3, etap_fit_final.M(), MCw );
+                   six_phy_DP_015->FillWeighted(DP_binnr_fit4, etap_fit_final.M(), MCw );
                    if( TMath::Abs(Xfit1 - Xtrue1) > TMath::Abs(Xfit1 - Xtrue2)){
                        Double_t Xtemp = Xtrue1;
                        Xtrue1 = Xtrue2;
@@ -2286,6 +2292,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                    six_phy_DP->Fill(DP_binnr_fit1, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                    six_phy_DP->Fill(DP_binnr_fit2, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
+                   six_phy_DP_015->Fill(DP_binnr_fit3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
+                   six_phy_DP_015->Fill(DP_binnr_fit4, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                    if( TMath::Abs(Xfit1 - Xtrue1) > TMath::Abs(Xfit1 - Xtrue2)){
                        Double_t Xtemp = Xtrue1;
                        Xtrue1 = Xtrue2;
@@ -2300,34 +2308,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                TLorentzVector fin_all = fin[0] + fin[1] + fin[2];
                Int_t diffbin =  diff_distr( GetTagger()->GetTaggedEnergy(tag), fin_all );
-               // Put this into a subroutine;
-               // return Int_t diff_bin = diff_distr( beam_e, fin )
-//               TLorentzVector sqrt_s(0.,0., GetTagger()->GetTaggedEnergy(tag), GetTagger()->GetTaggedEnergy(tag)+MASS_PROTON);
-//               TVector3 cm_vector  = -(sqrt_s).BoostVector();
-//               TLorentzVector etapr_cm  = fin[0]+fin[1]+fin[2];
-//               etapr_cm.Boost(cm_vector);
-//               Double_t angle = etapr_cm.Theta();
-//               Double_t x = TMath::Cos( angle );
 
-//               Int_t ee = -100;
-//               if( GetTagger()->GetTaggedEnergy(tag) < Legendre[1] )
-//                    ee = 0;
-//               else if( GetTagger()->GetTaggedEnergy(tag) >= Legendre[77] )
-//                    ee = 11;
-//               else{
-//                   bool energy_region = false;
-//                   int k = 7;
-//                   while(! energy_region && k < 71){
-//                       if( (GetTagger()->GetTaggedEnergy(tag) >= Legendre[k]) && (GetTagger()->GetTaggedEnergy(tag) < Legendre[k+1]) ){
-//                            ee = k/7;
-//                            energy_region = true;
-//                       }
-//                       else
-//                           k += 7;
-//                   }
-//               }
-//               Int_t diffbin = ee*20 + int((1. + x)/0.2);
-//               // end of subroutine, return int
 
                if(MC_weight)
                     six_phy_etapr_prod_diff_distr->FillWeighted(diffbin, etap_fit_final.M(), MCw);
@@ -2356,7 +2337,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    Double_t Yfit = -2.0;
                    Int_t DP_binnr_fit1 = -100;
                    Int_t DP_binnr_fit2 = -100;
-                   DalitzPlot(fin_metapr, Xfit1, Xfit2, Yfit, DP_binnr_fit1, DP_binnr_fit2);
+                   Int_t DP_binnr_fit3 = -100;
+                   Int_t DP_binnr_fit4 = -100;
+                   DalitzPlot(fin_metapr, Xfit1, Xfit2, Yfit, DP_binnr_fit1, DP_binnr_fit2, DP_binnr_fit3, DP_binnr_fit4);
 
                    if(MC_weight){
                        six_phy_etapr_prod_diff_distr_metapr->FillWeighted( diffbin, MCw );
@@ -3094,7 +3077,9 @@ void AdlarsonPhysics::tengAnalysis(UInt_t ipr)
                 Double_t Yfit = -2.0;
                 Int_t DP_binnr_fit1 = -100;
                 Int_t DP_binnr_fit2 = -100;
-                DalitzPlot(fin, Xfit1, Xfit2, Yfit, DP_binnr_fit1, DP_binnr_fit2);
+                Int_t DP_binnr_fit3 = -100;
+                Int_t DP_binnr_fit4 = -100;
+                DalitzPlot(fin, Xfit1, Xfit2, Yfit, DP_binnr_fit1, DP_binnr_fit2, DP_binnr_fit3, DP_binnr_fit4);
 
                 if( TMath::Abs(Xfit1 - Xtrue1) > TMath::Abs(Xfit1 - Xtrue2))
                 {
@@ -3253,7 +3238,7 @@ Int_t AdlarsonPhysics::diff_distr(const Double_t beam_e, TLorentzVector &fin ){
 }
 
 
-void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Double_t &X2, Double_t &Y , Int_t &DP_nr1, Int_t &DP_nr2)
+void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Double_t &X2, Double_t &Y , Int_t &DP_nr1, Int_t &DP_nr2, Int_t &DP_nr3, Int_t &DP_nr4)
 {
     // g is the array of TLorentzVectors containing the final event sample in order
     // 0 1 2 - eta pi01 pi02
@@ -3261,7 +3246,7 @@ void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Doubl
 
     Double_t T_eta, T_pi1, T_pi2;
     Double_t Q;
-    Double_t X_max = 1.5, Y_max = 1.5, bin_width = 0.2;
+    Double_t X_max = 1.5, Y_max = 1.5, bin_width = 0.2, bin_width2 = 0.15;
 
     TVector3 etaprime_rest      = -(g[0]+g[1]+g[2]).BoostVector();
     TLorentzVector eta_ep_rest  = g[0];
@@ -3283,6 +3268,9 @@ void AdlarsonPhysics::DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Doubl
 
     DP_nr1 = int ( (X1  + X_max ) / bin_width ) + 40*int( (Y  + Y_max ) / bin_width );
     DP_nr2 = int ( (X2  + X_max ) / bin_width ) + 40*int( (Y  + Y_max ) / bin_width );
+
+    DP_nr3 = int ( (X1  + X_max ) / bin_width ) + 40*int( (Y  + Y_max ) / bin_width2 );
+    DP_nr4 = int ( (X2  + X_max ) / bin_width ) + 40*int( (Y  + Y_max ) / bin_width2 );
 
 }
 

@@ -61,6 +61,7 @@ private:
     TH2*            true_eta_pr_gg_effcorr;
     TH2*            true_DP;
     TH1*            true_phy_DP;
+    TH1*            true_phy_DP_015;
     TH1*            true_M_pi1pi2_e2p;
     TH1*            true_M_etapi_e2p;
 
@@ -302,10 +303,12 @@ private:
     GH1*            six_phy_etapr_prod_diff_distr_metapr;
 
     GHistBGSub2*    six_phy_DP;
+    GHistBGSub2*    six_phy_DP_015;
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
 
     GH1*            six_phy_DP_fit_metapr;
+    GH1*            six_phy_DP_fit_015_metapr;
     GH1*            six_phy_M_pi1pi2_v_etapr_fit;
     GH1*            six_phy_M_etapi_v_etapr_fit;
 
@@ -387,7 +390,7 @@ private:
     TLorentzVector  etapr_true[3];
 
     Double_t        Xtrue1, Xtrue2, Ytrue;
-    Int_t           DPnrTrue1, DPnrTrue2;
+    Int_t           DPnrTrue1, DPnrTrue2, DPnrTrue3, DPnrTrue4; // 2 first with bw 0.2, two next w. bw 0.15
     Double_t        m_etapi01True, m_etapi02True, m_2pi0True;
 
     // Reconstructed Lorentz Vectors
@@ -656,7 +659,7 @@ public:
     const std::vector<TLorentzVector> ClusterEnergyCorr();
 
     Int_t diff_distr(const Double_t beam_e, TLorentzVector& fin );
-    void DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Double_t &X2, Double_t &Y, Int_t &DP_nr1, Int_t &DP_nr2);
+    void DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Double_t &X2, Double_t &Y, Int_t &DP_nr1, Int_t &DP_nr2, Int_t &DP_nr3, Int_t &DP_nr4);
     void m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 );
 
 };
