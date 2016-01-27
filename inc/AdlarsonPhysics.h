@@ -117,6 +117,7 @@ private:
     GH1*            ten_rec_IM;
     GHistBGSub2*    ten_rec_IM_v_MMp;
     GHistBGSub2*    ten_fit_EvTh_g;
+    GHistBGSub2*    ten_fit_EvTh_g_min;
 
     GH1*            fi_diff_TAPSCB;
     GHistBGSub2*    fi_TAPSvsCB;
@@ -200,6 +201,7 @@ private:
 
     GH1*            six_rec_IM;
     GHistBGSub2*    six_rec_IM_v_MMp;
+    GH1*            six_rec_IM_eta2pi;
     GHistBGSub2*    six_rec_EvTh_5g;
     GHistBGSub2*    six_rec_EvTh_6g_from_5g_sample;
     GHistBGSub2*    six_rec_EvTh_6g;
@@ -375,6 +377,14 @@ private:
     TH1*            p_TAPS_fi;
     TH1*            p_TAPS_R;
 
+    TFile*          g_unc_vz;
+    TFile*          p_unc_vz;
+    TH2*            g_e_vz;
+    TH2*            g_th_vz;
+    TH2*            g_phi_vz;
+    TH1*            p_TAPS_th_vz;
+    TH1*            p_TAPS_fi_vz;
+
 
     TFile*          unc_corr;
     TH2*            g_e_c1;
@@ -432,6 +442,7 @@ private:
     std::vector<double> Legendre; //etapr photo pr Legendre values
 
     std::vector<TLorentzVector> photons_rec;
+    std::vector<TLorentzVector> photons_rec_ten;
     std::vector<TLorentzVector> photons_fit;
     std::vector<TLorentzVector> photons_fit_final;
     std::vector<TLorentzVector> photons_fit_final_metapr;
