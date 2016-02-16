@@ -42,6 +42,7 @@ public:
     const	Double_t*       GetTaggedTime()                     const	{return taggedTime;}
             Double_t        GetTaggedTime(const Int_t index)    const	{return taggedTime[index];}
     const	Double_t*       GetTaggedEnergy()                   const	{return taggedEnergy;}
+    void                    SetTaggedEnergy(const Int_t index, Double_t E_new) {taggedEnergy[index] = E_new;}
             Double_t        GetTaggedEnergy(const Int_t index)	const	{if(hasEnergy) return taggedEnergy[index]; return calibration[taggedChannel[index]];}
     const	Bool_t*         GetTaggedDouble()                   const	{return taggedDouble;}
             Bool_t          GetTaggedDouble(const Int_t index)  const	{return taggedDouble[index];}
