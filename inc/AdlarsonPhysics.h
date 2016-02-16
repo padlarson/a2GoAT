@@ -30,7 +30,6 @@ class	AdlarsonPhysics  : public GTreeManager
 {
 
 private:
-
     TRandom3*       pRandoms;
     Bool_t          MC;
     Bool_t          MC_weight  = false;
@@ -60,19 +59,35 @@ private:
     TH2*            true_eta_pr_production;
     TH2*            true_eta_pr_gg_effcorr;
     TH2*            true_DP;
-    TH1*            true_phy_DP;
+    TH1*            true_phy_DP_020;
     TH1*            true_phy_DP_015;
+    TH1*            true_phy_DP_010;
+    TH1*            true_phy_DP_005;
     TH1*            true_M_pi1pi2_e2p;
     TH1*            true_M_etapi_e2p;
+
+    GHistBGSub2*    true_six_phy_DP_020;
+    GHistBGSub2*    true_six_phy_DP_015;
+    GHistBGSub2*    true_six_phy_DP_010;
+    GHistBGSub2*    true_six_phy_DP_005;
+    GHistBGSub2*    true_six_phy_DP_020_pr;
+    GHistBGSub2*    true_six_phy_DP_015_pr;
+    GHistBGSub2*    true_six_phy_DP_010_pr;
+    GHistBGSub2*    true_six_phy_DP_005_pr;
 
     // in 6g analaysis
     GHistBGSub2*    true_six_phy_dX_v_DPbin;
     GHistBGSub2*    true_six_phy_dY_v_DPbin;
     GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
+    GHistBGSub2*    true_six_phy_dX_v_X;
+    GHistBGSub2*    true_six_phy_dY_v_Y;
+
     // for m_etapr forced in kinfit
     GHistBGSub2*    true_six_phy_dX_v_DPbin_metapr;
     GHistBGSub2*    true_six_phy_dY_v_DPbin_metapr;
     GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi_metapr;
+    GHistBGSub2*    true_six_phy_dX_v_X_metapr;
+    GHistBGSub2*    true_six_phy_dY_v_Y_metapr;
 
     // in 10g analysis
     GHistBGSub2*    true_ten_phy_dMpipi_v_Mpipi;
@@ -102,6 +117,7 @@ private:
     GHistBGSub2*    p_E_v_TOF_CB_best;
     GHistBGSub2*    p_E_v_TOF_after_kfit;
     GHistBGSub2*    p_Erec_v_TOF_after_kfit;
+    GHistBGSub2*    p_E_v_TOF_after_kfit_2;
 
     GHistBGSub*     CB_EnergySum;
     GHistBGSub*     CB_EnergySum_2pi0;
@@ -148,47 +164,47 @@ private:
     TLorentzVector  IM4g_vec;
     TLorentzVector  IM4g_fit;
 
-    // 4g analysis
-    GH1*            four_rec_IM;
-    GH1*            four_fit_IM;
+//    // 4g analysis
+//    GH1*            four_rec_IM;
+//    GH1*            four_fit_IM;
 
-    GH1*            four_fit_chi2;
-    GH1*            four_fit_pdf;
+//    GH1*            four_fit_chi2;
+//    GH1*            four_fit_pdf;
 
-    GHistBGSub2*    fit_mgg_pi_v_CB_2;
-    GHistBGSub2*    fit_mgg_eta_v_CB_2;
-    GHistBGSub2*    fit_mgg_pi_v_CB_3;
-    GHistBGSub2*    fit_mgg_pi_v_TAPS_2;
-    GHistBGSub2*    fit_mgg_eta_v_TAPS_2;
-    GHistBGSub2*    fit_Eg_Er_CB;
-    GHistBGSub2*    fit_Eg_Er_CB_fin;
+//    GHistBGSub2*    fit_mgg_pi_v_CB_2;
+//    GHistBGSub2*    fit_mgg_eta_v_CB_2;
+//    GHistBGSub2*    fit_mgg_pi_v_CB_3;
+//    GHistBGSub2*    fit_mgg_pi_v_TAPS_2;
+//    GHistBGSub2*    fit_mgg_eta_v_TAPS_2;
+//    GHistBGSub2*    fit_Eg_Er_CB;
+//    GHistBGSub2*    fit_Eg_Er_CB_fin;
 
-    GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
-    GHistBGSub2*    four_fit_best_2pi_IM_v_E;
-    GHistBGSub2*    four_fit_best_etapi_IM_v_E;
+//    GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
+//    GHistBGSub2*    four_fit_best_2pi_IM_v_E;
+//    GHistBGSub2*    four_fit_best_etapi_IM_v_E;
 
-    GHistBGSub2*    four_fit_Pulls_g_E_vs_eth_CB;
-    GHistBGSub2*    four_fit_Pulls_g_th_vs_eth_CB;
-    GHistBGSub2*    four_fit_Pulls_g_phi_vs_eth_CB;
+//    GHistBGSub2*    four_fit_Pulls_g_E_vs_eth_CB;
+//    GHistBGSub2*    four_fit_Pulls_g_th_vs_eth_CB;
+//    GHistBGSub2*    four_fit_Pulls_g_phi_vs_eth_CB;
 
-    GHistBGSub2*    four_fit_mgg_v_eth;
-    GHistBGSub2*    four_fit_mgg_v_eth_BaF2;
-    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4;
+//    GHistBGSub2*    four_fit_mgg_v_eth;
+//    GHistBGSub2*    four_fit_mgg_v_eth_BaF2;
+//    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4;
 
-    GHistBGSub2*    four_fit_m_eta_gg_v_eth;
-    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2;
-    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4;
+//    GHistBGSub2*    four_fit_m_eta_gg_v_eth;
+//    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2;
+//    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4;
 
-    GHistBGSub2*    four_fit_mgg_v_eth_2;
-    GHistBGSub2*    four_fit_mgg_v_eth_BaF2_2;
-    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4_2;
+//    GHistBGSub2*    four_fit_mgg_v_eth_2;
+//    GHistBGSub2*    four_fit_mgg_v_eth_BaF2_2;
+//    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4_2;
 
-    GHistBGSub2*    four_fit_m_eta_gg_v_eth_2;
-    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2_2;
-    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4_2;
+//    GHistBGSub2*    four_fit_m_eta_gg_v_eth_2;
+//    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2_2;
+//    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4_2;
 
-    GHistBGSub2*    four_fit_best_2pi0_pi_E_v_th;
-    GHistBGSub2*    four_fit_best_etapi0_pi_E_v_th;
+//    GHistBGSub2*    four_fit_best_2pi0_pi_E_v_th;
+//    GHistBGSub2*    four_fit_best_etapi0_pi_E_v_th;
 
     // 6g analysis
     // test analysis to test that kinfit APLCON is working properly
@@ -202,8 +218,6 @@ private:
     GH1*            six_rec_IM;
     GHistBGSub2*    six_rec_IM_v_MMp;
     GH1*            six_rec_IM_eta2pi;
-    GHistBGSub2*    six_rec_EvTh_5g;
-    GHistBGSub2*    six_rec_EvTh_6g_from_5g_sample;
     GHistBGSub2*    six_rec_EvTh_6g;
     GHistBGSub2*    six_rec_EvTh_7g;
     GHistBGSub2*    time_clusters_CB_3pi0;
@@ -218,20 +232,20 @@ private:
 
     GHistBGSub2*    proton_fit_e_v_th;
     GHistBGSub2*    proton_fit_e_v_th_final;
-    GHistBGSub2*    six_fit_Pulls;
-    GHistBGSub2*    six_fit_Pulls_g_E_vs_E_CB;
-    GHistBGSub2*    six_fit_Pulls_g_th_vs_th_CB;
-    GHistBGSub2*    six_fit_Pulls_g_phi_vs_th_CB;
-    GHistBGSub2*    six_fit_Pulls_g_E_vs_E_TAPS;
-    GHistBGSub2*    six_fit_Pulls_g_th_vs_th_TAPS;
-    GHistBGSub2*    six_fit_Pulls_g_phi_vs_th_TAPS;
+//    GHistBGSub2*    six_fit_Pulls;
+//    GHistBGSub2*    six_fit_Pulls_g_E_vs_E_CB;
+//    GHistBGSub2*    six_fit_Pulls_g_th_vs_th_CB;
+//    GHistBGSub2*    six_fit_Pulls_g_phi_vs_th_CB;
+//    GHistBGSub2*    six_fit_Pulls_g_E_vs_E_TAPS;
+//    GHistBGSub2*    six_fit_Pulls_g_th_vs_th_TAPS;
+//    GHistBGSub2*    six_fit_Pulls_g_phi_vs_th_TAPS;
 
-    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth;
-    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth;
-    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth;
+//    GHistBGSub2*    six_fit_Pulls_g_E_vs_eth;
+//    GHistBGSub2*    six_fit_Pulls_g_th_vs_eth;
+//    GHistBGSub2*    six_fit_Pulls_g_phi_vs_eth;
 
-    GHistBGSub2*    six_fit_Pulls_p_th_vs_det_TAPS;
-    GHistBGSub2*    six_fit_Pulls_p_phi_vs_det_TAPS;
+//    GHistBGSub2*    six_fit_Pulls_p_th_vs_det_TAPS;
+//    GHistBGSub2*    six_fit_Pulls_p_phi_vs_det_TAPS;
 
     GH1*            six_fit_IM;
     GHistBGSub2*    six_fit_IM_vz;
@@ -240,8 +254,6 @@ private:
     GH1*            six_fit_which_place_best_3pi_cand;
     GH1*            six_fit_which_place_best_etapr_cand;
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi;
-    GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_b;
-
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_2;
     GHistBGSub2*    six_fit_PDF_eta2pi_v_3pi_4;
 
@@ -304,13 +316,17 @@ private:
     GHistBGSub2*    six_phy_etapr_prod_diff_distr;
     GH1*            six_phy_etapr_prod_diff_distr_metapr;
 
-    GHistBGSub2*    six_phy_DP;
+    GHistBGSub2*    six_phy_DP_020;
     GHistBGSub2*    six_phy_DP_015;
+    GHistBGSub2*    six_phy_DP_010;
+    GHistBGSub2*    six_phy_DP_005;
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
 
-    GH1*            six_phy_DP_fit_metapr;
-    GH1*            six_phy_DP_fit_015_metapr;
+    GH1*            six_phy_DP_020_pr;
+    GH1*            six_phy_DP_015_pr;
+    GH1*            six_phy_DP_010_pr;
+    GH1*            six_phy_DP_005_pr;
     GH1*            six_phy_M_pi1pi2_v_etapr_fit;
     GH1*            six_phy_M_etapi_v_etapr_fit;
 
@@ -354,10 +370,8 @@ private:
     TFile*          PDF_cut_file;
     TCutG*          PDF_cut;
 
-    TFile*          eta_cand;
-    TCutG*          eta_g_cand;
-    TFile*          pi0_cand;
-    TCutG*          pi0_g_cand;
+    TFile*          p_ToF_kfit_file;
+    TCutG*          p_ToF_kfit_cut;
 
     TFile*          g_unc;
     TFile*          p_unc;
@@ -399,8 +413,8 @@ private:
     TLorentzVector  pi02_true;
     TLorentzVector  etapr_true[3];
 
-    Double_t        Xtrue1, Xtrue2, Ytrue;
-    Int_t           DPnrTrue1, DPnrTrue2, DPnrTrue3, DPnrTrue4; // 2 first with bw 0.2, two next w. bw 0.15
+    Double_t        Xtrue, Ytrue, bw;
+    Int_t           DPnrTrue020, DPnrTrue015, DPnrTrue010, DPnrTrue005;
     Double_t        m_etapi01True, m_etapi02True, m_2pi0True;
 
     // Reconstructed Lorentz Vectors
@@ -636,6 +650,7 @@ public:
 
     Bool_t	Init(const char* configfile);
     void            RandomTime();
+    void            Tagger_corr();      // corrects tagged energy by subtracting 1.0 MeV for exp data
     void            Time_corr();
     void            Energy_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
@@ -670,7 +685,7 @@ public:
     const std::vector<TLorentzVector> ClusterEnergyCorr();
 
     Int_t diff_distr(const Double_t beam_e, TLorentzVector& fin );
-    void DalitzPlot(const TLorentzVector g[3] , Double_t &X1, Double_t &X2, Double_t &Y, Int_t &DP_nr1, Int_t &DP_nr2, Int_t &DP_nr3, Int_t &DP_nr4);
+    void DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double_t &Y, Double_t bw, Int_t &DP_nr);
     void m2pi0_metapi0(  TLorentzVector g[3], Double_t &m_etapi01, Double_t &m_etapi02, Double_t &m_2pi0 );
 
 };
