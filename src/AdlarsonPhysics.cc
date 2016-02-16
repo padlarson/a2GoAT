@@ -306,7 +306,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     ten_fit_dX_v_pdf_5pi0_v_eta2pi0 = new GHistBGSub2("ten_fit_dX_v_pdf_5pi0_v_eta2pi0", "ten #gamma", 10000, 0, 10000, 50, 0, 50);
     ten_fit_dY_v_pdf_5pi0_v_eta2pi0 = new GHistBGSub2("ten_fit_dY_v_pdf_5pi0_v_eta2pi0", "ten #gamma", 10000, 0, 10000, 50, 0, 50);
 
-    ten_phy_etapr_prod_diff_distr       = new GHistBGSub2("ten_phy_etapr_prod_diff_distr", "IM(10#gamma) w eta and 2pi0 mass vs E#gamma and #theta_{CM}", 260, 0, 260, 80, 800., 1200.);
+    ten_phy_etapr_prod_diff_distr       = new GHistBGSub2("ten_phy_etapr_prod_diff_distr", "IM(10#gamma) w eta and 2pi0 mass vs E#gamma and #theta_{CM}", 260, 0, 260, 200, 800., 1200.);
     ten_phy_etapr_prod_diff_distr_metapr= new GHistBGSub2("ten_phy_etapr_prod_diff_distr_metapr", "IM(10#gamma) w eta2pi0, eta pr mass vs E#gamma and #theta_{CM}", 260, 0, 260, 200,800., 1200.);
 
 
