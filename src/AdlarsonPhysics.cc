@@ -54,6 +54,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     true_BeamE                  = new GH1("true_BeamE", "True Beam Energy", 100, 1.400, 1.60);
     true_BeamE_weight           = new GH1("true_BeamE_weight", "True Beam Energy weighted", 100, 1.40, 1.60);
     tag_BeamE                   = new GH1("tag_BeamE", "Tagged Beam Energy", 75, 1400, 1600);
+
+    true_imng                   = new TH1D("true_imng", "IM(Ng) true for 3#pi and #eta#pi", 400, 400., 1200.);
 // Phase space final state particles
     true_th_v_E_p               = new GHistBGSub2("true_th_v_E_p", "True E_{p} vs #theta_{p}", 100, 0., 0.6, 100, 0., 25.);
     true_th_v_E_eta_g           = new GHistBGSub2("true_th_v_E_eta_g", "E_{#gamma, #eta} vs #theta_{#gamma, #eta}", 100, 0, 1000, 90, 0, 180);
@@ -227,7 +229,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_fit_dthpr_vz            = new GHistBGSub2("six_fit_dthpr_vz", "dth proton true - fit vs z_true", 100, -5., 5., 100, -10.0, 10.0);
 
     six_fit_IM_3pi              = new GH1("six_fit_IM_3pi", "IM(6#gamma) for 3#pi^{0} candidates", 400, 400., 1200.);
-    six_fit_IM_eta2pi           = new GH1("six_fit_IM_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 400, 400., 1200.);
+    six_fit_IM_eta2pi           = new GH1("six_fit_IM_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 150, 800., 1100.);
 
     six_fit_IM_eta2pi0_b        = new GH1("six_fit_IM_eta2pi0_b", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.01", 150, 800., 1100.);
     six_fit_IM_eta2pi0_c        = new GH1("six_fit_IM_eta2pi0_c", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{3#pi} < 0.075", 150, 800., 1100.);
@@ -293,8 +295,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     kfit_Pulls_10g      = new GHistBGSub2("kfit_Pulls_10g", "Pulls 10#gamma", 50, -5., 5., 40, 0, 40);
     ten_fit_EvTh_g      = new GHistBGSub2("ten_fit_EvTh_g", "E_{#eta, #gamma} vs #Theta_{#eta, #gamma} 10 #gamma", 200, 0., 1000., 100, 0., 200.);
     ten_fit_EvTh_g_min  = new GHistBGSub2("ten_fit_EvTh_g_min", "E_{#eta, #gamma} vs #Theta_{#eta, #gamma} min E 10 #gamma", 200, 0., 1000., 100, 0., 200.);
-    IM10g_fit           = new GH1("IM10g_fit", "IM(10#gamma) after APLCON fit", 200, 400., 1400.);
-    IM10g_fit_best_cand = new GH1("IM10g_fit_best_cand", "IM(10#gamma) after APLCON fit with eta and 2pi0 mass enforced", 500, 400., 1400.);
+    IM10g_fit           = new GH1("IM10g_fit", "IM(10#gamma) after APLCON fit", 200, 700., 1100.);
+    IM10g_fit_best_cand = new GH1("IM10g_fit_best_cand", "IM(10#gamma) after APLCON fit with eta and 2pi0 mass enforced", 200, 700., 1100.);
 
     ten_fit_PDF_eta2pi_v_eta6g   = new GHistBGSub2("ten_fit_PDF_eta2pi_v_eta6g", "ten_fit_PDF_eta2pi_v_eta6g 6#gamma", 100, 0., 1., 100, 0., 1.);
 
@@ -309,9 +311,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     ten_phy_etapr_prod_diff_distr       = new GHistBGSub2("ten_phy_etapr_prod_diff_distr", "IM(10#gamma) w eta and 2pi0 mass vs E#gamma and #theta_{CM}", 260, 0, 260, 200, 800., 1200.);
     ten_phy_etapr_prod_diff_distr_metapr= new GHistBGSub2("ten_phy_etapr_prod_diff_distr_metapr", "IM(10#gamma) w eta2pi0, eta pr mass vs E#gamma and #theta_{CM}", 260, 0, 260, 200,800., 1200.);
 
-
     // Physics results eta'
-
     // APLCON kinfit uncertainties
 
     g_unc               = new TFile("configfiles/APLCONunc/photon_uncertainties_0z_R.root");
@@ -358,6 +358,9 @@ AdlarsonPhysics::AdlarsonPhysics():
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
 
+    weight_bkgd                = new TFile("configfiles/corr/weight_3pi0_etapi0_cocktail.root");
+    MCw_bkgd                   = (TH1D*)weight_bkgd->Get("six_fit_IM_3pi_Buffer")->Clone();
+
     Evth_g_sel                 = new TFile("configfiles/cuts/E_v_th_g_cut.root");
     sixg_cand                  = (TCutG*)Evth_g_sel->Get("CutProton")->Clone();
 
@@ -369,7 +372,6 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     PDF_cut_file              = new TFile("configfiles/cuts/PDF_cut.root");
     PDF_cut                   = (TCutG*)PDF_cut_file->Get("CUTG")->Clone();
-
     GHistBGSub::InitCuts(-12., 12., -45., -20.);
     GHistBGSub::AddRandCut(20., 45.);
 
@@ -442,7 +444,6 @@ AdlarsonPhysics::AdlarsonPhysics():
         photon_names4g.push_back(s_photon.str());
         kinfit4g.LinkVariable(s_photon.str(), Photons_four[i].Link(), Photons_four[i].LinkSigma());
     }
-
     vector<string> all_names4g = {"Beam4g", "Proton4g"};
     all_names4g.insert(all_names4g.end(),photon_names4g.begin(),photon_names4g.end());
 
@@ -772,7 +773,6 @@ AdlarsonPhysics::AdlarsonPhysics():
 //      return sum.M() - MASS_PI0;
 //  };
 
-
   kinfit3pi.AddConstraint("RequireIMpi1_vx", all_names_3pi + std::vector<string>{"v_z"}, RequireIMpi1_vx); //added req that first pair has pi0 mass.
   kinfit3pi.AddConstraint("RequireIMpi2_vx", all_names_3pi + std::vector<string>{"v_z"}, RequireIMpi2_vx); //added req that second pair has pi0 mass.
   kinfit3pi.AddConstraint("RequireIMpi3_vx", all_names_3pi + std::vector<string>{"v_z"}, RequireIMpi3_vx); //added req that third pair has pi0 mass.
@@ -809,17 +809,14 @@ AdlarsonPhysics::AdlarsonPhysics():
     kinfit3pi.SetSettings(settings_3pi);
     kinfit_final.SetSettings(settings_metapr);
 
-
     APLCON::Fit_Settings_t settings10g = kinfit10g.GetSettings();
     settings10g.MaxIterations = 30;
 //    settings10g.DebugLevel = 5;
 //    kinfit10g.SetSettings(settings10g);
 
-
     cout.precision(5);
     APLCON::PrintFormatting::Width = 11;
 }
-
 AdlarsonPhysics::~AdlarsonPhysics()
 {}
 
@@ -881,12 +878,15 @@ Bool_t	AdlarsonPhysics::Start()
 void	AdlarsonPhysics::ProcessEvent()
 {
     if(MC){
-//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       TrueAnalysis_etapr6g();                    // obtains the true observables
-//       MCw = etapr_6gTrue.GetWeight();
+       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       TrueAnalysis_etapr6g();                    // obtains the true observables
+       MCw = etapr_6gTrue.GetWeight();
        // for 3pi0 and etapi0 MC
-       MCw = 1.0;
-       MC_weight = true;
+//       MCw = 1.0;
+//       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       MCw = TrueAnalysis_threepi_etapi();
+
+//       MC_weight = true;
 //        etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //        TrueAnalysis_etapr10g();
 //        MCw = etapr_10gTrue.GetWeight();
@@ -1208,6 +1208,24 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
         for(int i = 0; i < 720; i++)
             CBtime_corr.push_back(0.0);
 
+
+   CBtime_sgm.resize(0);
+   std::ifstream fileCBsgm("configfiles/data/time_corr_CB_sgm.txt");
+   if(fileCBsgm){
+        std::getline(fileCBsgm, line);
+        std::string         buffer1;
+        std::stringstream   ss0;
+        ss0 << line;
+        while (std::getline(ss0, buffer1, '\t'))
+        {
+           CBtime_sgm.push_back(std::stod(buffer1));
+        }
+        fileCBsgm.close();
+   }
+    else
+        for(int i = 0; i < 720; i++)
+            CBtime_sgm.push_back(0.0);
+
     TAPS_CB_toff.resize(0);
     std::ifstream fileCBTAPS_off("configfiles/data/TAPS_CB_offsets.txt");
     if(fileCBTAPS_off){
@@ -1352,206 +1370,6 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile)
     return kTRUE;
 }
 
-
-void AdlarsonPhysics::TrueAnalysis_etapr6g(){
-
-    true_BeamE->Fill( etapr_6gTrue.GetTrueBeamEnergy() );
-    Double_t beam_e = etapr_6gTrue.GetTrueBeamEnergy();
-
-    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
-    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
-    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
-
-    Double_t weight = Get_etapr_weight_MC(beam_e, etapr_true);
-    etapr_6gTrue.SetWeight(weight);
-
-    true_BeamE_weight->FillWeighted(etapr_6gTrue.GetTrueBeamEnergy(),etapr_6gTrue.GetWeight());
-    // calculate Physics
-
-    // here calculate the boost
-    TVector3 etaprime_rest  = -(etapr_true[0]+etapr_true[1]+etapr_true[2]).BoostVector();
-    TLorentzVector etapr_rest  = etapr_6gTrue.GetTrueEtaPrimeLV();
-    etapr_rest.Boost(etaprime_rest);
-
-    // here calculate the eta prime theta as function of beam energy
-    bw = 0.20;
-    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue020);
-    bw = 0.15;
-    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue015);
-    bw = 0.10;
-    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue010);
-    bw = 0.05;
-    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue005);
-    true_phy_DP_020->Fill(DPnrTrue020);
-    true_phy_DP_015->Fill(DPnrTrue015);
-    true_phy_DP_010->Fill(DPnrTrue010);
-    true_phy_DP_005->Fill(DPnrTrue005);
-
-    true_DP->Fill( Xtrue, Ytrue );
-
-    m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
-    true_M_pi1pi2_e2p->Fill(m_2pi0True*1.0e3);
-    true_M_etapi_e2p->Fill(m_etapi01True*1.0e3);
-    true_M_etapi_e2p->Fill(m_etapi02True*1.0e3);
-
-    // calculate True Energy vs Theta of final state particles
-
-    true_th_v_E_p->Fill(etapr_6gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000 ,etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
-
-    for(UInt_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
-    {
-        if ( i > 3 ) // first four gammas come from 2pi0
-            true_th_v_E_eta_g->Fill(etapr_6gTrue.GetTrueGammaLV(i).E()*1000.,etapr_6gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
-        else
-            true_th_v_E_pi0_g->Fill(etapr_6gTrue.GetTrueGammaLV(i).E()*1000.,etapr_6gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
-
-    }
-    return;
-}
-
-void AdlarsonPhysics::TrueAnalysis_etapr10g(){
-    true_BeamE->Fill( etapr_10gTrue.GetTrueBeamEnergy() );
-    Double_t beam_e = etapr_10gTrue.GetTrueBeamEnergy();
-
-    etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
-    etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
-    etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
-    Double_t weight = Get_etapr_weight_MC( beam_e, etapr_true );
-
-    etapr_10gTrue.SetWeight(weight);
-
-    if(TMath::Abs(weight) < 1.0e-5)
-        weight = 1.;
-
-    // calculate Physics
-
-    etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
-    etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
-    etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
-    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue020);
-    true_DP->Fill( Xtrue, Ytrue, weight);
-    true_phy_DP_020->Fill(DPnrTrue020, weight);
-
-    m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
-    true_M_pi1pi2_e2p->Fill(m_2pi0True*1.0e3, weight);
-    true_M_etapi_e2p->Fill(m_etapi01True*1.0e3, weight);
-    true_M_etapi_e2p->Fill(m_etapi02True*1.0e3, weight);
-
-    // calculate True Energy vs Theta of final state particles
-
-    true_th_v_E_p->Fill(etapr_10gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000 ,etapr_10gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
-
-    for(UInt_t i = 0; i < etapr_10gTrue.GetNgamma(); i++ )
-    {
-        if ( i > 3 ) // first four gammas come from 2pi0
-            true_th_v_E_eta_6g->Fill(etapr_10gTrue.GetTrueGammaLV(i).E(),etapr_10gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg(), weight);
-        else
-            true_th_v_E_pi0_g->Fill(etapr_10gTrue.GetTrueGammaLV(i).E(),etapr_10gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg(), weight);
-    }
-    return;
-}
-
-Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame, TLorentzVector etapr_true[2]){
-
-    Double_t w = 1.0;
-    Double_t N, c1, c2, c3, c4;
-    Double_t leg0, leg1, leg2, leg3, leg4;
-    Double_t weight, w1, w2;
-    Double_t be = beame*1000;
-    Int_t ee = -100;
-    TLorentzVector sqrt_s(0.,0., be, be+MASS_PROTON);
-
-//    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
-//    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
-//    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
-
-
-//    etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
-//    etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
-//    etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
-
-    // here calculate the boost
-    TVector3 cm_vector  = -(sqrt_s).BoostVector();
-    TLorentzVector etapr_cm  = etapr_6gTrue.GetTrueEtaPrimeLV();
-//    TLorentzVector etapr_cm  = etapr_10gTrue.GetTrueEtaPrimeLV();
-    etapr_cm.Boost(cm_vector);
-
-    //in the CM frame!
-    Double_t angle = etapr_cm.Theta();
-    Double_t x = TMath::Cos( angle );
-
-    leg0 = 1.;
-    leg1 = x;
-    leg2 = (0.5)*( 3.*TMath::Power(x,2) - 1. );
-    leg3 = (0.5)*( 5.*TMath::Power(x,3) - 3.*x );
-    leg4 = (0.125)*( 35.*TMath::Power(x,4) - 30.*TMath::Power(x,2.) + 3.);
-
-    if(be >= Legendre[0] && be < Legendre[1]){
-        N   =   Legendre[0+2];
-        c1  =   Legendre[0+3];
-        c2  =   Legendre[0+4];
-        c3  =   Legendre[0+5];
-        c4  =   Legendre[0+6];
-
-        w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
-        ee = 0;
-    }
-    else if(be >= (Legendre[77])){
-        N   =   Legendre[77+2];
-        c1  =   Legendre[77+3];
-        c2  =   Legendre[77+4];
-        c3  =   Legendre[77+5];
-        c4  =   Legendre[77+6];
-
-        w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
-        ee = 11;
-    }
-    else{
-        bool be_range = true;
-        int k = 0;
-        while( be_range && ( k < 71 ) ){
-            if( be >= Legendre[k] && be < Legendre[k+1] ){
-                be_range = false;
-                ee = k/7;
-            }
-            else
-                k += 7;
-        }
-
-        N   =   Legendre[k+2];
-        c1  =   Legendre[k+3];
-        c2  =   Legendre[k+4];
-        c3  =   Legendre[k+5];
-        c4  =   Legendre[k+6];
-
-        w =  N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
-    }
-
-    if(ee < 4)
-        w /= 6.5;
-    else
-        w /= 13.;
-
-     w /= 104.4736;
-//    w*= (100000./4700.); // to be used for the case when the diff distribution is used
-
-    TLorentzVector eta_pr_all = etapr_true[0] + etapr_true[1] + etapr_true[2];
-    Int_t bin =  diff_distr( be, eta_pr_all );
-    bin = ee*20 + int((1. + x)/0.2);
-
-    true_eta_pr_gg_effcorr->Fill(bin,w);
-    true_etapr_diff_distr->Fill(bin,w);
-
-    // here split up into different beams;
-
-    true_eta_pr_production->Fill(bin,w);
-
-    true_norm->Fill(1,w);
-    MC_weight = true;
-
-    return w;
-
-}
 
 void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 {
@@ -2191,7 +2009,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     }
                }
 
-               six_fit_IM_3pi->Fill(etap_fit.M(), GetTagger()->GetTaggedTime(tag));
+           if(MC_weight)
+                six_fit_IM_3pi->FillWeighted(etap_fit.M(), MCw);
+           else
+                six_fit_IM_3pi->Fill(etap_fit.M(), GetTagger()->GetTaggedTime(tag));
 
              } // end of p 3pi0 final analysis
 
@@ -2301,29 +2122,33 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                // Filling of final results
 
                if(MC_weight){
-                   six_phy_M_pi1pi2_v_etapr->FillWeighted(m_2pi0_fit / 1.0e3, etap_fit_final.M(), MCw);
-                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi01_fit / 1.0e3, etap_fit_final.M(), MCw);
-                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi02_fit / 1.0e3, etap_fit_final.M(), MCw);
-                   true_six_phy_dMpipi_v_Mpipi->FillWeighted(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw);
-
                    six_phy_DP_020->FillWeighted(DP_binnr_fit020, etap_fit_final.M(), MCw );
                    six_phy_DP_015->FillWeighted(DP_binnr_fit015, etap_fit_final.M(), MCw );
                    six_phy_DP_010->FillWeighted(DP_binnr_fit010, etap_fit_final.M(), MCw );
                    six_phy_DP_005->FillWeighted(DP_binnr_fit005, etap_fit_final.M(), MCw );
 
-                   true_six_phy_dX_v_DPbin->FillWeighted(DP_binnr_fit015, Xfit - Xtrue, MCw);
-                   true_six_phy_dY_v_DPbin->FillWeighted(DP_binnr_fit015, Yfit - Ytrue, MCw);
+                   six_phy_M_pi1pi2_v_etapr->FillWeighted(m_2pi0_fit / 1.0e3, etap_fit_final.M(), MCw);
+                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi01_fit / 1.0e3, etap_fit_final.M(), MCw);
+                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi02_fit / 1.0e3, etap_fit_final.M(), MCw);
 
-                   true_six_phy_dX_v_X->FillWeighted(Xfit, Xfit - Xtrue, MCw);
-                   true_six_phy_dY_v_Y->FillWeighted(Yfit, Yfit - Ytrue, MCw);
+                   if(etap_fit_final.M()> 930. && etap_fit_final.M() < 980.){
+                       true_six_phy_dMpipi_v_Mpipi->FillWeighted(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw);
+                       true_six_phy_DP_020->FillWeighted(DPnrTrue020, DP_binnr_fit020, MCw);
+                       true_six_phy_DP_015->FillWeighted(DPnrTrue015, DP_binnr_fit015, MCw);
+                       true_six_phy_DP_010->FillWeighted(DPnrTrue010, DP_binnr_fit010, MCw);
+                       true_six_phy_DP_005->FillWeighted(DPnrTrue005, DP_binnr_fit005, MCw);
 
+                       true_six_phy_dX_v_DPbin->FillWeighted(DP_binnr_fit015, Xfit - Xtrue, MCw);
+                       true_six_phy_dY_v_DPbin->FillWeighted(DP_binnr_fit015, Yfit - Ytrue, MCw);
+
+                       true_six_phy_dX_v_X->FillWeighted(Xfit, Xfit - Xtrue, MCw);
+                       true_six_phy_dY_v_Y->FillWeighted(Yfit, Yfit - Ytrue, MCw);
+                   }
                }
                else{
                    six_phy_M_pi1pi2_v_etapr->Fill(m_2pi0_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
                    six_phy_M_etapi_v_etapr->Fill(m_etapi01_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
                    six_phy_M_etapi_v_etapr->Fill(m_etapi02_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
-                   true_six_phy_dMpipi_v_Mpipi->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3));
-
 
                    six_phy_DP_020->Fill(DP_binnr_fit020, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                    six_phy_DP_015->Fill(DP_binnr_fit015, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
@@ -2386,11 +2211,11 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                        true_six_phy_DP_020_pr->FillWeighted(DPnrTrue020, DP_binnr_fit020, MCw);
                        true_six_phy_DP_015_pr->FillWeighted(DPnrTrue015, DP_binnr_fit015, MCw);
-                       true_six_phy_DP_010_pr->FillWeighted(DPnrTrue010, DP_binnr_fit010, MCw);;
-                       true_six_phy_DP_005_pr->FillWeighted(DPnrTrue005, DP_binnr_fit005, MCw);;
+                       true_six_phy_DP_010_pr->FillWeighted(DPnrTrue010, DP_binnr_fit010, MCw);
+                       true_six_phy_DP_005_pr->FillWeighted(DPnrTrue005, DP_binnr_fit005, MCw);
 
-                       true_six_phy_dX_v_DPbin_metapr->FillWeighted(DP_binnr_fit020, Xfit - Xtrue, MCw);
-                       true_six_phy_dY_v_DPbin_metapr->FillWeighted(DP_binnr_fit020, Yfit - Ytrue, MCw);
+                       true_six_phy_dX_v_DPbin_metapr->FillWeighted(DP_binnr_fit015, Xfit - Xtrue, MCw);
+                       true_six_phy_dY_v_DPbin_metapr->FillWeighted(DP_binnr_fit015, Yfit - Ytrue, MCw);
 
                        true_six_phy_dX_v_X_metapr->FillWeighted(Xfit, Xfit - Xtrue, MCw);
                        true_six_phy_dY_v_Y_metapr->FillWeighted(Yfit, Yfit - Ytrue, MCw);
@@ -2977,30 +2802,6 @@ void AdlarsonPhysics::tengAnalysis(UInt_t ipr)
                 photons_fit_10g[igam_fit] = FitParticle::Make(Photons_ten[igam_fit], 0);
                 ten_fit_EvTh_g->Fill(photons_fit_10g[igam_fit].E(), photons_fit_10g[igam_fit].Theta()*TMath::RadToDeg(), GetTagger()->GetTaggedTime(tag) );
                 etap10g_fit += photons_fit_10g[igam_fit];
-//                obs_kfit.resize(0);
-//                string s = Form("Photon10g%0i[0]", igam_fit+1); // Energy
-//                string t = Form("Photon10g%0i[1]", igam_fit+1); // th
-//                string u = Form("Photon10g%0i[2]", igam_fit+1); // phi
-//                string z = Form("v_z"); // z
-
-//                double E = result10g.Variables.at(s).Value.After;
-//                double th = result10g.Variables.at(t).Value.After;
-//                double ph = result10g.Variables.at(u).Value.After;
-//                double vx_z = result10g.Variables.at(z).Value.After;
-
-//                if(Is_CB[igam_fit+1] == 1){
-//                    obs_kfit = {E, E, th, ph};
-//                    etap_fit_tmp = GetLVCorrForZ(obs_kfit, vx_z, Is_CB[igam_fit+1], 0.0);
-//                    photons_fit_10g.push_back(etap_fit_tmp);
-//                    etap10g_fit += etap_fit_tmp;
-//                }
-//                else{
-//                    obs_kfit = {E, E, th, ph}; // th is R in TAPS
-
-//                    etap_fit_tmp = GetLVCorrForZ(obs_kfit, vx_z, Is_CB[igam_fit+1], 0.0);
-//                    photons_fit_10g.push_back(etap_fit_tmp);
-//                    etap10g_fit += etap_fit_tmp;
-//                }
             }
         }
 
@@ -3327,7 +3128,6 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
     double Ek_s, Theta_s, Phi_s;
     std::vector<double> unc;
     unc.resize(0);
-//    double e_g, th_g, fi_g, p_th, p_fi;
 
     if( particle == 1 )         // gamma
     {
@@ -3337,127 +3137,6 @@ std::vector<double> AdlarsonPhysics::Get_unc(Int_t apparatus_nr, Int_t particle,
         Ek_s    = g_e_vz->GetBinContent( g_e_vz->FindBin(Ek,theta) );
         Theta_s = g_th_vz->GetBinContent( g_th_vz->FindBin(Ek,theta) );
         Phi_s   = g_phi_vz->GetBinContent( g_phi_vz->FindBin(Ek,theta) );
-
-//        e_g     = g_e_c1->GetBinContent(g_e_c1->FindBin(Ek,theta) );
-//        th_g    = g_th_c1->GetBinContent(g_th_c1->FindBin(Ek,theta) );
-//        fi_g    = g_fi_c1->GetBinContent(g_fi_c1->FindBin(Ek,theta) );
-
-//        if( TMath::Abs(e_g) < 1.0e-5){
-//            e_g = 1.0;
-//            Double_t g_corr_tmp = 1.0;
-//            if(Ek < 50.){
-//                bool loop = true;
-//                double dE = 10.;
-//                while(loop && dE < 50.){
-//                    g_corr_tmp = (Double_t)g_e_c1->GetBinContent(g_e_c1->FindBin(Ek+dE,theta) );
-//                    if(TMath::Abs(g_corr_tmp) > 1.0e-5){
-//                        loop = false;
-//                        e_g = g_corr_tmp;
-//                    }
-//                    else{
-//                        dE += 10.;
-//                    }
-
-//                }
-//            }
-//            else if(Ek > 200.){
-//                bool loop = true;
-//                double dE = 10;
-//                while(loop && dE < 250.){
-//                    g_corr_tmp = (Double_t)g_e_c1->GetBinContent(g_e_c1->FindBin(Ek-dE,theta) );
-//                    if(TMath::Abs(g_corr_tmp) > 1.0e-5){
-//                        loop = false;
-//                        e_g = g_corr_tmp;
-//                    }
-//                    else{
-//                        dE += 10.;
-//                    }
-//                }
-//            }
-//            else
-//                e_g = 1.0;
-//        }
-//        if( TMath::Abs(th_g) < 1.0e-5){
-//            th_g = 1.0;
-//            Double_t th_corr_tmp = 1.0;
-//            if(Ek < 50.){
-//                bool loop = true;
-//                double dE = 10.;
-//                while(loop && dE < 50.){
-//                    th_corr_tmp = (Double_t)g_th_c1->GetBinContent(g_th_c1->FindBin(Ek+dE,theta) );
-//                    if(TMath::Abs(th_corr_tmp) > 1.0e-5){
-//                        loop = false;
-//                        th_g = th_corr_tmp;
-//                    }
-//                    else{
-//                        dE += 10.;
-//                    }
-
-//                }
-//            }
-//            else if(Ek > 200.){
-//                bool loop = true;
-//                double dE = 10;
-//                while(loop && dE < 250.){
-//                    th_corr_tmp = (Double_t)g_th_c1->GetBinContent(g_th_c1->FindBin(Ek-dE,theta) );
-//                    if(TMath::Abs(th_corr_tmp) > 1.0e-5){
-//                        loop = false;
-//                        th_g = th_corr_tmp;
-//                    }
-//                    else{
-//                        dE += 10.;
-//                    }
-//                }
-//            }
-//            else
-//                th_g = 1.0;
-//        }
-//        if( TMath::Abs(fi_g) < 1.0e-5){
-//            fi_g = 1.0;
-//            Double_t fi_corr_tmp = 1.0;
-//            if(Ek < 50.){
-//                bool loop = true;
-//                double dE = 10.;
-//                while(loop && dE < 50.){
-//                    fi_corr_tmp = (Double_t)g_fi_c1->GetBinContent(g_fi_c1->FindBin(Ek+dE,theta) );
-//                    if(TMath::Abs(fi_corr_tmp) > 1.0e-5){
-//                        loop = false;
-//                        fi_g = fi_corr_tmp;
-//                    }
-//                    else{
-//                        dE += 10.;
-//                    }
-
-//                }
-//            }
-//            else if(Ek > 200.){
-//                bool loop = true;
-//                double dE = 10;
-//                while(loop && dE < 250.){
-//                    fi_corr_tmp = (Double_t)g_fi_c1->GetBinContent(g_fi_c1->FindBin(Ek+dE,theta) );
-//                    if(TMath::Abs(fi_corr_tmp) > 1.0e-5){
-//                        loop = false;
-//                        fi_g = fi_corr_tmp;
-//                    }
-//                    else{
-//                        dE += 10.;
-//                    }
-//                }
-//            }
-//            else
-//                fi_g = 1.0;
-//        }
-
-//        if( TMath::Abs(e_g) < 1.0e-5)
-//            e_g = 1.0;
-//        if( TMath::Abs(th_g) < 1.0e-5)
-//            th_g = 1.0;
-//        if( TMath::Abs(fi_g) < 1.0e-5)
-//            fi_g = 1.0;
-
-//        Ek_s    = Ek_s*TMath::Power(e_g, 1.0);
-//        Theta_s = Theta_s*TMath::Power(th_g, 1.0);
-//        Phi_s = Phi_s*fi_g;
 
         if(TMath::Abs(Ek_s) < 1.0e-5){
             if(apparatus_nr == 1 )
@@ -3990,17 +3669,21 @@ void    AdlarsonPhysics::CB_TAPS_boundary(){
 void    AdlarsonPhysics::RandomTime(){
 
     Double_t Trigger_t, CB_t, TAPS_t;
+    Double_t sgm_CB;
 //    Double_t EPT_t;
 
-    Trigger_t   = pRandoms->Gaus(0, 2.5);
+    Trigger_t   = pRandoms->Gaus(0, 2.2);
 //    EPT_t       = Trigger_t + pRandoms->Gaus(0, 0.2);
-    CB_t        = Trigger_t + pRandoms->Gaus(0, 0.8);
-    TAPS_t      = Trigger_t + pRandoms->Gaus(0, 0.1);
+    CB_t        = Trigger_t;
+    TAPS_t      = Trigger_t + pRandoms->Gaus(0, 0.5);
 
     for( int j = 0; j < GetTracks()->GetNTracks() ; j++ )
     {
-        if(GetTracks()->HasCB(j))
+        if(GetTracks()->HasCB(j)){
+            sgm_CB = TMath::Sqrt(CBtime_sgm[GetTracks()->GetCentralCrystal(j)]*CBtime_sgm[GetTracks()->GetCentralCrystal(j)] - Trigger_t*Trigger_t);
+            CB_t += pRandoms->Gaus(0, sgm_CB);
             tracks->SetTime(j, GetTracks()->GetTime(j) + CB_t);
+        }
         if(GetTracks()->HasTAPS(j))
             tracks->SetTime(j,GetTracks()->GetTime(j) + TAPS_t);
     }
@@ -4053,4 +3736,233 @@ TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, c
         LVmod.SetPxPyPzE(Px,Py,Pz,E);
     }
     return LVmod;
+}
+
+
+
+void AdlarsonPhysics::TrueAnalysis_etapr6g(){
+
+    true_BeamE->Fill( etapr_6gTrue.GetTrueBeamEnergy() );
+    Double_t beam_e = etapr_6gTrue.GetTrueBeamEnergy();
+
+    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
+    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
+    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
+
+    Double_t weight = Get_etapr_weight_MC(beam_e, etapr_true);
+    etapr_6gTrue.SetWeight(weight);
+
+    true_BeamE_weight->FillWeighted(etapr_6gTrue.GetTrueBeamEnergy(),etapr_6gTrue.GetWeight());
+    // calculate Physics
+
+    // here calculate the boost
+    TVector3 etaprime_rest  = -(etapr_true[0]+etapr_true[1]+etapr_true[2]).BoostVector();
+    TLorentzVector etapr_rest  = etapr_6gTrue.GetTrueEtaPrimeLV();
+    etapr_rest.Boost(etaprime_rest);
+
+    // here calculate the eta prime theta as function of beam energy
+    bw = 0.20;
+    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue020);
+    bw = 0.15;
+    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue015);
+    bw = 0.10;
+    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue010);
+    bw = 0.05;
+    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue005);
+    true_phy_DP_020->Fill(DPnrTrue020);
+    true_phy_DP_015->Fill(DPnrTrue015);
+    true_phy_DP_010->Fill(DPnrTrue010);
+    true_phy_DP_005->Fill(DPnrTrue005);
+
+    true_DP->Fill( Xtrue, Ytrue );
+
+    m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
+    true_M_pi1pi2_e2p->Fill(m_2pi0True*1.0e3);
+    true_M_etapi_e2p->Fill(m_etapi01True*1.0e3);
+    true_M_etapi_e2p->Fill(m_etapi02True*1.0e3);
+
+    // calculate True Energy vs Theta of final state particles
+
+    true_th_v_E_p->Fill(etapr_6gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000 ,etapr_6gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
+
+    for(UInt_t i = 0; i < etapr_6gTrue.GetNgamma(); i++ )
+    {
+        if ( i > 3 ) // first four gammas come from 2pi0
+            true_th_v_E_eta_g->Fill(etapr_6gTrue.GetTrueGammaLV(i).E()*1000.,etapr_6gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
+        else
+            true_th_v_E_pi0_g->Fill(etapr_6gTrue.GetTrueGammaLV(i).E()*1000.,etapr_6gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg());
+
+    }
+    return;
+}
+
+void AdlarsonPhysics::TrueAnalysis_etapr10g(){
+    true_BeamE->Fill( etapr_10gTrue.GetTrueBeamEnergy() );
+    Double_t beam_e = etapr_10gTrue.GetTrueBeamEnergy();
+
+    etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
+    etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
+    etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
+    Double_t weight = Get_etapr_weight_MC( beam_e, etapr_true );
+
+    etapr_10gTrue.SetWeight(weight);
+
+    if(TMath::Abs(weight) < 1.0e-5)
+        weight = 1.;
+
+    // calculate Physics
+
+    etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
+    etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
+    etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
+    DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue020);
+    true_DP->Fill( Xtrue, Ytrue, weight);
+    true_phy_DP_020->Fill(DPnrTrue020, weight);
+
+    m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
+    true_M_pi1pi2_e2p->Fill(m_2pi0True*1.0e3, weight);
+    true_M_etapi_e2p->Fill(m_etapi01True*1.0e3, weight);
+    true_M_etapi_e2p->Fill(m_etapi02True*1.0e3, weight);
+
+    // calculate True Energy vs Theta of final state particles
+
+    true_th_v_E_p->Fill(etapr_10gTrue.GetTrueProtonLV().E() - MASS_PROTON/1000 ,etapr_10gTrue.GetTrueProtonLV().Theta()*TMath::RadToDeg());
+
+    for(UInt_t i = 0; i < etapr_10gTrue.GetNgamma(); i++ )
+    {
+        if ( i > 3 ) // first four gammas come from 2pi0
+            true_th_v_E_eta_6g->Fill(etapr_10gTrue.GetTrueGammaLV(i).E(),etapr_10gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg(), weight);
+        else
+            true_th_v_E_pi0_g->Fill(etapr_10gTrue.GetTrueGammaLV(i).E(),etapr_10gTrue.GetTrueGammaLV(i).Theta()*TMath::RadToDeg(), weight);
+    }
+    return;
+}
+
+Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame, TLorentzVector etapr_true[2]){
+
+    Double_t w = 1.0;
+    Double_t N, c1, c2, c3, c4;
+    Double_t leg0, leg1, leg2, leg3, leg4;
+    Double_t weight, w1, w2;
+    Double_t be = beame*1000;
+    Int_t ee = -100;
+    TLorentzVector sqrt_s(0.,0., be, be+MASS_PROTON);
+
+//    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
+//    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
+//    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
+
+
+//    etapr_true[0] = etapr_10gTrue.GetTrueEtaLV();
+//    etapr_true[1] = etapr_10gTrue.GetTrueNeutralPiLV(0);
+//    etapr_true[2] = etapr_10gTrue.GetTrueNeutralPiLV(1);
+
+    // here calculate the boost
+    TVector3 cm_vector  = -(sqrt_s).BoostVector();
+    TLorentzVector etapr_cm  = etapr_6gTrue.GetTrueEtaPrimeLV();
+//    TLorentzVector etapr_cm  = etapr_10gTrue.GetTrueEtaPrimeLV();
+    etapr_cm.Boost(cm_vector);
+
+    //in the CM frame!
+    Double_t angle = etapr_cm.Theta();
+    Double_t x = TMath::Cos( angle );
+
+    leg0 = 1.;
+    leg1 = x;
+    leg2 = (0.5)*( 3.*TMath::Power(x,2) - 1. );
+    leg3 = (0.5)*( 5.*TMath::Power(x,3) - 3.*x );
+    leg4 = (0.125)*( 35.*TMath::Power(x,4) - 30.*TMath::Power(x,2.) + 3.);
+
+    if(be >= Legendre[0] && be < Legendre[1]){
+        N   =   Legendre[0+2];
+        c1  =   Legendre[0+3];
+        c2  =   Legendre[0+4];
+        c3  =   Legendre[0+5];
+        c4  =   Legendre[0+6];
+
+        w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+        ee = 0;
+    }
+    else if(be >= (Legendre[77])){
+        N   =   Legendre[77+2];
+        c1  =   Legendre[77+3];
+        c2  =   Legendre[77+4];
+        c3  =   Legendre[77+5];
+        c4  =   Legendre[77+6];
+
+        w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+        ee = 11;
+    }
+    else{
+        bool be_range = true;
+        int k = 0;
+        while( be_range && ( k < 71 ) ){
+            if( be >= Legendre[k] && be < Legendre[k+1] ){
+                be_range = false;
+                ee = k/7;
+            }
+            else
+                k += 7;
+        }
+
+        N   =   Legendre[k+2];
+        c1  =   Legendre[k+3];
+        c2  =   Legendre[k+4];
+        c3  =   Legendre[k+5];
+        c4  =   Legendre[k+6];
+
+        w =  N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+    }
+
+    if(ee < 4)
+        w /= 6.5;
+    else
+        w /= 13.;
+
+     w /= 104.4736;
+//    w*= (100000./4700.); // to be used for the case when the diff distribution is used
+
+    TLorentzVector eta_pr_all = etapr_true[0] + etapr_true[1] + etapr_true[2];
+    Int_t bin =  diff_distr( be, eta_pr_all );
+    bin = ee*20 + int((1. + x)/0.2);
+
+    true_eta_pr_gg_effcorr->Fill(bin,w);
+    true_etapr_diff_distr->Fill(bin,w);
+
+    // here split up into different beams;
+
+    true_eta_pr_production->Fill(bin,w);
+
+    true_norm->Fill(1,w);
+    MC_weight = true;
+
+    return w;
+
+}
+
+Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
+    TLorentzVector true_im(0.0, 0.0, 0.0, 0.0);
+
+    MCw = 1.0;
+    for(UInt_t ig = 0; ig < threepi_etapi.GetNgamma(); ig++)
+        true_im += threepi_etapi.GetTrueGammaLV(ig);
+
+    Double_t M = true_im.M()*1.0e3;
+    Double_t Mw = M;
+
+
+    if( Mw < 650. )
+        Mw = 650;
+    else if(Mw > 1020.)
+        Mw = 1020.;
+
+    MCw    = MCw_bkgd->GetBinContent( MCw_bkgd->FindBin(Mw));
+    MCw *= (100000./96057.8);
+
+    true_imng->Fill(M, MCw);
+
+    true_norm->Fill(1,MCw);
+
+    return MCw;
+
 }

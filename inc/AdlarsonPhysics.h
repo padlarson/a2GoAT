@@ -26,8 +26,7 @@ std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2) {
     return v;
 }
 
-class	AdlarsonPhysics  : public GTreeManager
-{
+class	AdlarsonPhysics  : public GTreeManager{
 
 private:
     TRandom3*       pRandoms;
@@ -65,6 +64,7 @@ private:
     TH1*            true_phy_DP_005;
     TH1*            true_M_pi1pi2_e2p;
     TH1*            true_M_etapi_e2p;
+    TH1*            true_imng;
 
     GHistBGSub2*    true_six_phy_DP_020;
     GHistBGSub2*    true_six_phy_DP_015;
@@ -376,12 +376,7 @@ private:
     TFile*          g_unc;
     TFile*          p_unc;
     // histograms with unc
-//    TH2*            g_CB_e;
-//    TH2*            g_CB_th;
-//    TH2*            g_CB_fi;
-//    TH2*            g_TAPS_e;
-//    TH2*            g_TAPS_th;
-//    TH2*            g_TAPS_fi;
+
     TH2*            g_e;
     TH2*            g_th;
     TH2*            g_phi;
@@ -399,13 +394,16 @@ private:
     TH1*            p_TAPS_th_vz;
     TH1*            p_TAPS_fi_vz;
 
+    TFile*          weight_bkgd;
+    TH1*            MCw_bkgd;
 
-    TFile*          unc_corr;
-    TH2*            g_e_c1;
-    TH2*            g_th_c1;
-    TH2*            g_fi_c1;
-    TH1*            p_th_c1;
-    TH1*            p_fi_c1;
+
+//    TFile*          unc_corr;
+//    TH2*            g_e_c1;
+//    TH2*            g_th_c1;
+//    TH2*            g_fi_c1;
+//    TH1*            p_th_c1;
+//    TH1*            p_fi_c1;
 
     // True LorentzVectors
     TLorentzVector  eta_true;
@@ -444,6 +442,7 @@ private:
 
     GTrue   etapr_6gTrue;
     GTrue   etapr_10gTrue;
+    GTrue   threepi_etapi;
 
     std::vector<int>  detnr;
     std::vector<bool> CB_region;
@@ -473,6 +472,7 @@ private:
     std::vector<Double_t> TAPS_Ecorr;
 
     std::vector<Double_t> CBtime_corr;
+    std::vector<Double_t> CBtime_sgm;
     std::vector<Double_t> TAPS_CB_toff;
 
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
@@ -502,34 +502,34 @@ private:
     TFile*          Ecorr_TAPS;         // File which contains TH2F
     TH2F*           EvdetTAPS;
 
-    TFile*          g_corr_peak_2pi0;
-    TH2F*           g_corr_twopi0;
+//    TFile*          g_corr_peak_2pi0;
+//    TH2F*           g_corr_twopi0;
 
-    TFile*          g_corr_peak;
-    TH2F*           g_corr_threepi;
-    TFile*          g_corr_peak_it1;
-    TH2F*           g_corr_threepi_it1;
-    TFile*          g_corr_peak_it2;
-    TH2F*           g_corr_threepi_it2;
+//    TFile*          g_corr_peak;
+//    TH2F*           g_corr_threepi;
+//    TFile*          g_corr_peak_it1;
+//    TH2F*           g_corr_threepi_it1;
+//    TFile*          g_corr_peak_it2;
+//    TH2F*           g_corr_threepi_it2;
 
-    TFile*          g_corr_kfit;
-    TH2F*           g_corr_etapr;
-    TH2F*           g_corr_3pi;
-    TH2F*           g_corr_both;
+//    TFile*          g_corr_kfit;
+//    TH2F*           g_corr_etapr;
+//    TH2F*           g_corr_3pi;
+//    TH2F*           g_corr_both;
 
-    TFile*          g_corr_kfit_it1;
-    TH2F*           g_corr_both_it1;
-    TFile*          g_corr_kfit_it2;
-    TH2F*           g_corr_both_it2;
-    TFile*          g_corr_kfit_it3;
-    TH2F*           g_corr_both_it3;
-    TFile*          g_corr_kfit_it4;
-    TH2F*           g_corr_both_it4;
+//    TFile*          g_corr_kfit_it1;
+//    TH2F*           g_corr_both_it1;
+//    TFile*          g_corr_kfit_it2;
+//    TH2F*           g_corr_both_it2;
+//    TFile*          g_corr_kfit_it3;
+//    TH2F*           g_corr_both_it3;
+//    TFile*          g_corr_kfit_it4;
+//    TH2F*           g_corr_both_it4;
 
-    TFile*          g_corr_th_kfit;
-    TH2F*           g_corr_th_both;
-    TFile*          g_corr_th_kfit_it1;
-    TH2F*           g_corr_th_both_it1;
+//    TFile*          g_corr_th_kfit;
+//    TH2F*           g_corr_th_both;
+//    TFile*          g_corr_th_kfit_it1;
+//    TH2F*           g_corr_th_both_it1;
 
 
 
@@ -662,6 +662,7 @@ public:
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g();
     void TrueAnalysis_etapr10g();
+    Double_t TrueAnalysis_threepi_etapi(); // returns weight as function of IM(ng);
     Double_t Get_etapr_weight_MC(Double_t beame, TLorentzVector eta_pr[2]);
     void Kinfit_test();
 
