@@ -1,2 +1,16 @@
-Input-Directory:  /local/raid1/work/adlarson/analysis/Aug2012/ACQU/root/
-Output-Directory: /local/raid1/work/adlarson/analysis/Aug2012/GoAT/
+#	Aug 2012
+#Input-Directory:  /local/raid1/work/adlarson/analysis/Aug2012/ACQU/root/
+#Output-Directory: /local/raid1/work/adlarson/analysis/Aug2012/GoAT/
+#	July 2014  Time Shift FullTarget
+#Input-Directory: /local/raid2/work/adlarson/analysis/July2014/ACQU/TSFullTarget/root/
+#Output-Directory: /local/raid2/work/adlarson/analysis/July2014/GoAT/TimeShiftFullTarget/
+#	Oct 2014  Time Shift FullTarget
+#Input-Directory: /local/raid1/work/adlarson/analysis/Oct2014/ACQUTS/root/
+#Output-Directory: /local/raid1/work/adlarson/analysis/Oct2014/GoATTS/
+#	Dec 2014  Time Shift FullTarget
+#Input-Directory: /local/raid2/work/adlarson/analysis/Dec2014/ACQU/NoShiftFullTarget/root/
+#Output-Directory: /local/raid2/work/adlarson/analysis/Dec2014/GoAT/NoShiftFullTarget/
+Input-Directory: /local/raid2/work/adlarson/analysis/Dec2014/ACQU/TimeShiftFullTarget/root/
+Output-Directory: /local/raid2/work/adlarson/analysis/Dec2014/GoAT/TimeShiftFullTarget/
+
+

@@ -1,6 +1,22 @@
+#	Aug 2012
 #Input-Directory: /local/raid1/work/adlarson/analysis/Aug2012/GoAT/root/
 #Output-Directory: /local/raid1/work/adlarson/analysis/Aug2012/Physics/
-Input-Directory: /local/raid2/work/adlarson/analysis/July2014/GoAT/NoShiftFullTarget/root/
-Output-Directory: /local/raid2/work/adlarson/analysis/July2014/Physics/NoShiftFullTarget/
+#	July 2014 No Time Shift
+#Input-Directory: /local/raid2/work/adlarson/analysis/July2014/GoAT/NoShiftFullTarget/root/
+#Output-Directory: /local/raid2/work/adlarson/analysis/July2014/Physics/NoShiftFullTarget/
+#	July 2014 Time Shift
+#Input-Directory: /local/raid2/work/adlarson/analysis/July2014/GoAT/NoShiftFullTarget/root/
+#Output-Directory: /local/raid2/work/adlarson/analysis/July2014/Physics/NoShiftFullTarget/
+#	Oct 2014  No Time Shift
 #Input-Directory: /local/raid1/work/adlarson/analysis/Oct2014/GoAT/root/
 #Output-Directory: /local/raid1/work/adlarson/analysis/Oct2014/Physics/
+#	Oct 2014   Time Shift
+#Input-Directory: /local/raid1/work/adlarson/analysis/Oct2014/GoATTS/root/
+#Output-Directory: /local/raid1/work/adlarson/analysis/Oct2014/PhysicsTS/
+#	Dec 2014  No Time Shift
+#Input-Directory: /local/raid2/work/adlarson/analysis/Dec2014/GoAT/NoShiftFullTarget/root/
+#Output-Directory: /local/raid2/work/adlarson/analysis/Dec2014/Physics/NoShiftFullTarget/
+#	Dec 2014   Time Shift
+#Input-Directory: /local/raid2/work/adlarson/analysis/Dec2014/GoAT/TimeShiftFullTarget/root/
+#Output-Directory: /local/raid2/work/adlarson/analysis/Dec2014/Physics/TimeShiftFullTarget/
+
