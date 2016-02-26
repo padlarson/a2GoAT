@@ -158,6 +158,11 @@ AdlarsonPhysics::AdlarsonPhysics():
     IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 200, 0, 1000, 440, 0, 440);
     IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 50, 0, 250, 440, 0, 440);
 
+    IM6g_v_det_etaprfit_CB          =   new GHistBGSub2("IM6g_v_det_etaprfit_CB", "IM(6g) fit fin.ev.s, CB, CB", 50, 0, 250, 720, 0, 720);
+    IM6g_v_det_etaprfit_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprfit_TAPS", "IM(6g) fit fin.ev.s, TAPS", 50, 0, 250, 440, 0, 440);
+    IM6g_v_det_etaprrec_CB          =   new GHistBGSub2("IM6g_v_det_etaprrec_CB", "IM(6g) rec fin.ev.s, CB, CB", 50, 0, 250, 720, 0, 720);
+    IM6g_v_det_etaprrec_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprrec_TAPS", "IM(6g) rec fin.ev.s, TAPS", 50, 0, 250, 440, 0, 440);
+
 // Rec. Photons
 
     ten_rec_IM                  = new GH1("ten_rec_IM", " rec IM(10#gamma)", 400,  400, 1400);
@@ -1924,7 +1929,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 etap_fit += etap_fit_tmp;
             }
         }
-        if(result_min.Status == APLCON::Result_Status_t::Success){
+        if(result_min.Status == APLCON::Result_Status_t::Success ){
 
 //            TLorentzVector proton_fit = FitParticle::Make(proton, MASS_PROTON);
             // proton LV:
@@ -1961,8 +1966,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 six_fit_chi2->FillWeighted(result_min.ChiSquare, MCw );
                 six_fit_pdf->FillWeighted( result_min.Probability, MCw );
 
-                six_fit_IM->FillWeighted( etap_fit.M(), MCw );
-//                double p = proton_fit.E();
+                if(result_min.Probability >0.01 && result_min.Probability <1.0)
+                    six_fit_IM->FillWeighted( etap_fit.M(), MCw );
 
                 Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
                 six_fit_IM_vz->FillWeighted( etap_fit.M(), ztrue, MCw );
@@ -1985,7 +1990,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 six_fit_chi2->Fill( result_min.ChiSquare, GetTagger()->GetTaggedTime(tag));
                 six_fit_pdf->Fill( result_min.Probability, GetTagger()->GetTaggedTime(tag) );
 
-                six_fit_IM->Fill( etap_fit.M(),GetTagger()->GetTaggedTime(tag) );
+                if(result_min.Probability >0.01 && result_min.Probability <1.0)
+                    six_fit_IM->Fill( etap_fit.M(),GetTagger()->GetTaggedTime(tag) );
+
                 proton_fit_e_v_th->Fill(proton_fit.E() - MASS_PROTON, proton_fit.Theta()*TMath::RadToDeg(), GetTagger()->GetTaggedTime(tag));
                 p_E_v_TOF_after_kfit->Fill(TOF_CB_proton, proton_fit.E()-MASS_PROTON, GetTagger()->GetTaggedTime(tag));
                 p_Erec_v_TOF_after_kfit->Fill(TOF_CB_proton, GetTracks()->GetClusterEnergy(ipr) ,GetTagger()->GetTaggedTime(tag));
@@ -2239,10 +2246,32 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                             six_fit_IM_eta2pi0_c->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
 
                         if( (probmin_etapr > 0.04) && (probmin_etapr < 1.0) ){
-                            if(MC_weight)
+                            if(MC_weight){
                                 six_fit_IM_eta2pi0_d->FillWeighted( etap_fit_final.M(), MCw );
-                            else
+                                for(int ietapr = 0; ietapr < 6; ietapr++){
+                                    if( GetTracks()->HasCB( set_min[imin_eta2pi[ietapr]+2]) ){
+                                            IM6g_v_det_etaprrec_CB->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], MCw);
+                                            IM6g_v_det_etaprfit_CB->Fill( etap_fit_final.M(), detnr[imin_eta2pi[ietapr]], MCw);
+                                    }
+                                    else{
+                                            IM6g_v_det_etaprrec_TAPS->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], MCw);
+                                            IM6g_v_det_etaprfit_TAPS->Fill( etap_fit_final.M(), detnr[imin_eta2pi[ietapr]], MCw);
+                                        }
+                                    }
+                            }
+                            else{
                                 six_fit_IM_eta2pi0_d->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
+                                for(int ietapr = 0; ietapr < 6; ietapr++){
+                                    if( GetTracks()->HasCB( set_min[imin_eta2pi[ietapr]+2]) ){
+                                            IM6g_v_det_etaprrec_CB->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
+                                            IM6g_v_det_etaprfit_CB->Fill( etap_fit_final.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
+                                    }
+                                    else{
+                                            IM6g_v_det_etaprrec_TAPS->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
+                                            IM6g_v_det_etaprfit_TAPS->Fill( etap_fit_final.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
+                                        }
+                                    }
+                            }
                         }
                         else{
                             if(MC_weight)
@@ -2297,9 +2326,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                         six_fit_mgg_v_eth->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
                     }
 
-                    if( GetTracks()->HasCB( set_min[imin_3pi[isix]+2]) )
+                    if( GetTracks()->HasCB( set_min[imin_3pi[isix]+2]) ){
+                        if(etap_fit.M() > 650.0)
                             IMgg_v_det_3pi0_CB->Fill( rc[imass].M(), detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));
-
+                    }
                     else{
                         if(etap_fit.M() > 650.0){
                             IMgg_v_det_3pi0_TAPS->Fill( rc[imass].M() , detnr[imin_3pi[isix]], GetTagger()->GetTaggedTime(tag));

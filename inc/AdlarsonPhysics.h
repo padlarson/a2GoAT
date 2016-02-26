@@ -148,6 +148,11 @@ private:
     GHistBGSub2*    IMgg_v_det_etapi0_TAPS;
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS;
 
+    GHistBGSub2*    IM6g_v_det_etaprfit_CB;
+    GHistBGSub2*    IM6g_v_det_etaprfit_TAPS;
+    GHistBGSub2*    IM6g_v_det_etaprrec_CB;
+    GHistBGSub2*    IM6g_v_det_etaprrec_TAPS;
+
     TH2D            time_TOF;
     TH2D            time_clusters_TAPS;
     TH2D            time_clusters_CB;
