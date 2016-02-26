@@ -17,6 +17,7 @@
 #include <vector>
 #include <map>
 #include <cmath>
+#include "TTree.h"
 
 #include <APLCON.hpp>
 template<typename T>
@@ -270,6 +271,7 @@ private:
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
     GH1*            six_fit_best_eta;
+    GH1*            six_fit_best_eta_rec;
 
     GHistBGSub2*    six_fit_EvTh_g;
     GHistBGSub2*    six_fit_EvTh_g_final;
@@ -277,6 +279,7 @@ private:
     GHistBGSub2*    six_fit_best_etapr_pi_E_v_th;
     GHistBGSub2*    six_fit_best_3pi0_pi_E_v_th;
     GH1*            six_fit_best_2pi;
+    GH1*            six_fit_best_2pi_rec;
 
     GHistBGSub2*    six_fit_best_etapr_eta_mgg_v_thth;
     GHistBGSub2*    six_fit_best_etapr_pi0_mgg_v_thth;
@@ -312,6 +315,8 @@ private:
 
     GHistBGSub2*    six_phy_etapr_v_BeamE;
     GHistBGSub2*    six_phy_etapr_eta2pi_v_BeamE;
+    GHistBGSub2*    six_phy_etapr_v_EPT;
+    GHistBGSub2*    six_phy_etapr_eta2pi_v_EPT;
 
     GHistBGSub2*    six_phy_etapr_prod_diff_distr;
     GH1*            six_phy_etapr_prod_diff_distr_metapr;
@@ -329,6 +334,69 @@ private:
     GH1*            six_phy_DP_005_pr;
     GH1*            six_phy_M_pi1pi2_v_etapr_fit;
     GH1*            six_phy_M_etapi_v_etapr_fit;
+
+    TString     tree_file_name;
+    const int    MAX_LENGTH  =30;
+    // vectors related to TTrees saved at the end of the analysis
+    std::vector<double> vec_weight;
+    std::vector<double> vec_taggerenergy;
+    std::vector<double> vec_fitted_pr_th;
+    std::vector<double> vec_fitted_pr_e;
+    std::vector<double> fitted_zvx;
+    std::vector<double> vec_X;
+    std::vector<double> vec_Y;
+    std::vector<double> vec_pdf_eta2pi;
+    std::vector<double> vec_pdf_3pi;
+    std::vector<double> vec_pdf_etapr;
+    std::vector<int> vec_costh_epr_cm;
+    std::vector<double> vec_DP_005;
+    std::vector<double> vec_DP_010;
+    std::vector<double> vec_DP_015;
+    std::vector<double> vec_M_eta2pi;
+    std::vector<double> vec_M_etapi1;
+    std::vector<double> vec_M_etapi2;
+    std::vector<double> vec_M_pipi;
+    std::vector<int> vec_costh_epr_cm_pr;
+    std::vector<double> vec_X_pr;
+    std::vector<double> vec_Y_pr;
+    std::vector<int> vec_DP_005_pr;
+    std::vector<int> vec_DP_010_pr;
+    std::vector<int> vec_DP_015_pr;
+    std::vector<double> vec_M_etapi_pr1;
+    std::vector<double> vec_M_etapi_pr2;
+    std::vector<double> vec_M_pipi_pr;
+
+    TFile* f_tree;
+    TTree* tree;
+    int       branch_length;
+    double*   branch_weight;
+    double*   branch_taggerenergy;
+    double*   branch_fitted_pr_th;
+    double*   branch_fitted_pr_e;
+    double*   branch_fitted_zvx;
+    double*   branch_X;
+    double*   branch_Y;
+    double*   branch_pdf_eta2pi;
+    double*   branch_pdf_3pi;
+    double*   branch_pdf_etapr;
+    double*   branch_costh_epr_cm;
+    int*      branch_DP_005;
+    int*      branch_DP_010;
+    int*      branch_DP_015;
+    double*   branch_M_eta2pi;
+    double*   branch_M_etapi1;
+    double*   branch_M_etapi2;
+    double*   branch_M_pipi;
+    double*   branch_costh_epr_cm_pr;
+    double*   branch_X_pr;
+    double*   branch_Y_pr;
+    int*      branch_DP_005_pr;
+    int*      branch_DP_010_pr;
+    int*      branch_DP_015_pr;
+    double*   branch_M_etapi_pr1;
+    double*   branch_M_etapi_pr2;
+    double*   branch_M_pipi_pr;
+
 
     // Kinfit related variables 10g
 
@@ -398,12 +466,6 @@ private:
     TH1*            MCw_bkgd;
 
 
-//    TFile*          unc_corr;
-//    TH2*            g_e_c1;
-//    TH2*            g_th_c1;
-//    TH2*            g_fi_c1;
-//    TH1*            p_th_c1;
-//    TH1*            p_fi_c1;
 
     // True LorentzVectors
     TLorentzVector  eta_true;
@@ -411,6 +473,7 @@ private:
     TLorentzVector  pi02_true;
     TLorentzVector  etapr_true[3];
 
+    Int_t           diffbin, diffbin_pr;
     Double_t        Xtrue, Ytrue, bw;
     Int_t           DPnrTrue020, DPnrTrue015, DPnrTrue010, DPnrTrue005;
     Double_t        m_etapi01True, m_etapi02True, m_2pi0True;
@@ -677,7 +740,7 @@ public:
     void sixgAnalysis( UInt_t ipr );
     void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb );
     void test_correct_hypothesis(Double_t &prob_etapr, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi,  std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb);
-
+    void FillTree();
 
     // functions specifically related to 10g analysis
     void tengAnalysis(UInt_t ipr );
