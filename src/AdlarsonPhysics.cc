@@ -158,10 +158,10 @@ AdlarsonPhysics::AdlarsonPhysics():
     IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 200, 0, 1000, 440, 0, 440);
     IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 50, 0, 250, 440, 0, 440);
 
-    IM6g_v_det_etaprfit_CB          =   new GHistBGSub2("IM6g_v_det_etaprfit_CB", "IM(6g) fit fin.ev.s, CB, CB", 50, 0, 250, 720, 0, 720);
-    IM6g_v_det_etaprfit_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprfit_TAPS", "IM(6g) fit fin.ev.s, TAPS", 50, 0, 250, 440, 0, 440);
-    IM6g_v_det_etaprrec_CB          =   new GHistBGSub2("IM6g_v_det_etaprrec_CB", "IM(6g) rec fin.ev.s, CB, CB", 50, 0, 250, 720, 0, 720);
-    IM6g_v_det_etaprrec_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprrec_TAPS", "IM(6g) rec fin.ev.s, TAPS", 50, 0, 250, 440, 0, 440);
+    IM6g_v_det_etaprfit_CB          =   new GHistBGSub2("IM6g_v_det_etaprfit_CB", "IM(6g) fit fin.ev.s, CB, CB", 50, 800, 1050, 720, 0, 720);
+    IM6g_v_det_etaprfit_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprfit_TAPS", "IM(6g) fit fin.ev.s, TAPS", 50, 800, 1050, 440, 0, 440);
+    IM6g_v_det_etaprrec_CB          =   new GHistBGSub2("IM6g_v_det_etaprrec_CB", "IM(6g) rec fin.ev.s, CB, CB", 50, 800, 1050, 720, 0, 720);
+    IM6g_v_det_etaprrec_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprrec_TAPS", "IM(6g) rec fin.ev.s, TAPS", 50, 800, 1050, 440, 0, 440);
 
 // Rec. Photons
 
