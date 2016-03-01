@@ -33,6 +33,7 @@ private:
     TRandom3*       pRandoms;
     Bool_t          MC;
     Bool_t          MC_weight  = false;
+    Bool_t          MC_etapr   = false;
     Double_t        MCw  = 1.0;
     // Histograms and scatterplots
     // True

@@ -1864,6 +1864,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
             six_rec_IM_v_MMp->Fill(IM6g_vec.M(), MMp_vec.M(), GetTagger()->GetTaggedTime(tag));
         }
 
+
         const APLCON::Result_t& result_min = kinfit.DoFit();
         if(result_min.Status == APLCON::Result_Status_t::Success){
             if( result_min.ChiSquare <  chi2_min ){
@@ -1962,12 +1963,16 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 fit_six_fit_dz_v_z->Fill(vx_z, diff);
             }
 
+            if(etap_fit.M() < 800.)
+                continue;
+
             if(MC_weight){
                 six_fit_chi2->FillWeighted(result_min.ChiSquare, MCw );
                 six_fit_pdf->FillWeighted( result_min.Probability, MCw );
 
                 if(result_min.Probability >0.01 && result_min.Probability <1.0)
                     six_fit_IM->FillWeighted( etap_fit.M(), MCw );
+
 
                 Double_t ztrue = etapr_6gTrue.GetTrueVertex().Z();
                 six_fit_IM_vz->FillWeighted( etap_fit.M(), ztrue, MCw );
@@ -2681,7 +2686,7 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
     photons_fit_final.resize(0);
     photons_fit_final_metapr.resize(0);
 
-    for( Int_t icand = 0; icand < 1; icand++){
+    for( Int_t icand = 0; icand < 2; icand++){
 
         Is_CB.resize(0);
 
