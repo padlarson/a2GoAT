@@ -158,10 +158,10 @@ AdlarsonPhysics::AdlarsonPhysics():
     IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 200, 0, 1000, 440, 0, 440);
     IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 50, 0, 250, 440, 0, 440);
 
-    IM6g_v_det_etaprfit_CB          =   new GHistBGSub2("IM6g_v_det_etaprfit_CB", "IM(6g) fit fin.ev.s, CB, CB", 50, 800, 1050, 720, 0, 720);
-    IM6g_v_det_etaprfit_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprfit_TAPS", "IM(6g) fit fin.ev.s, TAPS", 50, 800, 1050, 440, 0, 440);
-    IM6g_v_det_etaprrec_CB          =   new GHistBGSub2("IM6g_v_det_etaprrec_CB", "IM(6g) rec fin.ev.s, CB, CB", 50, 800, 1050, 720, 0, 720);
-    IM6g_v_det_etaprrec_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprrec_TAPS", "IM(6g) rec fin.ev.s, TAPS", 50, 800, 1050, 440, 0, 440);
+    IM6g_v_det_etaprfit_CB          =   new GHistBGSub2("IM6g_v_det_etaprfit_CB", "IM(6g) fit fin.ev.s, CB, CB", 80, 800, 1200, 720, 0, 720);
+    IM6g_v_det_etaprfit_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprfit_TAPS", "IM(6g) fit fin.ev.s, TAPS", 80, 800, 1200, 440, 0, 440);
+    IM6g_v_det_etaprrec_CB          =   new GHistBGSub2("IM6g_v_det_etaprrec_CB", "IM(6g) rec fin.ev.s, CB, CB", 80, 800, 1200, 720, 0, 720);
+    IM6g_v_det_etaprrec_TAPS        =   new GHistBGSub2("IM6g_v_det_etaprrec_TAPS", "IM(6g) rec fin.ev.s, TAPS", 80, 800, 1200, 440, 0, 440);
 
 // Rec. Photons
 
@@ -973,15 +973,15 @@ Bool_t	AdlarsonPhysics::Start()
 void	AdlarsonPhysics::ProcessEvent()
 {
     if(MC){
-//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       TrueAnalysis_etapr6g();                    // obtains the true observables
-//       MCw = etapr_6gTrue.GetWeight();
-       // for 3pi0 and etapi0 MC
+       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       TrueAnalysis_etapr6g();                    // obtains the true observables
+       MCw = etapr_6gTrue.GetWeight();
+//        for 3pi0 and etapi0 MC
 //       MCw = 1.0;
-       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       MCw = TrueAnalysis_threepi_etapi();
+//       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       MCw = TrueAnalysis_threepi_etapi();
 
-       MC_weight = true;
+//       MC_weight = true;
 //        etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //        TrueAnalysis_etapr10g();
 //        MCw = etapr_10gTrue.GetWeight();
@@ -2412,8 +2412,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                    six_phy_etapr_v_BeamE->Fill((GetTagger()->GetVector(set_min[0])).E(), etap_fit.M(), GetTagger()->GetTaggedTime(tag));
                    six_phy_etapr_eta2pi_v_BeamE->Fill((GetTagger()->GetVector(set_min[0])).E(), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
-                   six_phy_etapr_v_EPT->FillWeighted((GetTagger()->GetTaggedChannel(set_min[0])), etap_fit.M(), GetTagger()->GetTaggedTime(tag));
-                   six_phy_etapr_eta2pi_v_EPT->FillWeighted((GetTagger()->GetTaggedChannel(set_min[0])), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_etapr_v_EPT->Fill((GetTagger()->GetTaggedChannel(set_min[0])), etap_fit.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_etapr_eta2pi_v_EPT->Fill((GetTagger()->GetTaggedChannel(set_min[0])), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
 
                    six_fit_best_eta->Fill( (g[0]).M(), GetTagger()->GetTaggedTime(tag) );
                    six_fit_best_2pi->Fill( g[1].M(), GetTagger()->GetTaggedTime(tag) );
