@@ -296,7 +296,7 @@ private:
     GHistBGSub2*    six_fit_best_2pi_IM_v_E;
 
     GHistBGSub2*    six_fit_mgg_v_eth;
-    GHistBGSub2*    six_fit_mgg_sig_v_eth;
+    GHistBGSub2*    six_rec_m6g_sig_v_eth;
     GHistBGSub2*    six_fit_fitted_etapr_de_v_eth;
     GHistBGSub2*    six_fit_fitted_3pi0_de_v_eth;
     GHistBGSub2*    six_fit_fitted_de_v_eth;
