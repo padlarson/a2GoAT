@@ -808,8 +808,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     APLCON::Fit_Settings_t settings = kinfit.GetSettings();
     settings.MaxIterations = 25;
 
-
-
     APLCON::Fit_Settings_t settings_eta2pi = kinfiteta2pi.GetSettings();
     settings_eta2pi.MaxIterations = 35;
     APLCON::Fit_Settings_t settings_3pi = kinfit3pi.GetSettings();
@@ -924,9 +922,6 @@ Bool_t	AdlarsonPhysics::Start()
     tree->Branch("Metapi_pr2", branch_M_etapi_pr2, "branch_M_etapi_pr2[branch_length]/D" );
     tree->Branch("Mpipi_pr", branch_M_pipi_pr, "branch_M_pipi_pr[branch_length]/D" );
 
-
-
-
     if (!GetScalers()->IsOpenForInput())
         MC = true;
     else
@@ -949,8 +944,6 @@ Bool_t	AdlarsonPhysics::Start()
     TraverseValidEvents();
 
     outputFile->cd();
-
-
 
     time_TOF.Write();
     time_clusters_TAPS.Write();
@@ -975,13 +968,13 @@ Bool_t	AdlarsonPhysics::Start()
 void	AdlarsonPhysics::ProcessEvent()
 {
     if(MC){
-//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       TrueAnalysis_etapr6g();                    // obtains the true observables
-//       MCw = etapr_6gTrue.GetWeight();
+       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       TrueAnalysis_etapr6g();                    // obtains the true observables
+       MCw = etapr_6gTrue.GetWeight();
 //        for 3pi0 and etapi0 MC
-       MCw = 1.0;
-       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       MCw = TrueAnalysis_threepi_etapi();
+//       MCw = 1.0;
+//       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       MCw = TrueAnalysis_threepi_etapi();
 
        MC_weight = true;
 //        etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
@@ -1913,6 +1906,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
             if(etap_fit.M() < 830.)
                 continue;
+            if( GetTagger()->GetTaggedChannel(tag) > 39 )
+                continue;
 
             if(MC_weight){
                 six_fit_chi2->FillWeighted(result_min.ChiSquare, MCw );
@@ -2456,8 +2451,8 @@ void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_
 //            imgg[j] = ( photons_fit[perm6g[i][0 + j*2]] + photons_fit[perm6g[i][1 + j*2]]).M();
             imgg[j] = ( photons_rec[perm6g[i][0 + j*2]] + photons_rec[perm6g[i][1 + j*2]]).M();
 
-            sgm_eta = 20.0;
-            sgm_pi0 = 12.0;
+            sgm_eta = 40.0;
+            sgm_pi0 = 14.0;
             chi2_eta2pi[j] = 0;
        }
 
@@ -2526,7 +2521,7 @@ void AdlarsonPhysics::GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_
         }
 
         bkgd_perm.resize(0);
-        sgm_3pi0 = 12.0;
+        sgm_3pi0 = 14.0;
         chi2_3pi = TMath::Power( (imgg[0] - MASS_PI0 )/(sgm_3pi0), 2) + TMath::Power( (imgg[1] - MASS_PI0 )/(sgm_3pi0), 2) + TMath::Power( (imgg[2] - MASS_PI0 )/(sgm_3pi0), 2);
 
         if(chi2_3pi < chi2min_3pi)
@@ -2592,7 +2587,7 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
     photons_fit_final.resize(0);
     photons_fit_final_metapr.resize(0);
 
-    for( Int_t icand = 0; icand < 3; icand++){
+    for( Int_t icand = 0; icand < 1; icand++){
 
         Is_CB.resize(0);
 
