@@ -2587,7 +2587,7 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
     photons_fit_final.resize(0);
     photons_fit_final_metapr.resize(0);
 
-    for( Int_t icand = 0; icand < 1; icand++){
+    for( Int_t icand = 0; icand < 3; icand++){
 
         Is_CB.resize(0);
 
