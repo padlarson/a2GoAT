@@ -108,6 +108,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_phy_DP_005_pr           = new GH1("six_phy_DP_005_pr", "Dalitz Plot 0.05 bin for m(#eta pr)", 2000, 0, 2000);
 
 // In 6g analysis
+    true_phy_3pi_IMpipi_v_IMppi         = new TH2F("treu_phy_3pi_IMpipi_v_IMppi", "True M_{#pi0#pi0} vs M_{p#pi0} for 3#pi^{0} ", 100, 0., 1., 200, 1., 3.);
+
     true_six_phy_dMpipi_v_Mpipi         = new GHistBGSub2("true_six_phy_dMpipi_v_Mpipi", "fitted - true value M_{#pi#pi,fit}^{2}", 200, 0.0, 200, 200, -100, 100);
     true_six_phy_dMpipi_v_Mpipi_metapr  = new GHistBGSub2("true_six_phy_dMpipi_v_Mpipi_metapr", "metapr fitted - true value M_{#pi#pi,fit}^{2}", 200, 0.0, 200, 200, -100, 100);
     true_six_phy_dX_v_DPbin             = new GHistBGSub2("true_six_phy_dX_v_DPbin", "X_{fit} - X_{true} v DP bin nr", 800, 0, 800, 800, -2.0, 2.0);
@@ -357,6 +359,9 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    g_fi_c1                    = (TH2F*)unc_corr->Get("phi_pull")->Clone();
 //    p_th_c1                    = (TH1F*)unc_corr->Get("th_pr_unc_corr")->Clone();
 //    p_fi_c1                    = (TH1F*)unc_corr->Get("phi_pr_unc_corr")->Clone();
+
+    etapr_MC_unc               = new TFile("configfiles/corr/etapr_unc.root");
+    CB_unc                     = (TH1F*)etapr_MC_unc->Get("plot_etapr_CB_sgm_ratio")->Clone();
 
     thcorr_CB                  = new TFile("configfiles/corr/CB_th_corr.root");
     dthvth_CB                  = (TProfile*)thcorr_CB->Get("photon_dtheta_v_theta_CB_pfx")->Clone();
@@ -3830,6 +3835,9 @@ void AdlarsonPhysics::Time_corr(){
 void AdlarsonPhysics::Energy_corr()
 {
     Double_t Erec, Ec_temp, DeltaE, Ec;
+    Double_t smear;
+
+    int group;
     for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
     {
         if( GetTracks()->HasCB(i) )
@@ -3839,7 +3847,16 @@ void AdlarsonPhysics::Energy_corr()
 
             DeltaE = Ec_temp*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetTheta(i)));
             Ec = Ec_temp - DeltaE;
+
+            if(MC){
+                smear = CB_unc->GetBinContent(CB_unc->FindBin(GetTracks()->GetCentralCrystal(i)));
+                if(smear > 0.0)
+                    Ec = pRandoms->Gaus(Ec, smear*Ec);
+            }
+
             tracks->SetClusterEnergy(i, Ec);
+
+
 
         }
         else if(GetTracks()->HasTAPS(i) )
@@ -4174,22 +4191,37 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
     for(UInt_t ig = 0; ig < threepi_etapi.GetNgamma(); ig++)
         true_im += threepi_etapi.GetTrueGammaLV(ig);
 
+     TLorentzVector three_pi0, three_pi1, three_pi2, proton_LV;
+     three_pi0 = threepi_etapi.GetTrueNeutralPiLV(0);
+     three_pi1 = threepi_etapi.GetTrueNeutralPiLV(1);
+     three_pi2 = threepi_etapi.GetTrueNeutralPiLV(2);
+     proton_LV = threepi_etapi.GetTrueProtonLV();
+
     Double_t M = true_im.M()*1.0e3;
     Double_t Mw = M;
+    if(M > 830.){
+        true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
+        true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi0+three_pi2).M2(), (three_pi1+proton_LV).M2());
+        true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
+    }
 
 
-    if( Mw < 650. )
-        Mw = 650;
-    else if(Mw > 1020.)
-        Mw = 1020.;
 
-    MCw    = MCw_bkgd->GetBinContent( MCw_bkgd->FindBin(Mw));
-    MCw *= (100000./96057.8);
+//    true_phy_3pi_IMpipi_v_IMppi
 
-    true_imng->Fill(M, MCw);
 
-    true_norm->Fill(1,MCw);
+//    if( Mw < 650. )
+//        Mw = 650;
+//    else if(Mw > 1020.)
+//        Mw = 1020.;
 
-    return MCw;
+//    MCw    = MCw_bkgd->GetBinContent( MCw_bkgd->FindBin(Mw));
+//    MCw *= (100000./96057.8);
+
+//    true_imng->Fill(M, MCw);
+
+//    true_norm->Fill(1,MCw);
+
+    return 1.0;
 
 }

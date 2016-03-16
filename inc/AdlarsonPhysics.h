@@ -81,6 +81,7 @@ private:
     GHistBGSub2*    true_six_phy_dX_v_DPbin;
     GHistBGSub2*    true_six_phy_dY_v_DPbin;
     GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
+    TH2*            true_phy_3pi_IMpipi_v_IMppi;
     GHistBGSub2*    true_six_phy_dX_v_X;
     GHistBGSub2*    true_six_phy_dY_v_Y;
 
@@ -104,6 +105,7 @@ private:
     Double_t        TOF_CB_proton;
     TLorentzVector  MMp_vec;
     TLorentzVector  g[3], h[3], rc[3], rc_sig[3];
+
 
     GHistBGSub*     p_MM;
     GHistBGSub2*    p_th_v_E;
@@ -471,7 +473,8 @@ private:
     TFile*          weight_bkgd;
     TH1*            MCw_bkgd;
 
-
+    TFile*          etapr_MC_unc;
+    TH1*            CB_unc;
 
     // True LorentzVectors
     TLorentzVector  eta_true;
