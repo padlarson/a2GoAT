@@ -11,6 +11,8 @@
 #include "GHistBGSub2.h"
 #include "TVector.h"
 #include "GTrue.h"
+#include <random>
+
 
 #define MASS_ELECTRON       0.510998928
 #define MASS_MUON           105.6583715
@@ -19,10 +21,13 @@
 class	ProtonChargeRadius  : public GTreeManager
 {
 private:
+
+    TRandom3*       pRandoms;
     // histograms and scatterplots
    GHistBGSub* True_BeamEnergy;
    // Phase space observables
    GHistBGSub2* ThvT_p;
+   GHistBGSub2* proton_p_v_th;
    GHistBGSub2* BeamEvETh_p;
    GHistBGSub2* ThvT_e;
    GHistBGSub2* ThvT_mu;
@@ -34,17 +39,6 @@ private:
 
    GHistBGSub2* thlabpr_v_t;
 
-   GHistBGSub2* thlabpr_v_th_e_1;
-   GHistBGSub2* thlabpr_v_th_mu_1;
-   GHistBGSub2* thlabpr_v_Tp_1;
-   GHistBGSub2* thlabpr_v_th_e_2;
-   GHistBGSub2* thlabpr_v_th_mu_2;
-   GHistBGSub2* thlabpr_v_Tp_2;
-   GHistBGSub2* thlabpr_v_th_e_3;
-   GHistBGSub2* thlabpr_v_th_mu_3;
-   GHistBGSub2* thlabpr_v_Tp_3;
-   GHistBGSub2* thlabpr_v_Tp_13;
-
    GH1*         Ntracks;
 
    GHistBGSub2* E_v_dE;
@@ -55,8 +49,20 @@ private:
    GHistBGSub2* proton_rE_v_E;
    GHistBGSub2* proton_rt_v_E;
 
-   GHistBGSub* MC_weight;
    GH1* mll;
+
+   GH1*                diff_msqll;
+   GH1*                ds;
+   GH1*                dtheta;
+   GHistBGSub2*        dt_v_t;
+   GHistBGSub2*        dmll_v_t;
+   GHistBGSub2*        dmll_v_theta;
+
+   GHistBGSub2*        dmll_v_bin;
+   GHistBGSub2*        dt_v_bin;
+   GHistBGSub2*        dmll_v_bin2;
+   GHistBGSub2*        dt_v_bin2;
+
 
    GHistBGSub2*        proton_E_v_th;
    GHistBGSub2*        proton_t_v_th;
@@ -73,6 +79,7 @@ private:
 
    Double_t BeamE;
    Double_t t_true;
+   Double_t mll_sq;
 
 
 
@@ -93,6 +100,13 @@ public:
     void TrueAnalysis_ll(int reaction);
     Double_t GEp(Double_t Qsqr);
     Double_t GMp(Double_t Qsqr);
+
+    Double_t GetT(Double_t pmom);
+    Double_t Get_mll(Double_t s,Double_t t, Double_t theta);
+    Double_t Get_s(Double_t beam);
+
+    void CB_analysis();
+    void BoNus_analysis();
 
 
 

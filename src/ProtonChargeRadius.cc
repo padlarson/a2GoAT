@@ -12,6 +12,8 @@ ProtonChargeRadius::ProtonChargeRadius()
     True_BeamEnergy    = new GHistBGSub("True_BeamEnergy", "True Beam Energy (MeV)", 400, 0., 1.6);
     // Phase space observables
     ThvT_p              = new GHistBGSub2("ThvT_p","proton true; Energy p (MeV); #theta_{p} (^{o})", 300, 0., 150, 100, 0., 100.);
+    proton_p_v_th       = new GHistBGSub2("proton_p_v_th", "proton; p_{true} (MeV/c); #theta_{true} (^{o})", 100, 0., 500., 50, 0, 100);
+
     BeamEvETh_p         = new GHistBGSub2("BeamEvETh_p","proton true; Beam Energy #gamma (MeV); bin = int(T_{p}/10) + 1 + 20*int(#theta_{p}/10)", 160, 0., 1600, 300, 0., 300.);
 
     ThvT_e              = new GHistBGSub2("ThvT_e","electron/positron true; Energy e^{+}/e^{-} (MeV); #theta_{e} (^{o})", 60, 0., 600, 18, 0., 180.);
@@ -21,24 +23,9 @@ ProtonChargeRadius::ProtonChargeRadius()
 
     dsigma_v_mll        = new GHistBGSub2("dsigma_v_mll", " differential cross-section; M_{ll}^{2}; d#sigma  (#mub /GeV^{4}) ", 1000, 0.0, 0.5, 1000, 0., 1000);
     t_v_mll             = new GHistBGSub2("t vs M_{ll}", ";M_{ll}^{2} (GeV^{2}); mom transfer (-t) (GeV^{2})", 125, 0.0, 0.25, 500, 0, 0.5);
-    thlabpr_v_mll       = new GHistBGSub2("thlabpr_v_mll", "#theta_{lab, pr} (y) vs M_{ll}^{2} (x)", 100, 0.0, 0.2, 50, 0, 100);
-    thlabpr_v_t         = new GHistBGSub2("thlabpr_v_t", ";-t (GeV^{2});#theta_{lab, proton} (^{o})", 500, 0.0, 0.5, 100, 0, 100);
+    thlabpr_v_mll       = new GHistBGSub2("thlabpr_v_mll", "#theta_{lab, pr} (y) vs M_{ll}^{2} (x)", 400, 0.0, 0.2, 200, 0, 100);
+    thlabpr_v_t         = new GHistBGSub2("thlabpr_v_t", ";-t (GeV^{2});#theta_{lab, proton} (^{o})", 25, 0.0, 0.05, 100, 0, 100);
 
-    thlabpr_v_th_e_1    = new GHistBGSub2("thlabpr_v_th_e_1", "#theta p vs #theta l 0.005 -t 0.015; #theta_p; #theta_e", 50, 0., 100., 45, 0., 180. );
-    thlabpr_v_th_e_2    = new GHistBGSub2("thlabpr_v_th_e_2", "#theta p vs #theta l 0.015 -t 0.025; #theta_p; #theta_e", 50, 0., 100., 45, 0., 180. );
-    thlabpr_v_th_e_3    = new GHistBGSub2("thlabpr_v_th_e_3", "#theta p vs #theta l 0.025 -t 0.035; #theta_p; #theta_e", 50, 0., 100., 45, 0., 180. );
-
-    thlabpr_v_th_mu_1    = new GHistBGSub2("thlabpr_v_th_mu_1", "#theta p vs #theta l 0.005 -t 0.015; #theta_p; #theta_mu", 50, 0., 100., 45, 0., 180. );
-    thlabpr_v_th_mu_2    = new GHistBGSub2("thlabpr_v_th_mu_2", "#theta p vs #theta l 0.015 -t 0.025; #theta_p; #theta_mu", 50, 0., 100., 45, 0., 180. );
-    thlabpr_v_th_mu_3    = new GHistBGSub2("thlabpr_v_th_mu_3", "#theta p vs #theta l 0.025 -t 0.035; #theta_p; #theta_mu", 50, 0., 100., 45, 0., 180. );
-
-
-    thlabpr_v_Tp_1      = new GHistBGSub2("thlabpr_v_Tp_1", "0.005 -t 0.015; T_{p}; #theta_p", 100, 0., 100., 100, 0., 100.);
-    thlabpr_v_Tp_2      = new GHistBGSub2("thlabpr_v_Tp_2", "0.015 -t 0.025; T_{p}; #theta_p", 100, 0., 100., 100, 0., 100.);
-    thlabpr_v_Tp_3      = new GHistBGSub2("thlabpr_v_Tp_3", "0.025 -t 0.035; T_{p}; #theta_p", 100, 0., 100., 100, 0., 100.);
-    thlabpr_v_Tp_13      = new GHistBGSub2("thlabpr_v_Tp_13", " 0.005 < (-t) < 0.035; T_{p}; #theta_{p} (^{o})", 40, 0., 20., 50, 0., 100.);
-
-    MC_weight           = new GHistBGSub("MC_weight", "MC_weight", 10000, 0, 1000);
     mll                 = new GH1("mll", "M_{l^{+}l^{-}} (GeV^{2})", 100, 0.0, 0.20);
 
     Ntracks             = new GH1("Ntracks", "Nr of reconstructed tracks", 10, 0, 10);
@@ -60,6 +47,19 @@ ProtonChargeRadius::ProtonChargeRadius()
     proton_rE_v_E      =  new GHistBGSub2("proton_rE_v_E", "proton; E_{rec} (MeV);relative (E_{rec} - E_{true}) / E_{rec} ", 40, 0., 200., 200, -1., 1.);
     proton_rt_v_E      =  new GHistBGSub2("proton_rt_v_E", "proton; E_{rec} (MeV);relative (t_{rec} - t_{true}) / t_{rec} ", 40, 0., 200., 200, -1., 1.);
 
+    diff_msqll         =  new GH1("diff_msqll", " m^{2}_{l^{+}l^{-},rec}-m^{2}_{l^{+}l^{-},true}; GeV^{2}", 500, -.05, .05);
+    ds                 =  new GH1("ds", " s_{rec}-s_{true}", 200, -0.05, .05);
+    dtheta             =  new GH1("dtheta", " th_{rec}-th_{true}", 200, -1., 1.);
+    dt_v_t             =  new GHistBGSub2("dt_v_t", "t_{rec}, t_{rec}-t_{true}", 50, 0., 0.05, 500, -0.05 , 0.05);
+    dmll_v_t           =  new GHistBGSub2("dmll_v_t", "t_{rec}, m^{2}_{l^{+}l^{-},rec}-m^{2}_{l^{+}l^{-},true}", 50, 0., 0.05, 400, -.1, .1);
+    dmll_v_theta       =  new GHistBGSub2("dmll_v_theta", "theta_{rec}, m^{2}_{l^{+}l^{-},rec}-m^{2}_{l^{+}l^{-},true}", 500, 0., 100, 200, -.1, .1);
+
+    dmll_v_bin         =  new GHistBGSub2("dmll_v_bin", ";binnr; m^{2}_{l^{+}l^{-},rec}-m^{2}_{l^{+}l^{-},true}", 2200, 0., 2200, 1000, -.1, .1);
+    dt_v_bin           =  new GHistBGSub2("dt_v_bin", ";binnr; t_{rec}-t_{true}", 2200, 0., 2200, 1000, -0.05 , 0.05);
+
+    // zoomed in interval
+    dmll_v_bin2         =  new GHistBGSub2("dmll_v_bin2", ";binnr; m^{2}_{l^{+}l^{-},rec}-m^{2}_{l^{+}l^{-},true}", 2200, 0., 2200, 100, -.05, .05);
+    dt_v_bin2           =  new GHistBGSub2("dt_v_bin2", ";binnr; t_{rec}-t_{true}", 2200, 0., 2200, 400, -0.05 , 0.05);
 
     cutFile             = new TFile("configfiles/cuts/CB_DeltaE_E_prchrad.root");
     cutProtonCB         = (TCutG*)cutFile->Get("Proton");
@@ -79,6 +79,8 @@ Bool_t	ProtonChargeRadius::Start()
 //        cout << "ERROR: Input File is not a GoAT file." << endl;
 //        return kFALSE;
 //    }
+    pRandoms = new TRandom3;
+    pRandoms->SetSeed(0); //'Randomize Timer'
 
     SetAsPhysicsFile();
 
@@ -96,7 +98,7 @@ void	ProtonChargeRadius::ProcessEvent()
 
     TrueObs.Start(*GetPluto(), *GetGeant());
 
-    int reaction = 0;
+    int reaction = 1;
     // reaction:
     // 0  p e+e- production   : 1/E x Bethe-Heidler process.
     // 1  p mu+mu- production   : 1/E x Bethe-Heidler process.
@@ -106,23 +108,21 @@ void	ProtonChargeRadius::ProcessEvent()
     // 5  p pi+pi-            : 1/E x Total cross section.
     TrueAnalysis_ll(reaction); //lepton-lepton analysis
 
-
-
     Double_t weight = TrueObs.GetWeight();
     True_BeamEnergy->FillWeighted( TrueObs.GetTrueBeamEnergy(), TrueObs.GetWeight() );
 
 
     Double_t E_true = TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON;
+    Double_t p_true = TMath::Sqrt(TrueObs.GetTrueProtonLV().E()*1000*TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON*MASS_PROTON);
     Double_t th_true = TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg();
     Double_t fi_true = TrueObs.GetTrueProtonLV().Phi()*TMath::RadToDeg();
-
-
 
 
     // Double_t protonE = TrueObs.GetTrueProtonLV().E();
 
 
     ThvT_p->FillWeighted( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight() );
+    proton_p_v_th->FillWeighted( p_true , TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight() );
 
     ThpvEg->FillWeighted( TrueObs.GetTrueBeamEnergy()*1000, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
 
@@ -135,6 +135,224 @@ void	ProtonChargeRadius::ProcessEvent()
     Int_t bin_nr = Int_t(( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON ) / 10) +1 + 20*Int_t(TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg()/10.0);
     BeamEvETh_p->FillWeighted(TrueObs.GetTrueBeamEnergy()*1000, bin_nr, TrueObs.GetWeight() );
 
+
+    CB_analysis();
+
+    BoNus_analysis();
+
+
+}
+
+void	ProtonChargeRadius::ProcessScalerRead()
+{
+//    hist_eta.ScalerReadCorrection(Double_t(scalers->GetScaler(0))/scalers->GetScaler(1));
+//    hist_etap.ScalerReadCorrection(Double_t(scalers->GetScaler(0))/scalers->GetScaler(1));
+}
+
+
+Bool_t	ProtonChargeRadius::Init(const char* configfile)
+{
+    return kTRUE;
+}
+
+void ProtonChargeRadius::BoNus_analysis(){
+    Double_t p_true = TMath::Sqrt(TrueObs.GetTrueProtonLV().E()*1000*TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON*MASS_PROTON);
+    Double_t th_true = TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg();
+    Double_t th_true_rad = TrueObs.GetTrueProtonLV().Theta();
+
+    // sigma_theta_p 50 mrad; sigma_phi = 25 mrad; sigma_R 0.53 mm; magnetic field 4 T
+    // sigma_p = 10 %, 20 %
+
+    Double_t s_true     = Get_s(TrueObs.GetTrueBeamEnergy());
+    Double_t t_true     = GetT(p_true/1000.);
+    Double_t m_ll_true  = Get_mll(s_true, t_true, th_true_rad);
+
+    Double_t beam_rec   = TrueObs.GetTrueBeamEnergy() + pRandoms->Gaus(0,1.5e-3);
+
+    Double_t rand1      = pRandoms->Uniform(0, 0.020);
+    Double_t rand2      = pRandoms->Uniform(0, 0.005);
+
+    Double_t p_rec      = p_true + pRandoms->Gaus(0, rand1*p_true);
+    Double_t th_rec_rad = th_true_rad + pRandoms->Gaus(0, rand2);
+
+    if( (p_true > 70.) && (p_true < 250.) ){
+        Double_t s_rec      = Get_s(beam_rec);
+        Double_t t_rec      = GetT(p_rec/1000.);
+        Double_t m_ll_rec   = Get_mll(s_rec, t_rec, th_rec_rad);
+
+
+        Double_t diff_mll = m_ll_rec - mll_sq;
+        diff_msqll->FillWeighted(diff_mll, TrueObs.GetWeight());
+        ds->FillWeighted(s_rec-s_true, TrueObs.GetWeight());
+        dtheta->FillWeighted(th_rec_rad-th_true_rad, TrueObs.GetWeight());
+        dt_v_t->FillWeighted(-t_rec, t_rec-t_true, TrueObs.GetWeight());
+        dmll_v_t->FillWeighted(-t_rec,diff_mll,TrueObs.GetWeight());
+        dmll_v_theta->FillWeighted(th_rec_rad*TMath::RadToDeg(), diff_mll, TrueObs.GetWeight());
+
+        // 20 in momentum res
+        // 50 in theta res
+
+        int bin = int(rand1/0.001) + 40*int(rand2/0.0002);
+        dmll_v_bin->FillWeighted(bin, diff_mll, TrueObs.GetWeight());
+        dt_v_bin->FillWeighted(bin, t_rec-t_true, TrueObs.GetWeight());
+
+//        if((rand1 < 0.02) && (rand2 < ){
+//            int bin2 = int(rand1/0.001) + 50*int(rand2/0.0001);
+//            dmll_v_bin->FillWeighted(bin2, diff_mll, TrueObs.GetWeight());
+//            dt_v_bin->FillWeighted(bin2, t_rec-t_true, TrueObs.GetWeight());
+//        }
+
+}
+
+
+    // relative uncertainty
+}
+
+Double_t ProtonChargeRadius::GetT(Double_t pr_lab_mom){
+    Double_t mp         =   MASS_PROTON/1000.;
+    return (2*mp*mp -TMath::Sqrt(4*mp*mp*mp*mp + (pr_lab_mom*pr_lab_mom)*(4*mp*mp) ));
+}
+
+Double_t ProtonChargeRadius::Get_mll(Double_t s, Double_t t, Double_t theta){
+    Double_t mp         =   MASS_PROTON/1000;
+    Double_t tau        =   (-t)/(4*mp*mp);
+
+    Double_t term_1     = 2*(s-mp*mp)*TMath::Sqrt(tau*(1+tau));
+    Double_t term_2     = 2*(s+mp*mp)*tau;
+    Double_t mll = TMath::Cos(theta)*term_1 - term_2;
+    return mll;
+}
+
+Double_t ProtonChargeRadius::Get_s(Double_t beam){
+    Double_t mp         =   MASS_PROTON/1000;
+    return (mp*mp + 2*mp*beam);   // Mandelstam s;
+}
+
+void ProtonChargeRadius::TrueAnalysis_ll(int reaction) // implementation BH-process
+{
+    Double_t weight = 1.0;
+    Double_t norm;
+         if( reaction < 2 ){
+            Double_t ml;
+            if(reaction == 0)
+                ml = MASS_ELECTRON/1000;
+            else
+                ml = MASS_MUON/1000;
+
+            if( TMath::Abs(ml - MASS_ELECTRON/1000) < 1.0e-4) //electrons/positrons
+                mll_sq = (TrueObs.GetTrueElectronLV() + TrueObs.GetTruePositronLV()).M2();
+            else                                                    //muons
+                mll_sq = (TrueObs.GetTrueMuonNegLV() + TrueObs.GetTrueMuonPosLV()).M2();
+
+            Double_t mp         =   MASS_PROTON/1000;
+            Double_t hbarc      =   0.197327;
+            Double_t pr_lab_mom =   TrueObs.GetTrueProtonLV().P();
+            Double_t alpha      =   1.0/137.036;
+
+            Double_t beta       =   TMath::Sqrt( 1 - ( (4*ml*ml)/mll_sq ) );
+            Double_t s          =   (MASS_PROTON*MASS_PROTON + 2*MASS_PROTON*TrueObs.GetTrueBeamEnergy()*1000.0)/1.0e6;   // Mandelstam s
+
+            Double_t t          =   GetT(pr_lab_mom);
+            Double_t tau        =   (-t)/(4*mp*mp);
+
+
+            Double_t term1, term2, term3;
+
+            term1               =   TMath::Power(hbarc,2)*TMath::Power(10,4)*(alpha*alpha*alpha)/( (s-mp*mp)*(s-mp*mp) );
+            term2               =   (4*beta)/( t*t*TMath::Power((mll_sq-t),4) );
+            term3               =   1./(1.+tau);
+
+            Double_t CE1, CE2, CM1, CM2;
+            Double_t CE, CM;
+
+            CE1                 =   (t)*(s - mp*mp)*(s - mp*mp - mll_sq + t)*( TMath::Power(mll_sq,2) + 6*mll_sq*t + t*t + 4*ml*ml*mll_sq ) + (TMath::Power((mll_sq -t),2))*( t*t*mll_sq + mp*mp*( TMath::Power((mll_sq+t),2) + 4*ml*ml*mp*mp*mll_sq));
+            CE2                 =  (-t)*(s - mp*mp)*(s - mp*mp - mll_sq + t)*( TMath::Power(mll_sq,2) + t*t + 4*ml*ml*(mll_sq+2*t-2*ml*ml))+ TMath::Power((mll_sq - t), 2)*(-1*mp*mp*(mll_sq*mll_sq + t*t ) + 2*ml*ml*(-1*t*t - 2*mp*mp*mll_sq + 4*ml*ml*mp*mp));
+            CE                  =  CE1 + CE2*(1/beta)*TMath::Log((1 + beta)/(1 - beta)) ;
+
+            CM1                 =  CE1 - 2*mp*mp*(1 + tau)*TMath::Power((mll_sq-t),2)*(mll_sq*mll_sq + t*t + 4*ml*ml*mll_sq);
+            CM2                 =  CE2 - 2*mp*mp*(1 + tau)*TMath::Power((mll_sq-t),2)*(mll_sq*mll_sq + t*t + 4*ml*ml*(mll_sq - t -2*ml*ml));
+            CM                  =  CM1 + CM2*(1/beta)*TMath::Log((1 + beta)/(1 - beta)) ;
+
+            Double_t diffxs     =   term1*term2*term3*(CE*GEp(-t)*GEp(-t) + CM*tau*GMp(-t)*GMp(-t));
+
+            // end of implementation BH process. Below a normalisation factor is found to match the nr of entries to integrated nr
+            // Different if l = mu or e, and different given the beam photon energy.
+
+//            // norm 510 MeV e and mu
+//           if(reaction == 0)
+//               norm = 1.0e-3*200000/38219*2.0/2.01099;
+//           else
+//               norm = 200000/13837*200000/198659*2.00000/1.98659;
+
+           //            // norm 500 MeV e and mu
+              if(reaction == 0)
+                  norm = 0.000693963;
+              else
+                  norm = 14.115561277;
+
+           // norm all beam energies MeV e and mu
+//            if(reaction == 0)
+//              norm = 1.0;
+//            else
+//              norm = 1.0e6/24047.0*(1.0e6/1153485.0)*(1.0e6/1391015.0);
+
+            Double_t weight_beame;
+            Double_t weight_diffxs;
+
+            weight_diffxs = diffxs*norm;
+            //
+
+            if(weight_diffxs < 0 )
+                weight_diffxs = 0;
+
+            TrueObs.SetWeight(weight_diffxs);
+
+            mll->FillWeighted(mll_sq, TrueObs.GetWeight() );
+            dsigma_v_mll->FillWeighted(mll_sq,diffxs, weight);
+            t_v_mll->FillWeighted(mll_sq, -t, TrueObs.GetWeight());
+            thlabpr_v_mll->FillWeighted(mll_sq, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),  TrueObs.GetWeight());
+
+            Double_t p_true = TMath::Sqrt(TrueObs.GetTrueProtonLV().E()*1000*TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON*MASS_PROTON);
+            if( (p_true > 70.) && (p_true < 150.))
+                thlabpr_v_t->FillWeighted(-t, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),  TrueObs.GetWeight());
+
+            dsigma_v_mll->FillWeighted(mll_sq,diffxs, TrueObs.GetWeight());
+
+         }
+         if(reaction == 3){
+             norm = 1.0;
+             weight = (1.0/TrueObs.GetTrueBeamEnergy())*norm;
+             TrueObs.SetWeight(weight);
+         }
+         if(reaction == 4){
+             norm = 1.0;
+             weight = (1.0/TrueObs.GetTrueBeamEnergy())*norm;
+             TrueObs.SetWeight(weight);
+         }
+}
+
+Double_t ProtonChargeRadius::GEp(Double_t Qsqr)
+    {
+    return  1./TMath::Power(1. + Qsqr/0.71,2)*(1. - 0.4980*Qsqr+5.4592*TMath::Power(Qsqr,2) -
+            34.7281 * TMath::Power(Qsqr,3) + 124.3173 * TMath::Power(Qsqr,4) - 262.9808 * TMath::Power(Qsqr,5) +
+            329.1395 * TMath::Power(Qsqr,6) - 227.3306 * TMath::Power(Qsqr,7) + 66.6980 * TMath::Power(Qsqr,8));
+    }
+
+Double_t ProtonChargeRadius::GMp(Double_t Qsqr)
+    {
+    Double_t PMAGN      =   2.79285;
+    return PMAGN/TMath::Power(1 + Qsqr/0.71,2) * (1 + 0.2472 * Qsqr - 4.9123 * TMath::Power(Qsqr,2) +
+           29.7509 * TMath::Power(Qsqr,3) - 84.0430 * TMath::Power(Qsqr,4) + 129.3256 * TMath::Power(Qsqr,5) -
+           111.1068 * TMath::Power(Qsqr,6) + 49.9753 * TMath::Power(Qsqr,7) - 9.1659 * TMath::Power(Qsqr,8));
+    }
+
+
+
+void ProtonChargeRadius::CB_analysis(){
+
+    Double_t E_true = TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON;
+    Double_t th_true = TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg();
+    Double_t fi_true = TrueObs.GetTrueProtonLV().Phi()*TMath::RadToDeg();
 
     Ntracks->FillWeighted(GetTracks()->GetNTracks(), TrueObs.GetWeight());
 
@@ -169,178 +387,9 @@ void	ProtonChargeRadius::ProcessEvent()
             proton_dtheta_v_2D->FillWeighted(E_rec, th_rec, dth, TrueObs.GetWeight());
             proton_dphi_v_2D->FillWeighted(E_rec, th_rec, dfi, TrueObs.GetWeight());
         }
-
     }
-
 }
 
-void	ProtonChargeRadius::ProcessScalerRead()
-{
-//    hist_eta.ScalerReadCorrection(Double_t(scalers->GetScaler(0))/scalers->GetScaler(1));
-//    hist_etap.ScalerReadCorrection(Double_t(scalers->GetScaler(0))/scalers->GetScaler(1));
-}
-
-
-Bool_t	ProtonChargeRadius::Init(const char* configfile)
-{
-    return kTRUE;
-}
-
-
-void ProtonChargeRadius::TrueAnalysis_ll(int reaction)
-{
-
-    Double_t weight = 1.0;
-    Double_t norm;
-         if( reaction < 2 )
-         {
-
-            Double_t ml;
-            if(reaction == 0)
-                ml = MASS_ELECTRON/1000;
-            else
-                ml = MASS_MUON/1000;
-
-            Double_t mll_sq; // mass squared lepton pairs
-            if( TMath::Abs(ml - MASS_ELECTRON/1000) < 1.0e-4) //electrons/positrons
-                mll_sq = (TrueObs.GetTrueElectronLV() + TrueObs.GetTruePositronLV()).M2();
-            else                                                    //muons
-                mll_sq = (TrueObs.GetTrueMuonNegLV() + TrueObs.GetTrueMuonPosLV()).M2();
-
-            Double_t mp         =   MASS_PROTON/1000;
-            Double_t hbarc      =   0.197327;
-            Double_t pr_lab_mom =   TrueObs.GetTrueProtonLV().P();
-            Double_t alpha      =   1.0/137.036;
-
-            Double_t beta       =   TMath::Sqrt( 1 - ( (4*ml*ml)/mll_sq ) );
-            Double_t s          =   (MASS_PROTON*MASS_PROTON + 2*MASS_PROTON*TrueObs.GetTrueBeamEnergy()*1000.0)/1.0e6;   // Mandelstam s
-            Double_t t          =   2*mp*mp -TMath::Sqrt(4*mp*mp*mp*mp + (pr_lab_mom*pr_lab_mom)*(4*mp*mp) );           // momentum transfer t
-            Double_t tau        =   (-t)/(4*mp*mp);
-
-            Double_t term1, term2, term3;
-
-            term1               =   TMath::Power(hbarc,2)*TMath::Power(10,4)*(alpha*alpha*alpha)/( (s-mp*mp)*(s-mp*mp) );
-            term2               =   (4*beta)/( t*t*TMath::Power((mll_sq-t),4) );
-            term3               =   1./(1.+tau);
-
-            Double_t CE1, CE2, CM1, CM2;
-            Double_t CE, CM;
-
-            CE1                 =   (t)*(s - mp*mp)*(s - mp*mp - mll_sq + t)*( TMath::Power(mll_sq,2) + 6*mll_sq*t + t*t + 4*ml*ml*mll_sq ) + (TMath::Power((mll_sq -t),2))*( t*t*mll_sq + mp*mp*( TMath::Power((mll_sq+t),2) + 4*ml*ml*mp*mp*mll_sq));
-            CE2                 =  (-t)*(s - mp*mp)*(s - mp*mp - mll_sq + t)*( TMath::Power(mll_sq,2) + t*t + 4*ml*ml*(mll_sq+2*t-2*ml*ml))+ TMath::Power((mll_sq - t), 2)*(-1*mp*mp*(mll_sq*mll_sq + t*t ) + 2*ml*ml*(-1*t*t - 2*mp*mp*mll_sq + 4*ml*ml*mp*mp));
-            CE                  =  CE1 + CE2*(1/beta)*TMath::Log((1 + beta)/(1 - beta)) ;
-
-            CM1                 =  CE1 - 2*mp*mp*(1 + tau)*TMath::Power((mll_sq-t),2)*(mll_sq*mll_sq + t*t + 4*ml*ml*mll_sq);
-            CM2                 =  CE2 - 2*mp*mp*(1 + tau)*TMath::Power((mll_sq-t),2)*(mll_sq*mll_sq + t*t + 4*ml*ml*(mll_sq - t -2*ml*ml));
-            CM                  =  CM1 + CM2*(1/beta)*TMath::Log((1 + beta)/(1 - beta)) ;
-
-            Double_t diffxs     =   term1*term2*term3*(CE*GEp(-t)*GEp(-t) + CM*tau*GMp(-t)*GMp(-t));
-
-//            // norm 510 MeV e and mu
-//           if(reaction == 0)
-//               norm = 1.0e-3*200000/38219*2.0/2.01099;
-//           else
-//               norm = 200000/13837*200000/198659*2.00000/1.98659;
-
-           // norm all beam energies MeV e and mu
-            if(reaction == 0)
-              norm = 1.0;
-            else
-              norm = 1.0e6/24047.0*(1.0e6/1153485.0)*(1.0e6/1391015.0);
-
-            Double_t weight_beame;
-            Double_t weight_diffxs;
-
-            weight_diffxs = diffxs*norm;
-
-//            weight_beame = 200000./397369.;
-            weight_beame = 1.0e6/1429536.0; // all beam energies
-
-
-            weight = (1.0/(TrueObs.GetTrueBeamEnergy()))*weight_beame*weight_diffxs;
-            if(weight < 0.1 )
-                weight = 0;
-
-            TrueObs.SetWeight(weight);
-
-
-            dsigma_v_mll->FillWeighted(mll_sq,diffxs, weight);
-            MC_weight->FillWeighted(weight,weight);
-            mll->FillWeighted(mll_sq, TrueObs.GetWeight() );
-
-            t_v_mll->FillWeighted(mll_sq, -t, TrueObs.GetWeight());
-            thlabpr_v_mll->FillWeighted(mll_sq, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),  TrueObs.GetWeight());
-
-            thlabpr_v_t->FillWeighted(-t, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),  TrueObs.GetWeight());
-            dsigma_v_mll->FillWeighted(mll_sq,diffxs, TrueObs.GetWeight());
-            mll->FillWeighted(mll_sq, TrueObs.GetWeight() );
-
-            t_v_mll->FillWeighted(mll_sq, -t, TrueObs.GetWeight());
-            thlabpr_v_mll->FillWeighted(mll_sq, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),  TrueObs.GetWeight());
-
-            thlabpr_v_t->FillWeighted(-t, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),  TrueObs.GetWeight());
-
-            if( (-t > 0.005) && (-t < 0.015) )
-            {
-                 thlabpr_v_Tp_13->FillWeighted( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_e_1->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueElectronLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_e_1->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTruePositronLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_mu_1->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueMuonNegLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_mu_1->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueMuonPosLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_Tp_1->FillWeighted( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),TrueObs.GetWeight());
-             }
-             if( (-t > 0.015) && (-t < 0.025) )
-             {
-                 thlabpr_v_Tp_13->FillWeighted( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_e_2->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueElectronLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_e_2->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTruePositronLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_mu_2->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueMuonNegLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_mu_2->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueMuonPosLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_Tp_2->FillWeighted( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),TrueObs.GetWeight());
-             }
-             if( (-t > 0.025) && (-t < 0.035) )
-             {
-                 thlabpr_v_Tp_13->FillWeighted( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_e_3->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueElectronLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_e_3->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTruePositronLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_mu_3->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueMuonNegLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_th_mu_3->FillWeighted( TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(), TrueObs.GetTrueMuonPosLV().Theta()*TMath::RadToDeg(), TrueObs.GetWeight());
-                 thlabpr_v_Tp_3->FillWeighted( TrueObs.GetTrueProtonLV().E()*1000 - MASS_PROTON, TrueObs.GetTrueProtonLV().Theta()*TMath::RadToDeg(),TrueObs.GetWeight());
-             }
-         }
-
-         if(reaction == 3)
-         {
-             norm = 1.0;
-             weight = (1.0/TrueObs.GetTrueBeamEnergy())*norm;
-             TrueObs.SetWeight(weight);
-
-         }
-
-         if(reaction == 4)
-         {
-             norm = 1.0;
-             weight = (1.0/TrueObs.GetTrueBeamEnergy())*norm;
-             TrueObs.SetWeight(weight);
-
-         }
-
-}
-
-Double_t ProtonChargeRadius::GEp(Double_t Qsqr)
-    {
-    return  1./TMath::Power(1. + Qsqr/0.71,2)*(1. - 0.4980*Qsqr+5.4592*TMath::Power(Qsqr,2) -
-            34.7281 * TMath::Power(Qsqr,3) + 124.3173 * TMath::Power(Qsqr,4) - 262.9808 * TMath::Power(Qsqr,5) +
-            329.1395 * TMath::Power(Qsqr,6) - 227.3306 * TMath::Power(Qsqr,7) + 66.6980 * TMath::Power(Qsqr,8));
-    }
-
-Double_t ProtonChargeRadius::GMp(Double_t Qsqr)
-    {
-    Double_t PMAGN      =   2.79285;
-    return PMAGN/TMath::Power(1 + Qsqr/0.71,2) * (1 + 0.2472 * Qsqr - 4.9123 * TMath::Power(Qsqr,2) +
-           29.7509 * TMath::Power(Qsqr,3) - 84.0430 * TMath::Power(Qsqr,4) + 129.3256 * TMath::Power(Qsqr,5) -
-           111.1068 * TMath::Power(Qsqr,6) + 49.9753 * TMath::Power(Qsqr,7) - 9.1659 * TMath::Power(Qsqr,8));
-    }
 
 
 
