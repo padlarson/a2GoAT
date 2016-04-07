@@ -239,6 +239,10 @@ private:
     GH1*            NIeta2pi0;
     GH1*            NItetapr;
 
+    GHistBGSub2*    NI3pi0vPDF;
+    GHistBGSub2*    NIeta2pi0vPDF;
+    GHistBGSub2*    NItetaprvPDF;
+
     GHistBGSub2*    proton_fit_e_v_th;
     GHistBGSub2*    proton_fit_e_v_th_final;
 //    GHistBGSub2*    six_fit_Pulls;
@@ -471,7 +475,11 @@ private:
     TH1*            p_TAPS_fi_vz;
 
     TFile*          weight_bkgd;
-    TH1*            MCw_bkgd;
+    TH2*            MCw_bkgd;
+    TFile*          weight_bkgd2;
+    TH2*            MCw_bkgd2;
+    TFile*          weight_bkgd3;
+    TH2*            MCw_bkgd3;
 
     TFile*          etapr_MC_unc;
     TH1*            CB_unc;
@@ -736,6 +744,10 @@ public:
     void TrueAnalysis_etapr10g();
     Double_t TrueAnalysis_threepi_etapi(); // returns weight as function of IM(ng);
     Double_t Get_etapr_weight_MC(Double_t beame, TLorentzVector eta_pr[2]);
+
+    double GetWeight3pi1(Double_t M1sq, Double_t M2sq);
+    double GetWeight3pi2(Double_t M1sq, Double_t M2sq);
+    double GetWeight3pi3(Double_t M1sq, Double_t M2sq);
     void Kinfit_test();
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
@@ -756,6 +768,7 @@ public:
     void GetBest10gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta3pi, std::vector<int>& imin_eta3pi2pi );
 
     const std::vector<TLorentzVector> ClusterEnergyCorr();
+
 
     Int_t diff_distr(const Double_t beam_e, TLorentzVector& fin );
     void DalitzPlot(const TLorentzVector g[3] , Double_t &X, Double_t &Y, Double_t bw, Int_t &DP_nr);

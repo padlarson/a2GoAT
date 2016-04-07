@@ -215,6 +215,10 @@ AdlarsonPhysics::AdlarsonPhysics():
     NIeta2pi0                   = new GH1("NIeta2pi0", "Nr iterations eta2pi0", 100, 0, 100.);
     NItetapr                    = new GH1("NItetapr", "Nr iterations final etapr", 100, 0, 100.);
 
+    NI3pi0vPDF                  = new GHistBGSub2("NI3pi0vPDF", "Nr iterations 3pi0 vs prob", 100, 0, 100. ,100, 0., 1.);
+    NIeta2pi0vPDF               = new GHistBGSub2("NIeta2pi0vPDF", "Nr iterations eta2pi0 vs prob", 100, 0, 100.,100, 0., 1.);
+    NItetaprvPDF                = new GHistBGSub2("NItetaprvPDF", "Nr iterations final etapr vs prob", 100, 0, 100.,100, 0., 1.);
+
     proton_fit_e_v_th           = new GHistBGSub2("proton_fit_e_v_th", "proton E vs #theta", 200, 0., 1000., 25, 0, 25);
     proton_fit_e_v_th_final     = new GHistBGSub2("proton_fit_e_v_th_final", "proton E vs #theta final ev sample", 200, 0., 1000., 25, 0, 25);
 
@@ -375,8 +379,14 @@ AdlarsonPhysics::AdlarsonPhysics():
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
 
-    weight_bkgd                = new TFile("configfiles/corr/weight_3pi0_etapi0_cocktail.root");
-    MCw_bkgd                   = (TH1D*)weight_bkgd->Get("six_fit_IM_3pi_Buffer")->Clone();
+//    weight_bkgd                = new TFile("configfiles/corr/weight_3pi0_etapi0_cocktail.root");
+//    MCw_bkgd                   = (TH1D*)weight_bkgd->Get("six_fit_IM_3pi_Buffer")->Clone();
+    weight_bkgd                = new TFile("configfiles/corr/threepi_bkgd.root");
+    MCw_bkgd                   = (TH2F*)weight_bkgd->Get("EXP")->Clone();
+    weight_bkgd2                = new TFile("configfiles/corr/threepi_bkgd2.root");
+    MCw_bkgd2                   = (TH2F*)weight_bkgd2->Get("EXP")->Clone();
+    weight_bkgd3                = new TFile("configfiles/corr/threepi_bkgd3.root");
+    MCw_bkgd3                   = (TH2F*)weight_bkgd3->Get("EXP")->Clone();
 
     Evth_g_sel                 = new TFile("configfiles/cuts/E_v_th_g_cut.root");
     sixg_cand                  = (TCutG*)Evth_g_sel->Get("CutProton")->Clone();
@@ -813,6 +823,8 @@ AdlarsonPhysics::AdlarsonPhysics():
     APLCON::Fit_Settings_t settings = kinfit.GetSettings();
     settings.MaxIterations = 25;
 
+
+    // 25, 35, 35, 35
     APLCON::Fit_Settings_t settings_eta2pi = kinfiteta2pi.GetSettings();
     settings_eta2pi.MaxIterations = 35;
     APLCON::Fit_Settings_t settings_3pi = kinfit3pi.GetSettings();
@@ -976,7 +988,7 @@ void	AdlarsonPhysics::ProcessEvent()
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
        TrueAnalysis_etapr6g();                    // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
-//        for 3pi0 and etapi0 MC
+////        for 3pi0 and etapi0 MC
 //       MCw = 1.0;
 //       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //       MCw = TrueAnalysis_threepi_etapi();
@@ -2020,6 +2032,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
            rc_sig[1] = photons_rec[imin_eta2pi[2]] + photons_rec[imin_eta2pi[3]];
            rc_sig[2] = photons_rec[imin_eta2pi[4]] + photons_rec[imin_eta2pi[5]];
 
+           double mass_shift = 1.1;
+
            TLorentzVector etap_fit_final(0.0, 0.0, 0.0, 0.0);
            TLorentzVector fin[3];
            Double_t Xfit = -2.0;
@@ -2085,6 +2099,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                vec_M_pipi.push_back(m_2pi0_fit/1.0e3);
 
                if(probmin_etapr > 0.01 && probmin_etapr < 1.0){
+
+
                    TLorentzVector fin_metapr[3];
                    fin_metapr[0] = photons_fit_final_metapr[0] + photons_fit_final_metapr[1];
                    fin_metapr[1] = photons_fit_final_metapr[2] + photons_fit_final_metapr[3];
@@ -2137,7 +2153,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                // end filling results in vector
 
                if(MC_weight){
-                    six_fit_IM_eta2pi0_b->FillWeighted( etap_fit_final.M(), MCw );
+                    six_fit_IM_eta2pi0_b->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
                     six_rec_IM_eta2pi->FillWeighted(IM6g_vec.M(), MCw);
                }
                else{
@@ -2154,7 +2170,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                         if( (probmin_etapr > 0.04) && (probmin_etapr < 1.0) ){
                             if(MC_weight){
-                                six_fit_IM_eta2pi0_d->FillWeighted( etap_fit_final.M(), MCw );
+                                six_fit_IM_eta2pi0_d->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
                                 for(int ietapr = 0; ietapr < 6; ietapr++){
                                    int nEN =  int(photons_rec[imin_eta2pi[ietapr]].E()/20.);
                                    int nTH =  75*int(photons_rec[imin_eta2pi[ietapr]].Theta()*TMath::RadToDeg()/1.0);
@@ -2163,7 +2179,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                                     if( GetTracks()->HasCB( set_min[imin_eta2pi[ietapr]+2]) ){
                                             IM6g_v_det_etaprrec_CB->FillWeighted( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], MCw);
-                                            IM6g_v_det_etaprfit_CB->FillWeighted( etap_fit_final.M(), detnr[imin_eta2pi[ietapr]], MCw);
+                                            IM6g_v_det_etaprfit_CB->FillWeighted( etap_fit_final.M()+mass_shift, detnr[imin_eta2pi[ietapr]], MCw);
                                     }
                                     else{
                                             IM6g_v_det_etaprrec_TAPS->FillWeighted( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], MCw);
@@ -2172,7 +2188,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                                     }
                             }
                             else{
-                                six_fit_IM_eta2pi0_d->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
+                                six_fit_IM_eta2pi0_d->Fill( etap_fit_final.M()+mass_shift, GetTagger()->GetTaggedTime(tag) );
                                 for(int ietapr = 0; ietapr < 6; ietapr++){
                                     int nEN =  int(photons_rec[imin_eta2pi[ietapr]].E()/20.);
                                     int nTH =  75*int(photons_rec[imin_eta2pi[ietapr]].Theta()*TMath::RadToDeg()/1.0);
@@ -2181,7 +2197,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                                     if( GetTracks()->HasCB( set_min[imin_eta2pi[ietapr]+2]) ){
                                             IM6g_v_det_etaprrec_CB->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
-                                            IM6g_v_det_etaprfit_CB->Fill( etap_fit_final.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
+                                            IM6g_v_det_etaprfit_CB->Fill( etap_fit_final.M()+mass_shift, detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
                                     }
                                     else{
                                             IM6g_v_det_etaprrec_TAPS->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
@@ -2192,7 +2208,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                         }
                         else{
                             if(MC_weight)
-                                six_fit_IM_eta2pi0_e->FillWeighted( etap_fit_final.M(), MCw );
+                                six_fit_IM_eta2pi0_e->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
                             else
                                 six_fit_IM_eta2pi0_e->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                         }
@@ -2203,13 +2219,13 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
               if( probmin_3pi < 0.01 ){
                  if( (probmin_etapr > 0.02) && (probmin_etapr < 1.0) ){
                     if(MC_weight)
-                        six_fit_IM_eta2pi0_f->FillWeighted( etap_fit_final.M(), MCw );
+                        six_fit_IM_eta2pi0_f->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
                     else
                         six_fit_IM_eta2pi0_f->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                 }
                 else{
                     if(MC_weight)
-                        six_fit_IM_eta2pi0_g->FillWeighted( etap_fit_final.M(), MCw );
+                        six_fit_IM_eta2pi0_g->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
                     else
                         six_fit_IM_eta2pi0_g->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                 }
@@ -2228,9 +2244,17 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                six_fit_best_3pi_IM_v_E->Fill(h[2].E(), h[2].M(), GetTagger()->GetTaggedTime(tag));
 
                if(etap_fit.M() > 650.0){
-                six_phy_3pi_IMpipi_v_IMppi->Fill((h[0]+h[1]).M2()/1.0e6, (h[2]+proton_fit).M2()/1.0e6, GetTagger()->GetTaggedTime(tag));
-                six_phy_3pi_IMpipi_v_IMppi->Fill((h[2]+h[0]).M2()/1.0e6, (h[1]+proton_fit).M2()/1.0e6, GetTagger()->GetTaggedTime(tag));
-                six_phy_3pi_IMpipi_v_IMppi->Fill((h[1]+h[2]).M2()/1.0e6, (h[0]+proton_fit).M2()/1.0e6, GetTagger()->GetTaggedTime(tag));
+                   if(MC_weight){
+                       six_phy_3pi_IMpipi_v_IMppi->FillWeighted((h[0]+h[1]).M2()/1.0e6, (h[2]+proton_fit).M2()/1.0e6, MCw);
+                       six_phy_3pi_IMpipi_v_IMppi->FillWeighted((h[2]+h[0]).M2()/1.0e6, (h[1]+proton_fit).M2()/1.0e6, MCw);
+                       six_phy_3pi_IMpipi_v_IMppi->FillWeighted((h[1]+h[2]).M2()/1.0e6, (h[0]+proton_fit).M2()/1.0e6, MCw);
+
+                   }
+                   else{
+                       six_phy_3pi_IMpipi_v_IMppi->Fill((h[0]+h[1]).M2()/1.0e6, (h[2]+proton_fit).M2()/1.0e6, GetTagger()->GetTaggedTime(tag));
+                       six_phy_3pi_IMpipi_v_IMppi->Fill((h[2]+h[0]).M2()/1.0e6, (h[1]+proton_fit).M2()/1.0e6, GetTagger()->GetTaggedTime(tag));
+                       six_phy_3pi_IMpipi_v_IMppi->Fill((h[1]+h[2]).M2()/1.0e6, (h[0]+proton_fit).M2()/1.0e6, GetTagger()->GetTaggedTime(tag));
+                   }
                }
 
                for(Int_t isix = 0; isix < 6; isix++){
@@ -2343,14 +2367,14 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                // Filling of final results
 
                if(MC_weight){
-                   six_phy_DP_020->FillWeighted(DP_binnr_fit020, etap_fit_final.M(), MCw );
-                   six_phy_DP_015->FillWeighted(DP_binnr_fit015, etap_fit_final.M(), MCw );
-                   six_phy_DP_010->FillWeighted(DP_binnr_fit010, etap_fit_final.M(), MCw );
-                   six_phy_DP_005->FillWeighted(DP_binnr_fit005, etap_fit_final.M(), MCw );
+                   six_phy_DP_020->FillWeighted(DP_binnr_fit020, etap_fit_final.M()+mass_shift, MCw );
+                   six_phy_DP_015->FillWeighted(DP_binnr_fit015, etap_fit_final.M()+mass_shift, MCw );
+                   six_phy_DP_010->FillWeighted(DP_binnr_fit010, etap_fit_final.M()+mass_shift, MCw );
+                   six_phy_DP_005->FillWeighted(DP_binnr_fit005, etap_fit_final.M()+mass_shift, MCw );
 
-                   six_phy_M_pi1pi2_v_etapr->FillWeighted(m_2pi0_fit / 1.0e3, etap_fit_final.M(), MCw);
-                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi01_fit / 1.0e3, etap_fit_final.M(), MCw);
-                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi02_fit / 1.0e3, etap_fit_final.M(), MCw);
+                   six_phy_M_pi1pi2_v_etapr->FillWeighted(m_2pi0_fit / 1.0e3, etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi01_fit / 1.0e3, etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_etapi_v_etapr->FillWeighted(m_etapi02_fit / 1.0e3, etap_fit_final.M()+mass_shift, MCw);
 
                    if(etap_fit_final.M()> 930. && etap_fit_final.M() < 980.){
                        true_six_phy_dMpipi_v_Mpipi->FillWeighted(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw);
@@ -2378,7 +2402,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                }
 
                if(MC_weight)
-                    six_phy_etapr_prod_diff_distr->FillWeighted(diffbin, etap_fit_final.M(), MCw);
+                    six_phy_etapr_prod_diff_distr->FillWeighted(diffbin, etap_fit_final.M()+mass_shift, MCw);
                else
                     six_phy_etapr_prod_diff_distr->Fill(diffbin, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
 
@@ -2577,7 +2601,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
     Double_t chi2_3pi_fit       =  1.0e6;
     Double_t chi2_eta2pi_fit    =  1.0e6;
 
-    double niter_eta2pi = 0;
+    int niter_eta2pi = 0;
+    int niter_3pi = 0;
 
     Int_t n_photons_min;
     bool etapr_candidate = false;
@@ -2653,6 +2678,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
                     imin_3pi.resize(0);
                     imin_3pi = imin_3pi_temp;
                     iteration_place_threepi = icand;
+
+                    niter_3pi = result_3pi.NIterations;
                 }
             }
 
@@ -2763,6 +2790,9 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
     if(prob_eta2pi_fit > 0.0 && prob_eta2pi_fit < 1.0){
         prob_eta2pi = prob_eta2pi_fit;
         NIeta2pi0->Fill(niter_eta2pi);
+        NIeta2pi0vPDF->Fill(niter_eta2pi, prob_eta2pi);
+
+
         if(prob_eta2pi > 0.01)
             etapr_candidate = true;
     }
@@ -2771,6 +2801,7 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
 
     if(prob_3pi_fit > 0.0 && prob_3pi_fit < 1.0){
         prob_3pi = prob_3pi_fit;
+        NI3pi0vPDF->Fill(niter_3pi, prob_3pi);
     }
     else
         prob_3pi = 0.0;
@@ -2837,6 +2868,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
         {
             NItetapr->Fill(result_final.NIterations);
             prob_etapr = result_final.Probability;
+
+            NItetaprvPDF->Fill(result_final.NIterations, prob_etapr);
             photons_fit_final_metapr.resize(0);
             for ( Int_t n_photons_min = 0; n_photons_min < 6 ; n_photons_min++ ){
                 std::vector<double> obs_kfit;
@@ -4191,18 +4224,120 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
     for(UInt_t ig = 0; ig < threepi_etapi.GetNgamma(); ig++)
         true_im += threepi_etapi.GetTrueGammaLV(ig);
 
+    if(threepi_etapi.GetNgamma() == 6){
+     Double_t MCw_temp = 1.0; Double_t MCw_temp1 = 1.0; Double_t MCw_temp2 = 1.0; Double_t MCw_temp3 = 1.0;
+     Double_t MCw_tempb = 1.0; Double_t MCw_temp4 = 1.0; Double_t MCw_temp5 = 1.0; Double_t MCw_temp6 = 1.0;
+     Double_t MCw_tempc = 1.0; Double_t MCw_temp7 = 1.0; Double_t MCw_temp8 = 1.0; Double_t MCw_temp9 = 1.0;
+
      TLorentzVector three_pi0, three_pi1, three_pi2, proton_LV;
      three_pi0 = threepi_etapi.GetTrueNeutralPiLV(0);
      three_pi1 = threepi_etapi.GetTrueNeutralPiLV(1);
      three_pi2 = threepi_etapi.GetTrueNeutralPiLV(2);
      proton_LV = threepi_etapi.GetTrueProtonLV();
 
-    Double_t M = true_im.M()*1.0e3;
-    Double_t Mw = M;
-    if(M > 830.){
-        true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
-        true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi0+three_pi2).M2(), (three_pi1+proton_LV).M2());
-        true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
+     MCw_temp1 = GetWeight3pi1( (three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
+     if(MCw_temp1 > 0.){
+        MCw_temp *= MCw_temp1;
+     }
+     else
+        MCw_temp *=1.0;
+
+     MCw_temp2 = GetWeight3pi1( (three_pi0+three_pi2).M2(), (three_pi1+proton_LV).M2());
+     if(MCw_temp2 > 0.){
+        MCw_temp *= MCw_temp2;
+     }
+     else
+        MCw_temp *=1.0;
+
+     MCw_temp3 = GetWeight3pi1( (three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
+     if(MCw_temp3 > 0.){
+        MCw_temp *= MCw_temp3;
+     }
+     else
+        MCw_temp *=1.0;
+
+     MCw = TMath::Power(MCw_temp, 1./3.);
+
+
+
+     MCw_temp4 = GetWeight3pi2( (three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
+     if(MCw_temp4 > 0.){
+        MCw_tempb *= MCw_temp4;
+     }
+     else
+        MCw_tempb *=1.0;
+
+     MCw_temp5 = GetWeight3pi2( (three_pi0+three_pi2).M2(), (three_pi1+proton_LV).M2());
+     if(MCw_temp5 > 0.){
+        MCw_tempb *= MCw_temp5;
+     }
+     else
+        MCw_tempb *=1.0;
+
+     MCw_temp6 = GetWeight3pi2( (three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
+     if(MCw_temp6 > 0.){
+        MCw_tempb *= MCw_temp6;
+     }
+     else
+        MCw_tempb *=1.0;
+
+     MCw *= TMath::Power(MCw_tempb, 1./3.);
+
+
+     MCw_temp7 = GetWeight3pi3( (three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
+     if(MCw_temp7 > 0.){
+        MCw_tempc *= MCw_temp7;
+     }
+     else
+        MCw_tempc *=1.0;
+
+     MCw_temp8 = GetWeight3pi3( (three_pi0+three_pi2).M2(), (three_pi1+proton_LV).M2());
+     if(MCw_temp8 > 0.){
+        MCw_tempc *= MCw_temp8;
+     }
+     else
+        MCw_tempc *=1.0;
+
+     MCw_temp9 = GetWeight3pi3( (three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
+     if(MCw_temp9 > 0.){
+        MCw_tempc *= MCw_temp9;
+     }
+     else
+        MCw_tempc *=1.0;
+
+     MCw *= TMath::Power(MCw_tempc, 1./3.);
+
+//        MCw_temp4    = MCw_bkgd2->GetBinContent( MCw_bkgd2->FindBin((three_pi0+three_pi1).M2(),(three_pi2+proton_LV).M2()));
+//        if(MCw_temp4 > 0.){
+//            MCw_tempb *= MCw_temp4;
+//        }
+//        else{
+//           MCw_tempb *=1.0;
+//        }
+//        MCw_temp5    = MCw_bkgd2->GetBinContent( MCw_bkgd2->FindBin((three_pi0+three_pi2).M2(),(three_pi1+proton_LV).M2()));
+//        if(MCw_temp5 > 0.){
+//            MCw_tempb *= MCw_temp5;
+//        }
+//        else{
+//           MCw_tempb *= 1.0;
+//        }
+//        MCw_temp6    = MCw_bkgd2->GetBinContent( MCw_bkgd2->FindBin((three_pi1+three_pi2).M2(),(three_pi0+proton_LV).M2()));
+//        if(MCw_temp6 > 0.){
+//            MCw_tempb *= MCw_temp6;
+//        }
+//        else{
+//           MCw_tempb *= 1.0;
+//        }
+
+//        MCw *= TMath::Power(MCw_tempb, 1./3.);
+
+     Double_t M = true_im.M()*1.0e3;
+     Double_t Mw = M;
+        if(M > 830.){
+            true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
+            true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi0+three_pi2).M2(), (three_pi1+proton_LV).M2());
+            true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
+        }
     }
 
 
@@ -4222,6 +4357,258 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
 
 //    true_norm->Fill(1,MCw);
 
-    return 1.0;
+    return MCw;
+
+}
+
+double AdlarsonPhysics::GetWeight3pi1(Double_t M1sq, Double_t M2sq){
+
+    double r_c, r_temp, r_sum;
+    double ms1_c, ms2_c, ms1_temp, ms2_temp;
+    double r_min = 1.0e5;
+    double MCw_center, MCw_neighbor;
+    int x_n, y_n;
+
+    int xc = MCw_bkgd->GetXaxis()->FindBin(M1sq);
+    int yc = MCw_bkgd->GetYaxis()->FindBin(M2sq);
+
+    ms1_c = MCw_bkgd->GetXaxis()->GetBinCenter(xc);
+    ms2_c = MCw_bkgd->GetYaxis()->GetBinCenter(yc);
+
+    r_c = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc)*MCw_bkgd->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc)*MCw_bkgd->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    // test all 8 possibilities, from theta 0 - 360 deg, counter clock-wise
+    // 1) xbin + 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc)*MCw_bkgd->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    ms1_temp =  MCw_bkgd->GetXaxis()->GetBinCenter(xc+1);
+    ms2_temp = MCw_bkgd->GetYaxis()->GetBinCenter(yc);
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc ;
+    }
+    // 2) xbin + 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc + 1 ;
+    }
+    // 3) xbin + 0, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc)*MCw_bkgd->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc + 1 ;
+    }
+    // 4) xbin - 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc + 1;
+    }
+    // 5) xbin - 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc)*MCw_bkgd->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc ;
+    }
+    // 6) xbin - 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc - 1;
+    }
+    // 7) xbin + 0, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc)*MCw_bkgd->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc - 1;
+    }
+    // 8) xbin + 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc - 1;
+    }
+
+    MCw_center    = MCw_bkgd->GetBinContent(xc,yc);
+    MCw_neighbor  = MCw_bkgd->GetBinContent(x_n,y_n);
+
+    r_sum = r_min + r_c;
+
+    return MCw_center*(r_c/r_sum) + MCw_neighbor*(r_min/r_sum);
+
+}
+
+double AdlarsonPhysics::GetWeight3pi2(Double_t M1sq, Double_t M2sq){
+
+    double r_c, r_temp, r_sum;
+    double ms1_c, ms2_c, ms1_temp, ms2_temp;
+    double r_min = 1.0e5;
+    double MCw_center, MCw_neighbor;
+    int x_n, y_n;
+
+    int xc = MCw_bkgd2->GetXaxis()->FindBin(M1sq);
+    int yc = MCw_bkgd2->GetYaxis()->FindBin(M2sq);
+
+    ms1_c = MCw_bkgd2->GetXaxis()->GetBinCenter(xc);
+    ms2_c = MCw_bkgd2->GetYaxis()->GetBinCenter(yc);
+
+    r_c = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    // test all 8 possibilities, from theta 0 - 360 deg, counter clock-wise
+    // 1) xbin + 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    ms1_temp =  MCw_bkgd2->GetXaxis()->GetBinCenter(xc+1);
+    ms2_temp = MCw_bkgd2->GetYaxis()->GetBinCenter(yc);
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc ;
+    }
+    // 2) xbin + 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc + 1 ;
+    }
+    // 3) xbin + 0, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc + 1 ;
+    }
+    // 4) xbin - 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc + 1;
+    }
+    // 5) xbin - 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc ;
+    }
+    // 6) xbin - 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc - 1;
+    }
+    // 7) xbin + 0, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc - 1;
+    }
+    // 8) xbin + 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd2->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd2->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd2->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd2->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc - 1;
+    }
+
+    MCw_center    = MCw_bkgd2->GetBinContent(xc,yc);
+    MCw_neighbor  = MCw_bkgd2->GetBinContent(x_n,y_n);
+
+    r_sum = r_min + r_c;
+
+    return MCw_center*(r_c/r_sum) + MCw_neighbor*(r_min/r_sum);
+
+}
+
+double AdlarsonPhysics::GetWeight3pi3(Double_t M1sq, Double_t M2sq){
+
+    double r_c, r_temp, r_sum;
+    double ms1_c, ms2_c, ms1_temp, ms2_temp;
+    double r_min = 1.0e5;
+    double MCw_center, MCw_neighbor;
+    int x_n, y_n;
+
+    int xc = MCw_bkgd3->GetXaxis()->FindBin(M1sq);
+    int yc = MCw_bkgd3->GetYaxis()->FindBin(M2sq);
+
+    ms1_c = MCw_bkgd3->GetXaxis()->GetBinCenter(xc);
+    ms2_c = MCw_bkgd3->GetYaxis()->GetBinCenter(yc);
+
+    r_c = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    // test all 8 possibilities, from theta 0 - 360 deg, counter clock-wise
+    // 1) xbin + 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    ms1_temp =  MCw_bkgd3->GetXaxis()->GetBinCenter(xc+1);
+    ms2_temp = MCw_bkgd3->GetYaxis()->GetBinCenter(yc);
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc ;
+    }
+    // 2) xbin + 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc + 1 ;
+    }
+    // 3) xbin + 0, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc + 1 ;
+    }
+    // 4) xbin - 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc+1)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc+1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc + 1;
+    }
+    // 5) xbin - 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc ;
+    }
+    // 6) xbin - 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc-1)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc-1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc - 1;
+    }
+    // 7) xbin + 0, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc - 1;
+    }
+    // 8) xbin + 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((MCw_bkgd3->GetXaxis()->GetBinCenter(xc+1)*MCw_bkgd3->GetXaxis()->GetBinCenter(xc+1)-M1sq*M1sq)) + TMath::Abs((MCw_bkgd3->GetYaxis()->GetBinCenter(yc-1)*MCw_bkgd3->GetYaxis()->GetBinCenter(yc-1)-M2sq*M2sq)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc - 1;
+    }
+
+    MCw_center    = MCw_bkgd3->GetBinContent(xc,yc);
+    MCw_neighbor  = MCw_bkgd3->GetBinContent(x_n,y_n);
+
+    r_sum = r_min + r_c;
+
+    return MCw_center*(r_c/r_sum) + MCw_neighbor*(r_min/r_sum);
 
 }
