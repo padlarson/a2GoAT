@@ -55,7 +55,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     true_norm                   = new TH1D("true_norm", "normalisation factor between weighted and generated events", 1000, 0,1000.);
 // Beam energy
     true_BeamE                  = new GH1("true_BeamE", "True Beam Energy", 100, 1.400, 1.60);
-    true_BeamE_weight           = new GH1("true_BeamE_weight", "True Beam Energy weighted", 100, 1.40, 1.60);
+    true_BeamE_weight           = new GH1("true_BeamE_weight", "True Beam Energy weighted", 200, 1.40, 1.60);
     tag_BeamE                   = new GH1("tag_BeamE", "Tagged Beam Energy", 75, 1400, 1600);
 
     true_imng                   = new TH1D("true_imng", "IM(Ng) true for 3#pi and #eta#pi", 400, 400., 1200.);
@@ -3310,22 +3310,29 @@ Int_t AdlarsonPhysics::diff_distr(const Double_t beam_e, TLorentzVector &fin ){
     etapr_cm.Boost(cm_vector);
     Double_t angle = etapr_cm.Theta();
     Double_t x = TMath::Cos( angle );
+    double width;
 
     Int_t ee = -100;
-    if( beam_e < Legendre[1] )
+    if( beam_e < (Legendre[0]+3.25) )
          ee = 0;
-    else if( beam_e >= Legendre[77] )
+    else if( beam_e >= (Legendre[66]-6.5) )
          ee = 11;
     else{
+
+        if(beam_e < 1473.1)
+            width = 3.25;
+        else
+            width = 6.5;
+
         bool energy_region = false;
-        int k = 7;
-        while(! energy_region && k < 71){
-            if( ( beam_e >= Legendre[k] ) && ( beam_e < Legendre[k+1] ) ){
-                 ee = k/7;
+        int k = 6;
+        while(! energy_region && k < 61){
+            if( ( beam_e >= (Legendre[k]-width) ) && ( beam_e < (Legendre[k+6]+width) ) ){
+                 ee = k/6;
                  energy_region = true;
             }
             else
-                k += 7;
+                k += 6;
         }
     }
     return diffbin = ee*20 + int((1. + x)/0.2);
@@ -4125,6 +4132,8 @@ Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame, TLorentzVector eta
     Int_t ee = -100;
     TLorentzVector sqrt_s(0.,0., be, be+MASS_PROTON);
 
+    double width;
+
 //    etapr_true[0] = etapr_6gTrue.GetTrueEtaLV();
 //    etapr_true[1] = etapr_6gTrue.GetTrueNeutralPiLV(0);
 //    etapr_true[2] = etapr_6gTrue.GetTrueNeutralPiLV(1);
@@ -4150,54 +4159,95 @@ Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame, TLorentzVector eta
     leg3 = (0.5)*( 5.*TMath::Power(x,3) - 3.*x );
     leg4 = (0.125)*( 35.*TMath::Power(x,4) - 30.*TMath::Power(x,2.) + 3.);
 
-    if(be >= Legendre[0] && be < Legendre[1]){
-        N   =   Legendre[0+2];
-        c1  =   Legendre[0+3];
-        c2  =   Legendre[0+4];
-        c3  =   Legendre[0+5];
-        c4  =   Legendre[0+6];
+    if(be <= Legendre[0]){
+        width = 6.5;
+        N   =   Legendre[0+1];
+        c1  =   Legendre[0+2];
+        c2  =   Legendre[0+3];
+        c3  =   Legendre[0+4];
+        c4  =   Legendre[0+5];
 
         w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+        w /= width;
         ee = 0;
     }
-    else if(be >= (Legendre[77])){
-        N   =   Legendre[77+2];
-        c1  =   Legendre[77+3];
-        c2  =   Legendre[77+4];
-        c3  =   Legendre[77+5];
-        c4  =   Legendre[77+6];
+    else if(be >= (Legendre[66])){
+        width = 13.;
+        N   =   Legendre[66+1];
+        c1  =   Legendre[66+2];
+        c2  =   Legendre[66+3];
+        c3  =   Legendre[66+4];
+        c4  =   Legendre[66+5];
 
         w = N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+        w /= width;
         ee = 11;
     }
     else{
         bool be_range = true;
         int k = 0;
-        while( be_range && ( k < 71 ) ){
-            if( be >= Legendre[k] && be < Legendre[k+1] ){
+        while( be_range && ( k < 61 ) ){
+            if( be >= Legendre[k] && be < Legendre[k+6] ){
                 be_range = false;
-                ee = k/7;
+                ee = k/6;
             }
             else
-                k += 7;
+                k += 6;
         }
 
-        N   =   Legendre[k+2];
-        c1  =   Legendre[k+3];
-        c2  =   Legendre[k+4];
-        c3  =   Legendre[k+5];
-        c4  =   Legendre[k+6];
+        N   =   Legendre[k+1];
+        c1  =   Legendre[k+2];
+        c2  =   Legendre[k+3];
+        c3  =   Legendre[k+4];
+        c4  =   Legendre[k+5];
 
-        w =  N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+        w1 =  N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+
+        N   =   Legendre[k+7];
+        c1  =   Legendre[k+8];
+        c2  =   Legendre[k+9];
+        c3  =   Legendre[k+10];
+        c4  =   Legendre[k+11];
+
+        w2 =  N*leg0 + c1*leg1 + c2*leg2 + c3*leg3 + c4*leg4;
+
+        //should add up to 1
+
+        if(be < 1469.8){
+            width = 6.5;
+            double frac1 = (1- (be-Legendre[k+0])/width);
+            double frac2 = (1- (Legendre[k+6]-be)/width);
+            w = (frac1*w1 + frac2*w2)/width;
+        }
+        else if((be >= 1469.8) && (be < 1473.05 )){
+            width = 6.5;
+//            double frac1 = (1- (be-Legendre[k+0])/width);
+//            double frac2 = (1- (Legendre[k+6]-be)/width);
+//            w = (frac1*w1 + frac2*w2)/width;
+            w = w1/width;
+        }
+        else if((be >= 1473.05) && (be < 1479.5 )){
+            width = 13.;
+//            double frac1 = (1- (be-Legendre[k+0])/width);
+//            double frac2 = (1- (Legendre[k+6]-be)/width);
+//            w = (frac1*w1 + frac2*w2)/width;
+            w = w2/width;
+        }
+
+        else{
+            width = 13.;
+            double frac1 = (1- (be-Legendre[k+0])/width);
+            double frac2 = (1- (Legendre[k+6]-be)/width);
+            w = (frac1*w1 + frac2*w2)/width;
+        }
+
+
+
+
     }
+//        w /= width;
 
-    if(ee < 4)
-        w /= 6.5;
-    else
-        w /= 13.;
-
-     w /= 104.4736;
-//    w*= (100000./4700.); // to be used for the case when the diff distribution is used
+     w /= 104.44028;
 
     TLorentzVector eta_pr_all = etapr_true[0] + etapr_true[1] + etapr_true[2];
     Int_t bin =  diff_distr( be, eta_pr_all );
@@ -4307,29 +4357,6 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
 
      MCw *= TMath::Power(MCw_tempc, 1./3.);
 
-//        MCw_temp4    = MCw_bkgd2->GetBinContent( MCw_bkgd2->FindBin((three_pi0+three_pi1).M2(),(three_pi2+proton_LV).M2()));
-//        if(MCw_temp4 > 0.){
-//            MCw_tempb *= MCw_temp4;
-//        }
-//        else{
-//           MCw_tempb *=1.0;
-//        }
-//        MCw_temp5    = MCw_bkgd2->GetBinContent( MCw_bkgd2->FindBin((three_pi0+three_pi2).M2(),(three_pi1+proton_LV).M2()));
-//        if(MCw_temp5 > 0.){
-//            MCw_tempb *= MCw_temp5;
-//        }
-//        else{
-//           MCw_tempb *= 1.0;
-//        }
-//        MCw_temp6    = MCw_bkgd2->GetBinContent( MCw_bkgd2->FindBin((three_pi1+three_pi2).M2(),(three_pi0+proton_LV).M2()));
-//        if(MCw_temp6 > 0.){
-//            MCw_tempb *= MCw_temp6;
-//        }
-//        else{
-//           MCw_tempb *= 1.0;
-//        }
-
-//        MCw *= TMath::Power(MCw_tempb, 1./3.);
 
      Double_t M = true_im.M()*1.0e3;
      Double_t Mw = M;
@@ -4339,23 +4366,6 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
             true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
         }
     }
-
-
-
-//    true_phy_3pi_IMpipi_v_IMppi
-
-
-//    if( Mw < 650. )
-//        Mw = 650;
-//    else if(Mw > 1020.)
-//        Mw = 1020.;
-
-//    MCw    = MCw_bkgd->GetBinContent( MCw_bkgd->FindBin(Mw));
-//    MCw *= (100000./96057.8);
-
-//    true_imng->Fill(M, MCw);
-
-//    true_norm->Fill(1,MCw);
 
     return MCw;
 
