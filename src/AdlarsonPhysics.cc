@@ -423,8 +423,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     PDF_cut_file              = new TFile("configfiles/cuts/PDF_cut.root");
     PDF_cut                   = (TCutG*)PDF_cut_file->Get("CUTG")->Clone();
-    GHistBGSub::InitCuts(-12., 12., -50., -15.);
-    GHistBGSub::AddRandCut(15., 50.);
+    GHistBGSub::InitCuts(-12., 12., -72., -12.);
+    GHistBGSub::AddRandCut(12., 72.);
 
 //  For final states including 6g
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
@@ -1234,10 +1234,13 @@ void	AdlarsonPhysics::ProcessEvent()
 
     time_nr_FinalClusterSel.Fill(FinalClusterSelection.size());
 
+    TLorentzVector IM6_vec;
+    IM6_vec.SetPxPyPzE(0., 0., 0., 0.);
     if(FinalClusterSelection.size() == 7){
         for(UInt_t p = 0; p < FinalClusterSelection.size() ; p++){
             UInt_t q = FinalClusterSelection[p];
                 if(q != iprtrack){
+                    IM6_vec += GetTracks()->GetVector(q);
                     if(MC_weight)
                         six_rec_EvTh_6g->FillWeighted(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q), MCw);
                     else
@@ -1246,11 +1249,14 @@ void	AdlarsonPhysics::ProcessEvent()
         }
     }
 
+    Double_t mass_hyp = IM6_vec.M();
+
     //    Kinfit_test();  // runs kinematical fit with true observables- for testing purposes
 
     MMp_vec.SetPxPyPzE(0., 0., 0., 0.);
 
     if( (iprtrack == 10000) || (nrprotons == 0) ) return;
+    if( mass_hyp < 600. || mass_hyp > 1200.) return;
 
     // correction of proton from comparing true to reconstructed proton theta for MC eta prime'
     Double_t dth2 = TAPSth_corr[GetTracks()->GetCentralCrystal(iprtrack)];
@@ -1509,7 +1515,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile){
 void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 {
     for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++){
-        if(TMath::Abs(GetTagger()->GetTaggedTime(tag))> 50.) continue;
+        if(TMath::Abs(GetTagger()->GetTaggedTime(tag))> 72.) continue;
 
         Double_t chi2_min = 1.0e6;
         Double_t prob_min = 1.0e6;
@@ -1744,7 +1750,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
     vec_M_pipi_pr.resize(0);
 
     for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++){
-        if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 50.) continue;
+        if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 72.) continue;
         Double_t chi2_min = 1.0e6;
         Double_t prob_min = 1.0e6;
 
@@ -2182,10 +2188,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                else{
                     six_fit_IM_eta2pi0_b->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                     six_rec_IM_eta2pi->Fill(IM6g_vec.M(), GetTagger()->GetTaggedTime(tag) );
-                    if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 12.)
-                        six_fit_IM_eta2pi_prompt->Fill(etap_fit_final.M());
-                    else
-                        six_fit_IM_eta2pi_random->Fill(etap_fit_final.M());
 
                }
 
@@ -2381,6 +2383,11 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    six_fit_best_2pi_rec->Fill( rc_sig[2].M(), GetTagger()->GetTaggedTime(tag)  );
 
                    six_fit_IM_eta2pi->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
+                   if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 12.)
+                       six_fit_IM_eta2pi_prompt->Fill(etap_fit_final.M());
+                   else
+                       six_fit_IM_eta2pi_random->Fill(etap_fit_final.M());
+
                    six_fit_etaprfinal_pdf->Fill( probmin_eta2pi, GetTagger()->GetTaggedTime(tag) );
                    six_fit_eta_PDF_v_Metapr->Fill( probmin_eta2pi, etap_fit_final.M(),GetTagger()->GetTaggedTime(tag));
                }
