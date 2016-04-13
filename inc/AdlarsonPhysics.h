@@ -41,18 +41,18 @@ private:
     GH1*            true_BeamE_weight;
     TH1*            true_norm; // normalisation factor
 
-    GHistBGSub2*    true_th_p_v_th_etapr_CM;
-    GHistBGSub2*    true_th_v_E_p;
-    GHistBGSub2*    true_th_v_E_eta_g;
-    GHistBGSub2*    true_th_v_E_eta_6g;
-    GHistBGSub2*    true_th_v_E_pi0_g;
+    TH2*            true_th_p_v_th_etapr_CM;
+    TH2*    true_th_v_E_p;
+    TH2*    true_th_v_E_eta_g;
+    TH2*    true_th_v_E_eta_6g;
+    TH2*    true_th_v_E_pi0_g;
     // Kinfit tests
-    GHistBGSub2*    true_six_dth_vs_th_p;
-    GHistBGSub2*    true_six_dR_vs_R_p;
-    GHistBGSub2*    true_six_dR_vs_det_p;
-    GHistBGSub2*    true_six_fit_dz_v_z;
-    GHistBGSub2*    fit_six_fit_dz_v_z;
-    GHistBGSub2*    true_six_fit_dz_v_p_th;
+    TH2*    true_six_dth_vs_th_p;
+    TH2*    true_six_dR_vs_R_p;
+    TH2*    true_six_dR_vs_det_p;
+    TH2*    true_six_fit_dz_v_z;
+    TH2*    fit_six_fit_dz_v_z;
+    TH2*    true_six_fit_dz_v_p_th;
     GH1*            true_z_after_fit;
     GH1*            true_z_after_final_fit;
     // Physics Results
@@ -68,34 +68,34 @@ private:
     TH1*            true_M_etapi_e2p;
     TH1*            true_imng;
 
-    GHistBGSub2*    true_six_phy_DP_020;
-    GHistBGSub2*    true_six_phy_DP_015;
-    GHistBGSub2*    true_six_phy_DP_010;
-    GHistBGSub2*    true_six_phy_DP_005;
-    GHistBGSub2*    true_six_phy_DP_020_pr;
-    GHistBGSub2*    true_six_phy_DP_015_pr;
-    GHistBGSub2*    true_six_phy_DP_010_pr;
-    GHistBGSub2*    true_six_phy_DP_005_pr;
+    TH2*    true_six_phy_DP_020;
+    TH2*    true_six_phy_DP_015;
+    TH2*    true_six_phy_DP_010;
+    TH2*    true_six_phy_DP_005;
+    TH2*    true_six_phy_DP_020_pr;
+    TH2*    true_six_phy_DP_015_pr;
+    TH2*    true_six_phy_DP_010_pr;
+    TH2*    true_six_phy_DP_005_pr;
 
     // in 6g analaysis
-    GHistBGSub2*    true_six_phy_dX_v_DPbin;
-    GHistBGSub2*    true_six_phy_dY_v_DPbin;
-    GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi;
+    TH2*    true_six_phy_dX_v_DPbin;
+    TH2*    true_six_phy_dY_v_DPbin;
+    TH2*    true_six_phy_dMpipi_v_Mpipi;
     TH2*            true_phy_3pi_IMpipi_v_IMppi;
-    GHistBGSub2*    true_six_phy_dX_v_X;
-    GHistBGSub2*    true_six_phy_dY_v_Y;
+    TH2*    true_six_phy_dX_v_X;
+    TH2*    true_six_phy_dY_v_Y;
 
     // for m_etapr forced in kinfit
-    GHistBGSub2*    true_six_phy_dX_v_DPbin_metapr;
-    GHistBGSub2*    true_six_phy_dY_v_DPbin_metapr;
-    GHistBGSub2*    true_six_phy_dMpipi_v_Mpipi_metapr;
-    GHistBGSub2*    true_six_phy_dX_v_X_metapr;
-    GHistBGSub2*    true_six_phy_dY_v_Y_metapr;
+    TH2*    true_six_phy_dX_v_DPbin_metapr;
+    TH2*    true_six_phy_dY_v_DPbin_metapr;
+    TH2*    true_six_phy_dMpipi_v_Mpipi_metapr;
+    TH2*    true_six_phy_dX_v_X_metapr;
+    TH2*    true_six_phy_dY_v_Y_metapr;
 
     // in 10g analysis
-    GHistBGSub2*    true_ten_phy_dMpipi_v_Mpipi;
-    GHistBGSub2*    true_ten_phy_dX_v_DPbin;
-    GHistBGSub2*    true_ten_phy_dY_v_DPbin;
+    TH2*    true_ten_phy_dMpipi_v_Mpipi;
+    TH2*    true_ten_phy_dX_v_DPbin;
+    TH2*    true_ten_phy_dY_v_DPbin;
 
     // Tagger related
     GH1*            tag_BeamE;
@@ -309,8 +309,8 @@ private:
     GHistBGSub2*    six_fit_fitted_dth_v_eth;
     GHistBGSub2*    six_fit_fitted_p_th_v_det;
     GHistBGSub2*    six_fit_fitted_p_fi_v_det;
-    GHistBGSub2*    six_fit_true_p_th_v_det;
-    GHistBGSub2*    six_fit_true_p_fi_v_det;
+    TH2*    six_fit_true_p_th_v_det;
+    TH2*    six_fit_true_p_fi_v_det;
     GHistBGSub2*    six_fit_mgg_v_eth_BaF2;
     GHistBGSub2*    six_fit_mgg_v_eth_PbWO4;
     GHistBGSub2*    six_fit_mgg_v_e_BaF2;
@@ -346,6 +346,24 @@ private:
     GH1*            six_phy_DP_005_pr;
     GH1*            six_phy_M_pi1pi2_v_etapr_fit;
     GH1*            six_phy_M_etapi_v_etapr_fit;
+
+    TH2*	six_phy_DP_020_prompt;
+    TH2*	six_phy_DP_015_prompt;
+    TH2*	six_phy_DP_010_prompt;
+    TH2*	six_phy_DP_005_prompt;
+    TH2*	six_phy_DP_020_rnd;
+    TH2*	six_phy_DP_015_rnd;
+    TH2*	six_phy_DP_010_rnd;
+    TH2*	six_phy_DP_005_rnd;
+
+    TH1*	six_fit_IM_eta2pi_prompt;
+    TH1*	six_fit_IM_eta2pi_random;
+
+    TH2*	six_phy_M_pi1pi2_v_etapr_prompt;
+    TH2*	six_phy_M_pi1pi2_v_etapr_random;
+
+    TH2*	six_phy_M_etapi_v_etapr_prompt;
+    TH2*	six_phy_M_etapi_v_etapr_random;
 
     TString     tree_file_name;
     const int    MAX_LENGTH  =30;
