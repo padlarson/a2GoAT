@@ -2218,7 +2218,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                                     }
                             }
                             else{
-                                six_fit_IM_eta2pi0_d->Fill( etap_fit_final.M()+mass_shift, GetTagger()->GetTaggedTime(tag) );
+                                six_fit_IM_eta2pi0_d->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                                 for(int ietapr = 0; ietapr < 6; ietapr++){
                                     int nEN =  int(photons_rec[imin_eta2pi[ietapr]].E()/20.);
                                     int nTH =  75*int(photons_rec[imin_eta2pi[ietapr]].Theta()*TMath::RadToDeg()/1.0);
@@ -2227,7 +2227,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                                     if( GetTracks()->HasCB( set_min[imin_eta2pi[ietapr]+2]) ){
                                             IM6g_v_det_etaprrec_CB->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
-                                            IM6g_v_det_etaprfit_CB->Fill( etap_fit_final.M()+mass_shift, detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
+                                            IM6g_v_det_etaprfit_CB->Fill( etap_fit_final.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
                                     }
                                     else{
                                             IM6g_v_det_etaprrec_TAPS->Fill( IM6g_vec.M(), detnr[imin_eta2pi[ietapr]], GetTagger()->GetTaggedTime(tag));
@@ -3540,48 +3540,6 @@ std::vector<double> AdlarsonPhysics::Get_unc_R(Int_t apparatus_nr, Int_t particl
 
         Ek_s    = g_e->GetBinContent( g_e->FindBin(Ek,theta) );
 
-//                e_g     = g_e_c1->GetBinContent(g_e_c1->FindBin(Ek,theta) );
-//                th_g    = g_th_c1->GetBinContent(g_th_c1->FindBin(Ek,theta) );
-//                fi_g    = g_fi_c1->GetBinContent(g_fi_c1->FindBin(Ek,theta) );
-
-//                if( TMath::Abs(e_g) < 1.0e-5){
-//                    e_g = 1.0;
-//                    Double_t g_corr_tmp = 1.0;
-//                    if(Ek < 50.){
-//                        bool loop = true;
-//                        double dE = 10.;
-//                        while(loop && dE < 50.){
-//                            g_corr_tmp = (Double_t)g_e_c1->GetBinContent(g_e_c1->FindBin(Ek+dE,theta) );
-//                            if(TMath::Abs(g_corr_tmp) > 1.0e-5){
-//                                loop = false;
-//                                e_g = g_corr_tmp;
-//                            }
-//                            else{
-//                                dE += 10.;
-//                            }
-
-//                        }
-//                    }
-//                    else if(Ek > 200.){
-//                        bool loop = true;
-//                        double dE = 10;
-//                        while(loop && dE < 250.){
-//                            g_corr_tmp = (Double_t)g_e_c1->GetBinContent(g_e_c1->FindBin(Ek-dE,theta) );
-//                            if(TMath::Abs(g_corr_tmp) > 1.0e-5){
-//                                loop = false;
-//                                e_g = g_corr_tmp;
-//                            }
-//                            else{
-//                                dE += 10.;
-//                            }
-//                        }
-//                    }
-//                    else
-//                        e_g = 1.0;
-//                }
-
-//        Ek_s *= e_g;
-
         Phi_s   = g_phi->GetBinContent( g_phi->FindBin(Ek,theta) );
         Phi_s   *= TMath::DegToRad();
 
@@ -3954,8 +3912,6 @@ void AdlarsonPhysics::Energy_corr()
 
             tracks->SetClusterEnergy(i, Ec);
 
-
-
         }
         else if(GetTracks()->HasTAPS(i) )
         {
@@ -4068,6 +4024,7 @@ TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, c
     else{   // TAPS
         E = EkPThPhi[0];
         P = EkPThPhi[1];
+
 
         if(mass > 900.)
             R  =    X0_TAPS*TMath::Log((E-MASS_PROTON)/Ec_TAPS)/TMath::Log(2.);
