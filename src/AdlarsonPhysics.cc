@@ -423,8 +423,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     PDF_cut_file              = new TFile("configfiles/cuts/PDF_cut.root");
     PDF_cut                   = (TCutG*)PDF_cut_file->Get("CUTG")->Clone();
-    GHistBGSub::InitCuts(-12., 12., -72., -12.);
-    GHistBGSub::AddRandCut(12., 72.);
+    GHistBGSub::InitCuts(-8., 8., -88., -8.);
+    GHistBGSub::AddRandCut(8., 88.);
 
 //  For final states including 6g
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
@@ -857,6 +857,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     settings_metapr.MaxIterations = 40;
 
 //    settings.DebugLevel = 5;
+//    settings_eta2pi.DebugLevel = 5;
     kinfit.SetSettings(settings);
     kinfiteta2pi.SetSettings(settings_eta2pi);
     kinfit3pi.SetSettings(settings_3pi);
