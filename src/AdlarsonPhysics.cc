@@ -1516,7 +1516,7 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile){
 void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 {
     for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++){
-        if(TMath::Abs(GetTagger()->GetTaggedTime(tag))> 72.) continue;
+        if(TMath::Abs(GetTagger()->GetTaggedTime(tag))> 88.) continue;
 
         Double_t chi2_min = 1.0e6;
         Double_t prob_min = 1.0e6;
@@ -1751,7 +1751,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
     vec_M_pipi_pr.resize(0);
 
     for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++){
-        if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 72.) continue;
+        if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 88.) continue;
         Double_t chi2_min = 1.0e6;
         Double_t prob_min = 1.0e6;
 
@@ -2103,8 +2103,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                // filling results in vector for Tree
                if(!MC)
-                    if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 12.)
-                        vec_weight.push_back(-24./70.);
+                    if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) > 8.)
+                        vec_weight.push_back(-16./160.);
                     else
                         vec_weight.push_back(1.0);
                else
@@ -2437,7 +2437,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    six_phy_DP_010->Fill(DP_binnr_fit010, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                    six_phy_DP_005->Fill(DP_binnr_fit005, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
 
-                   if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 12.){
+                   if(TMath::Abs(GetTagger()->GetTaggedTime(tag)) < 8.){
                        six_phy_DP_020_prompt->Fill(DP_binnr_fit020, etap_fit_final.M());
                        six_phy_DP_015_prompt->Fill(DP_binnr_fit015, etap_fit_final.M());
                        six_phy_DP_010_prompt->Fill(DP_binnr_fit010, etap_fit_final.M());
