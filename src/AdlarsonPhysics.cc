@@ -230,7 +230,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    six_fit_Pulls_p_phi_vs_det_TAPS    = new GHistBGSub2("six_fit_Pulls_p_phi_vs_det_TAPS", "Pulls proton #phi vs #theta TAPS", 440, 0, 440, 100, -10., 10.);
 
     six_fit_mgg_v_eth               = new GHistBGSub2("six_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 13500, 0, 13500, 50, 0., 250.);
-    six_rec_m6g_sig_v_eth           = new GHistBGSub2("six_rec_m6g_sig_v_eth", "m_{6#gamma} for eta prime decay products; E (MeV); #theta", 13500, 0, 13500, 80, 800., 1200.);
+    six_rec_m6g_sig_v_eth           = new GHistBGSub2("six_rec_m6g_sig_v_eth", "m_{6#gamma} for eta prime decay products; E (MeV); #theta", 1500, 0, 1500, 80, 600., 1200.);
 
     six_fit_fitted_p_th_v_det       = new GHistBGSub2("six_fit_fitted_p_th_v_det", "fitted proton theta vs theta rec", 440, 0, 440, 120, -3.0, 3.0);
     six_fit_fitted_p_fi_v_det       = new GHistBGSub2("six_fit_fitted_p_fi_v_det", "fitted proton fi vs phi rec", 440, 0, 440, 200, -10.0, 10.0);
@@ -2203,8 +2203,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                             if(MC_weight){
                                 six_fit_IM_eta2pi0_d->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
                                 for(int ietapr = 0; ietapr < 6; ietapr++){
-                                   int nEN =  int(photons_rec[imin_eta2pi[ietapr]].E()/20.);
-                                   int nTH =  75*int(photons_rec[imin_eta2pi[ietapr]].Theta()*TMath::RadToDeg()/1.0);
+                                   int nEN =  int(photons_rec[imin_eta2pi[ietapr]].E()/40.);
+                                   int nTH =  30*int(photons_rec[imin_eta2pi[ietapr]].Theta()*TMath::RadToDeg()/4.0);
                                    int nBIN = nEN + nTH;
                                    six_rec_m6g_sig_v_eth->FillWeighted(nBIN, IM6g_vec.M(), MCw );
 
