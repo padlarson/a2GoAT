@@ -2221,8 +2221,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                             else{
                                 six_fit_IM_eta2pi0_d->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                                 for(int ietapr = 0; ietapr < 6; ietapr++){
-                                    int nEN =  int(photons_rec[imin_eta2pi[ietapr]].E()/20.);
-                                    int nTH =  75*int(photons_rec[imin_eta2pi[ietapr]].Theta()*TMath::RadToDeg()/1.0);
+                                    int nEN =  int(photons_rec[imin_eta2pi[ietapr]].E()/40.);
+                                    int nTH =  30*int(photons_rec[imin_eta2pi[ietapr]].Theta()*TMath::RadToDeg()/4.0);
                                     int nBIN = nEN + nTH;
                                     six_rec_m6g_sig_v_eth->Fill(nBIN, IM6g_vec.M(), GetTagger()->GetTaggedTime(tag) );
 
