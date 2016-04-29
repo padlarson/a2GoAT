@@ -41,6 +41,7 @@ public:
             Int_t           GetTaggedChannel(const Int_t index) const	{return taggedChannel[index];}
     const	Double_t*       GetTaggedTime()                     const	{return taggedTime;}
             Double_t        GetTaggedTime(const Int_t index)    const	{return taggedTime[index];}
+    void                    SetTaggedTime(const Int_t index, Double_t t_new) {taggedTime[index] = t_new;}
     const	Double_t*       GetTaggedEnergy()                   const	{return taggedEnergy;}
     void                    SetTaggedEnergy(const Int_t index, Double_t E_new) {taggedEnergy[index] = E_new;}
             Double_t        GetTaggedEnergy(const Int_t index)	const	{if(hasEnergy) return taggedEnergy[index]; return calibration[taggedChannel[index]];}
