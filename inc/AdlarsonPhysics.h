@@ -99,6 +99,7 @@ private:
 
     // Tagger related
     GH1*            tag_BeamE;
+    Double_t        tagger_min, tagger_max;
 
     // Proton related
     Double_t        TOF_CB;
@@ -124,6 +125,7 @@ private:
     GHistBGSub2*    p_E_v_TOF_after_kfit_2;
 
     GHistBGSub*     CB_EnergySum;
+    GHistBGSub*     CB_EnergySum_2;
     GHistBGSub*     CB_EnergySum_2pi0;
     GHistBGSub*     CB_EnergySum_etapi0;
     GHistBGSub*     CB_EnergySum_3pi0;
@@ -309,8 +311,8 @@ private:
     GHistBGSub2*    six_fit_fitted_dth_v_eth;
     GHistBGSub2*    six_fit_fitted_p_th_v_det;
     GHistBGSub2*    six_fit_fitted_p_fi_v_det;
-    TH2*    six_fit_true_p_th_v_det;
-    TH2*    six_fit_true_p_fi_v_det;
+    TH2*            six_fit_true_p_th_v_det;
+    TH2*            six_fit_true_p_fi_v_det;
     GHistBGSub2*    six_fit_mgg_v_eth_BaF2;
     GHistBGSub2*    six_fit_mgg_v_eth_PbWO4;
     GHistBGSub2*    six_fit_mgg_v_e_BaF2;
@@ -339,6 +341,8 @@ private:
     GHistBGSub2*    six_phy_DP_005;
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
     GHistBGSub2*    six_phy_M_etapi_v_etapr;
+    GHistBGSub2*    six_phy_M_pi1pi2_v_etapr2;
+    GHistBGSub2*    six_phy_M_etapi_v_etapr2;
 
     GH1*            six_phy_DP_020_pr;
     GH1*            six_phy_DP_015_pr;
@@ -346,6 +350,8 @@ private:
     GH1*            six_phy_DP_005_pr;
     GH1*            six_phy_M_pi1pi2_v_etapr_fit;
     GH1*            six_phy_M_etapi_v_etapr_fit;
+    GH1*            six_phy_M_pi1pi2_v_etapr_fit2;
+    GH1*            six_phy_M_etapi_v_etapr_fit2;
 
     TH2*	six_phy_DP_020_prompt;
     TH2*	six_phy_DP_015_prompt;
@@ -580,8 +586,8 @@ private:
     std::vector<Double_t> R_TAPS;
     std::vector<Double_t> R_TAPS_corr;
 
-    typedef std::pair<UInt_t, std::vector<Double_t>> EPT_TAPS_pair;
-    std::map<UInt_t, std::vector<Double_t>> TOF_corr;
+    typedef std::pair<Int_t, std::vector<Double_t>> time_pair;
+    std::map<UInt_t, std::vector<Double_t>> MC_time_jump;
 
 
     typedef std::pair<std::vector<Int_t>, Double_t> comb;
@@ -758,10 +764,12 @@ public:
     void            CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
-    void TrueAnalysis_etapr6g();
+    void TrueAnalysis_etapr6g(TString s);
     void TrueAnalysis_etapr10g();
     Double_t TrueAnalysis_threepi_etapi(); // returns weight as function of IM(ng);
     Double_t Get_etapr_weight_MC(Double_t beame, TLorentzVector eta_pr[2]);
+
+    Double_t Get_ESum();
 
     double GetWeight3pi1(Double_t M1sq, Double_t M2sq);
     double GetWeight3pi2(Double_t M1sq, Double_t M2sq);
