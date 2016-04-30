@@ -855,18 +855,18 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    kinfit.AddUnmeasuredVariable("v_z"); // default value 0
 
     APLCON::Fit_Settings_t settings = kinfit.GetSettings();
-    settings.MaxIterations = 25;
+    settings.MaxIterations = 30;
 
 
     // 25, 35, 35, 35
     // 30 40 40 40
 
     APLCON::Fit_Settings_t settings_eta2pi = kinfiteta2pi.GetSettings();
-    settings_eta2pi.MaxIterations = 25;
+    settings_eta2pi.MaxIterations = 30;
     APLCON::Fit_Settings_t settings_3pi = kinfit3pi.GetSettings();
-    settings_3pi.MaxIterations = 25;
+    settings_3pi.MaxIterations = 30;
     APLCON::Fit_Settings_t settings_metapr = kinfit_final.GetSettings();
-    settings_metapr.MaxIterations = 25;
+    settings_metapr.MaxIterations = 30;
 
 //    settings.DebugLevel = 5;
 //    settings_eta2pi.DebugLevel = 5;
