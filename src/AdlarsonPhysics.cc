@@ -322,11 +322,11 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_phy_M_pi1pi2_v_etapr_fit= new GH1("six_phy_M_pi1pi2_v_etapr_fit", "Fitted M_{#pi#pi,fit}^{2} 6#gamma with metapr fit", 200 , 0.0, 200.);
     six_phy_M_etapi_v_etapr_fit = new GH1("six_phy_M_etapi_v_etapr_fit", "Fitted M_{#eta#pi,fit}^{2} 6#gamma with metapr fit", 400 , 400.0, 800.);
 
-    six_phy_M_pi1pi2_v_etapr2    = new GHistBGSub2("six_phy_M_pi1pi2_v_etapr2", "Fitted M_{#pi#pi,fit} 6#gamma", 400 , 0.2, 0.6, 250, 800., 1050. );
-    six_phy_M_etapi_v_etapr2     = new GHistBGSub2("six_phy_M_etapi_v_etapr2", "Fitted M_{#eta#pi,fit} 6#gamma", 400 , 0.6, 1., 250, 800., 1050. );
+    six_phy_M_pi1pi2_v_etapr2    = new GHistBGSub2("six_phy_M_pi1pi2_v_etapr2", "Fitted M_{#pi#pi,fit} 6#gamma", 400 , 200, 600, 250, 800., 1050. );
+    six_phy_M_etapi_v_etapr2     = new GHistBGSub2("six_phy_M_etapi_v_etapr2", "Fitted M_{#eta#pi,fit} 6#gamma", 400 , 600, 1000, 250, 800., 1050. );
 
-    six_phy_M_pi1pi2_v_etapr_fit2= new GH1("six_phy_M_pi1pi2_v_etapr_fit2", "Fitted M_{#pi#pi,fit} 6#gamma with metapr fit", 400 , 0.2, 0.6);
-    six_phy_M_etapi_v_etapr_fit2 = new GH1("six_phy_M_etapi_v_etapr_fit2", "Fitted M_{#eta#pi,fit} 6#gamma with metapr fit", 400 , 0.6, 1.);
+    six_phy_M_pi1pi2_v_etapr_fit2= new GH1("six_phy_M_pi1pi2_v_etapr_fit2", "Fitted M_{#pi#pi,fit} 6#gamma with metapr fit", 400 , 200, 600);
+    six_phy_M_etapi_v_etapr_fit2 = new GH1("six_phy_M_etapi_v_etapr_fit2", "Fitted M_{#eta#pi,fit} 6#gamma with metapr fit", 400 , 600, 1000);
 
     // to check the energy of the  eta pi0 system vs its inv mass
     six_fit_best_eta_IM_v_E     = new GHistBGSub2("six_fit_best_eta_IM_v_E", "E_{#eta} vs M_{#eta}", 80, 400., 1200., 100, 300., 800.);
@@ -2445,9 +2445,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    six_phy_M_etapi_v_etapr->FillWeighted(m_etapi01_fit / 1.0e3, etap_fit_final.M()+mass_shift, MCw);
                    six_phy_M_etapi_v_etapr->FillWeighted(m_etapi02_fit / 1.0e3, etap_fit_final.M()+mass_shift, MCw);
 
-                   six_phy_M_pi1pi2_v_etapr2->FillWeighted(TMath::Sqrt(m_2pi0_fit / 1.0e6), etap_fit_final.M()+mass_shift, MCw);
-                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi01_fit / 1.0e6), etap_fit_final.M()+mass_shift, MCw);
-                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi02_fit / 1.0e6), etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_pi1pi2_v_etapr2->FillWeighted(TMath::Sqrt(m_2pi0_fit / 1.0e3), etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi01_fit / 1.0e3), etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi02_fit / 1.0e3), etap_fit_final.M()+mass_shift, MCw);
 
                    if(etap_fit_final.M()> 930. && etap_fit_final.M() < 980.){
                        true_six_phy_dMpipi_v_Mpipi->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw);
@@ -2468,9 +2468,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    six_phy_M_etapi_v_etapr->Fill(m_etapi01_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
                    six_phy_M_etapi_v_etapr->Fill(m_etapi02_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
 
-                   six_phy_M_pi1pi2_v_etapr2->Fill(TMath::Sqrt(m_2pi0_fit / 1.0e6), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
-                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi01_fit / 1.0e6), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
-                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi02_fit / 1.0e6), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_M_pi1pi2_v_etapr2->Fill(TMath::Sqrt(m_2pi0_fit / 1.0e3), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi01_fit / 1.0e3), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi02_fit / 1.0e3), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
 
                    six_phy_DP_020->Fill(DP_binnr_fit020, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                    six_phy_DP_015->Fill(DP_binnr_fit015, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
@@ -2514,9 +2514,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                        six_phy_M_pi1pi2_v_etapr_fit->FillWeighted(m_2pi0_fit / 1.0e3, MCw );
                        six_phy_M_etapi_v_etapr_fit->FillWeighted(m_etapi01_fit / 1.0e3, MCw );
                        six_phy_M_etapi_v_etapr_fit->FillWeighted(m_etapi02_fit / 1.0e3, MCw );
-                       six_phy_M_pi1pi2_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_2pi0_fit / 1.0e6), MCw );
-                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi01_fit / 1.0e6), MCw );
-                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi02_fit / 1.0e6), MCw );
+                       six_phy_M_pi1pi2_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_2pi0_fit / 1.0e3), MCw );
+                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi01_fit / 1.0e3), MCw );
+                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi02_fit / 1.0e3), MCw );
                        true_six_phy_dMpipi_v_Mpipi_metapr->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw );
 
                        six_phy_DP_020_pr->FillWeighted(DP_binnr_fit020, MCw );
@@ -2541,9 +2541,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                        six_phy_M_pi1pi2_v_etapr_fit->Fill(m_2pi0_fit / 1.0e3, GetTagger()->GetTaggedTime(tag) );
                        six_phy_M_etapi_v_etapr_fit->Fill(m_etapi01_fit / 1.0e3, GetTagger()->GetTaggedTime(tag) );
                        six_phy_M_etapi_v_etapr_fit->Fill(m_etapi02_fit / 1.0e3, GetTagger()->GetTaggedTime(tag) );
-                       six_phy_M_pi1pi2_v_etapr_fit2->Fill(TMath::Sqrt(m_2pi0_fit / 1.0e6), GetTagger()->GetTaggedTime(tag) );
-                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi01_fit / 1.0e6), GetTagger()->GetTaggedTime(tag) );
-                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi02_fit / 1.0e6), GetTagger()->GetTaggedTime(tag) );
+                       six_phy_M_pi1pi2_v_etapr_fit2->Fill(TMath::Sqrt(m_2pi0_fit / 1.0e3), GetTagger()->GetTaggedTime(tag) );
+                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi01_fit / 1.0e3), GetTagger()->GetTaggedTime(tag) );
+                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi02_fit / 1.0e3), GetTagger()->GetTaggedTime(tag) );
                        true_six_phy_dMpipi_v_Mpipi_metapr->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3) );
 
                        six_phy_DP_020_pr->Fill(DP_binnr_fit020, GetTagger()->GetTaggedTime(tag) );
