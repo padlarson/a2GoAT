@@ -152,6 +152,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    CB_EnergySum_etapi0         = new GHistBGSub("CB_EnergySum_etapi0", "Crystal Ball Energy Sum for etapi0", 400, 0., 2000.);
     CB_EnergySum_3pi0           = new GHistBGSub("CB_EnergySum_3pi0", "Crystal Ball Energy Sum for 3pi0", 200, 0., 2000.);
     CB_EnergySum_etapr          = new GHistBGSub("CB_EnergySum_etapr", "Crystal Ball Energy Sum for eta prime", 200, 0., 2000.);
+    CB_EnergySum_3pi0_v_CB      = new GHistBGSub2("CB_EnergySum_3pi0_v_CB", "Crystal Ball Energy Sum for 3pi0 vs CB", 200, 0., 2000., 90, 0, 90);
+    CB_EnergySum_etapr_v_CB     = new GHistBGSub2("CB_EnergySum_etapr_v_CB", "Crystal Ball Energy Sum for eta prime vs_CB", 200, 0., 2000., 90, 0,90);
 
     IMgg_v_det_2pi0_CB          =   new GHistBGSub2("IMgg_v_det_2pi0_CB", "IM(gg) 2#pi^{0}, CB", 50, 0, 250, 720, 0, 720);
     IMgg_v_det_etapi0_pi0_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_pi0_CB", "IM(gg) #eta#pi^{0}, CB", 50, 0, 250, 720, 0, 720);
@@ -290,13 +292,13 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_phy_DP_005              = new GHistBGSub2("six_phy_DP_005", "Dalitz Plot vs m(#eta2#pi0) with 0.05 bin", 2000, 0, 2000, 250, 800., 1050.);
 
     six_phy_DP_020_prompt       = new TH2D("six_phy_DP_020_prompt", "Dalitz Plot vs m(#eta2#pi0) with 0.20 bin prompt", 200, 0, 200, 250., 800.0, 1050.0);
-    six_phy_DP_015_prompt       = new TH2D("six_phy_DP_015_prompt", "Dalitz Plot vs m(#eta2#pi0) with 0.15 bin prompt", 200, 0, 200, 250., 800.0, 1050.0);
-    six_phy_DP_010_prompt       = new TH2D("six_phy_DP_010_prompt", "Dalitz Plot vs m(#eta2#pi0) with 0.10 bin prompt", 200, 0, 200, 250., 800.0, 1050.0);
-    six_phy_DP_005_prompt       = new TH2D("six_phy_DP_005_prompt", "Dalitz Plot vs m(#eta2#pi0) with 0.05 bin prompt", 200, 0, 200, 250., 800.0, 1050.0);
+    six_phy_DP_015_prompt       = new TH2D("six_phy_DP_015_prompt", "Dalitz Plot vs m(#eta2#pi0) with 0.15 bin prompt", 400, 0, 400, 250., 800.0, 1050.0);
+    six_phy_DP_010_prompt       = new TH2D("six_phy_DP_010_prompt", "Dalitz Plot vs m(#eta2#pi0) with 0.10 bin prompt", 800, 0, 800, 250., 800.0, 1050.0);
+    six_phy_DP_005_prompt       = new TH2D("six_phy_DP_005_prompt", "Dalitz Plot vs m(#eta2#pi0) with 0.05 bin prompt", 2000, 0, 2000, 250., 800.0, 1050.0);
     six_phy_DP_020_rnd          = new TH2D("six_phy_DP_020_rnd", "Dalitz Plot vs m(#eta2#pi0) with 0.20 bin rnd", 200, 0, 200, 250., 800.0, 1050.0);
-    six_phy_DP_015_rnd          = new TH2D("six_phy_DP_015_rnd", "Dalitz Plot vs m(#eta2#pi0) with 0.15 bin rnd", 200, 0, 200, 250., 800.0, 1050.0);
-    six_phy_DP_010_rnd          = new TH2D("six_phy_DP_010_rnd", "Dalitz Plot vs m(#eta2#pi0) with 0.10 bin rnd", 200, 0, 200, 250., 800.0, 1050.0);
-    six_phy_DP_005_rnd          = new TH2D("six_phy_DP_005_rnd", "Dalitz Plot vs m(#eta2#pi0) with 0.05 bin rnd", 200, 0, 200, 250., 800.0, 1050.0);
+    six_phy_DP_015_rnd          = new TH2D("six_phy_DP_015_rnd", "Dalitz Plot vs m(#eta2#pi0) with 0.15 bin rnd", 400, 0, 400, 250., 800.0, 1050.0);
+    six_phy_DP_010_rnd          = new TH2D("six_phy_DP_010_rnd", "Dalitz Plot vs m(#eta2#pi0) with 0.10 bin rnd", 800, 0, 800, 250., 800.0, 1050.0);
+    six_phy_DP_005_rnd          = new TH2D("six_phy_DP_005_rnd", "Dalitz Plot vs m(#eta2#pi0) with 0.05 bin rnd", 2000, 0, 2000, 250., 800.0, 1050.0);
 
     six_phy_DP_020              = new GHistBGSub2("six_phy_DP_020", "Dalitz Plot vs m(#eta2#pi0) with 0.20 bin", 200, 0, 200, 250, 800., 1050.);
     six_phy_DP_015              = new GHistBGSub2("six_phy_DP_015", "Dalitz Plot vs m(#eta2#pi0) with 0.15 bin", 400, 0, 400, 250, 800., 1050.);
@@ -1022,6 +1024,7 @@ Bool_t	AdlarsonPhysics::Start()
 void	AdlarsonPhysics::ProcessEvent()
 {
     if(MC){
+
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
        TrueAnalysis_etapr6g("PS");                    // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
@@ -1060,16 +1063,17 @@ void	AdlarsonPhysics::ProcessEvent()
 
     Double_t CB_avg_time = -1000.;
     Double_t CB_avg_time_tmp = 0.;
-    Double_t CB_en_sum = 0;
+    ESum    = 0;
+    ESum_MC = 0;
 
 
-
+    // Here change MC Energy Sum
     // First step: count clusters and add CB clusters inside time window. Obtain CB time average and Energy
     for( Int_t i = 0; i < GetTracks()->GetNTracks(); i++ ){
         AllTimes++; // counting nr of CB and TAPS clusters
         if(GetTracks()->HasCB(i)){
             time_clusters_CB.Fill( GetTracks()->GetTime(i), GetTracks()->GetCentralCrystal(i) );
-            CB_en_sum += GetTracks()->GetClusterEnergy(i);
+            ESum += GetTracks()->GetClusterEnergy(i);
             if( TMath::Abs( GetTracks()->GetTime(i) ) < 30.0 ){                               
                     CB_avg_time_tmp += GetTracks()->GetClusterEnergy(i)*GetTracks()->GetTime(i);
             }
@@ -1077,22 +1081,24 @@ void	AdlarsonPhysics::ProcessEvent()
     }
 
     time_nr_AllClusters.Fill(AllTimes);
-    CB_avg_time = CB_avg_time_tmp/CB_en_sum;
+    CB_avg_time = CB_avg_time_tmp/ESum;
     if(MC)
         CB_avg_time = 0.0;
 
     // Here put in the condition that CB Energy Sum has to be fulfilled. For MC one has to consider also which photons contribute since in July 2014 data last 16 channels were off
     if(MC_weight){
-        CB_EnergySum->FillWeighted(CB_en_sum, MCw);
-        CB_EnergySum_2->Fill(Get_ESum(),MCw);
-        if(CB_en_sum < 550.) return;
+//        Double_t ESum_threshold = pRandoms->Gaus(487.6,77.2);
+        Double_t ESum_threshold = pRandoms->Gaus(540.,52.);
+        ESum_MC = Get_ESumMC(ESum);
+        if( (ESum_MC < ESum_threshold)) return;
+
+        CB_EnergySum->FillWeighted(ESum_MC, MCw);
+        CB_EnergySum_2->Fill(ESum_MC,MCw);
+
     }
     else{
-        CB_EnergySum->Fill(CB_en_sum);   
-        CB_EnergySum_2->Fill(Get_ESum());
+        CB_EnergySum->Fill(ESum);
     }
-
-
 
     Double_t dt;
     // Second step: count clusters and add CB clusters inside time window. Obtain CB time average and Energy
@@ -1262,13 +1268,13 @@ void	AdlarsonPhysics::ProcessEvent()
     if(FinalClusterSelection.size() == 7){
         for(UInt_t p = 0; p < FinalClusterSelection.size() ; p++){
             UInt_t q = FinalClusterSelection[p];
-                if(q != iprtrack){
-                    IM6_vec += GetTracks()->GetVector(q);
-                    if(MC_weight)
-                        six_rec_EvTh_6g->FillWeighted(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q), MCw);
-                    else
-                        six_rec_EvTh_6g->Fill(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q));
-                }
+            if(q != iprtrack){
+                IM6_vec += GetTracks()->GetVector(q);
+                if(MC_weight)
+                    six_rec_EvTh_6g->FillWeighted(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q), MCw);
+                else
+                    six_rec_EvTh_6g->Fill(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q));
+            }
         }
     }
 
@@ -1527,7 +1533,13 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile){
    // structure of file: groups of 8 CB elements (0-89), cumulative distribution for -25, 0, 25, 50, 100. If elements -1 then no time jumps.
    // use of random value in RandomTime to determine if time jump should be implemented
 
-   std::ifstream file_MC_t_jump("configfiles/data/CB_time_jump_July14.txt");
+   string sFile;
+   if(MCJuly14)
+        sFile = "configfiles/data/CB_time_jump_July14.txt";
+   else // MCOctDec14
+        sFile = "configfiles/data/CB_time_jump_OctDec14.txt";
+
+   std::ifstream file_MC_t_jump(sFile);
    if(file_MC_t_jump){
        int group;
        std::vector<Double_t> t_jump;
@@ -2296,8 +2308,12 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
               }
            }
            if( (probmin_3pi > 0.01) && (probmin_eta2pi < 0.1) ){ // dir 3pi0
-               if(etap_fit.M() > 650.0)
-                    CB_EnergySum_3pi0->Fill(GetTrigger()->GetEnergySum(),GetTagger()->GetTaggedTime(tag));
+               if(etap_fit.M() > 650.0){
+                   if(MC_weight)
+                       CB_EnergySum_3pi0->Fill(ESum_MC, MCw);
+                   else
+                       CB_EnergySum_3pi0->Fill(GetTrigger()->GetEnergySum(),GetTagger()->GetTaggedTime(tag));
+               }
 
                for(Int_t t = 0; t < GetTracks()->GetNTracks(); t++)
                    if(GetTracks()->HasCB(t))
@@ -2354,7 +2370,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
            if( (probmin_3pi < 0.1) && (probmin_eta2pi > 0.04) ){ //eta prime
 
              if(MC_weight)
-                CB_EnergySum_etapr->FillWeighted(GetTrigger()->GetEnergySum(), MCw );
+                CB_EnergySum_etapr->FillWeighted(ESum_MC, MCw );
              else
                 CB_EnergySum_etapr->Fill(GetTrigger()->GetEnergySum(), GetTagger()->GetTaggedTime(tag));
 
@@ -2445,9 +2461,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    six_phy_M_etapi_v_etapr->FillWeighted(m_etapi01_fit / 1.0e3, etap_fit_final.M()+mass_shift, MCw);
                    six_phy_M_etapi_v_etapr->FillWeighted(m_etapi02_fit / 1.0e3, etap_fit_final.M()+mass_shift, MCw);
 
-                   six_phy_M_pi1pi2_v_etapr2->FillWeighted(TMath::Sqrt(m_2pi0_fit / 1.0e3), etap_fit_final.M()+mass_shift, MCw);
-                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi01_fit / 1.0e3), etap_fit_final.M()+mass_shift, MCw);
-                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi02_fit / 1.0e3), etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_pi1pi2_v_etapr2->FillWeighted(TMath::Sqrt(m_2pi0_fit), etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi01_fit), etap_fit_final.M()+mass_shift, MCw);
+                   six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi02_fit), etap_fit_final.M()+mass_shift, MCw);
 
                    if(etap_fit_final.M()> 930. && etap_fit_final.M() < 980.){
                        true_six_phy_dMpipi_v_Mpipi->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw);
@@ -2468,9 +2484,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    six_phy_M_etapi_v_etapr->Fill(m_etapi01_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
                    six_phy_M_etapi_v_etapr->Fill(m_etapi02_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
 
-                   six_phy_M_pi1pi2_v_etapr2->Fill(TMath::Sqrt(m_2pi0_fit / 1.0e3), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
-                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi01_fit / 1.0e3), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
-                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi02_fit / 1.0e3), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_M_pi1pi2_v_etapr2->Fill(TMath::Sqrt(m_2pi0_fit), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi01_fit), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
+                   six_phy_M_etapi_v_etapr2->Fill(TMath::Sqrt(m_etapi02_fit), etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
 
                    six_phy_DP_020->Fill(DP_binnr_fit020, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
                    six_phy_DP_015->Fill(DP_binnr_fit015, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
@@ -2514,9 +2530,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                        six_phy_M_pi1pi2_v_etapr_fit->FillWeighted(m_2pi0_fit / 1.0e3, MCw );
                        six_phy_M_etapi_v_etapr_fit->FillWeighted(m_etapi01_fit / 1.0e3, MCw );
                        six_phy_M_etapi_v_etapr_fit->FillWeighted(m_etapi02_fit / 1.0e3, MCw );
-                       six_phy_M_pi1pi2_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_2pi0_fit / 1.0e3), MCw );
-                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi01_fit / 1.0e3), MCw );
-                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi02_fit / 1.0e3), MCw );
+                       six_phy_M_pi1pi2_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_2pi0_fit), MCw );
+                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi01_fit), MCw );
+                       six_phy_M_etapi_v_etapr_fit2->FillWeighted(TMath::Sqrt(m_etapi02_fit), MCw );
                        true_six_phy_dMpipi_v_Mpipi_metapr->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw );
 
                        six_phy_DP_020_pr->FillWeighted(DP_binnr_fit020, MCw );
@@ -2541,9 +2557,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                        six_phy_M_pi1pi2_v_etapr_fit->Fill(m_2pi0_fit / 1.0e3, GetTagger()->GetTaggedTime(tag) );
                        six_phy_M_etapi_v_etapr_fit->Fill(m_etapi01_fit / 1.0e3, GetTagger()->GetTaggedTime(tag) );
                        six_phy_M_etapi_v_etapr_fit->Fill(m_etapi02_fit / 1.0e3, GetTagger()->GetTaggedTime(tag) );
-                       six_phy_M_pi1pi2_v_etapr_fit2->Fill(TMath::Sqrt(m_2pi0_fit / 1.0e3), GetTagger()->GetTaggedTime(tag) );
-                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi01_fit / 1.0e3), GetTagger()->GetTaggedTime(tag) );
-                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi02_fit / 1.0e3), GetTagger()->GetTaggedTime(tag) );
+                       six_phy_M_pi1pi2_v_etapr_fit2->Fill(TMath::Sqrt(m_2pi0_fit), GetTagger()->GetTaggedTime(tag) );
+                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi01_fit), GetTagger()->GetTaggedTime(tag) );
+                       six_phy_M_etapi_v_etapr_fit2->Fill(TMath::Sqrt(m_etapi02_fit), GetTagger()->GetTaggedTime(tag) );
                        true_six_phy_dMpipi_v_Mpipi_metapr->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3) );
 
                        six_phy_DP_020_pr->Fill(DP_binnr_fit020, GetTagger()->GetTaggedTime(tag) );
@@ -4060,21 +4076,17 @@ void    AdlarsonPhysics::RandomTime(){
     }
 }
 
-Double_t AdlarsonPhysics::Get_ESum(){
-    Double_t Esum = 0.;
-    for( int j = 0; j < GetTracks()->GetNTracks() ; j++ )
-    {
-//        if( GetTracks()->HasCB(j) ){
-//            Esum += GetTracks()->GetClusterEnergy(j);
-//        }
-
-        if( GetTracks()->HasCB(j) ){
-            if((GetTracks()->GetCentralCrystal(j) < 352) || (GetTracks()->GetCentralCrystal(j) > 415)) // July beam time only
-                Esum += GetTracks()->GetClusterEnergy(j);
+Double_t AdlarsonPhysics::Get_ESumMC(Double_t& ESum){
+    Double_t ESum_shift = 17.11;
+    for( int j = 0; j < GetTracks()->GetNTracks() ; j++ ){
+        if(MCJuly14){
+            if( GetTracks()->HasCB(j) ){
+                if((GetTracks()->GetCentralCrystal(j) >= 352) && (GetTracks()->GetCentralCrystal(j) <= 415)) // July beam time only
+                    ESum -= GetTracks()->GetClusterEnergy(j);
+            }
         }
-
     }
-    return Esum;
+    return ESum + ESum_shift;
 }
 
 TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, const double v_z, Int_t& idet, double mass)
@@ -4112,7 +4124,6 @@ TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, c
     else{   // TAPS
         E = EkPThPhi[0];
         P = EkPThPhi[1];
-
 
         if(mass > 900.)
             R  =    X0_TAPS*TMath::Log((E-MASS_PROTON)/Ec_TAPS)/TMath::Log(2.);
@@ -4368,10 +4379,6 @@ Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame, TLorentzVector eta
             double frac2 = (1- (Legendre[k+6]-be)/width);
             w = (frac1*w1 + frac2*w2)/width;
         }
-
-
-
-
     }
 //        w /= width;
 
@@ -4436,8 +4443,6 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
 
      MCw = TMath::Power(MCw_temp, 1./3.);
 
-
-
      MCw_temp4 = GetWeight3pi2( (three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
      if(MCw_temp4 > 0.){
         MCw_tempb *= MCw_temp4;
@@ -4460,7 +4465,6 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
         MCw_tempb *=1.0;
 
      MCw *= TMath::Power(MCw_tempb, 1./3.);
-
 
      MCw_temp7 = GetWeight3pi3( (three_pi0+three_pi1).M2(), (three_pi2+proton_LV).M2());
      if(MCw_temp7 > 0.){
@@ -4485,7 +4489,6 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
 
      MCw *= TMath::Power(MCw_tempc, 1./3.);
 
-
      Double_t M = true_im.M()*1.0e3;
      Double_t Mw = M;
         if(M > 830.){
@@ -4494,9 +4497,7 @@ Double_t AdlarsonPhysics::TrueAnalysis_threepi_etapi(){
             true_phy_3pi_IMpipi_v_IMppi->Fill((three_pi1+three_pi2).M2(), (three_pi0+proton_LV).M2());
         }
     }
-
     return MCw;
-
 }
 
 double AdlarsonPhysics::GetWeight3pi1(Double_t M1sq, Double_t M2sq){
