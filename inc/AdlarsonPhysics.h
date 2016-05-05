@@ -35,6 +35,8 @@ private:
     Bool_t          MC_weight  = false;
     Bool_t          MC_etapr   = false;
     Double_t        MCw  = 1.0;
+    Bool_t          MCJuly14   = true;
+    Bool_t          MCOctDec14 = false;
     // Histograms and scatterplots
     // True
     GH1*            true_BeamE;
@@ -130,6 +132,8 @@ private:
     GHistBGSub*     CB_EnergySum_etapi0;
     GHistBGSub*     CB_EnergySum_3pi0;
     GHistBGSub*     CB_EnergySum_etapr;
+    GHistBGSub*     CB_EnergySum_3pi0_v_CB;
+    GHistBGSub*     CB_EnergySum_etapr_v_CB;
 
     // Photon related
     TLorentzVector  IM6g_vec;
@@ -769,7 +773,9 @@ public:
     Double_t TrueAnalysis_threepi_etapi(); // returns weight as function of IM(ng);
     Double_t Get_etapr_weight_MC(Double_t beame, TLorentzVector eta_pr[2]);
 
-    Double_t Get_ESum();
+    Double_t Get_ESumMC(Double_t &ESum);
+    Double_t ESum;
+    Double_t ESum_MC;
 
     double GetWeight3pi1(Double_t M1sq, Double_t M2sq);
     double GetWeight3pi2(Double_t M1sq, Double_t M2sq);
