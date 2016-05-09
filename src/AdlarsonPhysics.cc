@@ -434,8 +434,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 //    GHistBGSub::InitCuts(-8., 8., -88., -8.);
 //    GHistBGSub::AddRandCut(8., 88.);
 
-    GHistBGSub::InitCuts(-4.5, 3.5, -64.5, -4.5);
-    GHistBGSub::AddRandCut(3.5, 63.5);
+    GHistBGSub::InitCuts(-4.5, 3.5, -84.5, -4.5);
+    GHistBGSub::AddRandCut(3.5, 83.5);
 
 //  For final states including 6g
     kinfit.LinkVariable("Beam",    beam.Link(),       beam.LinkSigma(),  beam.LinkSettings() );
@@ -1041,8 +1041,8 @@ void	AdlarsonPhysics::ProcessEvent()
     }
     if(!MC)
         Tagger_corr();
-    tagger_min =-64.5;
-    tagger_max = 63.5;
+    tagger_min =-84.5;
+    tagger_max = 83.5;
 
     for ( Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++){
         if(MC_weight)
@@ -2107,7 +2107,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
            rc_sig[1] = photons_rec[imin_eta2pi[2]] + photons_rec[imin_eta2pi[3]];
            rc_sig[2] = photons_rec[imin_eta2pi[4]] + photons_rec[imin_eta2pi[5]];
 
-           double mass_shift = 1.1;
+           double mass_shift = 1.0;
 
            TLorentzVector etap_fit_final(0.0, 0.0, 0.0, 0.0);
            TLorentzVector fin[3];
@@ -2145,12 +2145,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                bw = 0.05;
                DalitzPlot(fin, Xfit, Yfit, bw, DP_binnr_fit005);
 
-
-
                // filling results in vector for Tree
                if(!MC)
-                    if( (GetTagger()->GetTaggedTime(tag) < 3.5) && (GetTagger()->GetTaggedTime(tag) > -4.5))
-                        vec_weight.push_back(-8./120.);
+                    if( (GetTagger()->GetTaggedTime(tag) > 3.5) || (GetTagger()->GetTaggedTime(tag) < -4.5))
+                        vec_weight.push_back(-8./160.);
                     else
                         vec_weight.push_back(1.0);
                else
