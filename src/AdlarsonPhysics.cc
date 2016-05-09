@@ -245,16 +245,16 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_fit_dthpr_vz            = new GHistBGSub2("six_fit_dthpr_vz", "dth proton true - fit vs z_true", 100, -5., 5., 100, -10.0, 10.0);
 
     six_fit_IM_3pi              = new GH1("six_fit_IM_3pi", "IM(6#gamma) for 3#pi^{0} candidates", 400, 400., 1200.);
-    six_fit_IM_eta2pi           = new GH1("six_fit_IM_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 150, 800., 1100.);
-    six_fit_IM_eta2pi_prompt    = new TH1D("six_fit_IM_eta2pi_prompt", "IM(6#gamma) for #eta2#pi^{0} prompt", 150, 800., 1100.);
-    six_fit_IM_eta2pi_random    = new TH1D("six_fit_IM_eta2pi_random", "IM(6#gamma) for #eta2#pi^{0} random", 150, 800., 1100.);
+    six_fit_IM_eta2pi           = new GH1("six_fit_IM_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 120, 800., 1100.);
+    six_fit_IM_eta2pi_prompt    = new TH1D("six_fit_IM_eta2pi_prompt", "IM(6#gamma) for #eta2#pi^{0} prompt", 120, 800., 1100.);
+    six_fit_IM_eta2pi_random    = new TH1D("six_fit_IM_eta2pi_random", "IM(6#gamma) for #eta2#pi^{0} random", 120, 800., 1100.);
 
-    six_fit_IM_eta2pi0_b        = new GH1("six_fit_IM_eta2pi0_b", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.01", 150, 800., 1100.);
-    six_fit_IM_eta2pi0_c        = new GH1("six_fit_IM_eta2pi0_c", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{3#pi} < 0.0075", 150, 800., 1100.);
-    six_fit_IM_eta2pi0_d        = new GH1("six_fit_IM_eta2pi0_d", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{#eta pr} > 0.04", 150, 800., 1100.);
-    six_fit_IM_eta2pi0_e        = new GH1("six_fit_IM_eta2pi0_e", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{#eta pr} < 0.04", 150, 800., 1100.);
-    six_fit_IM_eta2pi0_f        = new GH1("six_fit_IM_eta2pi0_f", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.02 & P_{#eta pr} > 0.02", 150, 800., 1100.);
-    six_fit_IM_eta2pi0_g        = new GH1("six_fit_IM_eta2pi0_g", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.02 & P_{#eta pr} < 0.02", 150, 800., 1100.);
+    six_fit_IM_eta2pi0_b        = new GH1("six_fit_IM_eta2pi0_b", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.01", 120, 800., 1100.);
+    six_fit_IM_eta2pi0_c        = new GH1("six_fit_IM_eta2pi0_c", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{3#pi} < 0.0075", 120, 800., 1100.);
+    six_fit_IM_eta2pi0_d        = new GH1("six_fit_IM_eta2pi0_d", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{#eta pr} > 0.04", 120, 800., 1100.);
+    six_fit_IM_eta2pi0_e        = new GH1("six_fit_IM_eta2pi0_e", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{#eta pr} < 0.04", 120, 800., 1100.);
+    six_fit_IM_eta2pi0_f        = new GH1("six_fit_IM_eta2pi0_f", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.02 & P_{#eta pr} > 0.02", 120, 800., 1100.);
+    six_fit_IM_eta2pi0_g        = new GH1("six_fit_IM_eta2pi0_g", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.02 & P_{#eta pr} < 0.02", 120, 800., 1100.);
 
     six_fit_which_place_best_3pi_cand = new GH1("six_fit_which_place_best_3pi_cand", "from rough chi2 test which fits kinfit hypoth best 3pi0", 11, -1, 10);
     six_fit_which_place_best_etapr_cand = new GH1("six_fit_which_place_best_etapr_cand", "from rough chi2 test which fits kinfit hypoth best eta prime", 11, -1, 10);
