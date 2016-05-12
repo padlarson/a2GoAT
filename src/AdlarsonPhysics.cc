@@ -364,7 +364,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     // Physics results eta'
     // APLCON kinfit uncertainties
 
-    g_unc                   = new TFile("configfiles/APLCONunc/photon_uncertainties_0z_R.root");
+    g_unc                   = new TFile("configfiles/APLCONunc/photon_uncertainties_0z_R_test.root");
     p_unc                   = new TFile("configfiles/APLCONunc/proton_uncertainties_0z_R.root");
     g_unc_vz                = new TFile("configfiles/APLCONunc/photon_uncertainties_vz.root");
     p_unc_vz                = new TFile("configfiles/APLCONunc/proton_uncertainties_vz.root");
@@ -1067,6 +1067,10 @@ void	AdlarsonPhysics::ProcessEvent()
     ESum_MC = 0;
 
 
+//    // SEE IT HERE!!!! //
+//    return;
+
+
     // Here change MC Energy Sum
     // First step: count clusters and add CB clusters inside time window. Obtain CB time average and Energy
     for( Int_t i = 0; i < GetTracks()->GetNTracks(); i++ ){
@@ -1208,43 +1212,44 @@ void	AdlarsonPhysics::ProcessEvent()
     }
 
     FinalClusterSelection.resize(0);
-    IgnoreTAPSCluster.resize(0);
-    // fourth step- go through good CB cluster. If CB cluster is in the edge, check if there is a corresponding TAPS hit in phi. If inside 40 deg then merge clusters
-    for(UInt_t i = 0; i < ClustersInTime.size() ; i++){
-        UInt_t j = ClustersInTime[i];
-        if(GetTracks()->HasCB(j)){
-            if( ring3_or_ring4_CB[ GetTracks()->GetCentralCrystal(j) ] && ClustersInTime.size() == 8 ){
-                for(UInt_t p = 0; p < TAPS_cl.size(); p++){
-                    UInt_t q = TAPS_cl[p];
-                    if(q != iprtrack){
-                        Double_t dfi = GetTracks()->GetPhi(j) - GetTracks()->GetPhi(q);
-                        if(TMath::Abs(dfi) < 40. ){
-                            Double_t E_CB   = GetTracks()->GetClusterEnergy(j);
-                            Double_t E_TAPS = GetTracks()->GetClusterEnergy(q);
-                            tracks->SetClusterEnergy(j, E_CB + E_TAPS );
-                            IgnoreTAPSCluster.push_back(q);
-                        }
-                    }
-                }
-            }
-            if(!sixg_cand->IsInside(GetTracks()->GetClusterEnergy(j)+10., GetTracks()->GetTheta(j))){
-                FinalClusterSelection.push_back(j);
-            }
-        }
-    }
-    for(UInt_t p = 0; p < TAPS_cl.size(); p++){
-        UInt_t q = TAPS_cl[p];
-        if( q == iprtrack )
-            FinalClusterSelection.push_back(q);
-        else{
-            Bool_t ignore_el = false;
-            for(uint s = 0; s < IgnoreTAPSCluster.size(); s++)
-                if(IgnoreTAPSCluster[s] == q)
-                    ignore_el = true;
-            if(!ignore_el)
-                    FinalClusterSelection.push_back(q);
-            }
-        }
+    FinalClusterSelection = ClustersInTime;
+//    IgnoreTAPSCluster.resize(0);
+//    // fourth step- go through good CB cluster. If CB cluster is in the edge, check if there is a corresponding TAPS hit in phi. If inside 40 deg then merge clusters
+//    for(UInt_t i = 0; i < ClustersInTime.size() ; i++){
+//        UInt_t j = ClustersInTime[i];
+//        if(GetTracks()->HasCB(j)){
+//            if( ring3_or_ring4_CB[ GetTracks()->GetCentralCrystal(j) ] && ClustersInTime.size() == 8 ){
+//                for(UInt_t p = 0; p < TAPS_cl.size(); p++){
+//                    UInt_t q = TAPS_cl[p];
+//                    if(q != iprtrack){
+//                        Double_t dfi = GetTracks()->GetPhi(j) - GetTracks()->GetPhi(q);
+//                        if(TMath::Abs(dfi) < 40. ){
+//                            Double_t E_CB   = GetTracks()->GetClusterEnergy(j);
+//                            Double_t E_TAPS = GetTracks()->GetClusterEnergy(q);
+//                            tracks->SetClusterEnergy(j, E_CB + E_TAPS );
+//                            IgnoreTAPSCluster.push_back(q);
+//                        }
+//                    }
+//                }
+//            }
+//            if(!sixg_cand->IsInside(GetTracks()->GetClusterEnergy(j)+10., GetTracks()->GetTheta(j))){
+//                FinalClusterSelection.push_back(j);
+//            }
+//        }
+//    }
+//    for(UInt_t p = 0; p < TAPS_cl.size(); p++){
+//        UInt_t q = TAPS_cl[p];
+//        if( q == iprtrack )
+//            FinalClusterSelection.push_back(q);
+//        else{
+//            Bool_t ignore_el = false;
+//            for(uint s = 0; s < IgnoreTAPSCluster.size(); s++)
+//                if(IgnoreTAPSCluster[s] == q)
+//                    ignore_el = true;
+//            if(!ignore_el)
+//                    FinalClusterSelection.push_back(q);
+//            }
+//        }
 
 //    std::vector<Int_t> fin_temp;
 //    fin_temp.resize(0);
@@ -4358,8 +4363,8 @@ Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame, TLorentzVector eta
         }
         else if((be >= 1469.8) && (be < 1473.05 )){
             width = 6.5;
-//            double frac1 = (1- (be-Legendre[k+0])/width);
-//            double frac2 = (1- (Legendre[k+6]-be)/width);
+            double frac1 = (1- (be-Legendre[k+0])/width);
+            double frac2 = (1- (Legendre[k+6]-be)/width);
 //            w = (frac1*w1 + frac2*w2)/width;
             w = w1/width;
         }
@@ -4378,9 +4383,12 @@ Double_t AdlarsonPhysics::Get_etapr_weight_MC(Double_t beame, TLorentzVector eta
             w = (frac1*w1 + frac2*w2)/width;
         }
     }
+
 //        w /= width;
 
-     w /= 104.44028;
+     w /= 104.440282;
+     if(be < 1473.05)
+         w *= 1.1;
 
     TLorentzVector eta_pr_all = etapr_true[0] + etapr_true[1] + etapr_true[2];
     Int_t bin =  diff_distr( be, eta_pr_all );
