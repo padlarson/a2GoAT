@@ -30,6 +30,10 @@ private:
     TH3*        photon_secondary_Evth;
     TH3*        proton_secondary_Evth;
 
+    TH3*        photon_rE_v_2D;
+    TH3*        photon_dtheta_v_2D;
+    TH3*        photon_dphi_v_2D;
+
     TH3*        photon_rE_v_2D_CB;
     TH3*        photon_rE_v_2D_TAPS;
     TH3*        photon_dtheta_v_2D_CB;
@@ -60,6 +64,7 @@ private:
     TH3*        proton_rE_v_det_TAPS;
     TH3*        proton_dtheta_v_det_TAPS;
     TH3*        proton_dphi_v_det_TAPS;
+    TH2*        photon_dR_v_det_TAPS;
 
     TH2*        proton_dth_v_detnr;
     TH2*        proton_dphi_v_detnr;
@@ -85,6 +90,8 @@ private:
 
     TFile*          thcorr_TAPS;        // File which contains TProfile
     TProfile*       dthvth_TAPS;
+    std::vector<Double_t> R_TAPS;
+    std::vector<Double_t> R_TAPS_corr;
 
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
     std::vector<Double_t> TAPSgain;

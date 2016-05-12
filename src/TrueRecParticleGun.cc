@@ -11,7 +11,7 @@ TrueRecParticleGun::TrueRecParticleGun()
 {
     //Relative Energy
     proton_true_Evth        = new TH2F("proton_true_Evth", "proton; E_{true} (MeV); #theta_{true} (^{o})", 30 , 0., 600., 30, 0, 30);
-    photon_true_Evth        = new TH2F("photon_true_Evth", "#gamma; E_{true} (MeV); #theta_{true} (^{o})", 150, 0., 1500., 36, 0, 180);
+    photon_true_Evth        = new TH2F("photon_true_Evth", "#gamma; E_{true} (MeV); #theta_{true} (^{o})", 150, 0., 1500., 180, 0, 180);
     photon_true_Evth_CB     = new TH2F("photon_true_Evth_CB", "#gamma; E_{true} (MeV); #theta_{true} (^{o})", 150, 0., 1500., 90, 0, 180);
     photon_true_Evth_TAPS   = new TH2F("photon_true_Evth_TAPS", "#gamma; E_{true} (MeV); #theta_{true} (^{o})",  150, 0., 1500., 30, 0, 30);
     photon_true_Evth_rec    = new TH2F("photon_true_Evth_rec", "#gamma nr tracks ; E_{true} (MeV); #theta_{true} (^{o})", 75, 0., 1500., 90, 0, 180);
@@ -25,6 +25,10 @@ TrueRecParticleGun::TrueRecParticleGun()
     photon_theta_phi_CB   = new TH2F("photon_theta_phi_CB", "#gamma CB; #theta_{rec} (MeV); #phi_{rec} (^{o});", 720, 0., 180., 720, 0., 180.);
 
     photon_dphi_v_2D_CB     = new TH3F("photon_dphi_v_2D_CB", "#gamma CB; E_{rec} (MeV); #theta_{rec} (^{o});  #phi_{rec} - #phi_{true} (^{o})", 150, 0., 1500., 90, 0, 180, 160, -20., 20.);
+
+    photon_rE_v_2D       = new TH3F("photon_rE_v_2D", "#gamma; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 150, 0., 1500., 180, 0, 180, 400, -2., 2.);
+    photon_dtheta_v_2D   = new TH3F("photon_dtheta_v_2D", "#gamma; E_{rec} (MeV); #theta_{rec} (^{o});  #theta_{rec} - #theta_{true} (^{o})", 150, 0., 1500., 180, 0, 180, 160, -20., 20.);
+    photon_dphi_v_2D     = new TH3F("photon_dphi_v_2D", "#gamma; E_{rec} (MeV); #theta_{rec} (^{o});  #phi_{rec} - #phi_{true} (^{o})", 150, 0., 1500., 180, 0, 180, 160, -20., 20.);
 
     photon_rE_v_det_CB      = new TH3F("photon_rE_v_det_CB", "#gamma CB; E_{rec} (MeV); det.nr; relative (E_{rec} - E_{true}) / E_{rec} ", 75, 0., 1500., 720, 0, 720, 200, -5., 5.);
     photon_dtheta_v_det_CB  = new TH3F("photon_dtheta_v_det_CB", "#gamma CB; E_{rec} (MeV); det.nr;  #theta_{rec} - #theta_{true} (^{o})", 75, 0., 1500., 720, 0, 720, 20, -40., 40.);
@@ -41,6 +45,9 @@ TrueRecParticleGun::TrueRecParticleGun()
     proton_rE_v_det_TAPS     = new TH3F("proton_rE_v_det_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); relative (E_{rec} - E_{true}) / E_{rec} ", 30, 0., 600., 440, 0, 440, 500, -5., 5.);
     photon_dtheta_v_det_TAPS = new TH3F("photon_dtheta_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 150, 0., 1500., 440, 0, 440, 160, -20., 20.);
     proton_dtheta_v_det_TAPS = new TH3F("proton_dtheta_v_det_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #theta_{rec} - #theta_{true} (^{o})", 30, 0., 600., 440, 0, 440, 160, -20., 20.);
+    photon_dR_v_det_TAPS     = new TH2F("photon_dR_v_det_TAPS", "photon_dR_v_det_TAPS", 440, 0, 440, 400, -20., 20.);
+
+
     photon_dphi_v_det_TAPS   = new TH3F("photon_dphi_v_det_TAPS", "#gamma TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #phi_{rec} - #phi_{true} (^{o})", 150, 0., 1500., 440, 0, 440, 160, -40., 40.);
     proton_dphi_v_det_TAPS   = new TH3F("proton_dphi_v_det_TAPS", "proton TAPS; E_{rec} (MeV); #theta_{rec} (^{o}); #phi_{rec} - #phi_{true} (^{o})", 30, 0., 600., 440, 0, 440, 160, -40., 40.);
 
@@ -138,9 +145,6 @@ void	TrueRecParticleGun::ProcessEvent()
         for( UInt_t j = 0; j < GetTracks()->GetNTracks(); j++ )
         {
 
-
-
-
             photon_true_Evth_rec->Fill(E_true, th_true);
             if( GetTracks()->GetNTracks() == 1)
                 i = j;
@@ -180,6 +184,11 @@ void	TrueRecParticleGun::ProcessEvent()
             {
                 photon_secondary_Evth->Fill( GetTracks()->GetClusterEnergy(k), GetTracks()->GetTheta(k), E_true );
             }
+
+            photon_rE_v_2D->Fill(E_rec, th_rec, rel_E);
+            photon_dtheta_v_2D->Fill(E_rec, th_rec, dth);
+            photon_dphi_v_2D->Fill(E_rec, th_rec, dfi);
+
             if(GetTracks()->HasCB(i))
             {
                 photon_true_Evth_CB->Fill(E_true, th_true);
@@ -218,6 +227,14 @@ void	TrueRecParticleGun::ProcessEvent()
                 photon_dphi_v_det_TAPS->Fill(E_rec, GetTracks()->GetCentralCrystal(i), dfi);
 
                 photon_EtEr_v_det_TAPS->Fill(E_rec,  GetTracks()->GetCentralCrystal(i), E_true/E_rec);
+
+                Double_t ztrue   =  0.0;
+                Double_t R_true  =  (145.7-ztrue)*(TMath::Tan(trueobs.Theta()));
+                Double_t R_rec   =  R_TAPS[GetTracks()->GetCentralCrystal(i)];
+                Double_t dR      =  R_rec - R_true;
+
+                photon_dR_v_det_TAPS->Fill( GetTracks()->GetCentralCrystal(i)  ,dR );
+
 
             }
         }
@@ -321,6 +338,45 @@ Bool_t	TrueRecParticleGun::Init(const char* configfile)
         TAPSgain.push_back(std::stod(buffer3));
     }
     fileTAPS.close();
+
+    R_TAPS_corr.resize(0);
+    std::ifstream fileTAPSRcorr("configfiles/corr/TAPS_R_corr.txt");
+    if(fileTAPSRcorr){
+        std::getline(fileTAPSRcorr, line);
+        std::string         buffer4;
+        std::stringstream   ss3;
+        ss3 << line;
+        while (std::getline(ss3, buffer4, '\t'))
+        {
+            R_TAPS_corr.push_back(std::stod(buffer4));
+        }
+
+        fileTAPSRcorr.close();
+    }
+    else
+        for(int i = 0; i < 438; i++)
+            R_TAPS_corr.push_back(0.0);
+
+    R_TAPS.resize(0);
+    std::ifstream fileTAPScentrcoord("configfiles/BaF2-PbWO4.dat");
+    if(fileTAPScentrcoord){
+        int el;
+        double x,y,z, R;
+        for(int iel = 0; iel < 438; iel++){
+             fileTAPScentrcoord >> el >> x >> y >> z;
+             R = TMath::Sqrt(x*x + y*y);
+             R_TAPS.push_back(R);
+        }
+    }
+    else{
+        std::cout << "Did not find the file BaF2-PbWO4.dat"<<std::endl;
+        exit(0);
+    }
+
+    for(int iR = 0 ; iR < 438; iR++)
+    {
+        R_TAPS[iR] -=  R_TAPS_corr[iR];
+    }
 
 
    std::cout << " CB gain correction applied" << std::endl;
