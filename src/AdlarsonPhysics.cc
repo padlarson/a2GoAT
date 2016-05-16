@@ -1028,6 +1028,11 @@ void	AdlarsonPhysics::ProcessEvent()
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
        TrueAnalysis_etapr6g("PS");                    // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
+       if(MCJuly14)
+         MCw *= 595881./500000.;
+       else if(MCOctDec14)
+         MCw *= 1008880./1000000.;
+
 //       for 3pi0 and etapi0 MC
 //       MCw = 1.0;
 //       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
@@ -1091,7 +1096,6 @@ void	AdlarsonPhysics::ProcessEvent()
 
     // Here put in the condition that CB Energy Sum has to be fulfilled. For MC one has to consider also which photons contribute since in July 2014 data last 16 channels were off
     if(MC_weight){
-//        Double_t ESum_threshold = pRandoms->Gaus(487.6,77.2);
         Double_t ESum_threshold = pRandoms->Gaus(540.,52.);
         ESum_MC = Get_ESumMC(ESum);
         if( (ESum_MC < ESum_threshold)) return;
@@ -2370,7 +2374,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
              } // end of p 3pi0 final analysis
 
 //             if(PDF_cut->IsInside(probmin_eta2pi, probmin_3pi)){
-           if( (probmin_3pi < 0.1) && (probmin_eta2pi > 0.04) ){ //eta prime
+           if( (probmin_3pi < 0.02) && (probmin_eta2pi > 0.02) ){ //eta prime
+//               if( (probmin_3pi < 0.1) && (probmin_eta2pi > 0.04) ){ //eta prime
+
 
              if(MC_weight)
                 CB_EnergySum_etapr->FillWeighted(ESum_MC, MCw );
