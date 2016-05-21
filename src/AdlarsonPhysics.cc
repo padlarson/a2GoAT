@@ -1025,20 +1025,21 @@ void	AdlarsonPhysics::ProcessEvent()
 {
     if(MC){
 
-       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr6g("PS");                    // obtains the true observables
-       MCw = etapr_6gTrue.GetWeight();
-       if(MCJuly14)
-         MCw *= 595881./500000.;
-       else if(MCOctDec14)
-         MCw *= 1008880./1000000.;
+//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       TrueAnalysis_etapr6g("PS");                    // obtains the true observables
+//       MCw = etapr_6gTrue.GetWeight();
+//       if(MCJuly14)
+//         MCw *= 595881./500000.;
+//       else if(MCOctDec14)
+//         MCw *= 1008880./1000000.;
 
-//       for 3pi0 and etapi0 MC
-//       MCw = 1.0;
-//       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       MCw = TrueAnalysis_threepi_etapi();
+//*****       for 3pi0 and etapi0 MC *****
+       MCw = 1.0;
+       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       MCw = TrueAnalysis_threepi_etapi();
+       MCw *= 1.5;
 
-       MC_weight = true;
+//       MC_weight = true;
 //        etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //        TrueAnalysis_etapr10g();
 //        MCw = etapr_10gTrue.GetWeight();
@@ -1070,11 +1071,6 @@ void	AdlarsonPhysics::ProcessEvent()
     Double_t CB_avg_time_tmp = 0.;
     ESum    = 0;
     ESum_MC = 0;
-
-
-//    // SEE IT HERE!!!! //
-//    return;
-
 
     // Here change MC Energy Sum
     // First step: count clusters and add CB clusters inside time window. Obtain CB time average and Energy
@@ -3958,6 +3954,9 @@ void AdlarsonPhysics::Time_corr(){
 void AdlarsonPhysics::Energy_corr()
 {
     Double_t Erec, Ec_temp, DeltaE, Ec;
+    // test 160517
+    Double_t Ec2;
+    // end test
     Double_t smear;
 
     int group;
@@ -3970,6 +3969,7 @@ void AdlarsonPhysics::Energy_corr()
 
             DeltaE = Ec_temp*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetTheta(i)));
             Ec = Ec_temp - DeltaE;
+
 
             if(MC){
                 smear = CB_unc->GetBinContent(CB_unc->FindBin(GetTracks()->GetCentralCrystal(i)));

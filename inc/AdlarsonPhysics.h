@@ -605,8 +605,7 @@ private:
     TProfile*       dthvth_TAPS;
     TFile*          Ecorr_CB;         // File which contains TH2F
     TH2F*           EvdetCB;
-    TFile*          Ecorr_CB2;         // File which contains TH2F
-    TH2F*           EvdetCB2;
+
     TFile*          Ecorr_TAPS;         // File which contains TH2F
     TH2F*           EvdetTAPS;
 
