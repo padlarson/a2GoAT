@@ -259,6 +259,7 @@ private:
     GHistBGSub2*    proton_fit_e_v_th_final;
 
     GH1*            six_fit_IM;
+    GHistBGSub2*    six_fit_IM_ncl;
     GHistBGSub2*    six_fit_IM_vz;
     GHistBGSub2*    six_fit_dthpr_vz;
 

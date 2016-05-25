@@ -242,13 +242,13 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_fit_true_p_fi_v_det       = new TH2F("six_fit_true_p_fi_v_det", "true proton fi vs phi rec", 440, 0, 440, 800, -200.0, 200.0);
 
     six_fit_IM                  = new GH1("six_fit_IM", "IM(6#gamma) after APLCON fit", 400, 400., 1200.);
-    six_fit_IM_ncl              = new GHistBGSub2("six_fit_IM_ncl", "IM(6#gamma) vs ncl", 2, 7, 8, 400, 400., 1200.);
+    six_fit_IM_ncl              = new GHistBGSub2("six_fit_IM_ncl", "IM(6#gamma) vs ncl", 10, 0., 10., 400, 400., 1200.);
     six_fit_IM_vz               = new GHistBGSub2("six_fit_IM_vz", "IM(6#gamma) vs z_true", 400, 400., 1200., 100, -10.0, 10.0);
     six_fit_dthpr_vz            = new GHistBGSub2("six_fit_dthpr_vz", "dth proton true - fit vs z_true", 100, -5., 5., 100, -10.0, 10.0);
 
     six_fit_IM_3pi              = new GH1("six_fit_IM_3pi", "IM(6#gamma) for 3#pi^{0} candidates", 400, 400., 1200.);
     six_fit_IM_eta2pi           = new GH1("six_fit_IM_eta2pi", "IM(6#gamma) for #eta2#pi^{0} candidates", 120, 800., 1100.);
-    six_fit_IM_eta2pi_v_ncl     = new GHistBGSub2("six_fit_IM_eta2pi_v_ncl", "IM(6#gamma) for #eta2#pi^{0} vs ncl", 2,7,8, 120, 800., 1100.);
+    six_fit_IM_eta2pi_v_ncl     = new GHistBGSub2("six_fit_IM_eta2pi_v_ncl", "IM(6#gamma) for #eta2#pi^{0} vs ncl", 10,0.,10., 120, 800., 1100.);
 
     six_fit_IM_eta2pi0_b        = new GH1("six_fit_IM_eta2pi0_b", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.01", 120, 800., 1100.);
     six_fit_IM_eta2pi0_c        = new GH1("six_fit_IM_eta2pi0_c", "IM(6#gamma) for #eta2#pi^{0}, P_{#eta2#pi} > 0.04 & P_{3#pi} < 0.0075", 120, 800., 1100.);
