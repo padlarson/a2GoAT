@@ -2441,7 +2441,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    if(eight_clusters)
                        ncl = 8 ;
 
-                   six_fit_IM_eta2pi_v_ncl->Fill( etap_fit_final.M(),ncl, GetTagger()->GetTaggedTime(tag) );
+                   six_fit_IM_eta2pi_v_ncl->Fill(ncl, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
 
                    six_fit_IM_eta2pi->Fill( etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
 
