@@ -242,6 +242,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     six_fit_true_p_fi_v_det       = new TH2F("six_fit_true_p_fi_v_det", "true proton fi vs phi rec", 440, 0, 440, 800, -200.0, 200.0);
 
     six_fit_IM                  = new GH1("six_fit_IM", "IM(6#gamma) after APLCON fit", 400, 400., 1200.);
+    six_fit_IM_ncl              = new GHistBGSub2("six_fit_IM_ncl", "IM(6#gamma) vs ncl", 2, 7, 8, 400, 400., 1200.);
     six_fit_IM_vz               = new GHistBGSub2("six_fit_IM_vz", "IM(6#gamma) vs z_true", 400, 400., 1200., 100, -10.0, 10.0);
     six_fit_dthpr_vz            = new GHistBGSub2("six_fit_dthpr_vz", "dth proton true - fit vs z_true", 100, -5., 5., 100, -10.0, 10.0);
 
@@ -2015,8 +2016,15 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 six_fit_chi2->Fill( result_min.ChiSquare, GetTagger()->GetTaggedTime(tag));
                 six_fit_pdf->Fill( result_min.Probability, GetTagger()->GetTaggedTime(tag) );
 
-                if(result_min.Probability >0.01 && result_min.Probability <1.0)
+                if(result_min.Probability >0.01 && result_min.Probability <1.0){
                     six_fit_IM->Fill( etap_fit.M(),GetTagger()->GetTaggedTime(tag) );
+
+                    int ncl = 7;
+                    if(eight_clusters)
+                        ncl = 8;
+
+                    six_fit_IM_ncl->Fill( ncl, etap_fit.M(), GetTagger()->GetTaggedTime(tag)  );
+                }
 
                 proton_fit_e_v_th->Fill(proton_fit.E() - MASS_PROTON, proton_fit.Theta()*TMath::RadToDeg(), GetTagger()->GetTaggedTime(tag));
                 p_E_v_TOF_after_kfit->Fill(TOF_CB_proton, proton_fit.E()-MASS_PROTON, GetTagger()->GetTaggedTime(tag));
