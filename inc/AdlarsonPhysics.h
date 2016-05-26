@@ -39,7 +39,6 @@ private:
     Bool_t          MCOctDec14 = true;
 
     Bool_t          eight_clusters;
-    Bool_t          nine_clusters;
     // Histograms and scatterplots
     // True
     GH1*            true_BeamE;

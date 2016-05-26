@@ -1052,7 +1052,7 @@ void	AdlarsonPhysics::ProcessEvent()
     UInt_t CB_clusters = 0;
 
     eight_clusters = false;
-    nine_clusters = false;
+
 
     Double_t CB_avg_time = -1000.;
     Double_t CB_avg_time_tmp = 0.;
@@ -1266,40 +1266,6 @@ void	AdlarsonPhysics::ProcessEvent()
       eight_clusters = true;
    }
 
-   if((FinalClusterSelection.size() == 9) && (TAPS_cl.size() >= 3)){
-       Int_t imin_E_cluster = 0;
-       Double_t Emin = 1.0e6;
-       for(UInt_t p = 0; p < TAPS_cl.size(); p++){
-           UInt_t q = TAPS_cl[p];
-           if(q != iprtrack){
-               if(GetTracks()->GetClusterEnergy(q) < Emin){
-                   Emin = GetTracks()->GetClusterEnergy(q);
-                   imin_E_cluster = q;
-               }
-           }
-       }
-       // here re-set the FinalClusterSelection
-
-       Int_t imin_E_cluster2 = 0;
-       Emin = 1.0e6;
-       for(UInt_t p = 0; p < TAPS_cl.size(); p++){
-           UInt_t q = TAPS_cl[p];
-           if((q != iprtrack) && (q != imin_E_cluster)){
-               if(GetTracks()->GetClusterEnergy(q) < Emin){
-                   Emin = GetTracks()->GetClusterEnergy(q);
-                   imin_E_cluster2 = q;
-               }
-           }
-       }
-       // here re-set the FinalClusterSelection
-       FinalClusterSelection.resize(0);
-       for(int icl = 0; icl < ClustersInTime.size(); icl++){
-           UInt_t q = FinalClusterSelection[icl];
-           if((imin_E_cluster != q) && (imin_E_cluster2 != q))
-             FinalClusterSelection.push_back(q);
-       }
-      nine_clusters = true;
-   }
 
     Double_t mass_hyp = IM6_vec.M();
 
@@ -2059,8 +2025,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     int ncl = 7;
                     if(eight_clusters)
                         ncl = 8;
-                    if(nine_clusters)
-                        ncl = 9;
 
                     six_fit_IM_ncl->Fill( ncl, etap_fit.M(), GetTagger()->GetTaggedTime(tag)  );
                 }
@@ -2204,8 +2168,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                int n_clusters = 7;
                if(eight_clusters)
                     n_clusters = 8;
-               if(nine_clusters)
-                   n_clusters = 9;
+
                vec_nclusters.push_back(n_clusters);
 
                vec_X.push_back(Xfit);
@@ -2494,8 +2457,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    int ncl = 7;
                    if(eight_clusters)
                        ncl = 8 ;
-                   if(nine_clusters)
-                       ncl = 9;
+
 
                    six_fit_IM_eta2pi_v_ncl->Fill(ncl, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
 
