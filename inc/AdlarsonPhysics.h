@@ -39,6 +39,7 @@ private:
     Bool_t          MCOctDec14 = true;
 
     Bool_t          eight_clusters;
+    Bool_t          nine_clusters;
     // Histograms and scatterplots
     // True
     GH1*            true_BeamE;
@@ -360,6 +361,7 @@ private:
     const int   MAX_LENGTH  =30;
     // vectors related to TTrees saved at the end of the analysis
     std::vector<double> vec_weight;
+    std::vector<int> vec_nclusters;
     std::vector<double> vec_taggerenergy;
     std::vector<double> vec_fitted_pr_th;
     std::vector<double> vec_fitted_pr_e;
@@ -391,6 +393,7 @@ private:
     TTree* tree;
     int       branch_length;
     double*   branch_weight;
+    int*      branch_nclusters;
     double*   branch_taggerenergy;
     double*   branch_fitted_pr_th;
     double*   branch_fitted_pr_e;

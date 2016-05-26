@@ -903,6 +903,7 @@ Bool_t	AdlarsonPhysics::Start()
     tree = new TTree("tree","result");
 
     branch_weight        = new double[MAX_LENGTH];
+    branch_nclusters     = new int[MAX_LENGTH];
     branch_taggerenergy  = new double[MAX_LENGTH];
     branch_fitted_pr_th  = new double[MAX_LENGTH];
     branch_fitted_pr_e   = new double[MAX_LENGTH];
@@ -932,6 +933,7 @@ Bool_t	AdlarsonPhysics::Start()
 
     tree->Branch("branch_length",&branch_length);
     tree->Branch("weight", branch_weight, "branch_weight[branch_length]/D" );
+    tree->Branch("nclusters", branch_nclusters, "branch_nclusters[branch_length]/I");
     tree->Branch("beam_energy", branch_taggerenergy, "branch_taggerenergy[branch_length]/D" );
     tree->Branch("proton_th_fit", branch_fitted_pr_th, "branch_fitted_pr_th[branch_length]/D" );
     tree->Branch("branch_fitted_pr_e", branch_fitted_pr_e, "branch_fitted_pr_e[branch_length]/D" );
@@ -1050,6 +1052,7 @@ void	AdlarsonPhysics::ProcessEvent()
     UInt_t CB_clusters = 0;
 
     eight_clusters = false;
+    nine_clusters = false;
 
     Double_t CB_avg_time = -1000.;
     Double_t CB_avg_time_tmp = 0.;
@@ -1263,7 +1266,40 @@ void	AdlarsonPhysics::ProcessEvent()
       eight_clusters = true;
    }
 
-    int lenth = FinalClusterSelection.size();
+   if((FinalClusterSelection.size() == 9) && (TAPS_cl.size() >= 3)){
+       Int_t imin_E_cluster = 0;
+       Double_t Emin = 1.0e6;
+       for(UInt_t p = 0; p < TAPS_cl.size(); p++){
+           UInt_t q = TAPS_cl[p];
+           if(q != iprtrack){
+               if(GetTracks()->GetClusterEnergy(q) < Emin){
+                   Emin = GetTracks()->GetClusterEnergy(q);
+                   imin_E_cluster = q;
+               }
+           }
+       }
+       // here re-set the FinalClusterSelection
+
+       Int_t imin_E_cluster2 = 0;
+       Emin = 1.0e6;
+       for(UInt_t p = 0; p < TAPS_cl.size(); p++){
+           UInt_t q = TAPS_cl[p];
+           if((q != iprtrack) && (q != imin_E_cluster)){
+               if(GetTracks()->GetClusterEnergy(q) < Emin){
+                   Emin = GetTracks()->GetClusterEnergy(q);
+                   imin_E_cluster2 = q;
+               }
+           }
+       }
+       // here re-set the FinalClusterSelection
+       FinalClusterSelection.resize(0);
+       for(int icl = 0; icl < ClustersInTime.size(); icl++){
+           UInt_t q = FinalClusterSelection[icl];
+           if((imin_E_cluster != q) && (imin_E_cluster2 != q))
+             FinalClusterSelection.push_back(q);
+       }
+      nine_clusters = true;
+   }
 
     Double_t mass_hyp = IM6_vec.M();
 
@@ -1751,6 +1787,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
     // First reset the vectors
     vec_weight.resize(0);
+    vec_nclusters.resize(0);
     vec_X.resize(0);
     vec_Y.resize(0);
     vec_M_eta2pi.resize(0);
@@ -2022,6 +2059,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     int ncl = 7;
                     if(eight_clusters)
                         ncl = 8;
+                    if(nine_clusters)
+                        ncl = 9;
 
                     six_fit_IM_ncl->Fill( ncl, etap_fit.M(), GetTagger()->GetTaggedTime(tag)  );
                 }
@@ -2161,6 +2200,13 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                         vec_weight.push_back(1.0);
                else
                    vec_weight.push_back(MCw);
+
+               int n_clusters = 7;
+               if(eight_clusters)
+                    n_clusters = 8;
+               if(nine_clusters)
+                   n_clusters = 9;
+               vec_nclusters.push_back(n_clusters);
 
                vec_X.push_back(Xfit);
                vec_Y.push_back(Yfit);
@@ -2448,6 +2494,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    int ncl = 7;
                    if(eight_clusters)
                        ncl = 8 ;
+                   if(nine_clusters)
+                       ncl = 9;
 
                    six_fit_IM_eta2pi_v_ncl->Fill(ncl, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
 
@@ -3042,6 +3090,7 @@ void AdlarsonPhysics::FillTree(){
     branch_length = vec_weight.size();
     for(int i = 0; i < branch_length ; i++){
         branch_weight[i]        = vec_weight[i];
+        branch_nclusters[i]     = vec_nclusters[i];
         branch_taggerenergy[i]  = vec_taggerenergy[i];
         branch_fitted_pr_th[i]  = vec_fitted_pr_th[i];
         branch_fitted_pr_e[i]   = vec_fitted_pr_e[i];
