@@ -332,6 +332,11 @@ private:
     GHistBGSub2*    six_phy_DP_010;
     GHistBGSub2*    six_phy_DP_075;
     GHistBGSub2*    six_phy_DP_005;
+    GHistBGSub2*    six_phy_DP_020_P1;
+    GHistBGSub2*    six_phy_DP_015_P1;
+    GHistBGSub2*    six_phy_DP_010_P1;
+    GHistBGSub2*    six_phy_DP_075_P1;
+    GHistBGSub2*    six_phy_DP_005_P1;
     GHistBGSub2*    six_phy_DP_X;
     GHistBGSub2*    six_phy_DP_Y;
     GHistBGSub2*    six_phy_M_pi1pi2_v_etapr;
