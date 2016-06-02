@@ -240,7 +240,6 @@ private:
     GH1*            six_rec_IM_eta2pi;
     GHistBGSub2*    six_rec_EvTh_6g;
     GHistBGSub2*    six_rec_EvTh_7g;
-    GHistBGSub2*    six_rec_EvTh_8g;
     GHistBGSub2*    time_clusters_CB_3pi0;
 
     GH1*            six_fit_chi2;
@@ -362,68 +361,102 @@ private:
 
 
     TString     tree_file_name;
-    const int   MAX_LENGTH  =30;
-    // vectors related to TTrees saved at the end of the analysis
-    std::vector<double> vec_weight;
-    std::vector<int> vec_nclusters;
-    std::vector<double> vec_taggerenergy;
-    std::vector<double> vec_fitted_pr_th;
-    std::vector<double> vec_fitted_pr_e;
-    std::vector<double> fitted_zvx;
-    std::vector<double> vec_X;
-    std::vector<double> vec_Y;
-    std::vector<double> vec_pdf_eta2pi;
-    std::vector<double> vec_pdf_3pi;
-    std::vector<double> vec_pdf_etapr;
-    std::vector<int> vec_costh_epr_cm;
-    std::vector<double> vec_DP_005;
-    std::vector<double> vec_DP_010;
-    std::vector<double> vec_DP_015;
-    std::vector<double> vec_M_eta2pi;
-    std::vector<double> vec_M_etapi1;
-    std::vector<double> vec_M_etapi2;
-    std::vector<double> vec_M_pipi;
-    std::vector<int> vec_costh_epr_cm_pr;
-    std::vector<double> vec_X_pr;
-    std::vector<double> vec_Y_pr;
-    std::vector<int> vec_DP_005_pr;
-    std::vector<int> vec_DP_010_pr;
-    std::vector<int> vec_DP_015_pr;
-    std::vector<double> vec_M_etapi_pr1;
-    std::vector<double> vec_M_etapi_pr2;
-    std::vector<double> vec_M_pipi_pr;
+//    const int   MAX_LENGTH  =30;
+//    // vectors related to TTrees saved at the end of the analysis
+//    std::vector<double> vec_weight;
+//    std::vector<int> vec_nclusters;
+//    std::vector<double> vec_taggerenergy;
+//    std::vector<double> vec_fitted_pr_th;
+//    std::vector<double> vec_fitted_pr_e;
+//    std::vector<double> fitted_zvx;
+//    std::vector<double> vec_X;
+//    std::vector<double> vec_Y;
+//    std::vector<double> vec_pdf_eta2pi;
+//    std::vector<double> vec_pdf_3pi;
+//    std::vector<double> vec_pdf_etapr;
+//    std::vector<int> vec_costh_epr_cm;
+//    std::vector<double> vec_DP_005;
+//    std::vector<double> vec_DP_010;
+//    std::vector<double> vec_DP_015;
+//    std::vector<double> vec_M_eta2pi;
+//    std::vector<double> vec_M_etapi1;
+//    std::vector<double> vec_M_etapi2;
+//    std::vector<double> vec_M_pipi;
+//    std::vector<int> vec_costh_epr_cm_pr;
+//    std::vector<double> vec_X_pr;
+//    std::vector<double> vec_Y_pr;
+//    std::vector<int> vec_DP_005_pr;
+//    std::vector<int> vec_DP_010_pr;
+//    std::vector<int> vec_DP_015_pr;
+//    std::vector<double> vec_M_etapi_pr1;
+//    std::vector<double> vec_M_etapi_pr2;
+//    std::vector<double> vec_M_pipi_pr;
 
-    TFile* f_tree;
-    TTree* tree;
-    int       branch_length;
-    double*   branch_weight;
-    int*      branch_nclusters;
-    double*   branch_taggerenergy;
-    double*   branch_fitted_pr_th;
-    double*   branch_fitted_pr_e;
-    double*   branch_fitted_zvx;
-    double*   branch_X;
-    double*   branch_Y;
-    double*   branch_pdf_eta2pi;
-    double*   branch_pdf_3pi;
-    double*   branch_pdf_etapr;
-    double*   branch_costh_epr_cm;
-    int*      branch_DP_005;
-    int*      branch_DP_010;
-    int*      branch_DP_015;
-    double*   branch_M_eta2pi;
-    double*   branch_M_etapi1;
-    double*   branch_M_etapi2;
-    double*   branch_M_pipi;
-    double*   branch_costh_epr_cm_pr;
-    double*   branch_X_pr;
-    double*   branch_Y_pr;
-    int*      branch_DP_005_pr;
-    int*      branch_DP_010_pr;
-    int*      branch_DP_015_pr;
-    double*   branch_M_etapi_pr1;
-    double*   branch_M_etapi_pr2;
-    double*   branch_M_pipi_pr;
+//    TFile* f_tree;
+//    TTree* tree;
+//    int       branch_length;
+//    double*   branch_weight;
+//    int*      branch_nclusters;
+//    double*   branch_taggerenergy;
+//    double*   branch_fitted_pr_th;
+//    double*   branch_fitted_pr_e;
+//    double*   branch_fitted_zvx;
+//    double*   branch_X;
+//    double*   branch_Y;
+//    double*   branch_pdf_eta2pi;
+//    double*   branch_pdf_3pi;
+//    double*   branch_pdf_etapr;
+//    double*   branch_costh_epr_cm;
+//    int*      branch_DP_005;
+//    int*      branch_DP_010;
+//    int*      branch_DP_015;
+//    double*   branch_M_eta2pi;
+//    double*   branch_M_etapi1;
+//    double*   branch_M_etapi2;
+//    double*   branch_M_pipi;
+//    double*   branch_costh_epr_cm_pr;
+//    double*   branch_X_pr;
+//    double*   branch_Y_pr;
+//    int*      branch_DP_005_pr;
+//    int*      branch_DP_010_pr;
+//    int*      branch_DP_015_pr;
+//    double*   branch_M_etapi_pr1;
+//    double*   branch_M_etapi_pr2;
+//    double*   branch_M_pipi_pr;
+
+    TFile*    f_tree2;
+    TTree*    tree2;
+
+    double    fWeight;
+    int       fNclusters;
+    double    fTaggerenergy;
+    double    fProton_th_fit;
+    double    fProton_E_fit;
+    double    fZ_vx_fit;
+    double    fX;
+    double    fY;
+    double    fPeta2pi;
+    double    fP3pi;
+    double    fPetapr;
+    double    fCosth_epr_cm;
+    int       fDP005;
+    int       fDP075;
+    int       fDP010;
+    int       fDP015;
+    double    fMeta2pi;
+    double    fMpipi;
+    double    fMetapi1;
+    double    fMetapi2;
+    double    fCosth_epr_cm_pr;
+    double    fXpr;
+    double    fYpr;
+    int       fDP005pr;
+    int       fDP075pr;
+    int       fDP010pr;
+    int       fDP015pr;
+    double    fMpipipr;
+    double    fMetapi1pr;
+    double    fMetapi2pr;
 
 
     // Kinfit related variables 10g
@@ -599,6 +632,11 @@ private:
     TFile*          Ecorr_TAPS;         // File which contains TH2F
     TH2F*           EvdetTAPS;
 
+    TFile*          Ecorr_gamma;        // correction compated to MC 3pi0
+    TH2F*           Eth_gamma;
+
+
+
 //    TFile*          g_corr_peak_2pi0;
 //    TH2F*           g_corr_twopi0;
 
@@ -770,6 +808,8 @@ public:
     double GetWeight3pi2(Double_t M1sq, Double_t M2sq);
     double GetWeight3pi3(Double_t M1sq, Double_t M2sq);
     void Kinfit_test();
+
+    double GetGain(Double_t E, Double_t th);
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
     std::vector<double> Get_unc_R(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);

@@ -219,7 +219,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     time_clusters_CB_3pi0       = new GHistBGSub2("time_clusters_CB_3pi0", "CB cluster time for 3pi0 events", 200, -50., 50., 720, 0, 720),
     six_rec_EvTh_6g             = new GHistBGSub2("six_rec_EvTh_6g", "E_{#gamma} vs #Theta_{#gamma} rec 6g cand", 100, 0., 1000., 100, 0., 200.);
     six_rec_EvTh_7g             = new GHistBGSub2("six_rec_EvTh_7g", "E_{#gamma} vs #Theta_{#gamma} rec 7g cand", 100, 0., 1000., 100, 0., 200.);
-    six_rec_EvTh_8g             = new GHistBGSub2("six_rec_EvTh_8g", "E_{#gamma} vs #Theta_{#gamma} rec 8g cand", 100, 0., 1000., 100, 0., 200.);
 
     six_fit_chi2                = new GH1("six_fit_chi2", "#chi^{2} kinfit for 6#gamma", 20, 0, 20.);
     six_fit_pdf                 = new GH1("six_fit_pdf", "pdf kinfit for 6#gamma", 100, 0, 1.);
@@ -394,6 +393,9 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     Ecorr_TAPS                 = new TFile("configfiles/corr/TAPS_e_corr.root");
     EvdetTAPS                  = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
+
+    Ecorr_gamma                = new TFile("configfiles/corr/MCEXP3pi0diff.root");
+    Eth_gamma                  = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
 
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
@@ -902,70 +904,111 @@ Bool_t	AdlarsonPhysics::Start()
     
     tree_file_name = prefix + suffix + pch2;
 
-    f_tree = new TFile(tree_file_name,"recreate");
+//    f_tree = new TFile(tree_file_name,"recreate");
+//    std::cout << tree_file_name << std::endl;
+//    if(f_tree)
+//        std::cout << "Created output tree in linked output folder"<< std::endl;
+//    tree = new TTree("tree","result");
+
+//    branch_weight        = new double[MAX_LENGTH];
+//    branch_nclusters     = new int[MAX_LENGTH];
+//    branch_taggerenergy  = new double[MAX_LENGTH];
+//    branch_fitted_pr_th  = new double[MAX_LENGTH];
+//    branch_fitted_pr_e   = new double[MAX_LENGTH];
+//    branch_fitted_zvx    = new double[MAX_LENGTH];
+//    branch_pdf_eta2pi    = new double[MAX_LENGTH];
+//    branch_pdf_3pi       = new double[MAX_LENGTH];
+//    branch_pdf_etapr     = new double[MAX_LENGTH];
+//    branch_costh_epr_cm  = new double[MAX_LENGTH];
+//    branch_X             = new double[MAX_LENGTH];
+//    branch_Y             = new double[MAX_LENGTH];
+//    branch_DP_005        = new int[MAX_LENGTH];
+//    branch_DP_010        = new int[MAX_LENGTH];
+//    branch_DP_015        = new int[MAX_LENGTH];
+//    branch_M_eta2pi      = new double[MAX_LENGTH];
+//    branch_M_etapi1      = new double[MAX_LENGTH];
+//    branch_M_etapi2      = new double[MAX_LENGTH];
+//    branch_M_pipi        = new double[MAX_LENGTH];
+//    branch_costh_epr_cm_pr = new double[MAX_LENGTH];
+//    branch_X_pr          = new double[MAX_LENGTH];
+//    branch_Y_pr          = new double[MAX_LENGTH];
+//    branch_DP_005_pr     = new int[MAX_LENGTH];
+//    branch_DP_010_pr     = new int[MAX_LENGTH];
+//    branch_DP_015_pr     = new int[MAX_LENGTH];
+//    branch_M_etapi_pr1   = new double[MAX_LENGTH];
+//    branch_M_etapi_pr2   = new double[MAX_LENGTH];
+//    branch_M_pipi_pr     = new double[MAX_LENGTH];
+
+//    tree->Branch("branch_length",&branch_length);
+//    tree->Branch("weight", branch_weight, "branch_weight[branch_length]/D" );
+//    tree->Branch("nclusters", branch_nclusters, "branch_nclusters[branch_length]/I");
+//    tree->Branch("beam_energy", branch_taggerenergy, "branch_taggerenergy[branch_length]/D" );
+//    tree->Branch("proton_th_fit", branch_fitted_pr_th, "branch_fitted_pr_th[branch_length]/D" );
+//    tree->Branch("branch_fitted_pr_e", branch_fitted_pr_e, "branch_fitted_pr_e[branch_length]/D" );
+//    tree->Branch("z_vx_fit", branch_fitted_zvx, "branch_fitted_zvx[branch_length]/D" );
+//    tree->Branch("pdf_eta2pi", branch_pdf_eta2pi, "branch_pdf_eta2pi[branch_length]/D" );
+//    tree->Branch("pdf_3pi", branch_pdf_3pi, "branch_pdf_3pi[branch_length]/D" );
+//    tree->Branch("pdf_etapr", branch_pdf_etapr, "branch_pdf_etapr[branch_length]/D" );
+//    tree->Branch("costh_epr_cm", branch_costh_epr_cm, "branch_costh_epr_cm[branch_length]/D" );
+//    tree->Branch("X", branch_X, "branch_X[branch_length]/D" );
+//    tree->Branch("Y", branch_Y, "branch_Y[branch_length]/D" );
+//    tree->Branch("DP_005bin", branch_DP_005, "branch_DP_005[branch_length]/I" );
+//    tree->Branch("DP_010bin", branch_DP_010, "branch_DP_010[branch_length]/I" );
+//    tree->Branch("DP_015bin", branch_DP_015, "branch_DP_015[branch_length]/I" );
+//    tree->Branch("Meta2pi", branch_M_eta2pi, "branch_M_eta2pi[branch_length]/D" );
+//    tree->Branch("Metapi1", branch_M_etapi1, "branch_M_etapi1[branch_length]/D" );
+//    tree->Branch("Metapi2", branch_M_etapi2, "branch_M_etapi2[branch_length]/D" );
+//    tree->Branch("Mpipi", branch_M_pipi, "branch_M_pipi[branch_length]/D" );
+//    tree->Branch("costh_epr_cm_pr", branch_costh_epr_cm_pr, "branch_costh_epr_cm_pr[branch_length]/D" );
+//    tree->Branch("X_prime", branch_X_pr, "branch_X_pr[branch_length]/D" );
+//    tree->Branch("Y_prime", branch_Y_pr, "branch_Y_pr[branch_length]/D" );
+//    tree->Branch("DP_005bin_prime", branch_DP_005_pr, "branch_DP_005_pr[branch_length]/I" );
+//    tree->Branch("DP_010bin_prime", branch_DP_010_pr, "branch_DP_010_pr[branch_length]/I" );
+//    tree->Branch("DP_015bin_prime", branch_DP_015_pr, "branch_DP_015_pr[branch_length]/I" );
+//    tree->Branch("Metapi_pr1", branch_M_etapi_pr1, "branch_M_etapi_pr1[branch_length]/D" );
+//    tree->Branch("Metapi_pr2", branch_M_etapi_pr2, "branch_M_etapi_pr2[branch_length]/D" );
+//    tree->Branch("Mpipi_pr", branch_M_pipi_pr, "branch_M_pipi_pr[branch_length]/D" );
+
+    TFile*    f_tree2;
+    TTree*    tree2;
+
+    f_tree2 = new TFile(tree_file_name,"recreate");
     std::cout << tree_file_name << std::endl;
-    if(f_tree)
+    if(f_tree2)
         std::cout << "Created output tree in linked output folder"<< std::endl;
-    tree = new TTree("tree","result");
+    tree2 = new TTree("tree2","result");
 
-    branch_weight        = new double[MAX_LENGTH];
-    branch_nclusters     = new int[MAX_LENGTH];
-    branch_taggerenergy  = new double[MAX_LENGTH];
-    branch_fitted_pr_th  = new double[MAX_LENGTH];
-    branch_fitted_pr_e   = new double[MAX_LENGTH];
-    branch_fitted_zvx    = new double[MAX_LENGTH];
-    branch_pdf_eta2pi    = new double[MAX_LENGTH];
-    branch_pdf_3pi       = new double[MAX_LENGTH];
-    branch_pdf_etapr     = new double[MAX_LENGTH];
-    branch_costh_epr_cm  = new double[MAX_LENGTH];
-    branch_X             = new double[MAX_LENGTH];
-    branch_Y             = new double[MAX_LENGTH];
-    branch_DP_005        = new int[MAX_LENGTH];
-    branch_DP_010        = new int[MAX_LENGTH];
-    branch_DP_015        = new int[MAX_LENGTH];
-    branch_M_eta2pi      = new double[MAX_LENGTH];
-    branch_M_etapi1      = new double[MAX_LENGTH];
-    branch_M_etapi2      = new double[MAX_LENGTH];
-    branch_M_pipi        = new double[MAX_LENGTH];
-    branch_costh_epr_cm_pr = new double[MAX_LENGTH];
-    branch_X_pr          = new double[MAX_LENGTH];
-    branch_Y_pr          = new double[MAX_LENGTH];
-    branch_DP_005_pr     = new int[MAX_LENGTH];
-    branch_DP_010_pr     = new int[MAX_LENGTH];
-    branch_DP_015_pr     = new int[MAX_LENGTH];
-    branch_M_etapi_pr1   = new double[MAX_LENGTH];
-    branch_M_etapi_pr2   = new double[MAX_LENGTH];
-    branch_M_pipi_pr     = new double[MAX_LENGTH];
+    tree2->Branch("fWeight",&fWeight);
+    tree2->Branch("fNclusters",&fNclusters);
+    tree2->Branch("fTaggerenergy",&fTaggerenergy);
+    tree2->Branch("fProton_th_fit",&fProton_th_fit);
+    tree2->Branch("fProton_E_fit",&fProton_E_fit);
+    tree2->Branch("fZ_vx_fit",&fZ_vx_fit);
+    tree2->Branch("fX",&fX);
+    tree2->Branch("fY",&fY);
+    tree2->Branch("fPeta2pi",&fPeta2pi);
+    tree2->Branch("fP3pi",&fP3pi);
+    tree2->Branch("fPetapr",&fPetapr);
+    tree2->Branch("fCosth_epr_cm",&fCosth_epr_cm);
+    tree2->Branch("fDP005",&fDP005);
+    tree2->Branch("fDP075",&fDP075);
+    tree2->Branch("fDP010",&fDP010);
+    tree2->Branch("fDP015",&fDP015);
+    tree2->Branch("fMeta2pi",&fMeta2pi);
+    tree2->Branch("fMpipi",&fMpipi);
+    tree2->Branch("fMetapi1",&fMetapi1);
+    tree2->Branch("fMetapi2",&fMetapi2);
+    tree2->Branch("fCosth_epr_cm_pr",&fCosth_epr_cm_pr);
+    tree2->Branch("fXpr",&fXpr);
+    tree2->Branch("fYpr",&fYpr);
+    tree2->Branch("fDP005pr",&fDP005pr);
+    tree2->Branch("fDP075pr",&fDP075pr);
+    tree2->Branch("fDP010pr",&fDP010pr);
+    tree2->Branch("fDP015pr",&fDP015pr);
+    tree2->Branch("fMpipipr",&fMpipipr);
+    tree2->Branch("fMetapi1pr",&fMetapi1pr);
+    tree2->Branch("fMetapi2pr",&fMetapi2pr);
 
-    tree->Branch("branch_length",&branch_length);
-    tree->Branch("weight", branch_weight, "branch_weight[branch_length]/D" );
-    tree->Branch("nclusters", branch_nclusters, "branch_nclusters[branch_length]/I");
-    tree->Branch("beam_energy", branch_taggerenergy, "branch_taggerenergy[branch_length]/D" );
-    tree->Branch("proton_th_fit", branch_fitted_pr_th, "branch_fitted_pr_th[branch_length]/D" );
-    tree->Branch("branch_fitted_pr_e", branch_fitted_pr_e, "branch_fitted_pr_e[branch_length]/D" );
-    tree->Branch("z_vx_fit", branch_fitted_zvx, "branch_fitted_zvx[branch_length]/D" );
-    tree->Branch("pdf_eta2pi", branch_pdf_eta2pi, "branch_pdf_eta2pi[branch_length]/D" );
-    tree->Branch("pdf_3pi", branch_pdf_3pi, "branch_pdf_3pi[branch_length]/D" );
-    tree->Branch("pdf_etapr", branch_pdf_etapr, "branch_pdf_etapr[branch_length]/D" );
-    tree->Branch("costh_epr_cm", branch_costh_epr_cm, "branch_costh_epr_cm[branch_length]/D" );
-    tree->Branch("X", branch_X, "branch_X[branch_length]/D" );
-    tree->Branch("Y", branch_Y, "branch_Y[branch_length]/D" );
-    tree->Branch("DP_005bin", branch_DP_005, "branch_DP_005[branch_length]/I" );
-    tree->Branch("DP_010bin", branch_DP_010, "branch_DP_010[branch_length]/I" );
-    tree->Branch("DP_015bin", branch_DP_015, "branch_DP_015[branch_length]/I" );
-    tree->Branch("Meta2pi", branch_M_eta2pi, "branch_M_eta2pi[branch_length]/D" );
-    tree->Branch("Metapi1", branch_M_etapi1, "branch_M_etapi1[branch_length]/D" );
-    tree->Branch("Metapi2", branch_M_etapi2, "branch_M_etapi2[branch_length]/D" );
-    tree->Branch("Mpipi", branch_M_pipi, "branch_M_pipi[branch_length]/D" );
-    tree->Branch("costh_epr_cm_pr", branch_costh_epr_cm_pr, "branch_costh_epr_cm_pr[branch_length]/D" );
-    tree->Branch("X_prime", branch_X_pr, "branch_X_pr[branch_length]/D" );
-    tree->Branch("Y_prime", branch_Y_pr, "branch_Y_pr[branch_length]/D" );
-    tree->Branch("DP_005bin_prime", branch_DP_005_pr, "branch_DP_005_pr[branch_length]/I" );
-    tree->Branch("DP_010bin_prime", branch_DP_010_pr, "branch_DP_010_pr[branch_length]/I" );
-    tree->Branch("DP_015bin_prime", branch_DP_015_pr, "branch_DP_015_pr[branch_length]/I" );
-    tree->Branch("Metapi_pr1", branch_M_etapi_pr1, "branch_M_etapi_pr1[branch_length]/D" );
-    tree->Branch("Metapi_pr2", branch_M_etapi_pr2, "branch_M_etapi_pr2[branch_length]/D" );
-    tree->Branch("Mpipi_pr", branch_M_pipi_pr, "branch_M_pipi_pr[branch_length]/D" );
 
     if (!GetScalers()->IsOpenForInput())
         MC = true;
@@ -1002,8 +1045,8 @@ Bool_t	AdlarsonPhysics::Start()
     time_nr_FinalClusterSel.Write();
     six_time_TaggedTime.Write();
 
-    f_tree->Write();
-    f_tree->Close();
+    f_tree2->Write();
+    f_tree2->Close();
     
 //    close and write physics tree
     
@@ -1016,7 +1059,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
        MC_weight = true;
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr6g("PS");                    // obtains the true observables
+       TrueAnalysis_etapr6g("Sergey");                    // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
        if(MCJuly14)
          MCw *= 595881./500000.;
@@ -1237,18 +1280,6 @@ void	AdlarsonPhysics::ProcessEvent()
         }
     }
 
-    if(FinalClusterSelection.size() == 9){
-        for(UInt_t p = 0; p < FinalClusterSelection.size() ; p++){
-            UInt_t q = FinalClusterSelection[p];
-            if(q != iprtrack){
-                IM6_vec += GetTracks()->GetVector(q);
-                if(MC_weight)
-                    six_rec_EvTh_8g->FillWeighted(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q), MCw);
-                else
-                    six_rec_EvTh_8g->Fill(GetTracks()->GetClusterEnergy(q),GetTracks()->GetTheta(q));
-            }
-        }
-    }
 
    if((FinalClusterSelection.size() == 8) && (TAPS_cl.size() >= 2)){
        Int_t imin_E_cluster = 0;
@@ -1266,8 +1297,12 @@ void	AdlarsonPhysics::ProcessEvent()
        FinalClusterSelection.resize(0);
        for(int icl = 0; icl < ClustersInTime.size(); icl++){
            UInt_t q = FinalClusterSelection[icl];
-           if(imin_E_cluster != q)
+           IM6_vec.SetPxPyPzE(0.,0.,0.,0.);
+           if(imin_E_cluster != q){
              FinalClusterSelection.push_back(q);
+             if(q != iprtrack)
+                IM6_vec += GetTracks()->GetVector(q);
+           }
        }
       eight_clusters = true;
    }
@@ -1758,37 +1793,37 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
 void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
     // First reset the vectors
-    vec_weight.resize(0);
-    vec_nclusters.resize(0);
-    vec_X.resize(0);
-    vec_Y.resize(0);
-    vec_M_eta2pi.resize(0);
-    vec_taggerenergy.resize(0);
-    vec_fitted_pr_th.resize(0);
-    vec_fitted_pr_e.resize(0);
-    fitted_zvx.resize(0);
-    vec_X.resize(0);
-    vec_Y.resize(0);
-    vec_pdf_eta2pi.resize(0);
-    vec_pdf_3pi.resize(0);
-    vec_pdf_etapr.resize(0);
-    vec_costh_epr_cm.resize(0);
-    vec_DP_005.resize(0);
-    vec_DP_010.resize(0);
-    vec_DP_015.resize(0);
-    vec_M_eta2pi.resize(0);
-    vec_M_etapi1.resize(0);
-    vec_M_etapi2.resize(0);
-    vec_M_pipi.resize(0);
-    vec_costh_epr_cm_pr.resize(0);
-    vec_X_pr.resize(0);
-    vec_Y_pr.resize(0);
-    vec_DP_005_pr.resize(0);
-    vec_DP_010_pr.resize(0);
-    vec_DP_015_pr.resize(0);
-    vec_M_etapi_pr1.resize(0);
-    vec_M_etapi_pr2.resize(0);
-    vec_M_pipi_pr.resize(0);
+//    vec_weight.resize(0);
+//    vec_nclusters.resize(0);
+//    vec_X.resize(0);
+//    vec_Y.resize(0);
+//    vec_M_eta2pi.resize(0);
+//    vec_taggerenergy.resize(0);
+//    vec_fitted_pr_th.resize(0);
+//    vec_fitted_pr_e.resize(0);
+//    fitted_zvx.resize(0);
+//    vec_X.resize(0);
+//    vec_Y.resize(0);
+//    vec_pdf_eta2pi.resize(0);
+//    vec_pdf_3pi.resize(0);
+//    vec_pdf_etapr.resize(0);
+//    vec_costh_epr_cm.resize(0);
+//    vec_DP_005.resize(0);
+//    vec_DP_010.resize(0);
+//    vec_DP_015.resize(0);
+//    vec_M_eta2pi.resize(0);
+//    vec_M_etapi1.resize(0);
+//    vec_M_etapi2.resize(0);
+//    vec_M_pipi.resize(0);
+//    vec_costh_epr_cm_pr.resize(0);
+//    vec_X_pr.resize(0);
+//    vec_Y_pr.resize(0);
+//    vec_DP_005_pr.resize(0);
+//    vec_DP_010_pr.resize(0);
+//    vec_DP_015_pr.resize(0);
+//    vec_M_etapi_pr1.resize(0);
+//    vec_M_etapi_pr2.resize(0);
+//    vec_M_pipi_pr.resize(0);
 
     for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++){
         if((GetTagger()->GetTaggedTime(tag) < tagger_min) || (GetTagger()->GetTaggedTime(tag) > tagger_max)) continue;
@@ -2163,38 +2198,38 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                DalitzPlot(fin, Xfit, Yfit, bw, DP_binnr_fit005);
 
                // filling results in vector for Tree
-               if(!MC)
-                    if( (GetTagger()->GetTaggedTime(tag) > 3.5) || (GetTagger()->GetTaggedTime(tag) < -4.5))
-                        vec_weight.push_back(-8./160.);
-                    else
-                        vec_weight.push_back(1.0);
-               else
-                   vec_weight.push_back(MCw);
+//               if(!MC)
+//                    if( (GetTagger()->GetTaggedTime(tag) > 3.5) || (GetTagger()->GetTaggedTime(tag) < -4.5))
+//                        vec_weight.push_back(-8./160.);
+//                    else
+//                        vec_weight.push_back(1.0);
+//               else
+//                   vec_weight.push_back(MCw);
 
                int n_clusters = 7;
                if(eight_clusters)
                     n_clusters = 8;
 
-               vec_nclusters.push_back(n_clusters);
+//               vec_nclusters.push_back(n_clusters);
 
-               vec_X.push_back(Xfit);
-               vec_Y.push_back(Yfit);
-               vec_M_eta2pi.push_back(etap_fit_final.M());
-               vec_taggerenergy.push_back(GetTagger()->GetTaggedEnergy(tag));
-               vec_fitted_pr_th.push_back(proton_fit.Theta()*TMath::RadToDeg());
-               vec_fitted_pr_e.push_back(proton_fit.E()-MASS_PROTON);
-               fitted_zvx.push_back(vx_z);
-               vec_pdf_eta2pi.push_back(probmin_eta2pi);
-               vec_pdf_3pi.push_back(probmin_3pi);
-               vec_pdf_etapr.push_back(probmin_etapr);
-               vec_costh_epr_cm.push_back(diffbin);
-               vec_DP_005.push_back(DP_binnr_fit005);
-               vec_DP_010.push_back(DP_binnr_fit010);
-               vec_DP_015.push_back(DP_binnr_fit015);
-               vec_M_eta2pi.push_back(etap_fit_final.M());
-               vec_M_etapi1.push_back(m_etapi01_fit/1.0e3);        // fill twice
-               vec_M_etapi2.push_back(m_etapi02_fit/1.0e3);
-               vec_M_pipi.push_back(m_2pi0_fit/1.0e3);
+//               vec_X.push_back(Xfit);
+//               vec_Y.push_back(Yfit);
+//               vec_M_eta2pi.push_back(etap_fit_final.M());
+//               vec_taggerenergy.push_back(GetTagger()->GetTaggedEnergy(tag));
+//               vec_fitted_pr_th.push_back(proton_fit.Theta()*TMath::RadToDeg());
+//               vec_fitted_pr_e.push_back(proton_fit.E()-MASS_PROTON);
+//               fitted_zvx.push_back(vx_z);
+//               vec_pdf_eta2pi.push_back(probmin_eta2pi);
+//               vec_pdf_3pi.push_back(probmin_3pi);
+//               vec_pdf_etapr.push_back(probmin_etapr);
+//               vec_costh_epr_cm.push_back(diffbin);
+//               vec_DP_005.push_back(DP_binnr_fit005);
+//               vec_DP_010.push_back(DP_binnr_fit010);
+//               vec_DP_015.push_back(DP_binnr_fit015);
+//               vec_M_eta2pi.push_back(etap_fit_final.M());
+//               vec_M_etapi1.push_back(m_etapi01_fit/1.0e3);        // fill twice
+//               vec_M_etapi2.push_back(m_etapi02_fit/1.0e3);
+//               vec_M_pipi.push_back(m_2pi0_fit/1.0e3);
 
                if(probmin_etapr > 0.01 && probmin_etapr < 1.0){
 
@@ -2223,26 +2258,26 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit005_pr);
 
 
-                   vec_costh_epr_cm_pr.push_back(diffbin_pr);
-                   vec_X_pr.push_back(Xfit);
-                   vec_Y_pr.push_back(Yfit);
-                   vec_DP_005_pr.push_back(DP_binnr_fit005_pr);
-                   vec_DP_010_pr.push_back(DP_binnr_fit010_pr);
-                   vec_DP_015_pr.push_back(DP_binnr_fit015_pr);
-                   vec_M_etapi_pr1.push_back(m_etapi01_fit_pr/1.0e3);
-                   vec_M_etapi_pr2.push_back(m_etapi02_fit_pr/1.0e3);
-                   vec_M_pipi_pr.push_back(m_2pi0_fit_pr/1.0e3);
+//                   vec_costh_epr_cm_pr.push_back(diffbin_pr);
+//                   vec_X_pr.push_back(Xfit);
+//                   vec_Y_pr.push_back(Yfit);
+//                   vec_DP_005_pr.push_back(DP_binnr_fit005_pr);
+//                   vec_DP_010_pr.push_back(DP_binnr_fit010_pr);
+//                   vec_DP_015_pr.push_back(DP_binnr_fit015_pr);
+//                   vec_M_etapi_pr1.push_back(m_etapi01_fit_pr/1.0e3);
+//                   vec_M_etapi_pr2.push_back(m_etapi02_fit_pr/1.0e3);
+//                   vec_M_pipi_pr.push_back(m_2pi0_fit_pr/1.0e3);
                }
                else{
-                   vec_costh_epr_cm_pr.push_back(-100);
-                   vec_X_pr.push_back(-100);
-                   vec_Y_pr.push_back(-100);
-                   vec_DP_005_pr.push_back(-100);
-                   vec_DP_010_pr.push_back(-100);
-                   vec_DP_015_pr.push_back(-100);
-                   vec_M_etapi_pr1.push_back(-100); // fill twice
-                   vec_M_etapi_pr2.push_back(-100);
-                   vec_M_pipi_pr.push_back(-100);
+//                   vec_costh_epr_cm_pr.push_back(-100);
+//                   vec_X_pr.push_back(-100);
+//                   vec_Y_pr.push_back(-100);
+//                   vec_DP_005_pr.push_back(-100);
+//                   vec_DP_010_pr.push_back(-100);
+//                   vec_DP_015_pr.push_back(-100);
+//                   vec_M_etapi_pr1.push_back(-100); // fill twice
+//                   vec_M_etapi_pr2.push_back(-100);
+//                   vec_M_pipi_pr.push_back(-100);
                }
 
                // end filling results in vector
@@ -2446,6 +2481,11 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     six_fit_best_2pi_rec->FillWeighted( rc_sig[1].M(), MCw );
                     six_fit_best_2pi_rec->FillWeighted( rc_sig[2].M(), MCw );
 
+                    int ncl = 7;
+                    if(eight_clusters)
+                        ncl = 8 ;
+                    six_fit_IM_eta2pi_v_ncl->Fill(ncl, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag) );
+
                     six_fit_IM_eta2pi->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
                     six_fit_etaprfinal_pdf->FillWeighted( probmin_eta2pi, MCw );
                     six_fit_eta_PDF_v_Metapr->FillWeighted( probmin_eta2pi, etap_fit_final.M(), MCw);
@@ -2612,7 +2652,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
     }
 
 //    if(vec_weight.size() > 0 )
-        FillTree();
+//        FillTree();
 
 }
 
@@ -3062,44 +3102,44 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
 }
 
 void AdlarsonPhysics::FillTree(){
-    if(vec_weight.size() >= MAX_LENGTH){
-        std::cout << "too many tagger hits!" <<  std::endl;
-        return;
-    }
+//    if(vec_weight.size() >= MAX_LENGTH){
+//        std::cout << "too many tagger hits!" <<  std::endl;
+//        return;
+//    }
 
-    branch_length = vec_weight.size();
-    for(int i = 0; i < branch_length ; i++){
-        branch_weight[i]        = vec_weight[i];
-        branch_nclusters[i]     = vec_nclusters[i];
-        branch_taggerenergy[i]  = vec_taggerenergy[i];
-        branch_fitted_pr_th[i]  = vec_fitted_pr_th[i];
-        branch_fitted_pr_e[i]   = vec_fitted_pr_e[i];
-        branch_fitted_zvx[i]    = fitted_zvx[i];
-        branch_pdf_eta2pi[i]    = vec_pdf_eta2pi[i];
-        branch_pdf_3pi[i]       = vec_pdf_3pi[i];
-        branch_pdf_etapr[i]     = vec_pdf_etapr[i];
-        branch_costh_epr_cm[i]  = vec_costh_epr_cm[i];
-        branch_X[i]             = vec_X[i];
-        branch_Y[i]             = vec_Y[i];
-        branch_DP_005[i]        = vec_DP_005[i];
-        branch_DP_010[i]        = vec_DP_010[i];
-        branch_DP_015[i]        = vec_DP_015[i];
-        branch_M_eta2pi[i]      = vec_M_eta2pi[i];
-        branch_M_etapi1[i]      = vec_M_etapi1[i];
-        branch_M_etapi2[i]      = vec_M_etapi2[i];
-        branch_M_pipi[i]        = vec_M_pipi[i];
-        branch_costh_epr_cm_pr[i] = vec_costh_epr_cm_pr[i];
-        branch_X_pr[i]          = vec_X_pr[i];
-        branch_Y_pr[i]          = vec_Y_pr[i];
-        branch_DP_005_pr[i]     = vec_DP_005_pr[i];
-        branch_DP_010_pr[i]     = vec_DP_010_pr[i];
-        branch_DP_015_pr[i]     = vec_DP_015_pr[i];
-        branch_M_etapi_pr1[i]   = vec_M_etapi_pr1[i];
-        branch_M_etapi_pr2[i]   = vec_M_etapi_pr2[i];
-        branch_M_pipi_pr[i]     = vec_M_pipi_pr[i];
-    }
+//    branch_length = vec_weight.size();
+//    for(int i = 0; i < branch_length ; i++){
+//        branch_weight[i]        = vec_weight[i];
+//        branch_nclusters[i]     = vec_nclusters[i];
+//        branch_taggerenergy[i]  = vec_taggerenergy[i];
+//        branch_fitted_pr_th[i]  = vec_fitted_pr_th[i];
+//        branch_fitted_pr_e[i]   = vec_fitted_pr_e[i];
+//        branch_fitted_zvx[i]    = fitted_zvx[i];
+//        branch_pdf_eta2pi[i]    = vec_pdf_eta2pi[i];
+//        branch_pdf_3pi[i]       = vec_pdf_3pi[i];
+//        branch_pdf_etapr[i]     = vec_pdf_etapr[i];
+//        branch_costh_epr_cm[i]  = vec_costh_epr_cm[i];
+//        branch_X[i]             = vec_X[i];
+//        branch_Y[i]             = vec_Y[i];
+//        branch_DP_005[i]        = vec_DP_005[i];
+//        branch_DP_010[i]        = vec_DP_010[i];
+//        branch_DP_015[i]        = vec_DP_015[i];
+//        branch_M_eta2pi[i]      = vec_M_eta2pi[i];
+//        branch_M_etapi1[i]      = vec_M_etapi1[i];
+//        branch_M_etapi2[i]      = vec_M_etapi2[i];
+//        branch_M_pipi[i]        = vec_M_pipi[i];
+//        branch_costh_epr_cm_pr[i] = vec_costh_epr_cm_pr[i];
+//        branch_X_pr[i]          = vec_X_pr[i];
+//        branch_Y_pr[i]          = vec_Y_pr[i];
+//        branch_DP_005_pr[i]     = vec_DP_005_pr[i];
+//        branch_DP_010_pr[i]     = vec_DP_010_pr[i];
+//        branch_DP_015_pr[i]     = vec_DP_015_pr[i];
+//        branch_M_etapi_pr1[i]   = vec_M_etapi_pr1[i];
+//        branch_M_etapi_pr2[i]   = vec_M_etapi_pr2[i];
+//        branch_M_pipi_pr[i]     = vec_M_pipi_pr[i];
+//    }
 
-    tree->Fill();
+//    tree->Fill();
 
 }
 
@@ -3988,7 +4028,7 @@ void AdlarsonPhysics::Time_corr(){
 void AdlarsonPhysics::Energy_corr()
 {
     Double_t Erec, Ec_temp, DeltaE, Ec;
-    // test 160517
+    // test 160601
     Double_t Ec2;
     // end test
     Double_t smear;
@@ -4023,6 +4063,17 @@ void AdlarsonPhysics::Energy_corr()
             Ec = Ec_temp - DeltaE;
 
             tracks->SetClusterEnergy(i, Ec);
+        }
+
+        if(!MC){
+            Double_t gain = GetGain(Ec, GetTracks()->GetTheta(i));
+
+            if((gain < 0.9) || (gain > 1.2))
+                  int stop_here = 0;
+
+            Double_t theta =  GetTracks()->GetTheta(i);
+            Ec2 = Ec*gain*gain;
+            tracks->SetClusterEnergy(i, Ec2);
         }
     }
 };
@@ -4800,3 +4851,118 @@ double AdlarsonPhysics::GetWeight3pi3(Double_t M1sq, Double_t M2sq){
     return MCw_center*(r_c/r_sum) + MCw_neighbor*(r_min/r_sum);
 
 }
+
+double AdlarsonPhysics::GetGain(Double_t E, Double_t th){
+
+    double r_c, r_temp, r_sum;
+    double E_c, th_c, E_temp, th_temp;
+    double r_min = 1.0e5;
+    double MCw_center, MCw_neighbor;
+    int x_n, y_n;
+
+    int xc = Eth_gamma->GetXaxis()->FindBin(E);
+    int yc = Eth_gamma->GetYaxis()->FindBin(th);
+
+    E_c  = Eth_gamma->GetXaxis()->GetBinCenter(xc);
+    th_c = Eth_gamma->GetYaxis()->GetBinCenter(yc);
+
+    r_c = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc)*Eth_gamma->GetXaxis()->GetBinCenter(xc)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc)*Eth_gamma->GetYaxis()->GetBinCenter(yc)-th*th)));
+    // test all 8 possibilities, from theta 0 - 360 deg, counter clock-wise
+    // 1) xbin + 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc+1)*Eth_gamma->GetXaxis()->GetBinCenter(xc+1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc)*Eth_gamma->GetYaxis()->GetBinCenter(yc)-th*th)));
+    E_temp =  Eth_gamma->GetXaxis()->GetBinCenter(xc+1);
+    th_temp = Eth_gamma->GetYaxis()->GetBinCenter(yc);
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc ;
+    }
+    // 2) xbin + 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc+1)*Eth_gamma->GetXaxis()->GetBinCenter(xc+1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc+1)*Eth_gamma->GetYaxis()->GetBinCenter(yc+1)-th*th)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc + 1 ;
+    }
+    // 3) xbin + 0, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc)*Eth_gamma->GetXaxis()->GetBinCenter(xc)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc+1)*Eth_gamma->GetYaxis()->GetBinCenter(yc+1)-th*th)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc + 1 ;
+    }
+    // 4) xbin - 1, ybin + 1
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc-1)*Eth_gamma->GetXaxis()->GetBinCenter(xc-1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc+1)*Eth_gamma->GetYaxis()->GetBinCenter(yc+1)-th*th)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc + 1;
+    }
+    // 5) xbin - 1, ybin + 0
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc-1)*Eth_gamma->GetXaxis()->GetBinCenter(xc-1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc)*Eth_gamma->GetYaxis()->GetBinCenter(yc)-th*th)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc ;
+    }
+    // 6) xbin - 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc-1)*Eth_gamma->GetXaxis()->GetBinCenter(xc-1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc-1)*Eth_gamma->GetYaxis()->GetBinCenter(yc-1)-th*th)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc - 1;
+        y_n = yc - 1;
+    }
+    // 7) xbin + 0, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc)*Eth_gamma->GetXaxis()->GetBinCenter(xc)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc-1)*Eth_gamma->GetYaxis()->GetBinCenter(yc-1)-th*th)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc ;
+        y_n = yc - 1;
+    }
+    // 8) xbin + 1, ybin - 1
+    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc+1)*Eth_gamma->GetXaxis()->GetBinCenter(xc+1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc-1)*Eth_gamma->GetYaxis()->GetBinCenter(yc-1)-th*th)));
+    if(r_temp < r_min){
+        r_min = r_temp;
+        x_n = xc + 1;
+        y_n = yc - 1;
+    }
+
+    MCw_center    = Eth_gamma->GetBinContent(xc,yc);
+    MCw_neighbor  = Eth_gamma->GetBinContent(x_n,y_n);
+    Double_t gain = 1.0;
+
+    if((TMath::Abs(MCw_center) < 1.0e-3) && (TMath::Abs(MCw_neighbor) < 1.0e-3)){
+        if(E < 40.){
+            int in = 1;
+            while((TMath::Abs(MCw_center)< 1.0e-3) && in < 10){
+                MCw_center = Eth_gamma->GetBinContent(xc+in,yc);
+                in++;
+            }
+            gain = MCw_center;
+        }
+        else{
+            int in = 1;
+            while((TMath::Abs(MCw_center)< 1.0e-3) && in < 10){
+                MCw_center = Eth_gamma->GetBinContent(xc-in,yc);
+                in++;
+            }
+            gain = MCw_center;
+        }
+    }
+    else if(TMath::Abs(MCw_center) < 1.0e-3)
+            gain = MCw_neighbor;
+    else if(TMath::Abs(MCw_neighbor) < 1.0e-3)
+            gain = MCw_center;
+    else{
+        r_sum = r_min + r_c;
+        gain = MCw_center*(r_c/r_sum) + MCw_neighbor*(r_min/r_sum);
+    }
+
+    if(TMath::Abs(gain) < 1.0e-3)
+            gain = 1.0;
+
+    return gain;
+
+}
+
+
