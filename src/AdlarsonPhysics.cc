@@ -978,8 +978,8 @@ Bool_t	AdlarsonPhysics::Start()
 //    tree->Branch("Metapi_pr2", branch_M_etapi_pr2, "branch_M_etapi_pr2[branch_length]/D" );
 //    tree->Branch("Mpipi_pr", branch_M_pipi_pr, "branch_M_pipi_pr[branch_length]/D" );
 
-    TFile*    f_tree2;
-    TTree*    tree2;
+//    TFile*    f_tree2;
+//    TTree*    tree2;
 
     f_tree2 = new TFile(tree_file_name,"recreate");
     std::cout << tree_file_name << std::endl;
@@ -2479,7 +2479,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     if(etap_fit.M() > 650.0){
                         six_fit_mgg_v_eth->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
                         six_fit_mgg_v_eth_2->Fill(nBIN2, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
-                        six_fit_mgg_v_eth_3->Fill(nBIN3, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
                     }
 
                     if( GetTracks()->HasCB( set_min[imin_3pi[isix]+2]) ){
