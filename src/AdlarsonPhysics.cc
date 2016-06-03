@@ -1290,6 +1290,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
 
    if((FinalClusterSelection.size() == 8) && (TAPS_cl.size() >= 2)){
+       IM6_vec.SetPxPyPzE(0.,0.,0.,0.);
        eight_clusters = true;
        Int_t imin_E_cluster = 0;
        Double_t Emin = 1.0e6;
@@ -1306,7 +1307,6 @@ void	AdlarsonPhysics::ProcessEvent()
        FinalClusterSelection.resize(0);
        for(int icl = 0; icl < ClustersInTime.size(); icl++){
            UInt_t q = FinalClusterSelection[icl];
-           IM6_vec.SetPxPyPzE(0.,0.,0.,0.);
            if(imin_E_cluster != q){
              FinalClusterSelection.push_back(q);
              if(q != iprtrack){
