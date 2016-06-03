@@ -304,6 +304,18 @@ private:
     GHistBGSub2*    six_fit_mgg_v_eth;
     GHistBGSub2*    six_fit_mgg_v_eth_2;
     GHistBGSub2*    six_fit_mgg_v_eth_3;
+    GHistBGSub2*    six_fit_mgg_v_CB;
+    GHistBGSub2*    six_fit_mgg_v_CB_2;
+    GHistBGSub2*    six_fit_mgg_v_CB_3;
+    GHistBGSub2*    six_fit_mgg_v_CB_4;
+    GHistBGSub2*    six_fit_mgg_v_TAPS;
+    GHistBGSub2*    six_fit_mgg_v_TAPS_2;
+    GHistBGSub2*    six_fit_mgg_v_TAPS_3;
+    GHistBGSub2*    six_fit_mgg_v_TAPS_4;
+
+
+
+
     GHistBGSub2*    six_rec_m6g_sig_v_eth;
     GHistBGSub2*    six_fit_fitted_etapr_de_v_eth;
     GHistBGSub2*    six_fit_fitted_3pi0_de_v_eth;
