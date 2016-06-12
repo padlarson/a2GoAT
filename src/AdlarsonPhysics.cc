@@ -403,7 +403,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     Ecorr_TAPS                 = new TFile("configfiles/corr/TAPS_e_corr.root");
     EvdetTAPS                  = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
 
-    Ecorr_gamma                = new TFile("configfiles/corr/MCEXP3pi0diff.root");
+    Ecorr_gamma                = new TFile("configfiles/corr/MCEXP3pi0diffJuly.root");
     Eth_gamma                  = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
 
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
@@ -4135,6 +4135,16 @@ void AdlarsonPhysics::Energy_corr()
             DeltaE = Ec_temp*(Double_t)EvdetCB->GetBinContent(EvdetCB->FindBin(Ec_temp, GetTracks()->GetTheta(i)));
             Ec = Ec_temp - DeltaE;
 
+            tracks->SetClusterEnergy(i, Ec);
+
+            if(!MC){
+
+                double gain = GetGain(Ec, GetTracks()->GetCentralCrystal(i));
+
+                Ec2 = Ec*gain;
+                tracks->SetClusterEnergy(i, Ec2);
+            }
+
 
             if(MC){
                 smear = CB_unc->GetBinContent(CB_unc->FindBin(GetTracks()->GetCentralCrystal(i)));
@@ -4142,7 +4152,7 @@ void AdlarsonPhysics::Energy_corr()
                     Ec = pRandoms->Gaus(Ec, smear*Ec);
             }
 
-            tracks->SetClusterEnergy(i, Ec);
+
 
         }
         else if(GetTracks()->HasTAPS(i) )
@@ -4156,16 +4166,7 @@ void AdlarsonPhysics::Energy_corr()
             tracks->SetClusterEnergy(i, Ec);
         }
 
-//        if(!MC){
-//            Double_t gain = GetGain(Ec, GetTracks()->GetTheta(i));
 
-//            if((gain < 0.9) || (gain > 1.2))
-//                  int stop_here = 0;
-
-//            Double_t theta =  GetTracks()->GetTheta(i);
-//            Ec2 = Ec*gain*gain;
-//            tracks->SetClusterEnergy(i, Ec2);
-//        }
     }
 };
 
@@ -4943,117 +4944,63 @@ double AdlarsonPhysics::GetWeight3pi3(Double_t M1sq, Double_t M2sq){
 
 }
 
-double AdlarsonPhysics::GetGain(Double_t E, Double_t th){
+double AdlarsonPhysics::GetGain(Double_t E, Double_t detnr){
 
-    double r_c, r_temp, r_sum;
-    double E_c, th_c, E_temp, th_temp;
-    double r_min = 1.0e5;
-    double MCw_center, MCw_neighbor;
-    int x_n, y_n;
+    double  gain_c, gain_n, gain;
+    double  E_c, E_n, de;
+    double  frac_c, frac_n;
+    int     x_n, y_n;
 
-    int xc = Eth_gamma->GetXaxis()->FindBin(E);
-    int yc = Eth_gamma->GetYaxis()->FindBin(th);
+    de = 40.;
 
-    E_c  = Eth_gamma->GetXaxis()->GetBinCenter(xc);
-    th_c = Eth_gamma->GetYaxis()->GetBinCenter(yc);
+    int xc  = Eth_gamma->GetXaxis()->FindBin(E);
+    int yc  = Eth_gamma->GetYaxis()->FindBin(detnr);
 
-    r_c = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc)*Eth_gamma->GetXaxis()->GetBinCenter(xc)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc)*Eth_gamma->GetYaxis()->GetBinCenter(yc)-th*th)));
-    // test all 8 possibilities, from theta 0 - 360 deg, counter clock-wise
-    // 1) xbin + 1, ybin + 0
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc+1)*Eth_gamma->GetXaxis()->GetBinCenter(xc+1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc)*Eth_gamma->GetYaxis()->GetBinCenter(yc)-th*th)));
-    E_temp =  Eth_gamma->GetXaxis()->GetBinCenter(xc+1);
-    th_temp = Eth_gamma->GetYaxis()->GetBinCenter(yc);
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc + 1;
-        y_n = yc ;
+    E_c     = Eth_gamma->GetXaxis()->GetBinCenter(xc);
+    gain_c = Eth_gamma->GetBinContent(xc,yc); // in the same bin
+    if( E < E_c ){
+        E_n     = Eth_gamma->GetXaxis()->GetBinCenter(xc-1);
+        gain_n  = Eth_gamma->GetBinContent(xc-1,yc);
     }
-    // 2) xbin + 1, ybin + 1
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc+1)*Eth_gamma->GetXaxis()->GetBinCenter(xc+1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc+1)*Eth_gamma->GetYaxis()->GetBinCenter(yc+1)-th*th)));
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc + 1;
-        y_n = yc + 1 ;
-    }
-    // 3) xbin + 0, ybin + 1
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc)*Eth_gamma->GetXaxis()->GetBinCenter(xc)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc+1)*Eth_gamma->GetYaxis()->GetBinCenter(yc+1)-th*th)));
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc ;
-        y_n = yc + 1 ;
-    }
-    // 4) xbin - 1, ybin + 1
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc-1)*Eth_gamma->GetXaxis()->GetBinCenter(xc-1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc+1)*Eth_gamma->GetYaxis()->GetBinCenter(yc+1)-th*th)));
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc - 1;
-        y_n = yc + 1;
-    }
-    // 5) xbin - 1, ybin + 0
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc-1)*Eth_gamma->GetXaxis()->GetBinCenter(xc-1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc)*Eth_gamma->GetYaxis()->GetBinCenter(yc)-th*th)));
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc - 1;
-        y_n = yc ;
-    }
-    // 6) xbin - 1, ybin - 1
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc-1)*Eth_gamma->GetXaxis()->GetBinCenter(xc-1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc-1)*Eth_gamma->GetYaxis()->GetBinCenter(yc-1)-th*th)));
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc - 1;
-        y_n = yc - 1;
-    }
-    // 7) xbin + 0, ybin - 1
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc)*Eth_gamma->GetXaxis()->GetBinCenter(xc)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc-1)*Eth_gamma->GetYaxis()->GetBinCenter(yc-1)-th*th)));
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc ;
-        y_n = yc - 1;
-    }
-    // 8) xbin + 1, ybin - 1
-    r_temp = TMath::Sqrt(TMath::Abs((Eth_gamma->GetXaxis()->GetBinCenter(xc+1)*Eth_gamma->GetXaxis()->GetBinCenter(xc+1)-E*E)) + TMath::Abs((Eth_gamma->GetYaxis()->GetBinCenter(yc-1)*Eth_gamma->GetYaxis()->GetBinCenter(yc-1)-th*th)));
-    if(r_temp < r_min){
-        r_min = r_temp;
-        x_n = xc + 1;
-        y_n = yc - 1;
-    }
-
-    MCw_center    = Eth_gamma->GetBinContent(xc,yc);
-    MCw_neighbor  = Eth_gamma->GetBinContent(x_n,y_n);
-    Double_t gain = 1.0;
-
-    if((TMath::Abs(MCw_center) < 1.0e-3) && (TMath::Abs(MCw_neighbor) < 1.0e-3)){
-        if(E < 40.){
-            int in = 1;
-            while((TMath::Abs(MCw_center)< 1.0e-3) && in < 10){
-                MCw_center = Eth_gamma->GetBinContent(xc+in,yc);
-                in++;
-            }
-            gain = MCw_center;
-        }
-        else{
-            int in = 1;
-            while((TMath::Abs(MCw_center)< 1.0e-3) && in < 10){
-                MCw_center = Eth_gamma->GetBinContent(xc-in,yc);
-                in++;
-            }
-            gain = MCw_center;
-        }
-    }
-    else if(TMath::Abs(MCw_center) < 1.0e-3)
-            gain = MCw_neighbor;
-    else if(TMath::Abs(MCw_neighbor) < 1.0e-3)
-            gain = MCw_center;
     else{
-        r_sum = r_min + r_c;
-        gain = MCw_center*(r_c/r_sum) + MCw_neighbor*(r_min/r_sum);
+        E_n     = Eth_gamma->GetXaxis()->GetBinCenter(xc+1);
+        gain_n  = Eth_gamma->GetBinContent(xc+1,yc);
     }
+
+    // 4 cases-
+        // i)   c and n have content
+        // ii)  c has content, not n
+        // iii) n has content, not c
+        // iv)  no content c nor n
+
+    if((TMath::Abs(gain_c) > 1.0e-3) && (TMath::Abs(gain_n) > 1.0e-3)){
+        frac_c = 1-TMath::Abs(E-E_c)/de;
+        frac_n = 1-TMath::Abs(E-E_n)/de;
+        gain = frac_c*gain_c + frac_n*gain_n;
+    }
+    else if((TMath::Abs(gain_c) > 1.0e-3) && (TMath::Abs(gain_n) < 1.0e-3)){
+        gain = gain_c;
+    }
+    else if((TMath::Abs(gain_n) > 1.0e-3) && (TMath::Abs(gain_c) < 1.0e-3)){
+        gain = gain_n;
+    }
+    else{
+        int ibin = 1;
+        while((TMath::Abs(Eth_gamma->GetBinContent(xc-ibin,yc))<1.0e-3) && (ibin < 10))
+            ibin++;
+        gain = Eth_gamma->GetBinContent(xc-ibin,yc);
+
+        if(TMath::Abs(gain)<1.0e-3)
+            gain =1.;
+
+    }
+
 
     if(TMath::Abs(gain) < 1.0e-3)
             gain = 1.0;
 
 
-    if((gain < 0.9) || (gain > 1.2))
+    if((gain < 0.85) || (gain > 1.2))
           int stop_here = 0;
 
     return gain;

@@ -821,7 +821,7 @@ public:
     double GetWeight3pi3(Double_t M1sq, Double_t M2sq);
     void Kinfit_test();
 
-    double GetGain(Double_t E, Double_t th);
+    double GetGain(Double_t E, Double_t detnr);
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
     std::vector<double> Get_unc_R(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
