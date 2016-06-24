@@ -403,7 +403,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     Ecorr_TAPS                 = new TFile("configfiles/corr/TAPS_e_corr.root");
     EvdetTAPS                  = (TH2F*)Ecorr_TAPS->Get("g_peak_E_TAPS");
 
-    Ecorr_gamma                = new TFile("configfiles/corr/MCEXP3pi0diffJuly.root");
+    Ecorr_gamma                = new TFile("configfiles/data/MCEXP3pi0diff.root");
     Eth_gamma                  = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
 
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
