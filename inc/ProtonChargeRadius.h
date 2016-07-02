@@ -22,13 +22,16 @@ class	ProtonChargeRadius  : public GTreeManager
 {
 private:
 
-    TRandom3*       pRandoms;
+   TRandom3*       pRandoms;
     // histograms and scatterplots
    GHistBGSub* True_BeamEnergy;
    // Phase space observables
    GHistBGSub2* ThvT_p;
    GHistBGSub2* proton_p_v_th;
+   GHistBGSub2* proton_p_vs_t;
    GHistBGSub2* BeamEvETh_p;
+   GH1*         e_acceptance;
+   GH1*         mu_acceptance;
    GHistBGSub2* ThvT_e;
    GHistBGSub2* ThvT_mu;
 
@@ -62,10 +65,13 @@ private:
    GHistBGSub2*        dt_v_bin;
    GHistBGSub2*        dmll_v_bin2;
    GHistBGSub2*        dt_v_bin2;
+   GHistBGSub2*        dmll_v_bin3;
+   GHistBGSub2*        dt_v_bin3;
 
 
    GHistBGSub2*        proton_E_v_th;
    GHistBGSub2*        proton_t_v_th;
+   GHistBGSub2*        proton_E_v_mllth;
    GHistBGSub3*        proton_rE_v_2D;
    GHistBGSub3*        proton_rt_v_2D;
    GHistBGSub3*        proton_dtheta_v_2D;
