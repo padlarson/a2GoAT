@@ -646,6 +646,8 @@ private:
 
     TFile*          Ecorr_gamma;        // correction compated to MC 3pi0
     TH2F*           Eth_gamma;
+    TFile*          Ecorr_gammaNLO;     // NLO correction compated to MC 3pi0
+    TH2F*           Eth_gammaNLO;
 
 
 
@@ -822,6 +824,7 @@ public:
     void Kinfit_test();
 
     double GetGain(Double_t E, Double_t detnr);
+    double GetGainNLO(Double_t E, Double_t detnr);
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
     std::vector<double> Get_unc_R(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);

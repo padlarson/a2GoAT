@@ -406,6 +406,9 @@ AdlarsonPhysics::AdlarsonPhysics():
     Ecorr_gamma                = new TFile("configfiles/data/MCEXP3pi0diff.root");
     Eth_gamma                  = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
 
+    Ecorr_gammaNLO             = new TFile("configfiles/data/MCEXP3pi0diffNLO.root");
+    Eth_gammaNLO               = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
+
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
 
@@ -4120,7 +4123,7 @@ void AdlarsonPhysics::Energy_corr()
 {
     Double_t Erec, Ec_temp, DeltaE, Ec;
     // test 160601
-    Double_t Ec2;
+    Double_t Ec2, Ec3;
     // end test
     Double_t smear;
 
@@ -4140,9 +4143,10 @@ void AdlarsonPhysics::Energy_corr()
             if(!MC){
 
                 double gain = GetGain(Ec, GetTracks()->GetCentralCrystal(i));
-
                 Ec2 = Ec*gain;
-                tracks->SetClusterEnergy(i, Ec2);
+                double gainNLO = GetGainNLO(Ec2, GetTracks()->GetCentralCrystal(i));
+                Ec3 = Ec2*gainNLO;
+                tracks->SetClusterEnergy(i, Ec3);
             }
 
 
@@ -4151,8 +4155,6 @@ void AdlarsonPhysics::Energy_corr()
                 if(smear > 0.0)
                     Ec = pRandoms->Gaus(Ec, smear*Ec);
             }
-
-
 
         }
         else if(GetTracks()->HasTAPS(i) )
@@ -4989,6 +4991,69 @@ double AdlarsonPhysics::GetGain(Double_t E, Double_t detnr){
         while((TMath::Abs(Eth_gamma->GetBinContent(xc-ibin,yc))<1.0e-3) && (ibin < 10))
             ibin++;
         gain = Eth_gamma->GetBinContent(xc-ibin,yc);
+
+        if(TMath::Abs(gain)<1.0e-3)
+            gain =1.;
+
+    }
+
+
+    if(TMath::Abs(gain) < 1.0e-3)
+            gain = 1.0;
+
+
+    if((gain < 0.85) || (gain > 1.2))
+          int stop_here = 0;
+
+    return gain;
+
+}
+
+double AdlarsonPhysics::GetGainNLO(Double_t E, Double_t detnr){
+
+    double  gain_c, gain_n, gain;
+    double  E_c, E_n, de;
+    double  frac_c, frac_n;
+    int     x_n, y_n;
+
+    de = 40.;
+
+    int xc  = Eth_gammaNLO->GetXaxis()->FindBin(E);
+    int yc  = Eth_gammaNLO->GetYaxis()->FindBin(detnr);
+
+    E_c     = Eth_gammaNLO->GetXaxis()->GetBinCenter(xc);
+    gain_c = Eth_gammaNLO->GetBinContent(xc,yc); // in the same bin
+    if( E < E_c ){
+        E_n     = Eth_gammaNLO->GetXaxis()->GetBinCenter(xc-1);
+        gain_n  = Eth_gammaNLO->GetBinContent(xc-1,yc);
+    }
+    else{
+        E_n     = Eth_gammaNLO->GetXaxis()->GetBinCenter(xc+1);
+        gain_n  = Eth_gammaNLO->GetBinContent(xc+1,yc);
+    }
+
+    // 4 cases-
+        // i)   c and n have content
+        // ii)  c has content, not n
+        // iii) n has content, not c
+        // iv)  no content c nor n
+
+    if((TMath::Abs(gain_c) > 1.0e-3) && (TMath::Abs(gain_n) > 1.0e-3)){
+        frac_c = 1-TMath::Abs(E-E_c)/de;
+        frac_n = 1-TMath::Abs(E-E_n)/de;
+        gain = frac_c*gain_c + frac_n*gain_n;
+    }
+    else if((TMath::Abs(gain_c) > 1.0e-3) && (TMath::Abs(gain_n) < 1.0e-3)){
+        gain = gain_c;
+    }
+    else if((TMath::Abs(gain_n) > 1.0e-3) && (TMath::Abs(gain_c) < 1.0e-3)){
+        gain = gain_n;
+    }
+    else{
+        int ibin = 1;
+        while((TMath::Abs(Eth_gammaNLO->GetBinContent(xc-ibin,yc))<1.0e-3) && (ibin < 10))
+            ibin++;
+        gain = Eth_gammaNLO->GetBinContent(xc-ibin,yc);
 
         if(TMath::Abs(gain)<1.0e-3)
             gain =1.;
