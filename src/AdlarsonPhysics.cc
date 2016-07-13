@@ -2104,7 +2104,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
            Double_t    chi2min_eta2pi  = 1.0e6;
            Double_t    chi2min_3pi     = 1.0e6;
-           Double_t    probmin_etapr  = 1.0e6;
+           Double_t    probmin_etapr  = 0.;
            Double_t    probmin_eta2pi  = 1.0e6;
            Double_t    probmin_3pi     = 1.0e6;
            std::vector<int> imin_eta2pi;
@@ -2210,39 +2210,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                bw = 0.05;
                DalitzPlot(fin, Xfit, Yfit, bw, DP_binnr_fit005);
 
-               // filling results in vector for Tree
-//               if(!MC)
-//                    if( (GetTagger()->GetTaggedTime(tag) > 3.5) || (GetTagger()->GetTaggedTime(tag) < -4.5))
-//                        vec_weight.push_back(-8./160.);
-//                    else
-//                        vec_weight.push_back(1.0);
-//               else
-//                   vec_weight.push_back(MCw);
-
                int n_clusters = 7;
                if(eight_clusters)
                     n_clusters = 8;
 
-//               vec_nclusters.push_back(n_clusters);
-
-//               vec_X.push_back(Xfit);
-//               vec_Y.push_back(Yfit);
-//               vec_M_eta2pi.push_back(etap_fit_final.M());
-//               vec_taggerenergy.push_back(GetTagger()->GetTaggedEnergy(tag));
-//               vec_fitted_pr_th.push_back(proton_fit.Theta()*TMath::RadToDeg());
-//               vec_fitted_pr_e.push_back(proton_fit.E()-MASS_PROTON);
-//               fitted_zvx.push_back(vx_z);
-//               vec_pdf_eta2pi.push_back(probmin_eta2pi);
-//               vec_pdf_3pi.push_back(probmin_3pi);
-//               vec_pdf_etapr.push_back(probmin_etapr);
-//               vec_costh_epr_cm.push_back(diffbin);
-//               vec_DP_005.push_back(DP_binnr_fit005);
-//               vec_DP_010.push_back(DP_binnr_fit010);
-//               vec_DP_015.push_back(DP_binnr_fit015);
-//               vec_M_eta2pi.push_back(etap_fit_final.M());
-//               vec_M_etapi1.push_back(m_etapi01_fit/1.0e3);        // fill twice
-//               vec_M_etapi2.push_back(m_etapi02_fit/1.0e3);
-//               vec_M_pipi.push_back(m_2pi0_fit/1.0e3);
 
                if(!MC)
                     if( (GetTagger()->GetTaggedTime(tag) > 3.5) || (GetTagger()->GetTaggedTime(tag) < -4.5))
@@ -2252,99 +2223,66 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                else
                    fWeight = MCw;
 
-                fPeta2pi = probmin_eta2pi;
-                fP3pi    = probmin_3pi;
-                fMeta2pi = etap_fit_final.M();
+                fNclusters      = n_clusters;
+                fTaggerenergy   = GetTagger()->GetTaggedEnergy(tag);
+                fProton_E_fit   = proton_fit.E()-MASS_PROTON;
+                fProton_th_fit  = proton_fit.Theta()*TMath::RadToDeg();
+                fZ_vx_fit       = vx_z;
+                fPeta2pi        = probmin_eta2pi;
+                fP3pi           = probmin_3pi;
+                fPetapr         = probmin_etapr;
+                fMeta2pi        = etap_fit_final.M();
+                fX              = Xfit;
+                fY              = Yfit;
+                fCosth_epr_cm   = diffbin;
+                fMpipi          = m_2pi0_fit/1.0e3;
+                fMetapi1        = m_etapi01_fit/1.0e3;
+                fMetapi2        = m_etapi02_fit/1.0e3;
+                fDP005          = DP_binnr_fit005;
+                fDP075          = DP_binnr_fit075;
+                fDP010          = DP_binnr_fit010;
+                fDP015          = DP_binnr_fit015;
+
+                if(probmin_etapr > 0.01 && probmin_etapr < 1.0){
+
+                    TLorentzVector fin_metapr[3];
+                    fin_metapr[0] = photons_fit_final_metapr[0] + photons_fit_final_metapr[1];
+                    fin_metapr[1] = photons_fit_final_metapr[2] + photons_fit_final_metapr[3];
+                    fin_metapr[2] = photons_fit_final_metapr[4] + photons_fit_final_metapr[5];
+
+                    TLorentzVector fin_all_metapr = fin_metapr[0] + fin_metapr[1] + fin_metapr[2];
+                    diffbin_pr =  diff_distr( GetTagger()->GetTaggedEnergy(tag), fin_all_metapr );
+
+                    m_etapi01_fit_pr = 0.;
+                    m_etapi02_fit_pr = 0.;
+                    m_2pi0_fit_pr    = 0.;
+                    m2pi0_metapi0( fin_metapr ,  m_etapi01_fit_pr, m_etapi02_fit_pr, m_2pi0_fit_pr);
+
+                    bw = 0.20;
+                    DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit020_pr);
+                    bw = 0.15;
+                    DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit015_pr);
+                    bw = 0.10;
+                    DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit010_pr);
+                    bw = 0.075;
+                    DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit075_pr);
+                    bw = 0.05;
+                    DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit005_pr);
+
+                }
+
+                fCosth_epr_cm_pr    = diffbin_pr;
+                fXpr                = Xfit_pr;
+                fYpr                = Yfit_pr;
+                fDP005pr            = DP_binnr_fit005_pr;
+                fDP075pr            = DP_binnr_fit075_pr;
+                fDP010pr            = DP_binnr_fit010_pr;
+                fDP015pr            = DP_binnr_fit015_pr;
+                fMpipipr            = m_2pi0_fit_pr/1.0e3;
+                fMetapi1pr          = m_etapi01_fit_pr/1.0e3;
+                fMetapi2pr          = m_etapi02_fit_pr/1.0e3;
 
                 tree2->Fill();
-
-//                tree2->Branch("fWeight",&fWeight);
-//                tree2->Branch("fNclusters",&fNclusters);
-//                tree2->Branch("fTaggerenergy",&fTaggerenergy);
-//                tree2->Branch("fProton_th_fit",&fProton_th_fit);
-//                tree2->Branch("fProton_E_fit",&fProton_E_fit);
-//                tree2->Branch("fZ_vx_fit",&fZ_vx_fit);
-//                tree2->Branch("fX",&fX);
-//                tree2->Branch("fY",&fY);
-//                tree2->Branch("fPeta2pi",&fPeta2pi);
-//                tree2->Branch("fP3pi",&fP3pi);
-//                tree2->Branch("fPetapr",&fPetapr);
-//                tree2->Branch("fCosth_epr_cm",&fCosth_epr_cm);
-//                tree2->Branch("fDP005",&fDP005);
-//                tree2->Branch("fDP075",&fDP075);
-//                tree2->Branch("fDP010",&fDP010);
-//                tree2->Branch("fDP015",&fDP015);
-//                tree2->Branch("fMeta2pi",&fMeta2pi);
-//                tree2->Branch("fMpipi",&fMpipi);
-//                tree2->Branch("fMetapi1",&fMetapi1);
-//                tree2->Branch("fMetapi2",&fMetapi2);
-//                tree2->Branch("fCosth_epr_cm_pr",&fCosth_epr_cm_pr);
-//                tree2->Branch("fXpr",&fXpr);
-//                tree2->Branch("fYpr",&fYpr);
-//                tree2->Branch("fDP005pr",&fDP005pr);
-//                tree2->Branch("fDP075pr",&fDP075pr);
-//                tree2->Branch("fDP010pr",&fDP010pr);
-//                tree2->Branch("fDP015pr",&fDP015pr);
-//                tree2->Branch("fMpipipr",&fMpipipr);
-//                tree2->Branch("fMetapi1pr",&fMetapi1pr);
-//                tree2->Branch("fMetapi2pr",&fMetapi2pr);
-
-
-
-
-               if(probmin_etapr > 0.01 && probmin_etapr < 1.0){
-
-                   TLorentzVector fin_metapr[3];
-                   fin_metapr[0] = photons_fit_final_metapr[0] + photons_fit_final_metapr[1];
-                   fin_metapr[1] = photons_fit_final_metapr[2] + photons_fit_final_metapr[3];
-                   fin_metapr[2] = photons_fit_final_metapr[4] + photons_fit_final_metapr[5];
-
-                   TLorentzVector fin_all_metapr = fin_metapr[0] + fin_metapr[1] + fin_metapr[2];
-                   diffbin_pr =  diff_distr( GetTagger()->GetTaggedEnergy(tag), fin_all_metapr );
-
-                   m_etapi01_fit_pr = 0.;
-                   m_etapi02_fit_pr = 0.;
-                   m_2pi0_fit_pr    = 0.;
-                   m2pi0_metapi0( fin_metapr ,  m_etapi01_fit_pr, m_etapi02_fit_pr, m_2pi0_fit_pr);
-
-                   bw = 0.20;
-                   DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit020_pr);
-                   bw = 0.15;
-                   DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit015_pr);
-                   bw = 0.10;
-                   DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit010_pr);
-                   bw = 0.075;
-                   DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit075_pr);
-                   bw = 0.05;
-                   DalitzPlot(fin_metapr, Xfit_pr, Yfit_pr, bw, DP_binnr_fit005_pr);
-
-
-
-
-//                   vec_costh_epr_cm_pr.push_back(diffbin_pr);
-//                   vec_X_pr.push_back(Xfit);
-//                   vec_Y_pr.push_back(Yfit);
-//                   vec_DP_005_pr.push_back(DP_binnr_fit005_pr);
-//                   vec_DP_010_pr.push_back(DP_binnr_fit010_pr);
-//                   vec_DP_015_pr.push_back(DP_binnr_fit015_pr);
-//                   vec_M_etapi_pr1.push_back(m_etapi01_fit_pr/1.0e3);
-//                   vec_M_etapi_pr2.push_back(m_etapi02_fit_pr/1.0e3);
-//                   vec_M_pipi_pr.push_back(m_2pi0_fit_pr/1.0e3);
-               }
-               else{
-//                   vec_costh_epr_cm_pr.push_back(-100);
-//                   vec_X_pr.push_back(-100);
-//                   vec_Y_pr.push_back(-100);
-//                   vec_DP_005_pr.push_back(-100);
-//                   vec_DP_010_pr.push_back(-100);
-//                   vec_DP_015_pr.push_back(-100);
-//                   vec_M_etapi_pr1.push_back(-100); // fill twice
-//                   vec_M_etapi_pr2.push_back(-100);
-//                   vec_M_pipi_pr.push_back(-100);
-               }
-
-               // end filling results in vector
-
 
                if(MC_weight){
                     six_fit_IM_eta2pi0_b->FillWeighted( etap_fit_final.M()+mass_shift, MCw );
