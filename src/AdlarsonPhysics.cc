@@ -4082,9 +4082,9 @@ void AdlarsonPhysics::Energy_corr()
 
                 double gain = GetGain(Ec, GetTracks()->GetCentralCrystal(i));
                 Ec2 = Ec*gain;
-                double gainNLO = GetGainNLO(Ec2, GetTracks()->GetCentralCrystal(i));
-                Ec3 = Ec2*gainNLO;
-                tracks->SetClusterEnergy(i, Ec3);
+//                double gainNLO = GetGainNLO(Ec2, GetTracks()->GetCentralCrystal(i));
+//                Ec3 = Ec2*gainNLO;
+                tracks->SetClusterEnergy(i, Ec2);
             }
 
 
