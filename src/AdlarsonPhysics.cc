@@ -693,7 +693,6 @@ AdlarsonPhysics::AdlarsonPhysics():
   v_z_settings.Limit.High = 10.;
   v_z_settings.Limit.Low = -10.;
 
-
   kinfit.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
   kinfiteta2pi.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
   kinfit3pi.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
@@ -4218,10 +4217,6 @@ Double_t AdlarsonPhysics::Get_ESumMC(Double_t& ESum){
 TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, const double v_z, Int_t& idet, double mass)
 {
 
-//    double X0       = 2.59;
-//    double X0_TAPS  = 2.05;
-//    double Ec       = 20.;
-//    double Ec_TAPS  = 12.7;
     double X0       = 2.588;
     double X0_TAPS  = 2.026;
     double Ec       = 13.3;
@@ -4237,7 +4232,7 @@ TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, c
         E = EkPThPhi[0];
         P = EkPThPhi[1];
 
-        R  = R_CB + X0*TMath::Log(E/Ec)/TMath::Log(2.);
+        R  = R_CB + X0*std::log2(E/Ec)/std::pow(std::sin(EkPThPhi[2]), 3.0);
         th = TMath::ACos(( R*TMath::Cos(EkPThPhi[2]) - v_z)/ R );
         ph = EkPThPhi[3];
 
@@ -4252,9 +4247,9 @@ TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, c
         P = EkPThPhi[1];
 
         if(mass > 900.)
-            R  =    X0_TAPS*TMath::Log((E-MASS_PROTON)/Ec_TAPS)/TMath::Log(2.);
+            R  =    X0_TAPS*std::log2((E-MASS_PROTON)/Ec_TAPS);
         else
-            R  =    X0_TAPS*TMath::Log(E/Ec_TAPS)/TMath::Log(2.);
+            R  =    X0_TAPS*std::log2(E/Ec_TAPS);
         th = TMath::ATan( EkPThPhi[2] / (Z_TAPS - v_z + R));
 
         ph = EkPThPhi[3];
