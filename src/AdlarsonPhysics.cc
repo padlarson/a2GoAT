@@ -568,23 +568,7 @@ AdlarsonPhysics::AdlarsonPhysics():
     // Constraint: Invariant mass of nPhotons equals constant IM,
     // make lambda catch also this with [&] specification
 
-    auto RequireIM6g_etapr = [&] (const vector< vector<double> >& photons) -> double
-    {
-        TLorentzVector sum(0,0,0,0);
-        for(int i = 0; i < 6; i++) {
-            sum += FitParticle::Make(photons[i], 0.0);
-        }
-        return sum.M() - MASS_ETAP;
-    };
 
-    auto RequireIM = [&] (const vector< vector<double> >& photons) -> double
-    {
-        TLorentzVector sum(0,0,0,0);
-        for(int i = 0; i < 2; i++) {
-            sum += FitParticle::Make(photons[i], 0.0);
-        }
-        return sum.M() - MASS_ETA;
-    };
 
     auto RequireIM6g = [&] (const vector< vector<double> >& photons) -> double
     {
@@ -879,8 +863,6 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     APLCON::Fit_Settings_t settings10g = kinfit10g.GetSettings();
     settings10g.MaxIterations = 30;
-//    settings10g.DebugLevel = 5;
-//    kinfit10g.SetSettings(settings10g);
 
     cout.precision(5);
     APLCON::PrintFormatting::Width = 11;
@@ -1770,32 +1752,9 @@ void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
             for(int j = 0; j < 4; j++){
 //                four_fit_best_etapi0_pi_E_v_th->Fill(photons_fit[j].E(), photons_fit[j].Theta()*TMath::RadToDeg(), GetTagger()->GetTaggedTime(tag));
 
-                int imass = int(j/2);
                 idet = perm4g[imin_etapi0][j];
                 if(CB_region[perm4g[ imin_etapi0 ][ j ]]){
-                    if(imass == 0){
-//                        IMgg_v_det_etapi0_eta_CB->Fill( (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
-                        double En = (photons_rec[perm4g[ imin_etapi0 ][ j ]]).E();
-                        double Th = (photons_rec[perm4g[ imin_etapi0 ][ j]]).Theta()*TMath::RadToDeg();
-                        double mgg = (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M();
-                        int nEN =  int(En/20.0);
-                        int nTH =  75*int(Th/1.0);
-                        int nBIN = nEN + nTH;
-//                        four_fit_m_eta_gg_v_eth->Fill( nBIN, mgg, GetTagger()->GetTaggedTime(tag) );
-                    }
-                    else{
-                    }
-                }
-                else{
-                    if(imass == 0){
-                        double En = (photons_rec[perm4g[ imin_etapi0 ][ j ]]).E();
-                        double Th = (photons_rec[perm4g[ imin_etapi0 ][ j]]).Theta()*TMath::RadToDeg();
-                        double mgg = (photons_rec[perm4g[ imin_etapi0 ][ imass*2 ]] + photons_rec[perm4g[imin_etapi0][imass*2+1]] ).M();
-                        int nEN =  int(En/20.0);
-                        int nTH =  75*int(Th/1.0);
-                        int nBIN2 = nEN + nTH;
-//                        four_fit_m_eta_gg_v_eth->Fill( nBIN2, mgg, GetTagger()->GetTaggedTime(tag) );
-                    }
+
                 }
             }
         }
@@ -1885,7 +1844,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
         set.push_back(ipr);
 
-        Double_t test1 = GetTracks()->GetVector(ipr).E();
         Double_t test2 = (GetTagger()->GetVector(tag) - IM6g_vec).E();
 
         proton.SetFromValues( test2, R_TAPS[GetTracks()->GetCentralCrystal(ipr)],GetTracks()->GetVector(ipr).Phi() );
@@ -1928,9 +1886,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 n_photons++;
             }
         }
-
-        Double_t MissE = GetTagger()->GetVector(tag).E() - IM6g_vec.E();
-        Double_t PRec  =  GetTracks()->GetVector(ipr).E();
 
         if(MC_weight){
             six_rec_IM->FillWeighted(IM6g_vec.M(), MCw);
@@ -2411,10 +2366,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     int nEN2 =  int(photons_rec[imin_3pi[isix]].E()/40.);
                     int nTH2 =  40*int(photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()/2.0);
                     int nBIN2 = nEN2 + nTH2;
-
-                    int nEN3 =  int(photons_rec[imin_3pi[isix]].E()/80.);
-                    int nTH3 =  20*int(photons_rec[imin_3pi[isix]].Theta()*TMath::RadToDeg()/4.0);
-                    int nBIN3 = nEN3 + nTH3;
 
                     if(etap_fit.M() > 650.0){
                         six_fit_mgg_v_eth->Fill(nBIN, rc[imass].M(),GetTagger()->GetTaggedTime(tag));
@@ -4058,17 +4009,12 @@ void AdlarsonPhysics::Time_corr(){
 
 void AdlarsonPhysics::Energy_corr()
 {
-    Double_t Erec, Ec_temp, DeltaE, Ec;
-    // test 160601
-    Double_t Ec2, Ec3;
-    // end test
+    Double_t Erec, Ec_temp, DeltaE, Ec, Ec2;
     Double_t smear;
 
-    int group;
-    for (int i = 0; i < GetTracks()->GetNTracks() ; i++)
-    {
-        if( GetTracks()->HasCB(i) )
-        {
+//    int group;
+    for (int i = 0; i < GetTracks()->GetNTracks() ; i++){
+        if( GetTracks()->HasCB(i) ){
             Erec = GetTracks()->GetVector(i).E();
             Ec_temp = CBgain[GetTracks()->GetCentralCrystal(i)]*Erec;
 
@@ -4078,14 +4024,10 @@ void AdlarsonPhysics::Energy_corr()
             tracks->SetClusterEnergy(i, Ec);
 
             if(!MC){
-
                 double gain = GetGain(Ec, GetTracks()->GetCentralCrystal(i));
                 Ec2 = Ec*gain;
-//                double gainNLO = GetGainNLO(Ec2, GetTracks()->GetCentralCrystal(i));
-//                Ec3 = Ec2*gainNLO;
                 tracks->SetClusterEnergy(i, Ec2);
             }
-
 
             if(MC){
                 smear = CB_unc->GetBinContent(CB_unc->FindBin(GetTracks()->GetCentralCrystal(i)));
@@ -4104,8 +4046,6 @@ void AdlarsonPhysics::Energy_corr()
 
             tracks->SetClusterEnergy(i, Ec);
         }
-
-
     }
 };
 
@@ -4884,7 +4824,6 @@ double AdlarsonPhysics::GetGain(Double_t E, Double_t detnr){
     double  gain_c, gain_n, gain;
     double  E_c, E_n, de;
     double  frac_c, frac_n;
-    int     x_n, y_n;
 
     de = 40.;
 
@@ -4929,14 +4868,8 @@ double AdlarsonPhysics::GetGain(Double_t E, Double_t detnr){
             gain =1.;
 
     }
-
-
     if(TMath::Abs(gain) < 1.0e-3)
             gain = 1.0;
-
-
-    if((gain < 0.85) || (gain > 1.2))
-          int stop_here = 0;
 
     return gain;
 
@@ -4990,16 +4923,10 @@ double AdlarsonPhysics::GetGainNLO(Double_t E, Double_t detnr){
 
         if(TMath::Abs(gain)<1.0e-3)
             gain =1.;
-
     }
-
 
     if(TMath::Abs(gain) < 1.0e-3)
             gain = 1.0;
-
-
-    if((gain < 0.85) || (gain > 1.2))
-          int stop_here = 0;
 
     return gain;
 
