@@ -33,16 +33,12 @@ AdlarsonPhysics::AdlarsonPhysics():
     photons_fit(nPhotons_six),
     photons_fit_final(nPhotons_six),
     photons_fit_10g(nPhotons_ten),
-    kinfit4g("4greactions"),
     kinfit("etaprime"),
     kinfit_final("etaprime6g_final"),
     kinfit3pi("3pi0hyp"),
     kinfiteta2pi("eta2pihyp"),
     kinfit10g("etaprime10g"),
     kinfit10g_eta2pi("etaprime10g_eta2pihyp"),
-    kinfit_2g_pi0("2g_pi0_hyp"),
-    kinfit_2g_eta("2g_eta_hyp"),
-    Photons_four(nPhotons_four),
     Photons_six(nPhotons_six),
     Photons_six_3pi(nPhotons_six),
     Photons_six_eta2pi(nPhotons_six),
@@ -158,20 +154,13 @@ AdlarsonPhysics::AdlarsonPhysics():
     p_MM                        = new GHistBGSub("MM_p", "Missing Mass calculated for proton", 300, 800., 1100.);
 
     CB_EnergySum                = new GHistBGSub("CB_EnergySum", "Crystal Ball Energy Sum", 200, 0., 2000.);
-    CB_EnergySum_2                = new GHistBGSub("CB_EnergySum_2", "Crystal Ball Energy Sum sum energy content crystals CB", 200, 0., 2000.);
-//    CB_EnergySum_2pi0           = new GHistBGSub("CB_EnergySum_2pi0", "Crystal Ball Energy Sum for 2pi0", 400, 0., 2000.);
-//    CB_EnergySum_etapi0         = new GHistBGSub("CB_EnergySum_etapi0", "Crystal Ball Energy Sum for etapi0", 400, 0., 2000.);
+    CB_EnergySum_2              = new GHistBGSub("CB_EnergySum_2", "Crystal Ball Energy Sum sum energy content crystals CB", 200, 0., 2000.);
     CB_EnergySum_3pi0           = new GHistBGSub("CB_EnergySum_3pi0", "Crystal Ball Energy Sum for 3pi0", 200, 0., 2000.);
     CB_EnergySum_etapr          = new GHistBGSub("CB_EnergySum_etapr", "Crystal Ball Energy Sum for eta prime", 200, 0., 2000.);
     CB_EnergySum_3pi0_v_CB      = new GHistBGSub2("CB_EnergySum_3pi0_v_CB", "Crystal Ball Energy Sum for 3pi0 vs CB", 200, 0., 2000., 90, 0, 90);
     CB_EnergySum_etapr_v_CB     = new GHistBGSub2("CB_EnergySum_etapr_v_CB", "Crystal Ball Energy Sum for eta prime vs_CB", 200, 0., 2000., 90, 0,90);
 
-    IMgg_v_det_2pi0_CB          =   new GHistBGSub2("IMgg_v_det_2pi0_CB", "IM(gg) 2#pi^{0}, CB", 50, 0, 250, 720, 0, 720);
-    IMgg_v_det_etapi0_pi0_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_pi0_CB", "IM(gg) #eta#pi^{0}, CB", 50, 0, 250, 720, 0, 720);
-    IMgg_v_det_etapi0_eta_CB    =   new GHistBGSub2("IMgg_v_det_etapi0_eta_CB", "IM(gg) #eta#pi^{0}, CB", 50, 400, 650, 720, 0, 720);
     IMgg_v_det_3pi0_CB          =   new GHistBGSub2("IMgg_v_det_3pi0_CB", "IM(gg) 3#pi^{0}, CB, CB", 50, 0, 250, 720, 0, 720);
-    IMgg_v_det_2pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_2pi0_TAPS", "IM(gg) 2#pi^{0}, TAPS", 50, 0, 250, 440, 0, 440);
-    IMgg_v_det_etapi0_TAPS      =   new GHistBGSub2("IMgg_v_det_etapi0_TAPS", "IM(gg) #eta#pi^{0}, TAPS", 200, 0, 1000, 440, 0, 440);
     IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "IM(gg) 3#pi^{0}, TAPS", 50, 0, 250, 440, 0, 440);
 
     IM6g_v_det_etaprfit_CB          =   new GHistBGSub2("IM6g_v_det_etaprfit_CB", "IM(6g) fit fin.ev.s, CB, CB", 80, 800, 1200, 720, 0, 720);
@@ -183,34 +172,6 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     ten_rec_IM                  = new GH1("ten_rec_IM", " rec IM(10#gamma)", 400,  400, 1400);
     ten_rec_IM_v_MMp            = new GHistBGSub2("ten_rec_IM_v_MMp", "MM(p) vs IM(10#gamma)", 300,800., 1100., 240, 200., 1400.);
-
-//  Related variables 4g analysis
-
-//    four_rec_IM                 = new GH1("four_rec_IM", "rec. IM(4#gamma)", 280, 0, 1400);
-//    four_fit_chi2               = new GH1("four_fit_chi2", "#chi^{2} kinfit for 4g final state", 500, 0, 500.);
-//    four_fit_pdf                = new GH1("four_fit_pdf", "#pdf kinfit 4g final state", 100, 0, 1.);
-
-//    four_fit_PDF_etapi_v_2pi    = new GHistBGSub2("four_fit_PDF_etapi_v_2pi", "PDF_etapi_v_2pi 4#gamma", 100, 0., 1., 100, 0., 1.);
-//    four_fit_IM                 = new GH1("four_fit_IM", "IM_4#gamma fitted", 260, 0, 1400);
-
-//    four_fit_best_2pi_IM_v_E        = new GHistBGSub2("four_fit_best_2pi_IM_v_E", "E_{#pi^{0}} vs M_{#gamma#gamma} for 2#pi^{0}", 100, 0., 1000., 100, 0., 400.);
-//    four_fit_best_etapi_IM_v_E      = new GHistBGSub2("four_fit_best_etapi_IM_v_E", "E_{#pi^{0}} vs M_{#gamma#gamma} for #eta#pi^{0}", 100, 0., 1000., 250, 0., 1000.);
-
-//    // 2pi0 inside phase space
-//    four_fit_mgg_v_eth             = new GHistBGSub2("four_fit_mgg_v_eth", "m_{#gamma#gamma} vs E, #theta", 12500, 0, 12500, 50, 50., 250.);
-
-//    // etapi0 eta-->gg cand inside phase space
-//    four_fit_m_eta_gg_v_eth        = new GHistBGSub2("four_fit_m_eta_gg_v_eth", "m_{#gamma#gamma} vs E, #theta #eta-->#gamma#gamma" , 12500, 0, 12500, 80, 300., 700.);
-
-//    four_fit_best_2pi0_pi_E_v_th      = new GHistBGSub2("four_fit_best_2pi0_pi_E_v_th", "E_{#pi^{0}, #gamma} vs #Theta_{#pi^{0}, #gamma} 2#pi^{0}", 275, 0., 1200., 200, 0., 200.);
-//    four_fit_best_etapi0_pi_E_v_th    = new GHistBGSub2("four_fit_best_etapi0_pi_E_v_th", "E_{#pi^{0}, #gamma} vs #Theta_{#pi^{0}, #gamma} #eta#pi^{0}", 275, 0., 1200., 200, 0., 200.);
-
-    // Kinfit related variables 6g
-
-//    test_six_rec_IM             = new GH1("test_six_rec_IM", " rec. IM(6#gamma)", 280, 0., 1400.);
-//    test_six_fit_chi2           = new GH1("test_six_fit_chi2", "#chi^{2} kinfit for 6#gamma", 500, 0, 500.);
-//    test_six_fit_pdf            = new GH1("test_six_fit_pdf", "pdf kinfit for 6#gamma", 100, 0, 1.);
-//    test_six_fit_Pulls          = new GHistBGSub2("test_six_fit_Pulls", "Pulls 6#gamma", 50, -5., 5., 25, 0, 25);
 
     six_rec_IM                  = new GH1("six_rec_IM", " rec. IM(6#gamma)", 200, 400., 1400.);
     six_rec_IM_v_MMp            = new GHistBGSub2("six_rec_IM_v_MMp", "MM(p) vs IM(6#gamma)",240, 200., 1200., 240, 200., 1400.);
@@ -496,20 +457,6 @@ AdlarsonPhysics::AdlarsonPhysics():
          vector<string> all_names_final = {"Beam_final", "Proton_final"};
           all_names_final.insert(all_names_final.end(),photon_names_final.begin(),photon_names_final.end());
 
-       //  For final states including 4g
-    kinfit4g.LinkVariable("Beam4g",    beam4g.Link(),       beam4g.LinkSigma(),  beam4g.LinkSettings() );
-    kinfit4g.LinkVariable("Proton4g",  proton4g.Link(),     proton4g.LinkSigma());
-
-    vector<string> photon_names4g;
-    for(size_t i=0;i<nPhotons_four;i++) {
-        stringstream s_photon;
-        s_photon << "Photon4g" << (i+1);
-        photon_names4g.push_back(s_photon.str());
-        kinfit4g.LinkVariable(s_photon.str(), Photons_four[i].Link(), Photons_four[i].LinkSigma());
-    }
-    vector<string> all_names4g = {"Beam4g", "Proton4g"};
-    all_names4g.insert(all_names4g.end(),photon_names4g.begin(),photon_names4g.end());
-
 //  For final states including 10g
 
     kinfit10g.LinkVariable("Beam10g",    beam10g.Link(),       beam10g.LinkSigma(),  beam10g.LinkSettings() );
@@ -554,14 +501,7 @@ AdlarsonPhysics::AdlarsonPhysics():
         return {diff.X(), diff.Y(), diff.Z(), diff.T()};
 
     };
-//    kinfit.AddConstraint("EnergyMomentumBalance", all_names, EnergyMomentumBalance);
 
-//    kinfiteta2pi.AddConstraint("EnergyMomentumBalance", all_names_eta2pi, EnergyMomentumBalance);
-//    kinfit3pi.AddConstraint("EnergyMomentumBalance", all_names_3pi, EnergyMomentumBalance);
-
-//    kinfit_final.AddConstraint("EnergyMomentumBalance", all_names_final, EnergyMomentumBalance);
-
-    kinfit4g.AddConstraint("EnergyMomentumBalance", all_names4g, EnergyMomentumBalance);
     kinfit10g.AddConstraint("EnergyMomentumBalance", all_names10g, EnergyMomentumBalance);
     kinfit10g_eta2pi.AddConstraint("EnergyMomentumBalance", all_names10g_eta2pi, EnergyMomentumBalance);
 
@@ -1346,9 +1286,6 @@ void	AdlarsonPhysics::ProcessEvent()
     ClustersInTime = FinalClusterSelection;
     FinalClusterSelection.resize(0);
 
-//    if( (ClustersInTime.size() == 5) && (nrprotons > 0) )
-//        fourgAnalysis(iprtrack);
-
     if( ClustersInTime.size() == 7 && (nrprotons > 0) )
         sixgAnalysis( iprtrack );
 
@@ -1581,185 +1518,6 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile){
     return kTRUE;
 }
 
-
-void AdlarsonPhysics::fourgAnalysis(UInt_t ipr)
-{
-    for(int tag = 0; tag < GetTagger()->GetNTagged(); tag++){
-        if((GetTagger()->GetTaggedTime(tag) < tagger_min) || (GetTagger()->GetTaggedTime(tag) > tagger_max)) continue;
-        Double_t chi2_min = 1.0e6;
-        Double_t prob_min = 1.0e6;
-        std::vector<Int_t> set;     // particle conf: tagger, proton, photon 1, 2, 3, 4, 5, 6;
-        std::vector<double> obs;
-        std::vector<double> unc;
-
-        detnr.resize(0);
-        CB_region.resize(0);
-
-//        IM4g_vec.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
-//        IM4g_fit.SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
-
-        photons_rec.resize(0);
-        photons_fit.resize(0);
-
-        for(UInt_t i = 0; i < nPhotons_four; i++){
-            photons_rec[i].SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
-            photons_fit[i].SetPxPyPzE(0.0, 0.0, 0.0, 0.0);
-        }
-
-        // beam energy
-        set.resize(0);
-        set.push_back(tag);
-        beam4g.SetFromVector( GetTagger()->GetVector(tag) );
-
-        obs.resize(0);
-        unc.resize(0);
-        unc = Get_unc(3,0,obs);
-        beam4g.Smear(unc, 2);
-        beam4g.APLCONSettings();
-
-        // proton
-        set.push_back(ipr);
-        proton4g.SetFromVector( GetTracks()->GetVector(ipr) );
-        obs.resize(0);
-        obs.push_back(GetTracks()->GetCentralCrystal(ipr));
-        unc.resize(0);
-        unc = Get_unc( 2, 2, obs);
-        proton4g.Smear(unc, 1);
-
-        Int_t n_photons = 0;
-        for ( UInt_t jgam = 0; jgam < ClustersInTime.size() ; jgam++ ){
-            UInt_t kgam = ClustersInTime[jgam];
-            if( kgam != ipr ){ // the id proton cluster
-                set.push_back(kgam);
-                photons_rec[n_photons] = GetTracks()->GetVector(kgam);
-                Photons_four[n_photons].SetFromVector( GetTracks()->GetVector(kgam));
-                detnr.push_back(GetTracks()->GetCentralCrystal(kgam));
-
-                if( GetTracks()->HasCB(kgam) ){
-                    obs.resize(0);
-                    obs.push_back(Photons_four[n_photons].Ek);
-                    obs.push_back(Photons_four[n_photons].Theta);
-                    unc.resize(0);
-                    unc = Get_unc( 1, 1, obs);
-                    Photons_four[n_photons].Smear(unc, 0);
-                }
-                else{ // ( GetTracks()->HasTAPS(k) )
-                    obs.resize(0);
-                    obs.push_back(Photons_four[n_photons].Ek);
-                    obs.push_back(Photons_four[n_photons].Theta);
-                    unc.resize(0);
-                    unc = Get_unc( 2, 1, obs);
-                    Photons_four[n_photons].Smear(unc, 0);
-                }
-                n_photons++;
-            }
-        }
-        const APLCON::Result_t& result4g = kinfit4g.DoFit();
-        if(result4g.Status == APLCON::Result_Status_t::Success  && (result4g.ChiSquare <  chi2_min)){
-            chi2_min = result4g.ChiSquare;
-            prob_min = result4g.Probability;
-        }
-
-        if( (prob_min < 0.01) || ( TMath::Abs(prob_min - 1.0e6) < 1.0e-4) ) continue;
-
-//        four_fit_chi2->Fill( result4g.ChiSquare, GetTagger()->GetTaggedTime(tag));
-//        four_fit_pdf->Fill( result4g.Probability, GetTagger()->GetTaggedTime(tag));
-
-        for(UInt_t i = 0; i < nPhotons_four; i++){
-            IM4g_vec += photons_rec[i];
-            photons_fit[i] = FitParticle::Make(Photons_four[i], 0);
-            IM4g_fit += photons_fit[i];
-        }
-
-//        four_rec_IM->Fill(IM4g_vec.M());
-//        four_fit_IM->Fill(IM4g_fit.M());
-
-        for ( Int_t jgam = 0; jgam < 4 ; jgam++ )
-            if( GetTracks()->HasCB(set[jgam+2]) )
-              CB_region.push_back(true);
-            else
-              CB_region.push_back(false);
-
-        Double_t sigma_eta = 25.0;
-        Double_t sigma_pi0 = 15.0;
-
-        std::vector<Double_t> chi2_etapi0;
-        std::vector<Double_t>  chi2_2pi0;
-        chi2_etapi0.resize(0);
-        chi2_2pi0.resize(0);
-
-
-        Double_t chi2min_etapi0     = 1.0e6;
-        Double_t chi2min_2pi0       = 1.0e6;
-
-        Double_t chi2_etapi0_tmp    = 1.0e6;
-        Double_t chi2_2pi0_tmp      = 1.0e6;
-
-        int imin_etapi0 = -1;
-        int imin_2pi0   = -1;
-        int idet;
-
-        for(int i = 0; i < 9; i++){
-            if( i < 6 ){
-                chi2_etapi0_tmp =  TMath::Power( ( ( photons_rec[perm4g[i][0]] + photons_rec[perm4g[i][1]] ).M() - MASS_ETA) / sigma_eta , 2 ) + TMath::Power( ( ( photons_rec[perm4g[i][2]] + photons_rec[perm4g[i][3]] ).M() - MASS_PI0 ) / sigma_pi0 , 2 );
-                chi2_etapi0.push_back(chi2_etapi0_tmp);
-                if( chi2_etapi0[i] < chi2min_etapi0 ){
-                    chi2min_etapi0 = chi2_etapi0[i];
-                    imin_etapi0 = i;
-                }
-            }
-            else{
-                chi2_2pi0_tmp = TMath::Power( ( (photons_rec[perm4g[i][0]] + photons_rec[perm4g[i][1]]).M() - MASS_PI0) / sigma_pi0 , 2 ) + TMath::Power( ( (photons_rec[perm4g[i][2]] + photons_rec[perm4g[i][3]]).M() - MASS_PI0) / sigma_pi0 , 2 );
-                chi2_2pi0.push_back(chi2_2pi0_tmp);
-                if( chi2_2pi0[i-6] < chi2min_2pi0 ){
-                    chi2min_2pi0 = chi2_2pi0[i-6];
-                    imin_2pi0 = i;
-                }
-            }
-        }
-//        four_fit_PDF_etapi_v_2pi->Fill(TMath::Prob(chi2min_etapi0,1), TMath::Prob(chi2min_2pi0,1), GetTagger()->GetTaggedTime(tag) );
-
-        if( (chi2min_2pi0 < chi2min_etapi0) && ( TMath::Prob(chi2min_2pi0,1) > 0.01) ){ // 2pi0
-            for(int j = 0; j < 4; j++){
-
-//                four_fit_best_2pi0_pi_E_v_th->Fill(photons_fit[j].E(), photons_fit[j].Theta()*TMath::RadToDeg(), GetTagger()->GetTaggedTime(tag));
-
-//                int imass = int(j/2);
-//                idet = perm4g[imin_2pi0][j];
-//                int nEN =  int((photons_rec[perm4g[ imin_2pi0 ][ j ]]).E()/20.0);
-//                int nTH =  75*int((photons_rec[perm4g[ imin_2pi0 ][ j]]).Theta()*TMath::RadToDeg()/1.0);
-//                int nBIN = nEN + nTH;
-//                double mgg = (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M();
-
-//                four_fit_mgg_v_eth->Fill( nBIN, mgg, GetTagger()->GetTaggedTime(tag) );
-//                if(CB_region[perm4g[ imin_2pi0 ][ j ]]){
-//                    IMgg_v_det_2pi0_CB->Fill( (photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag));
-//                }
-//                else{
-//                    IMgg_v_det_2pi0_TAPS->Fill((photons_rec[perm4g[ imin_2pi0 ][ imass*2 ]] + photons_rec[perm4g[imin_2pi0][imass*2+1]] ).M(), detnr[idet], GetTagger()->GetTaggedTime(tag) );
-
-//                }
-            }
-        }
-        else if( (chi2min_etapi0 < chi2min_2pi0  ) && ( TMath::Prob(chi2min_etapi0,1) > 0.01)){   //etapi0
-
-            // -------------------------------++++++++++++++++++++++++++++++++++++++++++++----------------------------------
-
-            continue;
-
-            // -------------------------------++++++++++++++++++++++++++++++++++++++++++++----------------------------------
-
-            for(int j = 0; j < 4; j++){
-//                four_fit_best_etapi0_pi_E_v_th->Fill(photons_fit[j].E(), photons_fit[j].Theta()*TMath::RadToDeg(), GetTagger()->GetTaggedTime(tag));
-
-                idet = perm4g[imin_etapi0][j];
-                if(CB_region[perm4g[ imin_etapi0 ][ j ]]){
-
-                }
-            }
-        }
-    }
-}
 
 void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
@@ -4156,7 +3914,6 @@ Double_t AdlarsonPhysics::Get_ESumMC(Double_t& ESum){
 
 TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, const double v_z, Int_t& idet, double mass)
 {
-
     double X0       = 2.588;
     double X0_TAPS  = 2.026;
     double Ec       = 13.3;

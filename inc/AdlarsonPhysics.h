@@ -88,7 +88,7 @@ private:
     TH2*    true_six_phy_dX_v_DPbin;
     TH2*    true_six_phy_dY_v_DPbin;
     TH2*    true_six_phy_dMpipi_v_Mpipi;
-    TH2*            true_phy_3pi_IMpipi_v_IMppi;
+    TH2*    true_phy_3pi_IMpipi_v_IMppi;
     TH2*    true_six_phy_dX_v_X;
     TH2*    true_six_phy_dY_v_Y;
 
@@ -133,8 +133,6 @@ private:
 
     GHistBGSub*     CB_EnergySum;
     GHistBGSub*     CB_EnergySum_2;
-    GHistBGSub*     CB_EnergySum_2pi0;
-    GHistBGSub*     CB_EnergySum_etapi0;
     GHistBGSub*     CB_EnergySum_3pi0;
     GHistBGSub*     CB_EnergySum_etapr;
     GHistBGSub*     CB_EnergySum_3pi0_v_CB;
@@ -154,12 +152,7 @@ private:
     GHistBGSub2*    fi_TAPSvsCB;
     GHistBGSub2*    fi_th_diff_TAPSCB;
 
-    GHistBGSub2*    IMgg_v_det_2pi0_CB;
-    GHistBGSub2*    IMgg_v_det_etapi0_eta_CB;
-    GHistBGSub2*    IMgg_v_det_etapi0_pi0_CB;
     GHistBGSub2*    IMgg_v_det_3pi0_CB;
-    GHistBGSub2*    IMgg_v_det_2pi0_TAPS;
-    GHistBGSub2*    IMgg_v_det_etapi0_TAPS;
     GHistBGSub2*    IMgg_v_det_3pi0_TAPS;
 
     GHistBGSub2*    IM6g_v_det_etaprfit_CB;
@@ -178,53 +171,6 @@ private:
     TH1D            time_nr_ClustersinTime;
     TH1D            time_nr_FinalClusterSel;
     TH1D            six_time_TaggedTime;
-
-   // Analysis 4g
-
-    TLorentzVector  IM4g_vec;
-    TLorentzVector  IM4g_fit;
-
-//    // 4g analysis
-//    GH1*            four_rec_IM;
-//    GH1*            four_fit_IM;
-
-//    GH1*            four_fit_chi2;
-//    GH1*            four_fit_pdf;
-
-//    GHistBGSub2*    fit_mgg_pi_v_CB_2;
-//    GHistBGSub2*    fit_mgg_eta_v_CB_2;
-//    GHistBGSub2*    fit_mgg_pi_v_CB_3;
-//    GHistBGSub2*    fit_mgg_pi_v_TAPS_2;
-//    GHistBGSub2*    fit_mgg_eta_v_TAPS_2;
-//    GHistBGSub2*    fit_Eg_Er_CB;
-//    GHistBGSub2*    fit_Eg_Er_CB_fin;
-
-//    GHistBGSub2*    four_fit_PDF_etapi_v_2pi;
-//    GHistBGSub2*    four_fit_best_2pi_IM_v_E;
-//    GHistBGSub2*    four_fit_best_etapi_IM_v_E;
-
-//    GHistBGSub2*    four_fit_Pulls_g_E_vs_eth_CB;
-//    GHistBGSub2*    four_fit_Pulls_g_th_vs_eth_CB;
-//    GHistBGSub2*    four_fit_Pulls_g_phi_vs_eth_CB;
-
-//    GHistBGSub2*    four_fit_mgg_v_eth;
-//    GHistBGSub2*    four_fit_mgg_v_eth_BaF2;
-//    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4;
-
-//    GHistBGSub2*    four_fit_m_eta_gg_v_eth;
-//    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2;
-//    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4;
-
-//    GHistBGSub2*    four_fit_mgg_v_eth_2;
-//    GHistBGSub2*    four_fit_mgg_v_eth_BaF2_2;
-//    GHistBGSub2*    four_fit_mgg_v_eth_PbWO4_2;
-
-//    GHistBGSub2*    four_fit_m_eta_gg_v_eth_2;
-//    GHistBGSub2*    four_fit_m_etagg_v_eth_BaF2_2;
-//    GHistBGSub2*    four_fit_m_etagg_v_eth_PbWO4_2;
-
-//    GHistBGSub2*    four_fit_best_2pi0_pi_E_v_th;
-//    GHistBGSub2*    four_fit_best_etapi0_pi_E_v_th;
 
     // 6g analysis
     // test analysis to test that kinfit APLCON is working properly
@@ -312,9 +258,6 @@ private:
     GHistBGSub2*    six_fit_mgg_v_TAPS_2;
     GHistBGSub2*    six_fit_mgg_v_TAPS_3;
     GHistBGSub2*    six_fit_mgg_v_TAPS_4;
-
-
-
 
     GHistBGSub2*    six_rec_m6g_sig_v_eth;
     GHistBGSub2*    six_fit_fitted_etapr_de_v_eth;
@@ -650,38 +593,6 @@ private:
     TH2F*           Eth_gammaNLO;
 
 
-
-//    TFile*          g_corr_peak_2pi0;
-//    TH2F*           g_corr_twopi0;
-
-//    TFile*          g_corr_peak;
-//    TH2F*           g_corr_threepi;
-//    TFile*          g_corr_peak_it1;
-//    TH2F*           g_corr_threepi_it1;
-//    TFile*          g_corr_peak_it2;
-//    TH2F*           g_corr_threepi_it2;
-
-//    TFile*          g_corr_kfit;
-//    TH2F*           g_corr_etapr;
-//    TH2F*           g_corr_3pi;
-//    TH2F*           g_corr_both;
-
-//    TFile*          g_corr_kfit_it1;
-//    TH2F*           g_corr_both_it1;
-//    TFile*          g_corr_kfit_it2;
-//    TH2F*           g_corr_both_it2;
-//    TFile*          g_corr_kfit_it3;
-//    TH2F*           g_corr_both_it3;
-//    TFile*          g_corr_kfit_it4;
-//    TH2F*           g_corr_both_it4;
-
-//    TFile*          g_corr_th_kfit;
-//    TH2F*           g_corr_th_both;
-//    TFile*          g_corr_th_kfit_it1;
-//    TH2F*           g_corr_th_both_it1;
-
-
-
 protected:
 //    virtual Bool_t  Init(const char* configFile);
     virtual Bool_t  Start();
@@ -693,7 +604,6 @@ protected:
     static constexpr bool includeIMconstraint = true;
     static constexpr bool includeVertexFit = true;
     static constexpr size_t nPhotons_two = 2;
-    static constexpr size_t nPhotons_four = 4;
     static constexpr size_t nPhotons_six = 6;
     static constexpr size_t nPhotons_ten = 10;
 
@@ -750,40 +660,32 @@ protected:
             double Phi_Sigma;
             APLCON::Variable_Settings_t Phi_Setting;
 
-//            bool isCB;
 
         private:
             static std::default_random_engine generator;
 
         };
 
-    APLCON kinfit4g;
     APLCON kinfit;
     APLCON kinfit_final;
     APLCON kinfit3pi;
     APLCON kinfiteta2pi;
     APLCON kinfit10g;
     APLCON kinfit10g_eta2pi;
-    APLCON kinfit_2g_pi0;
-    APLCON kinfit_2g_eta;
 
-    FitParticle beam4g;
     FitParticle beam;
     FitParticle beam_3pi;
     FitParticle beam_eta2pi;
     FitParticle beam_final;
     FitParticle beam10g;
     FitParticle beam10g_eta2pi;
-    std::vector<FitParticle> Photons_twog_pi0;
-    std::vector<FitParticle> Photons_twog_eta;
-    std::vector<FitParticle> Photons_four;
+
     std::vector<FitParticle> Photons_six;
     std::vector<FitParticle> Photons_six_3pi;
     std::vector<FitParticle> Photons_six_eta2pi;
     std::vector<FitParticle> Photons_six_final;
     std::vector<FitParticle> Photons_ten;
     std::vector<FitParticle> Photons_ten_eta2pi;
-    FitParticle proton4g;
     FitParticle proton;
     FitParticle proton_3pi;
     FitParticle proton_eta2pi;
@@ -791,7 +693,6 @@ protected:
     FitParticle proton10g;
     FitParticle proton10g_eta2pi;
 
-//    FitParticle v_z;
 			
 public:
     AdlarsonPhysics();
@@ -806,7 +707,7 @@ public:
 
     TLorentzVector GetLVCorrForZ(std::vector<double> EkPThPhi, const double v_z, Int_t &idet, double mass);
 
-    void            CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
+    void           CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
     void TrueAnalysis_etapr6g(TString s);
@@ -821,17 +722,13 @@ public:
     double GetWeight3pi1(Double_t M1sq, Double_t M2sq);
     double GetWeight3pi2(Double_t M1sq, Double_t M2sq);
     double GetWeight3pi3(Double_t M1sq, Double_t M2sq);
-    void Kinfit_test();
+    void   Kinfit_test();
 
     double GetGain(Double_t E, Double_t detnr);
     double GetGainNLO(Double_t E, Double_t detnr);
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
     std::vector<double> Get_unc_R(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
-
-    // functions specifically related to 4g analysis
-    void fourgAnalysis( UInt_t ipr );
-    void Best4g_comb(std::vector<TLorentzVector>& photons_rec, std::vector<int> &detnr , std::vector<bool> &CB_region);
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
