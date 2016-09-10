@@ -590,7 +590,6 @@ private:
     TFile*          Ecorr_gamma;        // correction compated to MC 3pi0
     TH2F*           Eth_gamma;
     TFile*          Ecorr_gammaNLO;     // NLO correction compated to MC 3pi0
-    TH2F*           Eth_gammaNLO;
 
 
 protected:
@@ -706,7 +705,6 @@ public:
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
 
     TLorentzVector GetLVCorrForZ(std::vector<double> EkPThPhi, const double v_z, Int_t &idet, double mass);
-
     void           CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
@@ -725,7 +723,6 @@ public:
     void   Kinfit_test();
 
     double GetGain(Double_t E, Double_t detnr);
-    double GetGainNLO(Double_t E, Double_t detnr);
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
     std::vector<double> Get_unc_R(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);

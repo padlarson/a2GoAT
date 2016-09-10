@@ -15,7 +15,6 @@
 std::default_random_engine AdlarsonPhysics::FitParticle::generator;
 
 AdlarsonPhysics::AdlarsonPhysics():
-//    time_TOF("time_TOF", "TAPS time_TOF time" ,23000, 0, 23000, 1600, -40., 40.),
     time_clusters_TAPS("time_clusters_TAPS", "TAPS cluster time" ,200, -50., 50., 450, 0, 450),
     time_clusters_CB("time_clusters_CB", "CB cluster time", 250, -125., 125., 720, 0, 720),
     time_clusters_CBavg_CBdiff("time_clusters_CBavg_CBdiff","time_clusters_CBavg_CBdiff",400, -20., 20., 720, 0, 720),
@@ -351,7 +350,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     p_TAPS_th_vz = (TH2F*)p_unc_vz->Get("p_theta")->Clone();
     p_TAPS_fi_vz = (TH2F*)p_unc_vz->Get("p_phi")->Clone();
 
-
     etapr_MC_unc               = new TFile("configfiles/corr/etapr_unc.root");
     CB_unc                     = (TH1F*)etapr_MC_unc->Get("plot_etapr_CB_sgm_ratio")->Clone();
 
@@ -368,13 +366,10 @@ AdlarsonPhysics::AdlarsonPhysics():
     Eth_gamma                  = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
 
     Ecorr_gammaNLO             = new TFile("configfiles/data/MCEXP3pi0diffNLO.root");
-    Eth_gammaNLO               = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
 
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
 
-//    weight_bkgd                = new TFile("configfiles/corr/weight_3pi0_etapi0_cocktail.root");
-//    MCw_bkgd                   = (TH1D*)weight_bkgd->Get("six_fit_IM_3pi_Buffer")->Clone();
     weight_bkgd                = new TFile("configfiles/corr/threepi_bkgd.root");
     MCw_bkgd                   = (TH2F*)weight_bkgd->Get("EXP")->Clone();
     weight_bkgd2                = new TFile("configfiles/corr/threepi_bkgd2.root");
@@ -393,8 +388,6 @@ AdlarsonPhysics::AdlarsonPhysics():
 
     PDF_cut_file              = new TFile("configfiles/cuts/PDF_cut.root");
     PDF_cut                   = (TCutG*)PDF_cut_file->Get("CUTG")->Clone();
-//    GHistBGSub::InitCuts(-8., 8., -88., -8.);
-//    GHistBGSub::AddRandCut(8., 88.);
 
     GHistBGSub::InitCuts(-4.5, 3.5, -84.5, -4.5);
     GHistBGSub::AddRandCut(3.5, 83.5);
@@ -608,10 +601,9 @@ AdlarsonPhysics::AdlarsonPhysics():
            }
            diff -= LV;
        }
-
        return {diff.X(), diff.Y(), diff.Z(), diff.E()};
-
     };
+
 
   auto v_z_settings = APLCON::Variable_Settings_t::Default;
   v_z_settings.Limit.High = 10.;
@@ -665,22 +657,6 @@ AdlarsonPhysics::AdlarsonPhysics():
       }
       return sum.M() - MASS_ETA;
   };
-
-//  auto RequireIM6g_vx = [&] (const vector< vector<double> >& args) -> double
-//  {
-//      TLorentzVector sum(0,0,0,0);
-//      int  idet;
-//      TLorentzVector LV;
-//      std::vector<Double_t> obs;       // observables given as E, P, theta/R, phi, in that order
-//      obs.resize(0);
-//      const double v_z = args.back()[0];
-//      for(int j = 2; j < 8; j++){
-//          idet = Is_CB[j-1];
-//          obs = {args[j][0], args[j][0] , args[j][1], args[j][2]};
-//          sum += GetLVCorrForZ( obs, v_z, idet ,0.0 );
-//      }
-//      return sum.M() - MASS_ETA;
-//  };
 
   auto RequireIMpi1_vx = [&] (const vector< vector<double> >& args) -> double
   {
@@ -777,15 +753,8 @@ AdlarsonPhysics::AdlarsonPhysics():
 //  kinfit10g_eta2pi.AddConstraint("RequireIMpi4_vx", all_names10g_eta2pi+std::vector<string>{"v_z"}, RequireIMpi4_vx);
 //  kinfit10g_eta2pi.AddConstraint("RequireIMpi5_vx", all_names10g_eta2pi+std::vector<string>{"v_z"}, RequireIMpi5_vx);
 
-//    kinfit.AddConstraint("VertexConstraint", all_names + std::vector<string>{"v_z"}, VertexConstraint);
-//    kinfit.AddUnmeasuredVariable("v_z"); // default value 0
-
     APLCON::Fit_Settings_t settings = kinfit.GetSettings();
     settings.MaxIterations = 30;
-
-
-    // 25, 35, 35, 35
-    // 30 40 40 40
 
     APLCON::Fit_Settings_t settings_eta2pi = kinfiteta2pi.GetSettings();
     settings_eta2pi.MaxIterations = 30;
@@ -794,8 +763,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     APLCON::Fit_Settings_t settings_metapr = kinfit_final.GetSettings();
     settings_metapr.MaxIterations = 30;
 
-//    settings.DebugLevel = 5;
-//    settings_eta2pi.DebugLevel = 5;
     kinfit.SetSettings(settings);
     kinfiteta2pi.SetSettings(settings_eta2pi);
     kinfit3pi.SetSettings(settings_3pi);
@@ -991,7 +958,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
        MC_weight = true;
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr6g("Sergey");                    // obtains the true observables
+       TrueAnalysis_etapr6g("PS");                 // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
        if(MCJuly14)
          MCw *= 595881./500000.;
@@ -1008,10 +975,14 @@ void	AdlarsonPhysics::ProcessEvent()
 //        etapr_10gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
 //        TrueAnalysis_etapr10g();
 //        MCw = etapr_10gTrue.GetWeight();
+
+       // Random Time adds time jumps and smears the timing signals similar to 2014 EPT data
         RandomTime();
     }
+    // EXP better agrees with maximum e- energy of 1603 MeV. All tagger energies are shifted by 1 MeV
     if(!MC)
         Tagger_corr();
+
     tagger_min =-84.5;
     tagger_max = 83.5;
 
@@ -1021,8 +992,11 @@ void	AdlarsonPhysics::ProcessEvent()
         else
             tag_BeamE->Fill(GetTagger()->GetTaggedEnergy(tag),GetTagger()->GetTaggedTime(tag));
     }
+    // Corrects CB time as fcn of crystal number (different file for each subset of data)
     Time_corr();
+    // Theta correction found by comparing rec theta vs true theta. Can be changed in AcquRoot also
     theta_corr();
+
     Energy_corr();
 
     ClustersInTime.clear();
@@ -3767,10 +3741,15 @@ void AdlarsonPhysics::Time_corr(){
 
 void AdlarsonPhysics::Energy_corr()
 {
+    // Energy corrections. () states where corrections have been applied:
+    // 1) gain factor to obtain 3pi0 peak position at pi0 mass- crystal dependent (CB/TAPS) (MC/EXP)
+    // 2) energy correction as function of E and theta (CB/TAPS) (MC/EXP)
+    // 3) final gain to reproduce non-linearity seen in EXP cf MC (CB) (EXP)
+    // 4) additional smearing applied to individual CB crystals to reproduce resolution (CB) (MC)
+
     Double_t Erec, Ec_temp, DeltaE, Ec, Ec2;
     Double_t smear;
 
-//    int group;
     for (int i = 0; i < GetTracks()->GetNTracks() ; i++){
         if( GetTracks()->HasCB(i) ){
             Erec = GetTracks()->GetVector(i).E();
@@ -3947,6 +3926,7 @@ TLorentzVector    AdlarsonPhysics::GetLVCorrForZ(std::vector<double> EkPThPhi, c
             R  =    X0_TAPS*std::log2((E-MASS_PROTON)/Ec_TAPS);
         else
             R  =    X0_TAPS*std::log2(E/Ec_TAPS);
+
         th = TMath::ATan( EkPThPhi[2] / (Z_TAPS - v_z + R));
 
         ph = EkPThPhi[3];
@@ -4631,62 +4611,4 @@ double AdlarsonPhysics::GetGain(Double_t E, Double_t detnr){
     return gain;
 
 }
-
-double AdlarsonPhysics::GetGainNLO(Double_t E, Double_t detnr){
-
-    double  gain_c, gain_n, gain;
-    double  E_c, E_n, de;
-    double  frac_c, frac_n;
-    int     x_n, y_n;
-
-    de = 40.;
-
-    int xc  = Eth_gammaNLO->GetXaxis()->FindBin(E);
-    int yc  = Eth_gammaNLO->GetYaxis()->FindBin(detnr);
-
-    E_c     = Eth_gammaNLO->GetXaxis()->GetBinCenter(xc);
-    gain_c = Eth_gammaNLO->GetBinContent(xc,yc); // in the same bin
-    if( E < E_c ){
-        E_n     = Eth_gammaNLO->GetXaxis()->GetBinCenter(xc-1);
-        gain_n  = Eth_gammaNLO->GetBinContent(xc-1,yc);
-    }
-    else{
-        E_n     = Eth_gammaNLO->GetXaxis()->GetBinCenter(xc+1);
-        gain_n  = Eth_gammaNLO->GetBinContent(xc+1,yc);
-    }
-
-    // 4 cases-
-        // i)   c and n have content
-        // ii)  c has content, not n
-        // iii) n has content, not c
-        // iv)  no content c nor n
-
-    if((TMath::Abs(gain_c) > 1.0e-3) && (TMath::Abs(gain_n) > 1.0e-3)){
-        frac_c = 1-TMath::Abs(E-E_c)/de;
-        frac_n = 1-TMath::Abs(E-E_n)/de;
-        gain = frac_c*gain_c + frac_n*gain_n;
-    }
-    else if((TMath::Abs(gain_c) > 1.0e-3) && (TMath::Abs(gain_n) < 1.0e-3)){
-        gain = gain_c;
-    }
-    else if((TMath::Abs(gain_n) > 1.0e-3) && (TMath::Abs(gain_c) < 1.0e-3)){
-        gain = gain_n;
-    }
-    else{
-        int ibin = 1;
-        while((TMath::Abs(Eth_gammaNLO->GetBinContent(xc-ibin,yc))<1.0e-3) && (ibin < 10))
-            ibin++;
-        gain = Eth_gammaNLO->GetBinContent(xc-ibin,yc);
-
-        if(TMath::Abs(gain)<1.0e-3)
-            gain =1.;
-    }
-
-    if(TMath::Abs(gain) < 1.0e-3)
-            gain = 1.0;
-
-    return gain;
-
-}
-
 
