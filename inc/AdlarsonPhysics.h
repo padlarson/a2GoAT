@@ -589,7 +589,6 @@ private:
 
     TFile*          Ecorr_gamma;        // correction compated to MC 3pi0
     TH2F*           Eth_gamma;
-    TFile*          Ecorr_gammaNLO;     // NLO correction compated to MC 3pi0
 
 
 protected:

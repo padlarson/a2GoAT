@@ -365,8 +365,6 @@ AdlarsonPhysics::AdlarsonPhysics():
     Ecorr_gamma                = new TFile("configfiles/data/MCEXP3pi0diff.root");
     Eth_gamma                  = (TH2F*)Ecorr_gamma->Get("MCtoEXP");
 
-    Ecorr_gammaNLO             = new TFile("configfiles/data/MCEXP3pi0diffNLO.root");
-
     thcorr_TAPS                = new TFile("configfiles/corr/TAPS_th_corr.root");
     dthvth_TAPS                = (TProfile*)thcorr_TAPS->Get("photon_dtheta_v_theta_TAPS_pfx")->Clone();
 
@@ -609,10 +607,10 @@ AdlarsonPhysics::AdlarsonPhysics():
   v_z_settings.Limit.High = 10.;
   v_z_settings.Limit.Low = -10.;
 
-  kinfit.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
-  kinfiteta2pi.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
-  kinfit3pi.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
-  kinfit_final.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
+  kinfit.AddMeasuredVariable("v_z", 0., 3., v_z_settings); // default value 0
+  kinfiteta2pi.AddMeasuredVariable("v_z", 0., 3., v_z_settings); // default value 0
+  kinfit3pi.AddMeasuredVariable("v_z", 0., 3., v_z_settings); // default value 0
+  kinfit_final.AddMeasuredVariable("v_z", 0., 3., v_z_settings); // default value 0
 //  kinfit10g.AddMeasuredVariable("v_z", 0.0, 2.3, v_z_settings); // default value 0
 //   kinfit10g.AddUnmeasuredVariable("v_z", 0.0, v_z_settings); // default value 0
 //  kinfit10g_eta2pi.AddMeasuredVariable("v_z", 0., 2.3, v_z_settings); // default value 0
@@ -1598,8 +1596,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     Photons_six[n_photons].SetFromValues( GetTracks()->GetVector(kgam).E(),GetTracks()->GetVector(kgam).Theta(),GetTracks()->GetVector(kgam).Phi() );
                     Is_CB.push_back(1);
                     obs.resize(0);
-                    obs.push_back(Photons_six[n_photons].Ek);
-                    obs.push_back(Photons_six[n_photons].Theta);
+                    obs.push_back(GetTracks()->GetVector(kgam).E());
+                    obs.push_back(GetTracks()->GetVector(kgam).Theta());
                     unc.resize(0);
                     unc = Get_unc_R( 1, 1, obs);
                     Photons_six[n_photons].Smear_R(unc, 0);
@@ -1608,8 +1606,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     Is_CB.push_back(0);
                     Photons_six[n_photons].SetFromValues( GetTracks()->GetVector(kgam).E(), R_TAPS[GetTracks()->GetCentralCrystal(kgam)],GetTracks()->GetVector(kgam).Phi() );
                     obs.resize(0);
-                    obs.push_back(Photons_six[n_photons].Ek);
-                    obs.push_back(Photons_six[n_photons].Theta);
+                    obs.push_back(GetTracks()->GetVector(kgam).E());
+                    obs.push_back(GetTracks()->GetVector(kgam).Theta());
                     obs.push_back(GetTracks()->GetCentralCrystal(kgam));
                     unc.resize(0);
                     unc = Get_unc_R( 2, 1, obs);
@@ -2561,8 +2559,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
                 Photons_six_3pi[n_photons_min].SetFromValues( GetTracks()->GetVector(tr3pi).E(),GetTracks()->GetVector(tr3pi).Theta(),GetTracks()->GetVector(tr3pi).Phi() );
                 Is_CB.push_back(1);
                 obs.resize(0);
-                obs.push_back(Photons_six_3pi[n_photons_min].Ek);
-                obs.push_back(Photons_six_3pi[n_photons_min].Theta);                
+                obs.push_back(GetTracks()->GetVector(tr3pi).E());
+                obs.push_back(GetTracks()->GetVector(tr3pi).Theta());
                 unc.resize(0);
                 unc = Get_unc_R( 1, 1, obs);
                 Photons_six_3pi[n_photons_min].Smear_R(unc ,0);
@@ -2571,8 +2569,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
                 Is_CB.push_back(0);
                 Photons_six_3pi[n_photons_min].SetFromValues( GetTracks()->GetVector(tr3pi).E(), R_TAPS[GetTracks()->GetCentralCrystal(tr3pi)],GetTracks()->GetVector(tr3pi).Phi() );
                 obs.resize(0);
-                obs.push_back(Photons_six_3pi[n_photons_min].Ek);
-                obs.push_back(Photons_six_3pi[n_photons_min].Theta);
+                obs.push_back(GetTracks()->GetVector(tr3pi).E());
+                obs.push_back(GetTracks()->GetVector(tr3pi).Theta());
                 obs.push_back(GetTracks()->GetCentralCrystal(tr3pi));
                 unc.resize(0);
                 unc = Get_unc_R( 2, 1, obs);
@@ -2625,8 +2623,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
                 Is_CB.push_back(1);
                 Photons_six_eta2pi[n_photons_min].SetFromValues( GetTracks()->GetVector(treta2pi).E(),GetTracks()->GetVector(treta2pi).Theta(), GetTracks()->GetVector(treta2pi).Phi() );
                 obs.resize(0);
-                obs.push_back(Photons_six_eta2pi[n_photons_min].Ek);
-                obs.push_back(Photons_six_eta2pi[n_photons_min].Theta);
+                obs.push_back(GetTracks()->GetVector(treta2pi).E());
+                obs.push_back(GetTracks()->GetVector(treta2pi).Theta());
                 unc.resize(0);
                 unc = Get_unc_R( 1, 1, obs);
                 Photons_six_eta2pi[n_photons_min].Smear_R(unc, 0);
@@ -2636,8 +2634,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
                 Is_CB.push_back(0);
                 Photons_six_eta2pi[n_photons_min].SetFromValues( GetTracks()->GetVector(treta2pi).E(), R_TAPS[GetTracks()->GetCentralCrystal(treta2pi)], GetTracks()->GetVector(treta2pi).Phi() );
                 obs.resize(0);
-                obs.push_back(Photons_six_eta2pi[n_photons_min].Ek);
-                obs.push_back(Photons_six_eta2pi[n_photons_min].Theta);
+                obs.push_back(GetTracks()->GetVector(treta2pi).E());
+                obs.push_back(GetTracks()->GetVector(treta2pi).Theta());
                 obs.push_back(GetTracks()->GetCentralCrystal(treta2pi));
                 unc.resize(0);
                 unc = Get_unc_R( 2, 1, obs);
@@ -2748,8 +2746,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
                 Is_CB.push_back(1);
                 Photons_six_final[n_photons_min].SetFromValues( GetTracks()->GetVector(tretapr).E(),GetTracks()->GetVector(tretapr).Theta(), GetTracks()->GetVector(tretapr).Phi() );
                 obs.resize(0);
-                obs.push_back(Photons_six_final[n_photons_min].Ek);
-                obs.push_back(Photons_six_final[n_photons_min].Theta);
+                obs.push_back(GetTracks()->GetVector(tretapr).E());
+                obs.push_back(GetTracks()->GetVector(tretapr).Theta());
                 unc.resize(0);
                 unc = Get_unc_R( 1, 1, obs);
                 Photons_six_final[n_photons_min].Smear_R(unc, 0);
@@ -2759,8 +2757,8 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
                 Is_CB.push_back(0);
                 Photons_six_final[n_photons_min].SetFromValues( GetTracks()->GetVector(tretapr).E(), R_TAPS[GetTracks()->GetCentralCrystal(tretapr)], GetTracks()->GetVector(tretapr).Phi() );
                 obs.resize(0);
-                obs.push_back(Photons_six_final[n_photons_min].Ek);
-                obs.push_back(Photons_six_final[n_photons_min].Theta);
+                obs.push_back(GetTracks()->GetVector(tretapr).E());
+                obs.push_back(GetTracks()->GetVector(tretapr).Theta());
                 obs.push_back(GetTracks()->GetCentralCrystal(tretapr));
                 unc.resize(0);
                 unc = Get_unc_R( 2, 1, obs);
