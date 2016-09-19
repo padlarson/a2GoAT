@@ -191,6 +191,7 @@ private:
     GH1*            six_fit_chi2;
     GH1*            six_fit_pdf;
     GH1*            six_fit_etaprfinal_pdf;
+    GHistBGSub2*    kfit_Pulls_6g;
 
     GH1*            NI6g;
     GH1*            NIeta2pi0;
@@ -589,7 +590,7 @@ private:
 
     TFile*          Ecorr_gamma;        // correction compated to MC 3pi0
     TH2F*           Eth_gamma;
-    TFile*          Ecorr_gammaNLO;     // NLO correction compated to MC 3pi0
+//    TFile*          Ecorr_gammaNLO;     // NLO correction compated to MC 3pi0
 
 
 protected:
@@ -614,10 +615,11 @@ protected:
                 Theta = p_.Theta();
                 Phi = p_.Phi();
             }
-            void SetFromValues(const Double_t& E, const Double_t& th, const Double_t& ph) {
+            void SetFromValues(const Double_t& E, const Double_t& th, const Double_t& ph, const Double_t& showerd) {
                 Ek = E;
                 Theta = th; // in case of TAPS, theta is replaced by Radius R
                 Phi = ph;
+                SD = showerd;
             }
 
             static TLorentzVector Make(const std::vector<double>& EkThetaPhi,
@@ -631,17 +633,19 @@ protected:
                 return {
                         std::addressof(Ek),
                         std::addressof(Theta),
-                        std::addressof(Phi)};
+                        std::addressof(Phi),
+                        std::addressof(SD)};
             }
             std::vector<double*> LinkSigma() {
                 return {
                         std::addressof(Ek_Sigma),
                         std::addressof(Theta_Sigma),
-                        std::addressof(Phi_Sigma)};
+                        std::addressof(Phi_Sigma),
+                        std::addressof(SD_Sigma)};
             }
             std::vector<APLCON::Variable_Settings_t> LinkSettings()
             {
-                return{Ek_Setting, Theta_Setting, Phi_Setting};
+                return{Ek_Setting, Theta_Setting, Phi_Setting, SD_Setting};
             }
 
             void Smear(std::vector<double> unc , int particle);
@@ -658,6 +662,9 @@ protected:
             double Phi;
             double Phi_Sigma;
             APLCON::Variable_Settings_t Phi_Setting;
+            double SD;
+            double SD_Sigma;
+            APLCON::Variable_Settings_t SD_Setting;
 
 
         private:
@@ -705,6 +712,12 @@ public:
     void            theta_corr();      // corrects theta for CB and TAPS for all clusters (Tracks).
 
     TLorentzVector GetLVCorrForZ(std::vector<double> EkPThPhi, const double v_z, Int_t &idet, double mass);
+//    Double_t       GetShowerDepth(Bool_t IsCB, Bool_t IsGamma, Double_t E, Double_t th);
+    Double_t       GetShowerDepth(Bool_t IsCB, Bool_t IsGamma, Double_t E);
+    Double_t       GetShowerDepthUnc(Bool_t IsCB, Bool_t IsGamma, Double_t E);
+    Double_t       GetThetaUnc(Bool_t IsCB, Bool_t IsGamma, Double_t E);
+    Double_t       GetEUnc(Bool_t IsCB, Bool_t IsGamma, Double_t E);
+
     void           CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
