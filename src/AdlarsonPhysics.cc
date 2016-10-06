@@ -889,10 +889,7 @@ void	AdlarsonPhysics::ProcessEvent()
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
        TrueAnalysis_etapr6g("PS");                 // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
-       if(MCJuly14)
-         MCw *= 595881./500000.;
-       else if(MCOctDec14)
-         MCw *= 1008880./1000000.;
+
 
 //*****       for 3pi0 and etapi0 MC *****
 //       MCw = 1.0;
