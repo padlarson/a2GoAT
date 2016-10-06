@@ -316,69 +316,6 @@ private:
 
 
     TString     tree_file_name;
-//    const int   MAX_LENGTH  =30;
-//    // vectors related to TTrees saved at the end of the analysis
-//    std::vector<double> vec_weight;
-//    std::vector<int> vec_nclusters;
-//    std::vector<double> vec_taggerenergy;
-//    std::vector<double> vec_fitted_pr_th;
-//    std::vector<double> vec_fitted_pr_e;
-//    std::vector<double> fitted_zvx;
-//    std::vector<double> vec_X;
-//    std::vector<double> vec_Y;
-//    std::vector<double> vec_pdf_eta2pi;
-//    std::vector<double> vec_pdf_3pi;
-//    std::vector<double> vec_pdf_etapr;
-//    std::vector<int> vec_costh_epr_cm;
-//    std::vector<double> vec_DP_005;
-//    std::vector<double> vec_DP_010;
-//    std::vector<double> vec_DP_015;
-//    std::vector<double> vec_M_eta2pi;
-//    std::vector<double> vec_M_etapi1;
-//    std::vector<double> vec_M_etapi2;
-//    std::vector<double> vec_M_pipi;
-//    std::vector<int> vec_costh_epr_cm_pr;
-//    std::vector<double> vec_X_pr;
-//    std::vector<double> vec_Y_pr;
-//    std::vector<int> vec_DP_005_pr;
-//    std::vector<int> vec_DP_010_pr;
-//    std::vector<int> vec_DP_015_pr;
-//    std::vector<double> vec_M_etapi_pr1;
-//    std::vector<double> vec_M_etapi_pr2;
-//    std::vector<double> vec_M_pipi_pr;
-
-//    TFile* f_tree;
-//    TTree* tree;
-//    int       branch_length;
-//    double*   branch_weight;
-//    int*      branch_nclusters;
-//    double*   branch_taggerenergy;
-//    double*   branch_fitted_pr_th;
-//    double*   branch_fitted_pr_e;
-//    double*   branch_fitted_zvx;
-//    double*   branch_X;
-//    double*   branch_Y;
-//    double*   branch_pdf_eta2pi;
-//    double*   branch_pdf_3pi;
-//    double*   branch_pdf_etapr;
-//    double*   branch_costh_epr_cm;
-//    int*      branch_DP_005;
-//    int*      branch_DP_010;
-//    int*      branch_DP_015;
-//    double*   branch_M_eta2pi;
-//    double*   branch_M_etapi1;
-//    double*   branch_M_etapi2;
-//    double*   branch_M_pipi;
-//    double*   branch_costh_epr_cm_pr;
-//    double*   branch_X_pr;
-//    double*   branch_Y_pr;
-//    int*      branch_DP_005_pr;
-//    int*      branch_DP_010_pr;
-//    int*      branch_DP_015_pr;
-//    double*   branch_M_etapi_pr1;
-//    double*   branch_M_etapi_pr2;
-//    double*   branch_M_pipi_pr;
-
     TFile*    f_tree2;
     TTree*    tree2;
 
@@ -731,6 +668,8 @@ public:
     void GetBest6gCombination(Double_t& sigma_eta, Double_t& sigma_pi0, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi, std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb );
     void test_correct_hypothesis(Double_t &prob_etapr, Double_t& chi2min_eta2pi, Double_t& chi2min_3pi, std::vector<Int_t>& set_min, std::vector<int>& imin_eta2pi, std::vector<int>& imin_3pi,  std::vector<comb>& etatwopi_comb, std::vector<comb>& threepi_comb);
     void FillTree();
+
+    void eightgAnalysis(UInt_t ipr);
 
     // functions specifically related to 10g analysis
     void tengAnalysis(UInt_t ipr );

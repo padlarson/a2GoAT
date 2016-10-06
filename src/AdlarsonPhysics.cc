@@ -801,75 +801,6 @@ Bool_t	AdlarsonPhysics::Start()
     }
     
     tree_file_name = prefix + suffix + pch2;
-
-//    f_tree = new TFile(tree_file_name,"recreate");
-//    std::cout << tree_file_name << std::endl;
-//    if(f_tree)
-//        std::cout << "Created output tree in linked output folder"<< std::endl;
-//    tree = new TTree("tree","result");
-
-//    branch_weight        = new double[MAX_LENGTH];
-//    branch_nclusters     = new int[MAX_LENGTH];
-//    branch_taggerenergy  = new double[MAX_LENGTH];
-//    branch_fitted_pr_th  = new double[MAX_LENGTH];
-//    branch_fitted_pr_e   = new double[MAX_LENGTH];
-//    branch_fitted_zvx    = new double[MAX_LENGTH];
-//    branch_pdf_eta2pi    = new double[MAX_LENGTH];
-//    branch_pdf_3pi       = new double[MAX_LENGTH];
-//    branch_pdf_etapr     = new double[MAX_LENGTH];
-//    branch_costh_epr_cm  = new double[MAX_LENGTH];
-//    branch_X             = new double[MAX_LENGTH];
-//    branch_Y             = new double[MAX_LENGTH];
-//    branch_DP_005        = new int[MAX_LENGTH];
-//    branch_DP_010        = new int[MAX_LENGTH];
-//    branch_DP_015        = new int[MAX_LENGTH];
-//    branch_M_eta2pi      = new double[MAX_LENGTH];
-//    branch_M_etapi1      = new double[MAX_LENGTH];
-//    branch_M_etapi2      = new double[MAX_LENGTH];
-//    branch_M_pipi        = new double[MAX_LENGTH];
-//    branch_costh_epr_cm_pr = new double[MAX_LENGTH];
-//    branch_X_pr          = new double[MAX_LENGTH];
-//    branch_Y_pr          = new double[MAX_LENGTH];
-//    branch_DP_005_pr     = new int[MAX_LENGTH];
-//    branch_DP_010_pr     = new int[MAX_LENGTH];
-//    branch_DP_015_pr     = new int[MAX_LENGTH];
-//    branch_M_etapi_pr1   = new double[MAX_LENGTH];
-//    branch_M_etapi_pr2   = new double[MAX_LENGTH];
-//    branch_M_pipi_pr     = new double[MAX_LENGTH];
-
-//    tree->Branch("branch_length",&branch_length);
-//    tree->Branch("weight", branch_weight, "branch_weight[branch_length]/D" );
-//    tree->Branch("nclusters", branch_nclusters, "branch_nclusters[branch_length]/I");
-//    tree->Branch("beam_energy", branch_taggerenergy, "branch_taggerenergy[branch_length]/D" );
-//    tree->Branch("proton_th_fit", branch_fitted_pr_th, "branch_fitted_pr_th[branch_length]/D" );
-//    tree->Branch("branch_fitted_pr_e", branch_fitted_pr_e, "branch_fitted_pr_e[branch_length]/D" );
-//    tree->Branch("z_vx_fit", branch_fitted_zvx, "branch_fitted_zvx[branch_length]/D" );
-//    tree->Branch("pdf_eta2pi", branch_pdf_eta2pi, "branch_pdf_eta2pi[branch_length]/D" );
-//    tree->Branch("pdf_3pi", branch_pdf_3pi, "branch_pdf_3pi[branch_length]/D" );
-//    tree->Branch("pdf_etapr", branch_pdf_etapr, "branch_pdf_etapr[branch_length]/D" );
-//    tree->Branch("costh_epr_cm", branch_costh_epr_cm, "branch_costh_epr_cm[branch_length]/D" );
-//    tree->Branch("X", branch_X, "branch_X[branch_length]/D" );
-//    tree->Branch("Y", branch_Y, "branch_Y[branch_length]/D" );
-//    tree->Branch("DP_005bin", branch_DP_005, "branch_DP_005[branch_length]/I" );
-//    tree->Branch("DP_010bin", branch_DP_010, "branch_DP_010[branch_length]/I" );
-//    tree->Branch("DP_015bin", branch_DP_015, "branch_DP_015[branch_length]/I" );
-//    tree->Branch("Meta2pi", branch_M_eta2pi, "branch_M_eta2pi[branch_length]/D" );
-//    tree->Branch("Metapi1", branch_M_etapi1, "branch_M_etapi1[branch_length]/D" );
-//    tree->Branch("Metapi2", branch_M_etapi2, "branch_M_etapi2[branch_length]/D" );
-//    tree->Branch("Mpipi", branch_M_pipi, "branch_M_pipi[branch_length]/D" );
-//    tree->Branch("costh_epr_cm_pr", branch_costh_epr_cm_pr, "branch_costh_epr_cm_pr[branch_length]/D" );
-//    tree->Branch("X_prime", branch_X_pr, "branch_X_pr[branch_length]/D" );
-//    tree->Branch("Y_prime", branch_Y_pr, "branch_Y_pr[branch_length]/D" );
-//    tree->Branch("DP_005bin_prime", branch_DP_005_pr, "branch_DP_005_pr[branch_length]/I" );
-//    tree->Branch("DP_010bin_prime", branch_DP_010_pr, "branch_DP_010_pr[branch_length]/I" );
-//    tree->Branch("DP_015bin_prime", branch_DP_015_pr, "branch_DP_015_pr[branch_length]/I" );
-//    tree->Branch("Metapi_pr1", branch_M_etapi_pr1, "branch_M_etapi_pr1[branch_length]/D" );
-//    tree->Branch("Metapi_pr2", branch_M_etapi_pr2, "branch_M_etapi_pr2[branch_length]/D" );
-//    tree->Branch("Mpipi_pr", branch_M_pipi_pr, "branch_M_pipi_pr[branch_length]/D" );
-
-//    TFile*    f_tree2;
-//    TTree*    tree2;
-
     f_tree2 = new TFile(tree_file_name,"recreate");
     std::cout << tree_file_name << std::endl;
     if(f_tree2)
@@ -1260,6 +1191,9 @@ void	AdlarsonPhysics::ProcessEvent()
 
     if( ClustersInTime.size() == 7 && (nrprotons > 0) )
         sixgAnalysis( iprtrack );
+
+    if( ClustersInTime.size() == 9 && (nrprotons > 0) )
+        eightgAnalysis( iprtrack );
 
     if( ClustersInTime.size() == 11 && (nrprotons > 0) )
         tengAnalysis(iprtrack);
@@ -1842,7 +1776,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
            rc_sig[1] = photons_rec[imin_eta2pi[2]] + photons_rec[imin_eta2pi[3]];
            rc_sig[2] = photons_rec[imin_eta2pi[4]] + photons_rec[imin_eta2pi[5]];
 
-           double mass_shift = 1.3;
+           double mass_shift = 1.0;
 
            TLorentzVector etap_fit_final(0.0, 0.0, 0.0, 0.0);
            TLorentzVector fin[3];
@@ -2813,46 +2747,13 @@ void AdlarsonPhysics::test_correct_hypothesis(Double_t& prob_etapr, Double_t& pr
     return;
 }
 
-void AdlarsonPhysics::FillTree(){
-//    if(vec_weight.size() >= MAX_LENGTH){
-//        std::cout << "too many tagger hits!" <<  std::endl;
-//        return;
-//    }
 
-//    branch_length = vec_weight.size();
-//    for(int i = 0; i < branch_length ; i++){
-//        branch_weight[i]        = vec_weight[i];
-//        branch_nclusters[i]     = vec_nclusters[i];
-//        branch_taggerenergy[i]  = vec_taggerenergy[i];
-//        branch_fitted_pr_th[i]  = vec_fitted_pr_th[i];
-//        branch_fitted_pr_e[i]   = vec_fitted_pr_e[i];
-//        branch_fitted_zvx[i]    = fitted_zvx[i];
-//        branch_pdf_eta2pi[i]    = vec_pdf_eta2pi[i];
-//        branch_pdf_3pi[i]       = vec_pdf_3pi[i];
-//        branch_pdf_etapr[i]     = vec_pdf_etapr[i];
-//        branch_costh_epr_cm[i]  = vec_costh_epr_cm[i];
-//        branch_X[i]             = vec_X[i];
-//        branch_Y[i]             = vec_Y[i];
-//        branch_DP_005[i]        = vec_DP_005[i];
-//        branch_DP_010[i]        = vec_DP_010[i];
-//        branch_DP_015[i]        = vec_DP_015[i];
-//        branch_M_eta2pi[i]      = vec_M_eta2pi[i];
-//        branch_M_etapi1[i]      = vec_M_etapi1[i];
-//        branch_M_etapi2[i]      = vec_M_etapi2[i];
-//        branch_M_pipi[i]        = vec_M_pipi[i];
-//        branch_costh_epr_cm_pr[i] = vec_costh_epr_cm_pr[i];
-//        branch_X_pr[i]          = vec_X_pr[i];
-//        branch_Y_pr[i]          = vec_Y_pr[i];
-//        branch_DP_005_pr[i]     = vec_DP_005_pr[i];
-//        branch_DP_010_pr[i]     = vec_DP_010_pr[i];
-//        branch_DP_015_pr[i]     = vec_DP_015_pr[i];
-//        branch_M_etapi_pr1[i]   = vec_M_etapi_pr1[i];
-//        branch_M_etapi_pr2[i]   = vec_M_etapi_pr2[i];
-//        branch_M_pipi_pr[i]     = vec_M_pipi_pr[i];
-//    }
 
-//    tree->Fill();
+void AdlarsonPhysics::eightgAnalysis(UInt_t ipr){
+    for(Int_t tag = 0; tag < GetTagger()->GetNTagged(); tag++)
+    {
 
+    }
 }
 
 void AdlarsonPhysics::tengAnalysis(UInt_t ipr)
@@ -3971,6 +3872,7 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
     DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue005);
 
     Double_t weight2 = 1.0;
+    Double_t weight3 = 1.0;
     // Weigh the MC with the Dalitz plot parameters.
     if(s == "Sergey"){
         N = 1.0e5/94190;
@@ -3981,10 +3883,19 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
     }
     else // Phase Space
     {
-        weight2 = 1.0;
+        weight2 = 9.0/9.115663;
     }
 
-    weight *= weight2;
+        weight *= weight2;
+
+    if(MCJuly14)
+      weight3 = 595881./500000.;
+    else if(MCOctDec14)
+      weight3 = 1008880./1000000.;
+
+    weight *= weight3;
+
+
     etapr_6gTrue.SetWeight(weight);
 
     true_phy_DP_020->Fill(DPnrTrue020,etapr_6gTrue.GetWeight());
