@@ -62,8 +62,11 @@ private:
     // Physics Results
     TH1*            true_etapr_diff_distr;
     TH2*            true_eta_pr_production;
-    TH2*            true_eta_pr_gg_effcorr;
     TH2*            true_DP;
+    TH2*            true_DP_005;
+    TH2*            true_DP_075;
+    TH2*            true_DP_010;
+    TH2*            true_DP_015;
     TH1*            true_phy_DP_020;
     TH1*            true_phy_DP_015;
     TH1*            true_phy_DP_010;
@@ -125,28 +128,25 @@ private:
     GHistBGSub2*    p_E_v_TOF_TAPS_1cl;
     GHistBGSub2*    p_E_v_TOF_CB_All_proton;
     GHistBGSub2*    p_E_v_TOF_CB_2PrID;
-    GHistBGSub2*    p_E_v_TOF_TAPS_2PrID;
     GHistBGSub2*    p_E_v_TOF_CB_best;
     GHistBGSub2*    p_E_v_TOF_after_kfit;
     GHistBGSub2*    p_Erec_v_TOF_after_kfit;
     GHistBGSub2*    p_E_v_TOF_after_kfit_2;
 
     GHistBGSub*     CB_EnergySum;
-    GHistBGSub*     CB_EnergySum_2;
     GHistBGSub*     CB_EnergySum_3pi0;
     GHistBGSub*     CB_EnergySum_etapr;
-    GHistBGSub*     CB_EnergySum_3pi0_v_CB;
-    GHistBGSub*     CB_EnergySum_etapr_v_CB;
+
 
     // Photon related
     TLorentzVector  IM6g_vec;
+    TLorentzVector  IM8g_vec;
     TLorentzVector  IM10g_vec;
 
     // 10g analysis
     GH1*            ten_rec_IM;
     GHistBGSub2*    ten_rec_IM_v_MMp;
     GHistBGSub2*    ten_fit_EvTh_g;
-    GHistBGSub2*    ten_fit_EvTh_g_min;
 
     GH1*            fi_diff_TAPSCB;
     GHistBGSub2*    fi_TAPSvsCB;
@@ -165,7 +165,6 @@ private:
     TH2D            time_clusters_CB;
     TH2D            time_clusters_CBavg_CBdiff;
     TH2D            time_clusters_CBavg_TAPSdiff;
-    TH2D            time_clusters_TAPS_TAPSdiff;
     TH2D            time_clusters_CBavg_EPT;
     TH1D            time_nr_AllClusters;
     TH1D            time_nr_ClustersinTime;
@@ -206,7 +205,6 @@ private:
     GH1*            six_fit_IM;
     GHistBGSub2*    six_fit_IM_ncl;
     GHistBGSub2*    six_fit_IM_vz;
-    GHistBGSub2*    six_fit_dthpr_vz;
 
     GH1*            six_fit_which_place_best_3pi_cand;
     GH1*            six_fit_which_place_best_etapr_cand;
@@ -222,8 +220,6 @@ private:
     GH1*            six_fit_IM_eta2pi0_g;
 
     GHistBGSub2*    six_fit_PDF_eta2pi_v_Meta2pi;
-
-    GHistBGSub2*    six_fit_eta_PDF_v_Metapr;
     GH1*            six_fit_IM_3pi;
     GH1*            six_fit_IM_eta2pi;
     GH1*            six_fit_best_eta;
@@ -266,8 +262,6 @@ private:
     GHistBGSub2*    six_fit_fitted_dth_v_eth;
     GHistBGSub2*    six_fit_fitted_p_th_v_det;
     GHistBGSub2*    six_fit_fitted_p_fi_v_det;
-    TH2*            six_fit_true_p_th_v_det;
-    TH2*            six_fit_true_p_fi_v_det;
 
     // to check the energy of the 3pi0 system vs its inv mass
     GHistBGSub2*    six_fit_best_3pi_IM_v_E;
@@ -310,12 +304,10 @@ private:
     GH1*            six_phy_M_pi1pi2_v_etapr_fit2;
     GH1*            six_phy_M_etapi_v_etapr_fit2;
 
-    TH1*	six_fit_IM_eta2pi_prompt;
-    TH1*	six_fit_IM_eta2pi_random;
+    TH1*            six_fit_IM_eta2pi_prompt;
+    TH1*            six_fit_IM_eta2pi_random;
 
-
-
-    TString     tree_file_name;
+    TString   tree_file_name;
     TFile*    f_tree2;
     TTree*    tree2;
 
@@ -351,8 +343,12 @@ private:
     double    fMetapi2pr;
 
 
-    // Kinfit related variables 10g
+    //    Analysis 8g
+    GH1*      eight_rec_IM;
+    GH1*      kfit_pdf_8g;
+    GH1*      IM8g_fit;
 
+    // Kinfit related variables 10g
     GH1*            kfit_chi2_10g;
     GH1*            kfit_pdf_10g;
     GHistBGSub2*    kfit_Pulls_10g;
@@ -364,10 +360,6 @@ private:
     GH1*            ten_fit_PDF_eta2pi;
     GHistBGSub2*    ten_fit_X_v_pdf_eta2pi;
     GHistBGSub2*    ten_fit_Y_v_pdf_eta2pi;
-
-    GHistBGSub2*    ten_fit_nfit_v_pdf_5pi0_v_eta2pi0;
-    GHistBGSub2*    ten_fit_dX_v_pdf_5pi0_v_eta2pi0;
-    GHistBGSub2*    ten_fit_dY_v_pdf_5pi0_v_eta2pi0;
 
     GHistBGSub2*    ten_phy_etapr_prod_diff_distr;
     GHistBGSub2*    ten_phy_etapr_prod_diff_distr_metapr;
@@ -461,6 +453,7 @@ private:
 
     static Int_t perm4g[9][4];
     static Int_t perm6g[15][6];
+    static Int_t perm8g[28][8];
     static Int_t perm6outof10g[210][6];
 
     GTrue   etapr_6gTrue;
@@ -478,10 +471,12 @@ private:
     std::vector<double> Legendre; //etapr photo pr Legendre values
 
     std::vector<TLorentzVector> photons_rec;
+    std::vector<TLorentzVector> photons_rec_eight;
     std::vector<TLorentzVector> photons_rec_ten;
     std::vector<TLorentzVector> photons_fit;
     std::vector<TLorentzVector> photons_fit_final;
     std::vector<TLorentzVector> photons_fit_final_metapr;
+    std::vector<TLorentzVector> photons_fit_8g;
     std::vector<TLorentzVector> photons_fit_10g;
 
     Double_t    sigma_eta;
@@ -538,9 +533,10 @@ protected:
 
     static constexpr bool includeIMconstraint = true;
     static constexpr bool includeVertexFit = true;
-    static constexpr size_t nPhotons_two = 2;
-    static constexpr size_t nPhotons_six = 6;
-    static constexpr size_t nPhotons_ten = 10;
+    static constexpr size_t nPhotons_two    = 2;
+    static constexpr size_t nPhotons_six    = 6;
+    static constexpr size_t nPhotons_eight  = 8;
+    static constexpr size_t nPhotons_ten    = 10;
 
 
     // lightweight structure for linking to fitter
@@ -605,6 +601,8 @@ protected:
     APLCON kinfit_final;
     APLCON kinfit3pi;
     APLCON kinfiteta2pi;
+    APLCON kinfit8g;
+//    APLCON kinfit8g_etapi;
     APLCON kinfit10g;
     APLCON kinfit10g_eta2pi;
 
@@ -612,6 +610,8 @@ protected:
     FitParticle beam_3pi;
     FitParticle beam_eta2pi;
     FitParticle beam_final;
+    FitParticle beam8g;
+//    FitParticle beam8g_etapi;
     FitParticle beam10g;
     FitParticle beam10g_eta2pi;
 
@@ -619,12 +619,16 @@ protected:
     std::vector<FitParticle> Photons_six_3pi;
     std::vector<FitParticle> Photons_six_eta2pi;
     std::vector<FitParticle> Photons_six_final;
+    std::vector<FitParticle> Photons_eight;
+//    std::vector<FitParticle> Photons_eight_etapi;
     std::vector<FitParticle> Photons_ten;
     std::vector<FitParticle> Photons_ten_eta2pi;
     FitParticle proton;
     FitParticle proton_3pi;
     FitParticle proton_eta2pi;
     FitParticle proton_final;
+    FitParticle proton8g;
+//    FitParticle proton8g_etapi;
     FitParticle proton10g;
     FitParticle proton10g_eta2pi;
 
@@ -662,6 +666,8 @@ public:
 
     std::vector<double> Get_unc(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
     std::vector<double> Get_unc_R(Int_t apparatus_nr, Int_t particle, std::vector<double>& obs);
+
+    void twogAnalysis( UInt_t ipr );
 
     // functions specifically related to 6g analysis
     void sixgAnalysis( UInt_t ipr );
