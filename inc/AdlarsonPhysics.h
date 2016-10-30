@@ -94,6 +94,10 @@ private:
     TH2*    true_phy_3pi_IMpipi_v_IMppi;
     TH2*    true_six_phy_dX_v_X;
     TH2*    true_six_phy_dY_v_Y;
+    TH2*    true_six_phy_Xtr_v_Xfit;
+    TH2*    true_six_phy_Ytr_v_Yfit;
+    TH2*    true_six_phy_Xtr_v_Xfit_metapr;
+    TH2*    true_six_phy_Ytr_v_Yfit_metapr;
 
     // for m_etapr forced in kinfit
     TH2*    true_six_phy_dX_v_DPbin_metapr;

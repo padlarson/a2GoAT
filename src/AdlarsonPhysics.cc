@@ -129,8 +129,12 @@ AdlarsonPhysics::AdlarsonPhysics():
     true_six_phy_dY_v_DPbin             = new TH2F("true_six_phy_dY_v_DPbin", "Y_{fit} - Y_{true} v DP bin nr; bin nr; Y_{fit} - Y_{true}", 800, 0, 800, 800, -2.0, 2.0);
     true_six_phy_dX_v_X                 = new TH2F("true_six_phy_dX_v_X", " X ; X_{fit}; X_{fit} - X_{true}", 200, -2., 2., 200, -1.0, 1.0);
     true_six_phy_dY_v_Y                 = new TH2F("true_six_phy_dY_v_Y", " Y ; Y_{fit}; Y_{fit} - Y_{true}", 200, -2., 2., 200, -1.0, 1.0);
+    true_six_phy_Xtr_v_Xfit             = new TH2F("true_six_phy_Xtr_v_Xfit", " X ; X_{fit}; X_{true}", 70, 0., 1.4, 70, 0., 1.4);
+    true_six_phy_Ytr_v_Yfit             = new TH2F("true_six_phy_Ytr_v_Yfit", " Y ; Y_{fit}; Y_{true}", 120, -1.2, 1.2, 120, -1.2, 1.2);
     true_six_phy_dX_v_X_metapr          = new TH2F("true_six_phy_dX_v_X_metapr", "X m_{#eta'}; X_{fit}; X_{fit} - X_{true} ", 200, -2., 2., 200, -2.0, 2.0);
     true_six_phy_dY_v_Y_metapr          = new TH2F("true_six_phy_dY_v_Y_metapr", "Y m_{#eta'}; Y_{fit}; Y_{fit} - Y_{true}", 200, -2., 2., 200, -2.0, 2.0);
+    true_six_phy_Xtr_v_Xfit_metapr      = new TH2F("true_six_phy_Xtr_v_Xfit_metapr", "X m_{#eta'}; X_{fit}; X_{true} ", 70, 0., 1.4, 70, 0., 1.4);
+    true_six_phy_Ytr_v_Yfit_metapr      = new TH2F("true_six_phy_Ytr_v_Yfit_metapr", "Y m_{#eta'}; Y_{fit}; Y_{true}", 120, -1.2, 1.2, 120, -1.2, 1.2);
 
     true_six_phy_dX_v_DPbin_metapr     = new TH2F("true_six_phy_dX_v_DPbin_metapr", "X_{fit} - X_{true} v DP bin nr m_{#eta'}; bin nr; X_{fit} - X_{true}", 800, 0, 800, 200, -2.0, 2.0);
     true_six_phy_dY_v_DPbin_metapr     = new TH2F("true_six_phy_dY_v_DPbin_metapr", "Y_{fit} - Y_{true} v DP bin nr m_{#eta'}; bin nr; Y_{fit} - Y_{true}", 800, 0, 800, 200, -2.0, 2.0);
@@ -1201,11 +1205,11 @@ void	AdlarsonPhysics::ProcessEvent()
     if( ClustersInTime.size() == 7 && (nrprotons > 0) )
         sixgAnalysis( iprtrack );
 
-    if( ClustersInTime.size() == 9 && (nrprotons > 0) )
-        eightgAnalysis( iprtrack );
+//    if( ClustersInTime.size() == 9 && (nrprotons > 0) )
+//        eightgAnalysis( iprtrack );
 
-    if( ClustersInTime.size() == 11 && (nrprotons > 0) )
-        tengAnalysis(iprtrack);
+//    if( ClustersInTime.size() == 11 && (nrprotons > 0) )
+//        tengAnalysis(iprtrack);
 }
 
 void	AdlarsonPhysics::ProcessScalerRead()
@@ -2192,6 +2196,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                        true_six_phy_dX_v_X->Fill(Xfit, Xfit - Xtrue, MCw);
                        true_six_phy_dY_v_Y->Fill(Yfit, Yfit - Ytrue, MCw);
+                       true_six_phy_Xtr_v_Xfit->Fill(Xfit, Xtrue, MCw);
+                       true_six_phy_Ytr_v_Yfit->Fill(Yfit, Ytrue, MCw);
                    }
                }
                else{
@@ -2254,6 +2260,8 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
                        true_six_phy_dX_v_X_metapr->Fill(Xfit_pr, Xfit_pr - Xtrue, MCw);
                        true_six_phy_dY_v_Y_metapr->Fill(Yfit_pr, Yfit_pr - Ytrue, MCw);
+                       true_six_phy_Xtr_v_Xfit_metapr->Fill(Xfit_pr, Xtrue, MCw);
+                       true_six_phy_Ytr_v_Yfit_metapr->Fill(Yfit_pr, Ytrue, MCw);
 
                    }
                    else{
