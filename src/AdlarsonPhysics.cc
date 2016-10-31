@@ -4034,7 +4034,7 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
     true_phy_DP_020->Fill(DPnrTrue020,etapr_6gTrue.GetWeight());
     true_phy_DP_015->Fill(DPnrTrue015,etapr_6gTrue.GetWeight());
     true_phy_DP_010->Fill(DPnrTrue010,etapr_6gTrue.GetWeight());
-    true_phy_DP_075->Fill(DPnrTrue005,etapr_6gTrue.GetWeight());
+    true_phy_DP_075->Fill(DPnrTrue075,etapr_6gTrue.GetWeight());
     true_phy_DP_005->Fill(DPnrTrue005,etapr_6gTrue.GetWeight());
 
 
