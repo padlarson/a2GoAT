@@ -35,8 +35,8 @@ private:
     Bool_t          MC_weight  = false;
     Bool_t          MC_etapr   = false;
     Double_t        MCw  = 1.0;
-    Bool_t          MCJuly14   = false;
-    Bool_t          MCOctDec14 = true;
+    Bool_t          MCJuly14   = true;
+    Bool_t          MCOctDec14 = false;
 
     Bool_t          eight_clusters;
     // Histograms and scatterplots
@@ -141,6 +141,9 @@ private:
     GHistBGSub*     CB_EnergySum_3pi0;
     GHistBGSub*     CB_EnergySum_etapr;
 
+    GH1*     two_rec_IM;
+    GH1*     kfit_pdf_2g;
+    GH1*     IM2g_fit;
 
     // Photon related
     TLorentzVector  IM6g_vec;

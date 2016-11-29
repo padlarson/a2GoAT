@@ -164,6 +164,13 @@ AdlarsonPhysics::AdlarsonPhysics():
     CB_EnergySum_3pi0           = new GHistBGSub("CB_EnergySum_3pi0", "Crystal Ball Energy Sum for 3#pi^{0}; E (MeV); Events", 200, 0., 2000.);
     CB_EnergySum_etapr          = new GHistBGSub("CB_EnergySum_etapr", "Crystal Ball Energy Sum for #eta'; E (MeV); Events", 200, 0., 2000.);
 
+//  In 2g analysis
+    // Kinfit related variables 8g
+    two_rec_IM         = new GH1("two_rec_IM", "rec. IM(2#gamma); IM(2#gamma) (MeV)", 240, 0., 1400.);
+    kfit_pdf_2g        = new GH1("kfit_pdf_2g", "#pdf kinfit 2#gamma; prob(2#gamma)", 100, 0, 1.);
+    IM2g_fit           = new GH1("IM2g_fit", "IM(2#gamma) after APLCON fit; IM(2#gamma) (MeV)", 500, 0., 1000.);
+
+
     IMgg_v_det_3pi0_CB          =   new GHistBGSub2("IMgg_v_det_3pi0_CB", "3#pi^{0}; m_{#gamma#gamma} (MeV); CB det nr", 50, 0, 250, 720, 0, 720);
     IMgg_v_det_3pi0_TAPS        =   new GHistBGSub2("IMgg_v_det_3pi0_TAPS", "3#pi^{0}; m_{#gamma#gamma} (MeV); TAPS det nr", 50, 0, 250, 440, 0, 440);
 
@@ -1838,7 +1845,10 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 fPeta2pi        = probmin_eta2pi;
                 fP3pi           = probmin_3pi;
                 fPetapr         = probmin_etapr;
-                fMeta2pi        = etap_fit_final.M()+mass_shift;
+                if(!MC)
+                    fMeta2pi    = etap_fit_final.M() + mass_shift;
+                else
+                    fMeta2pi    = etap_fit_final.M();
                 fX              = Xfit;
                 fY              = Yfit;
                 fCosth_epr_cm   = diffbin;
