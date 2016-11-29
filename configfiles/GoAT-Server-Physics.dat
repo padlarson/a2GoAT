@@ -19,7 +19,13 @@
 #	Dec 2014   Time Shift
 #Input-Directory: /local/raid2/work/adlarson/analysis/Dec2014/GoAT/TimeShiftFullTarget/root/
 #Output-Directory: /local/raid2/work/adlarson/analysis/Dec2014/Physics/TimeShiftFullTarget/
-#	MC 
-#Input-Directory: /local/raid1/work/adlarson/analysis/MC/GoAT/
-#Output-Directory: /local/raid1/work/adlarson/analysis/MC/Physics/
-
+#	MC etapr6g
+Input-Directory: /local/raid1/work/adlarson/analysis/MC/GoAT/etapr6g/new/
+Output-Directory: /local/raid1/work/adlarson/analysis/MC/Physics/etapr6g/
+#	MC pi0pi0pi0
+Input-Directory: /local/raid1/work/adlarson/analysis/MC/GoAT/pi0pi0pi0/new/
+Output-Directory: /local/raid1/work/adlarson/analysis/MC/Physics/pi0pi0pi0/
+#	MC etapi0
+Input-Directory: /local/raid1/work/adlarson/analysis/MC/GoAT/etapi0/new/
+Output-Directory: /local/raid1/work/adlarson/analysis/MC/Physics/etapi0/
+ 
