@@ -146,6 +146,7 @@ private:
     GH1*     IM2g_fit;
 
     // Photon related
+    TLorentzVector  IM2g_vec;
     TLorentzVector  IM6g_vec;
     TLorentzVector  IM8g_vec;
     TLorentzVector  IM10g_vec;
@@ -463,6 +464,7 @@ private:
     static Int_t perm8g[28][8];
     static Int_t perm6outof10g[210][6];
 
+    GTrue   etapr_2gTrue;
     GTrue   etapr_6gTrue;
     GTrue   etapr_10gTrue;
     GTrue   threepi_etapi;
@@ -502,6 +504,7 @@ private:
 
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
     std::vector<Double_t> TAPSgain;
+    std::vector<Double_t> TAPSsmear;
 
     std::vector<Double_t> TAPSth_corr;
     std::vector<Double_t> R_TAPS;
@@ -604,6 +607,7 @@ protected:
 
         };
 
+    APLCON kinfit2g;
     APLCON kinfit;
     APLCON kinfit_final;
     APLCON kinfit3pi;
@@ -613,6 +617,7 @@ protected:
     APLCON kinfit10g;
     APLCON kinfit10g_eta2pi;
 
+    FitParticle beam2g;
     FitParticle beam;
     FitParticle beam_3pi;
     FitParticle beam_eta2pi;
@@ -622,6 +627,7 @@ protected:
     FitParticle beam10g;
     FitParticle beam10g_eta2pi;
 
+    std::vector<FitParticle> Photons_two;
     std::vector<FitParticle> Photons_six;
     std::vector<FitParticle> Photons_six_3pi;
     std::vector<FitParticle> Photons_six_eta2pi;
@@ -630,6 +636,8 @@ protected:
 //    std::vector<FitParticle> Photons_eight_etapi;
     std::vector<FitParticle> Photons_ten;
     std::vector<FitParticle> Photons_ten_eta2pi;
+
+    FitParticle proton2g;
     FitParticle proton;
     FitParticle proton_3pi;
     FitParticle proton_eta2pi;
@@ -655,6 +663,7 @@ public:
     void           CB_TAPS_boundary(); // checks if there are double hits close to CB-TAPS boundary;
 
     // function where true analysis is done for eta' --> eta 2pi0 --> 6g
+    void TrueAnalysis_etapr2g8g(TString s);
     void TrueAnalysis_etapr6g(TString s);
     void TrueAnalysis_etapr10g();
     Double_t TrueAnalysis_threepi_etapi(); // returns weight as function of IM(ng);
