@@ -921,15 +921,15 @@ void	AdlarsonPhysics::ProcessEvent()
 //       TrueAnalysis_etapr2g8g("Production");
 //       MCw = etapr_2gTrue.GetWeight();
 
-       MC_weight = true;
-       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
-       MCw = etapr_6gTrue.GetWeight();
+//       MC_weight = true;
+//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
+//       MCw = etapr_6gTrue.GetWeight();
 
 //*****       for 3pi0 and etapi0 MC *****
 //       MCw = 1.0;
-//       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       MCw = TrueAnalysis_threepi_etapi();
+       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       MCw = TrueAnalysis_threepi_etapi();
 //       MCw *= 1.5;
 
 //       MC_weight = true;
@@ -1362,6 +1362,18 @@ Bool_t	AdlarsonPhysics::Init(const char* configFile){
        TAPSgain.push_back(std::stod(buffer3));
    }
    fileTAPS.close();
+
+   CBsmear.resize(0);
+   std::ifstream fileCBsmear("configfiles/data/CB_MC_sgm.txt");
+   std::getline(fileCBsmear, line);
+   std::string         buffer5;
+   std::stringstream   ss4;
+   ss4 << line;
+   while (std::getline(ss4, buffer5, '\t'))
+   {
+       CBsmear.push_back(std::stod(buffer5));
+   }
+   fileCBsmear.close();
 
 
    TAPSsmear.resize(0);
@@ -3961,7 +3973,7 @@ void AdlarsonPhysics::Energy_corr()
     // 4) additional smearing applied to individual CB crystals to reproduce resolution (CB) (MC)
 
     Double_t Erec, Ec_temp, DeltaE, Ec, Ec2;
-    Double_t smear;
+    Double_t smear, smear2;
 
     for (int i = 0; i < GetTracks()->GetNTracks() ; i++){
         if( GetTracks()->HasCB(i) ){
@@ -3983,6 +3995,11 @@ void AdlarsonPhysics::Energy_corr()
                 smear = CB_unc->GetBinContent(CB_unc->FindBin(GetTracks()->GetCentralCrystal(i)));
                 if(smear > 0.0)
                     Ec = pRandoms->Gaus(Ec, smear*Ec);
+
+                smear2 = CBsmear[GetTracks()->GetCentralCrystal(i)];
+                if(smear2 > 0.0)
+                    Ec = pRandoms->Gaus(Ec, smear2*Ec);
+
             }
 
         }

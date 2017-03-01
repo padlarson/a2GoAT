@@ -503,6 +503,7 @@ private:
     std::vector<Double_t> TAPS_CB_toff;
 
     std::vector<Double_t> CBgain;         //gain corr factors norm pi0 from 3pi0 at pipeak
+    std::vector<Double_t> CBsmear;
     std::vector<Double_t> TAPSgain;
     std::vector<Double_t> TAPSsmear;
 
