@@ -944,7 +944,6 @@ void	AdlarsonPhysics::ProcessEvent()
        TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
 
-       return;
 
 //*****       for 3pi0 and etapi0 MC *****
 //       MCw = 1.0;
