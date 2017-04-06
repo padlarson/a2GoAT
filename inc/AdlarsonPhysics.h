@@ -76,6 +76,15 @@ private:
     TH1*            true_M_etapi_e2p;
     TH1*            true_imng;
 
+    // Sergey Binning
+    TH2*            true_DP_SergeyBin;
+    TH1*            true_X_SergeyBin;
+    TH1*            true_Y_SergeyBin;
+    TH1*            true_m_pipi_SergeyBin;
+    TH1*            true_m_pipi_sq_SergeyBin;
+    TH1*            true_m_pieta_SergeyBin;
+    TH1*            true_m_pieta_sq_SergeyBin;
+
     TH2*    true_six_phy_DP_020;
     TH2*    true_six_phy_DP_015;
     TH2*    true_six_phy_DP_010;

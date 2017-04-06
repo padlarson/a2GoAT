@@ -84,6 +84,24 @@ AdlarsonPhysics::AdlarsonPhysics():
     true_DP_010                 = new TH2D("true_DP_010", "True Dalitz Plot bin 0.10; X; Y",  15, 0., 1.5, 30, -1.5, 1.5);
     true_DP_015                 = new TH2D("true_DP_015", "True Dalitz Plot bin 0.15; X; Y",  10, 0., 1.5, 20, -1.5, 1.5);
 
+    Int_t nhx = 18; Int_t nhy = 36;
+    Int_t nbnax = nhx/4*3;
+    Int_t nbnay = nhy/4*3;
+    Double_t ymax = 1.15, ymin = -1., xmax = 1.33, xmin = 0.;
+    Double_t m2pi0_min = 0.27, m2pi0_max = 0.41, mpi0eta_min = 0.6825, mpi0eta_max = 0.8225;
+    Double_t m2pi0_sq_min = 0.072, m2pi0_sq_max = 0.17 , mpi0eta_sq_min = 0.46, mpi0eta_sq_max = 0.68;
+    Int_t nbn_m2pi0 = 52, nbn_mpi0eta = 47;
+
+    true_DP_SergeyBin             = new TH2D("true_DP_SergeyBin", "True Dalitz Plot bin Sergey; X; Y",  nhx, xmin, xmax, nhy, ymin, ymax);
+    true_X_SergeyBin              = new TH1D("true_X_SergeyBin", "X Projection; X", nhx+nbnax, xmin, xmax);
+    true_Y_SergeyBin              = new TH1D("true_Y_SergeyBin", "Y Projection; Y", nhy+nbnay, ymin, ymax);
+
+    true_m_pipi_SergeyBin         = new TH1D("true_m_pipi_SergeyBin", "m_{#pi^{0}#pi^{0}}; m(#pi^{0}#pi^{0}) (GeV)", nbn_m2pi0, m2pi0_min, m2pi0_max);
+    true_m_pipi_sq_SergeyBin      = new TH1D("true_m_pipi_sq_SergeyBin", "m^{2}_{#pi^{0}#pi^{0}}; m^{2}(#pi^{0}#pi^{0}) (GeV^{2})", nbn_m2pi0, m2pi0_sq_min, m2pi0_sq_max);
+
+    true_m_pieta_SergeyBin        = new TH1D("true_m_pieta_SergeyBin", "m_{#pi^{0}#eta}; m(#pi^{0}#eta) (GeV)", nbn_mpi0eta, mpi0eta_min, mpi0eta_max);
+    true_m_pieta_sq_SergeyBin     = new TH1D("true_m_pieta_sq_SergeyBin", "m^{2}_{#pi^{0}#eta}; m^{2}(#pi^{0}#eta) (GeV^{2})", nbn_mpi0eta, mpi0eta_sq_min, mpi0eta_sq_max);
+
     true_phy_DP_020             = new TH1D("true_phy_DP_020", "True Dalitz Plot distribution bw 0.20; bin number; Events", 200, 0, 200);
     true_phy_DP_015             = new TH1D("true_phy_DP_015", "True Dalitz Plot distribution bw 0.15; bin number; Events", 400, 0, 400);
     true_phy_DP_010             = new TH1D("true_phy_DP_010", "True Dalitz Plot distribution bw 0.10; bin number; Events", 800, 0, 800);
@@ -922,14 +940,16 @@ void	AdlarsonPhysics::ProcessEvent()
 //       MCw = etapr_2gTrue.GetWeight();
 
 //       MC_weight = true;
-//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
-//       MCw = etapr_6gTrue.GetWeight();
+       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
+       MCw = etapr_6gTrue.GetWeight();
+
+       return;
 
 //*****       for 3pi0 and etapi0 MC *****
 //       MCw = 1.0;
-       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       MCw = TrueAnalysis_threepi_etapi();
+//       threepi_etapi.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       MCw = TrueAnalysis_threepi_etapi();
 //       MCw *= 1.5;
 
 //       MC_weight = true;
@@ -4267,10 +4287,22 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
     true_DP_010->Fill( Xtrue, Ytrue,etapr_6gTrue.GetWeight() );
     true_DP_015->Fill( Xtrue, Ytrue,etapr_6gTrue.GetWeight() );
 
+    true_DP_SergeyBin->Fill( Xtrue, Ytrue,etapr_6gTrue.GetWeight());
+    true_X_SergeyBin->Fill( Xtrue, etapr_6gTrue.GetWeight());
+    true_Y_SergeyBin->Fill( Ytrue, etapr_6gTrue.GetWeight());
+
     m2pi0_metapi0(etapr_true, m_etapi01True, m_etapi02True, m_2pi0True);
-    true_M_pi1pi2_e2p->Fill(m_2pi0True*1.0e3);
-    true_M_etapi_e2p->Fill(m_etapi01True*1.0e3);
-    true_M_etapi_e2p->Fill(m_etapi02True*1.0e3);
+    true_M_pi1pi2_e2p->Fill(m_2pi0True*1.0e3, etapr_6gTrue.GetWeight());
+    true_M_etapi_e2p->Fill(m_etapi01True*1.0e3, etapr_6gTrue.GetWeight());
+    true_M_etapi_e2p->Fill(m_etapi02True*1.0e3, etapr_6gTrue.GetWeight());
+
+    true_m_pipi_SergeyBin->Fill(TMath::Sqrt(m_2pi0True),etapr_6gTrue.GetWeight());
+    true_m_pipi_sq_SergeyBin->Fill(m_2pi0True,etapr_6gTrue.GetWeight());
+
+    true_m_pieta_SergeyBin->Fill(TMath::Sqrt(m_etapi01True),etapr_6gTrue.GetWeight());
+    true_m_pieta_SergeyBin->Fill(TMath::Sqrt(m_etapi02True),etapr_6gTrue.GetWeight());
+    true_m_pieta_sq_SergeyBin->Fill(m_etapi01True,etapr_6gTrue.GetWeight());
+    true_m_pieta_sq_SergeyBin->Fill(m_etapi02True,etapr_6gTrue.GetWeight());
 
     // calculate True Energy vs Theta of final state particles
 
