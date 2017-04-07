@@ -27,6 +27,9 @@ std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2) {
     return v;
 }
 
+#define MASS_ETAP_EXP 959.51
+
+
 class	AdlarsonPhysics  : public GTreeManager{
 
 private:

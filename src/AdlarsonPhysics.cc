@@ -675,6 +675,7 @@ AdlarsonPhysics::AdlarsonPhysics():
 
   auto RequireIM6g_etapr_vx = [&] (const vector< vector<double> >& args) -> double
   {
+      double mass;
       TLorentzVector sum(0,0,0,0);
       int  idet;
       TLorentzVector LV;
@@ -686,8 +687,12 @@ AdlarsonPhysics::AdlarsonPhysics():
           obs = {args[j][0], args[j][0] , args[j][1], args[j][2]};
           sum += GetLVCorrForZ( obs, v_z, idet ,0.0 );
       }
+      if(!MC)
+        mass = MASS_ETAP_EXP;
+      else
+        mass = MASS_ETAP;
 
-      return sum.M() - MASS_ETAP;
+      return sum.M() - mass;
   };
 
   auto RequireIM_vx = [&] (const vector< vector<double> >& args) -> double
