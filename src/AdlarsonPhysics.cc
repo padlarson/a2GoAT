@@ -687,12 +687,8 @@ AdlarsonPhysics::AdlarsonPhysics():
           obs = {args[j][0], args[j][0] , args[j][1], args[j][2]};
           sum += GetLVCorrForZ( obs, v_z, idet ,0.0 );
       }
-      if(!MC)
-        mass = MASS_ETAP_EXP;
-      else
-        mass = MASS_ETAP;
 
-      return sum.M() - mass;
+      return sum.M() - MASS_ETAP;
   };
 
   auto RequireIM_vx = [&] (const vector< vector<double> >& args) -> double
@@ -2293,9 +2289,7 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
 
              } // end of p 3pi0 final analysis
 
-//             if(PDF_cut->IsInside(probmin_eta2pi, probmin_3pi)){
-           if( (probmin_3pi < 0.08) && (probmin_eta2pi > 0.02) ){ //eta prime
-//               if( (probmin_3pi < 0.1) && (probmin_eta2pi > 0.04) ){ //eta prime
+           if( (probmin_3pi < 0.08) && (probmin_eta2pi > 0.07) ){ //eta prime
 
              if(MC_weight)
                 CB_EnergySum_etapr->FillWeighted(ESum_MC, MCw );
@@ -2443,9 +2437,9 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                     six_phy_etapr_prod_diff_distr->Fill(diffbin, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
 
                bool final_cond = false;
-               if(probmin_eta2pi > 0.04 && probmin_eta2pi < 1.0)
+//               if(probmin_eta2pi > 0.04 && probmin_eta2pi < 1.0)
                    if( probmin_3pi < 0.0075 )
-                    if((probmin_etapr > 0.04) && (probmin_etapr < 1.0))
+                    if((probmin_etapr > 0.07) && (probmin_etapr < 1.0))
                         final_cond = true;
 
                if(final_cond){
@@ -4258,6 +4252,15 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
         b = -0.070;
         d = -0.061;
         weight2 = N*( 1+ a*Ytrue + b*Ytrue*Ytrue + d*Xtrue*Xtrue );
+    }
+    else if(s == "Complex"){
+         N = 1.0e5;
+//        N *= (1.0e6/1.013407e6);
+// find a, b and d here..
+        a = -0.071;
+        b = -0.070;
+        d = -0.061;
+        weight2 = N*(1. + 2.*a*Ytrue +(a*a + b*b)*Ytrue*Ytrue + d*Xtrue*Xtrue);;
     }
     else // Phase Space
     {
