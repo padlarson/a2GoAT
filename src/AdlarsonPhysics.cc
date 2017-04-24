@@ -936,14 +936,14 @@ void	AdlarsonPhysics::ProcessEvent()
     if(MC){
 
        MC_weight = true;
-//       etapr_2gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       TrueAnalysis_etapr2g8g("Production");
-//       MCw = etapr_2gTrue.GetWeight();
+       etapr_2gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       TrueAnalysis_etapr2g8g("Production");
+       MCw = etapr_2gTrue.GetWeight();
 
 //       MC_weight = true;
-       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
-       MCw = etapr_6gTrue.GetWeight();
+//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
+//       MCw = etapr_6gTrue.GetWeight();
 
 
 //*****       for 3pi0 and etapi0 MC *****
@@ -2395,7 +2395,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                    six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi01_fit), etap_fit_final.M()+mass_shift, MCw);
                    six_phy_M_etapi_v_etapr2->FillWeighted(TMath::Sqrt(m_etapi02_fit), etap_fit_final.M()+mass_shift, MCw);
 
-                   if(etap_fit_final.M()> 930. && etap_fit_final.M() < 980.){
                        true_six_phy_dMpipi_v_Mpipi->Fill(m_2pi0_fit / 1.0e3, (m_2pi0_fit/1.0e3-m_2pi0True*1.0e3), MCw);
                        true_six_phy_DP_020->Fill(DPnrTrue020, DP_binnr_fit020, MCw);
                        true_six_phy_DP_015->Fill(DPnrTrue015, DP_binnr_fit015, MCw);
@@ -2410,7 +2409,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                        true_six_phy_dY_v_Y->Fill(Yfit, Yfit - Ytrue, MCw);
                        true_six_phy_Xtr_v_Xfit->Fill(Xfit, Xtrue, MCw);
                        true_six_phy_Ytr_v_Yfit->Fill(Yfit, Ytrue, MCw);
-                   }
                }
                else{
                    six_phy_M_pi1pi2_v_etapr->Fill(m_2pi0_fit / 1.0e3, etap_fit_final.M(), GetTagger()->GetTaggedTime(tag));
