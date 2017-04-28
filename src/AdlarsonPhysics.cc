@@ -935,15 +935,15 @@ void	AdlarsonPhysics::ProcessEvent()
 {
     if(MC){
 
-       MC_weight = true;
-       etapr_2gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr2g8g("Production");
-       MCw = etapr_2gTrue.GetWeight();
-
 //       MC_weight = true;
-//       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-//       TrueAnalysis_etapr6g("Sergey");                 // obtains the true observables
-//       MCw = etapr_6gTrue.GetWeight();
+//       etapr_2gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+//       TrueAnalysis_etapr2g8g("Production");
+//       MCw = etapr_2gTrue.GetWeight();
+
+       MC_weight = true;
+       etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
+       TrueAnalysis_etapr6g("Patrik");                 // obtains the true observables
+       MCw = etapr_6gTrue.GetWeight();
 
 
 //*****       for 3pi0 and etapi0 MC *****
@@ -4249,6 +4249,12 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
         a = -0.071;
         b = -0.070;
         d = -0.061;
+        weight2 = N*( 1+ a*Ytrue + b*Ytrue*Ytrue + d*Xtrue*Xtrue );}
+     else if(s == "Patrik"){
+        N = 1.0e5;
+        a = -0.074;
+        b = -0.063;
+        d = -0.050;
         weight2 = N*( 1+ a*Ytrue + b*Ytrue*Ytrue + d*Xtrue*Xtrue );
     }
     else if(s == "Complex"){
@@ -4258,7 +4264,7 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
         a = -0.071;
         b = -0.070;
         d = -0.061;
-        weight2 = N*(1. + 2.*a*Ytrue +(a*a + b*b)*Ytrue*Ytrue + d*Xtrue*Xtrue);;
+        weight2 = N*(1. + 2.*a*Ytrue +(a*a + b*b)*Ytrue*Ytrue + d*Xtrue*Xtrue);
     }
     else // Phase Space
     {
