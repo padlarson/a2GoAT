@@ -4261,10 +4261,11 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
          N = 1.0e5;
 //        N *= (1.0e6/1.013407e6);
 // find a, b and d here..
-        a = -0.071;
-        b = -0.070;
-        d = -0.061;
-        weight2 = N*(1. + 2.*a*Ytrue +(a*a + b*b)*Ytrue*Ytrue + d*Xtrue*Xtrue);
+        double alpha_p = -0.047;
+        a = alpha_p/2.;
+        b = alpha_p*alpha_p;
+        d = -0.037;
+        weight2 = N*( 1 + a*Ytrue + b*Ytrue*Ytrue + d*Xtrue*Xtrue);
     }
     else // Phase Space
     {
