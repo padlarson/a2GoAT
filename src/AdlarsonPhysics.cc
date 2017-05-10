@@ -942,7 +942,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
        MC_weight = true;
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr6g("Patrik");                 // obtains the true observables
+       TrueAnalysis_etapr6g("Complex");                 // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
 
 
@@ -4251,7 +4251,7 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
         d = -0.061;
         weight2 = N*( 1+ a*Ytrue + b*Ytrue*Ytrue + d*Xtrue*Xtrue );}
      else if(s == "Patrik"){
-        N = 1.0e5;
+        N = 1.0e5/1.0e5;
         a = -0.074;
         b = -0.063;
         d = -0.050;
@@ -4262,7 +4262,7 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
 //        N *= (1.0e6/1.013407e6);
 // find a, b and d here..
         double alpha_p = -0.047;
-        a = alpha_p/2.;
+        a = alpha_p*2.;
         b = alpha_p*alpha_p;
         d = -0.037;
         weight2 = N*( 1 + a*Ytrue + b*Ytrue*Ytrue + d*Xtrue*Xtrue);
