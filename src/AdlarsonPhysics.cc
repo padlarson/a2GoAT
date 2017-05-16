@@ -891,11 +891,18 @@ Bool_t	AdlarsonPhysics::Start()
     tree2->Branch("fMpipipr",&fMpipipr);
     tree2->Branch("fMetapi1pr",&fMetapi1pr);
     tree2->Branch("fMetapi2pr",&fMetapi2pr);
-
     if (!GetScalers()->IsOpenForInput())
         MC = true;
     else
         MC = false;
+
+    if(MC){
+        tree2->Branch("f_s1",&f_s1);
+        tree2->Branch("f_s2",&f_s2);
+        tree2->Branch("f_s3",&f_s3);
+        tree2->Branch("fXtr",&fXtr);
+        tree2->Branch("fYtr",&fYtr);
+    }
 
     SetAsPhysicsFile();
 
@@ -942,7 +949,7 @@ void	AdlarsonPhysics::ProcessEvent()
 
        MC_weight = true;
        etapr_6gTrue.Start(*GetPluto(), *GetGeant());   // (pluto tree, n part in pluto per event)
-       TrueAnalysis_etapr6g("Complex");                 // obtains the true observables
+       TrueAnalysis_etapr6g("PhaseSpace");                 // obtains the true observables
        MCw = etapr_6gTrue.GetWeight();
 
 
@@ -2032,7 +2039,6 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                if(eight_clusters)
                     n_clusters = 8;
 
-
                if(!MC)
                     if( (GetTagger()->GetTaggedTime(tag) > 3.5) || (GetTagger()->GetTaggedTime(tag) < -4.5))
                         fWeight = -8./160.;
@@ -2063,6 +2069,13 @@ void AdlarsonPhysics::sixgAnalysis(UInt_t ipr){
                 fDP075          = DP_binnr_fit075;
                 fDP010          = DP_binnr_fit010;
                 fDP015          = DP_binnr_fit015;
+                if(MC){
+                    fXtr            = Xtrue;
+                    fYtr            = Ytrue;
+                    f_s1             = s1_true;
+                    f_s2             = s2_true;
+                    f_s3             = s3_true;
+                }
 
                 if(probmin_etapr > 0.01 && probmin_etapr < 1.0){
 
@@ -4240,6 +4253,12 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
     bw = 0.05;
     DalitzPlot(etapr_true, Xtrue, Ytrue, bw, DPnrTrue005);
 
+                            // eta LV       pi0_1 LV          pi0_2 LV
+    TLorentzVector eta_pr = etapr_true[0] + etapr_true[1] + etapr_true[2];
+    s1_true = (eta_pr- etapr_true[1]).M2();
+    s2_true = (eta_pr- etapr_true[2]).M2();
+    s3_true = (eta_pr- etapr_true[0]).M2();
+
     Double_t weight2 = 1.0;
     Double_t weight3 = 1.0;
     // Weigh the MC with the Dalitz plot parameters.
@@ -4271,7 +4290,6 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
     {
         weight2 = 9.0/9.115663;
     }
-
         weight *= weight2;
 
     if(MCJuly14)
@@ -4281,7 +4299,6 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
 
     weight *= weight3;
 
-
     etapr_6gTrue.SetWeight(weight);
 
     true_phy_DP_020->Fill(DPnrTrue020,etapr_6gTrue.GetWeight());
@@ -4289,7 +4306,6 @@ void AdlarsonPhysics::TrueAnalysis_etapr6g(TString s){
     true_phy_DP_010->Fill(DPnrTrue010,etapr_6gTrue.GetWeight());
     true_phy_DP_075->Fill(DPnrTrue075,etapr_6gTrue.GetWeight());
     true_phy_DP_005->Fill(DPnrTrue005,etapr_6gTrue.GetWeight());
-
 
     true_BeamE_weight->FillWeighted(etapr_6gTrue.GetTrueBeamEnergy(),etapr_6gTrue.GetWeight());
 

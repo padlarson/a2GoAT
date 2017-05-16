@@ -47,17 +47,17 @@ private:
     TH1*            true_norm; // normalisation factor
 
     TH2*            true_th_p_v_th_etapr_CM;
-    TH2*    true_th_v_E_p;
-    TH2*    true_th_v_E_eta_g;
-    TH2*    true_th_v_E_eta_6g;
-    TH2*    true_th_v_E_pi0_g;
+    TH2*            true_th_v_E_p;
+    TH2*            true_th_v_E_eta_g;
+    TH2*            true_th_v_E_eta_6g;
+    TH2*            true_th_v_E_pi0_g;
     // Kinfit tests
-    TH2*    true_six_dth_vs_th_p;
-    TH2*    true_six_dR_vs_R_p;
-    TH2*    true_six_dR_vs_det_p;
-    TH2*    true_six_fit_dz_v_z;
-    TH2*    fit_six_fit_dz_v_z;
-    TH2*    true_six_fit_dz_v_p_th;
+    TH2*            true_six_dth_vs_th_p;
+    TH2*            true_six_dR_vs_R_p;
+    TH2*            true_six_dR_vs_det_p;
+    TH2*            true_six_fit_dz_v_z;
+    TH2*            fit_six_fit_dz_v_z;
+    TH2*            true_six_fit_dz_v_p_th;
     GH1*            true_z_after_fit;
     GH1*            true_z_after_final_fit;
     // Physics Results
@@ -359,7 +359,11 @@ private:
     double    fMpipipr;
     double    fMetapi1pr;
     double    fMetapi2pr;
-
+    double    f_s1;
+    double    f_s2;
+    double    f_s3;
+    double    fXtr;
+    double    fYtr;
 
     //    Analysis 8g
     GH1*      eight_rec_IM;
@@ -443,6 +447,7 @@ private:
 
     Int_t           diffbin, diffbin_pr;
     Double_t        Xtrue, Ytrue, bw;
+    Double_t        s1_true, s2_true, s3_true;
     Int_t           DPnrTrue020, DPnrTrue015, DPnrTrue010, DPnrTrue075, DPnrTrue005;
     Double_t        m_etapi01True, m_etapi02True, m_2pi0True;
 
